@@ -1,0 +1,248 @@
+﻿<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/css/style.css" />
+    <script src="~/Scripts/jquery.form.js" type="text/javascript"></script>
+    <title></title>
+</head>
+<body>
+
+    <article class="page-container">
+        <form class="form form-horizontal" id="form-article-add">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>项目名称：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["PojectName"]" readonly="readonly" placeholder="" id="PojectName" name="PojectName">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>订单状态：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["Status"]"  readonly="readonly" placeholder="" id="Status" name="Status">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>产品类型：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <span class="select-box">
+                        <select name="select" class="select" id="select">
+                            <option value="标准">标准</option>
+                            <option value="非标">非标</option>
+                            <option value="新产品">新产品</option>
+                            <option value="外协外购">外协外购</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>产品名称：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["ProductName"]" placeholder="" id="ProductName" name="ProductName">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>产品规格：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["ProductSpec"]" placeholder="" id="ProductSpec" name="ProductSpec">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>数量：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["Count"]" placeholder="" id="Count" name="Count">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>单位：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["Units"]" placeholder="" id="Units" name="Units">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>是否动力：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <span class="select-box">
+                        <select name="selectd" class="select" id="selectd">
+                            <option value="动力">动力</option>
+                            <option value="无动力">无动力</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计截至日期：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" onfocus="WdatePicker()" value="@ViewData["JieDate"]" id="JieDate" name="JieDate" class="input-text Wdate">
+                </div>
+            </div>
+                               
+                    
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务附件1：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" name="fileDownA" id="file1" value="@ViewData["file1"]" readonly="readonly">
+                    <a href="~/ProductionPlanning/FileADownload?file1=@ViewData["fileDownA"]">下载</a>
+            </div>
+             </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务附件1更新：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="file" name="file1" id="file1">
+                </div>
+            </div> 
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务附件2：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" name="fileDownB" value="@ViewData["file2"]" id="file2" readonly="readonly"><a href="~/ProductionPlanning/FileBDownload?file2=@ViewData["fileDownB"]">下载</a>
+                </div>
+                </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务附件2更新：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="file" name="file2" id="file2">
+                </div>
+            </div>             
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务附件3：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" name="fileDownC" id="file3" value="@ViewData["file3"]" readonly="readonly"><a href="~/ProductionPlanning/FileCDownload?file3=@ViewData["fileDownC"]">下载</a>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务附件3更新：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="file" name="file3" id="file3">
+                </div>
+            </div> 
+            <div class="row cl">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                    <button onclick="sub()" class="btn btn-primary radius" type="button"><i class="Hui-iconfont">&#xe632;</i>保存</button>
+                </div>
+            </div>
+        </form>
+    </article>
+
+    <!--_footer 作为公共模版分离出去-->
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer /作为公共模版分离出去-->
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="~/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+    <script type="text/javascript" src="~/lib/webuploader/0.1.5/webuploader.min.js"></script>
+    <script type="text/javascript" src="~/lib/ueditor/1.4.3/ueditor.config.js"></script>
+    <script type="text/javascript" src="~/lib/ueditor/1.4.3/ueditor.all.min.js"> </script>
+    <script type="text/javascript" src="~/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript">
+        $.ready(
+       document.getElementById('select').value = '@ViewData["select"]',
+        document.getElementById('selectd').value = '@ViewData["selectd"]'
+       );
+    function sub() {
+        $("#form-article-add").ajaxSubmit({
+            url: "@Url.Action("EdPo","ProductionPlanning")",
+            type: "post",
+            success: function (data) {
+                if (data == "true") {
+                    alert("修改成功！");
+                    window.parent.location.reload();
+                }else
+                {
+                    alert("修改失败！");
+                }
+            },
+            error: function (aa) {
+                alert(aa);
+            }
+        });
+    }
+    $(function () {
+        $('.skin-minimal input').iCheck({
+            checkboxClass: 'icheckbox-blue',
+            radioClass: 'iradio-blue',
+            increaseArea: '20%'
+        });
+        $("#cancled").click(function () {
+            var sd = $("#u").text();
+            window.parent.document.getElementById("rightframe").src = sd;
+        });     
+        //表单验证
+        //$("#form-article-add").validate({
+        //    rules: {
+        //        abstract2: {
+        //            required: true,
+        //        },
+        //        abstract3: {
+        //            required: true,
+        //        },
+        //        author: {
+        //            required: true,
+        //        },
+        //        sources: {
+        //            required: true,
+        //        },
+        //        allowcomments: {
+        //            required: true,
+        //        },
+        //        commentdatemin: {
+        //            required: true,
+        //        },
+        //        commentdatemax: {
+        //            required: true,
+        //        },
+
+        //    },
+        //    onkeyup: false,
+        //    focusCleanup: true,
+        //    success: "valid",
+        //    submitHandler: function (form) {
+        //        var Select = $(".select option:selected").text();
+        //        var CuNamed = $("#CuName").val().trim();
+
+        //        var Payd = $("#Pay").val();
+        //        var SendDated = $("#SendDate").val();
+        //        var weiyuetiaojiand = $("#weiyuetiaojian").val();
+        //        var CZongJied = $("#CZongJie").val();
+        //        $.ajax({
+        //            url: "/ProductionPlanning/TtPo",
+        //            data: { CuName: CuNamed, CuNumber: CuNumberd, Money: Moneyd, IfInstall: IfInstalld, IfIncludeTax: IfIncludeTax, DateOfSign: qianDate, IfTransport: IfTransportd, select: Select, Pay: Payd, SendDate: SendDated, weiyuetiaojian: weiyuetiaojiand, CZongJie: CZongJied },
+        //            type: "post",
+        //            dataType: "text",
+        //            success: function (data) {
+        //                if (data == "true") {
+        //                    window.setTimeout(function () {
+        //                        window.parent.document.getElementById("rightframe").src = "/Home/SalesCreation";
+        //                    }, 500);
+        //                }
+        //                else {
+        //                    alert("添加失败,请重新输入!");
+        //                    return;
+        //                }
+        //            },
+        //            error: function (aa) {
+        //                alert(aa);
+        //            }
+        //        });
+
+        //    }
+        //});
+
+        $list = $("#fileList"),
+        $btn = $("#btn-star"),
+        state = "pending",
+        uploader;
+
+
+    });
+    </script>
+    <!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

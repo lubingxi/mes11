@@ -1,0 +1,174 @@
+﻿
+@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        $(function () {
+            $(".click").click(function () {
+                $(".tip").fadeIn(200);
+            });
+
+            $(".tiptop a").click(function () {
+                $(".tip").fadeOut(200);
+            });
+
+            $(".sure").click(function () {
+                $(".tip").fadeOut(100);
+            });
+
+            $(".cancel").click(function () {
+                $(".tip").fadeOut(100);
+            });        
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                $(".layui-btn").click(function () {
+                    var ProjectName = $("#ProjectName").val().trim();
+                    var SalesOrder = $(".SalesOrder").val().trim();
+                    var Select = $("#s option:selected").text();
+                    var Selectd = $("#d option:selected").text();
+                    var strattime = $(".strattime").val();
+                    table.render({
+                    elem: '#tw'
+                   , url: '/TaskManagement/TaskJson?RwapStatusID=' + Selectd + '&CreatedTimeStart=' + strattime + '&SalesOrderd=' + SalesOrder + '&ProjectName=' + ProjectName + '&Status=' + Select
+                   , page: true                 
+                   , limit: 15
+                   , cols: [[
+                    { field: '序号', width: 210, title: '序号', hide: true }
+                   ,{ field: 'contractNumber', width: 210, title: '订单号'}
+                   , { field: 'customerName', width: 210, title: '项目名称' }
+                   , { field: 'DateOfSign', width: 235, title: '签订日期', sort: true }
+                   , {
+                       field: 'CreatedBy', width: 180, title: '创建人',
+                   }
+                   , { field: 'StatusID', title: '状态', width: 180 }        
+                   , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+                   ]]
+
+                    });
+                });
+                table.on('checkbox(demo)', function (obj) {
+                    console.log(obj)
+                });
+
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;
+                    switch (obj.event) {
+
+                        case 'Detials':
+                            id = data.序号;
+                            window.parent.document.getElementById("rightframe").src = "/TaskManagement/Contract_Check?id=" + id;
+                            break;
+                        case 'update':
+                            customerName = data.contractNumber;
+                            window.parent.document.getElementById("rightframe").src = "/TaskManagement/TechnicalPartAssignment?customerName=" + customerName;
+                            break;
+                    };
+                });
+
+
+            });
+        })
+
+
+
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" id="detials" lay-event="Detials">订单详细</a>
+        <a class="layui-btn layui-btn-xs" id="edit" lay-event="update">技术部设计任务</a>
+    </script>
+
+
+</head>
+
+
+<body>
+
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">任务管理</a></li>
+            <li><a href="#">任务分配</a></li>
+        </ul>
+    </div>
+
+    <div class="rightinfo">
+
+        <div class="tools">
+
+            <ul class="toolbar">
+                <li>
+                    创建日期：
+                    <input name="strattime" class="strattime" id="test1" type="text" onclick="WdatePicker()" style="width: 80px;" />
+                </li>
+                <li>
+                    到：
+                    <input class="endtime" id="test2" type="text" onclick="WdatePicker()" style="width: 80px;" />
+                </li>
+                <li>
+                    项目状态：
+                    <select name="quiz1" id="s">
+                        <option value="" selected="">全部</option>
+                        <option value="已完成">已完成</option>
+                        <option value="未开始">未开始</option>
+                        <option value="正在进行中">正在进行中</option>
+                    </select>
+                </li>
+                <li>
+                    任务安排状态：
+                    <select name="quiz2" id="d">
+                        <option value="" selected="">全部</option>
+                        <option value="已安排">已安排</option>
+                        <option value="未安排">未安排</option>
+                    </select>
+                </li>
+                <li>
+                    项目名称：
+                    <input class="ProjectName" id="ProjectName" type="text" style="width: 80px;" />
+                </li>
+                <li>
+                    订单号：
+                    <input class="SalesOrder " id="SalesOrder" type="text" style="width: 80px;" />
+                </li>
+            </ul>
+            <button class="layui-btn" data-type="reload">搜索</button>
+
+
+
+        </div>
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+
+    </div>
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+
+            function admin_add(title, url, w, h) {
+                layer_show(title, url, w, h);
+            }
+    </script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+</body>
+</html>

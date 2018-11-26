@@ -1,0 +1,4 @@
+﻿@{
+    ViewBag.Title = "hwd";
+}  
+货位名： @Html.DropDownList("Hw", new SelectList(ViewBag.Hw, "ID", "Name"), "请选择", new { @class = "Hw",@ID = "Hw" })

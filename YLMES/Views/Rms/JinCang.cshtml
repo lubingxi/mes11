@@ -1,0 +1,60 @@
+﻿
+
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/jquery.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        dayin();
+    });
+    function dayin() {
+        //bdhtml = window.document.body.innerHTML;//获取当前页的html代码
+        //sprnstr = "<!--startprint-->";//设置打印开始区域
+        //eprnstr = "<!--endprint-->";//设置打印结束区域
+        //prnhtml = bdhtml.substring(bdhtml.indexOf(sprnstr) + 18); //从开始代码向后取html
+        //prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));//从结束代码向前取html
+        //window.document.body.innerHTML = prnhtml;
+        window.print();
+    }
+    
+</script>
+<style>
+    tr td{
+        text-align:center;
+        border:2px solid #000;
+        font-family:TechnicBold;
+    }
+</style>
+<body>
+    <table style="font-size:50px;border:3px solid #000;width:1200px;height:600px;">
+
+       
+        <tr>
+            <td>@ViewData["canku"]</td>
+            <td style="width:200px;">@ViewData["kuqu"]货架</td>
+            <td style="width:200px;">@ViewData["huoqu"]层</td>
+            <td style="width:200px;">@ViewData["huowei"]位</td>
+            <td><img src="@TempData["ptu"]" /></td>
+        </tr>
+        <tr>
+            <td>名称:</td>
+            <td colspan="4" style="text-align:left">@ViewData["mingzi"]</td>
+        </tr>
+        <tr>
+            <td>规格:</td>
+            <td colspan="4" style="text-align:left;vertical-align: middle;">@ViewData["guige"]</td>
+        </tr>
+        <tr>
+            <td>材料:</td>
+            <td colspan="4" style="text-align:left">@ViewData["cailiao"]</td>
+        </tr>
+        <tr>
+            <td>图号:</td>
+            <td colspan="4" style="text-align:left">@ViewData["tuhao"]</td>
+        </tr>
+    </table>
+</body>
+
+
+
+
+

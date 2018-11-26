@@ -1,0 +1,396 @@
+﻿
+@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <style type="text/css">
+        table.gridtable {
+            font-family: verdana,arial,sans-serif;
+            font-size: 11px;
+            color: #333333;
+            border-width: 1px;
+            border-color: red;
+            border-collapse: collapse;
+        }
+
+            table.gridtable th {
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: red;
+                background-color: #dedede;
+            }
+
+            table.gridtable td {
+                font-size:15px;
+                text-align:center;
+                width:150px;
+                height:20px;
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: red;
+                background-color: #ffd800;
+            }
+            
+    </style>
+
+    <script type="text/javascript">
+        $(document).ready(init);
+        function ckone(ck) {
+            $.ajax({
+                url: "@Url.Action("kqd","Rms")",
+                data: { ck: ck },
+                success: function (data) {
+                    $("#kq").html(data);
+                }
+            })
+        }
+        function kqone(kw,cc) {
+            $.ajax({
+                url: "@Url.Action("kwd","Rms")",
+                data: { kw: kw ,ck:cc},
+            success: function (data) {
+                $("#kw").html(data);
+            }
+        })
+        }
+        function Hwone(c2, cc, kw) {
+            $.ajax({
+                url: "@Url.Action("hwd", "Rms")",
+                data: { kq: c2, cq: cc,hq:kw },
+            success: function (data) {
+                $("#hw").html(data);
+            }
+        })
+        }
+        function bianma(cc, c2, c3,hw) {
+            $.ajax({
+                url: "@Url.Action("bianma", "Rms")",
+                data: { cc:cc,c2:c2,c3:c3,hw:hw},
+                success: function (data) {
+                    $("#bianma").css("display", "block");
+                    $("#taoshu").css("display", "block");
+                    $("#shuliang").css("display", "block");
+                $("#bianma").html(data);
+            }
+        })
+        }
+        function init() {
+            var cc = null;
+            var c2 = null;
+            var c3 = null;            
+            $("select[name='Ck']").change(function () {
+                var ck = $(".ck").val();
+                ckone(ck);
+                cc = ck;
+            });          
+            $(document).on("change", ".Kq", function (e) {
+                var kq = $(".Kq").val();
+                kqone(kq, cc);
+                c2 = kq;
+            });
+            $(document).on("change", ".Kw", function (e) {
+                var kw = $(".Kw").val();
+                Hwone(c2, cc, kw);
+                c3 = kw;
+            });
+           
+            $(document).on("change", ".Hw", function (e) {
+                var ckd = $(".ck").val();
+                var kqd = $(".Kq").val();
+                var kwd = $(".Kw").val();
+                var hw = $(".Hw").val();                   
+                bianma(ckd, kqd, kwd, hw);
+            });
+        }
+        $(function () {
+            document.getElementById('ck').value = '@TempData["cangkuCache"]';
+            document.getElementById('Kq').value = '@TempData["kuquCache"]';
+            document.getElementById('Kw').value = '@TempData["kuweiCache"]';                               
+            $("#button").click(function () {
+                //  var taoshu = $('input[name="taoshu"]').val();
+                var shuliang = $('input[name="shuliang"]').val();
+                var ckd = $(".ck").find(":selected").text();
+                var kqd = $(".Kq").find(":selected").text();
+                var kwd = $(".Kw").find(":selected").text();
+                var hwd = $(".Hw").find(":selected").text();
+                var ck = $(".ck").val();
+                var kq = $(".Kq").val();
+                var kw = $(".Kw").val();
+                var hw = $(".Hw").val();
+                @*$.ajax({
+                    url: "@Url.Action("config", "Rms")",
+                    data: { ifhw:hw},
+                success:function(data)
+                {
+                    if (data == "true") {
+                        layer.confirm('货位已存在物料！是否更改货位信息？', {
+                            title: "友力提示", skin: "my-skin",
+                            btn: ['确定','取消'], btn1: function () {
+                                $.ajax({
+                                    url: "@Url.Action("txt", "Rms")",
+                                    data: { txt:hw,cangku:ck,kuqu:kq,kuwei:kw,huowei:hw },
+                                success:function(data)
+                                {
+                                    if (data == "true") {
+                                        location.href = "/Rms/JinCang?ck=" + ckd + "&kq=" + kqd + "&kw=" + kwd + "&hw=" + hwd + "&hww="+hw+"&tuhao=" + '@ViewData["fn"]' + "&cailiao=" + '@ViewData["pm"]' + "&guige=" + '@ViewData["ps"]' + "&named=" + '@ViewData["pn"]' + "&shuliang=" + shuliang;                            
+                                    }
+                                    else
+                                    {
+                                        alert("失败了！");
+                                    }
+
+                                }
+                            });
+                            },
+                            btn2: function () {
+                                return;
+                            }                          
+                        });
+                    }
+                    else if(data=="false")
+                    {*@
+                $.ajax({
+                    url: "@Url.Action("txt", "Rms")",
+                    data: { txt:hw,cangku:ck,kuqu:kq,kuwei:kw,huowei:hw },
+                    success:function(data)
+                    {
+                        if (data == "true") {
+                            location.href = "/Rms/JinCang?ck=" + ckd + "&kq=" + kqd + "&kw=" + kwd + "&hw=" + hwd + "&hww="+hw+"&tuhao=" + '@ViewData["fn"]' + "&cailiao=" + '@ViewData["pm"]' + "&guige=" + '@ViewData["ps"]' + "&named=" + '@ViewData["pn"]' + "&shuliang=" + shuliang;                            
+                        }
+                        else
+                        {
+                            alert("失败了！");
+                        }
+
+                    }
+                });
+                // }
+                //else
+                //{
+                //    layer.msg('出错了！');
+                //}
+
+                //}
+                });             
+               });
+        
+    </script>
+    @if (TempData["huoweiCache"] != null)
+    {
+        ViewBag.Hw = TempData["huoweiCache"];
+    }
+</head>
+<body>  
+
+    <div class="rightinfo">
+
+        <div class="tools">
+             
+            <ul class="toolbar">
+                <li class="ads" id="addD">
+                    <span>
+                        <img src="../../images/t01.png" />
+                    </span><a target="rightFrame" href="javascript:;" onclick="admin_add1('新增仓库名', '/Rms/CkAdd', '400', '200')">新增仓库名</a>
+                </li>
+                <li>
+                    仓库名： @Html.DropDownList("Ck", new SelectList(ViewBag.ck, "ID", "Name"), "请选择", new { @class = "ck",@ID = "ck" })
+                </li>
+                <li class="ads">
+                    <span>
+                        <img src="../../images/t03.png" />
+                    </span><a target="rightFrame" href="javascript:;" onclick="Delete1()">仓库删除</a>
+                </li> 
+                <li class="ads" id="addD">
+                    <span>
+                        <img src="../../images/t01.png" />
+                    </span><a target="rightFrame" href="javascript:;" onclick="admin_add2('新增库区名', '/Rms/KqAdd', '400', '200')">新增库区名</a>
+                </li>  
+                <li>
+                    <div id="kq">
+                        @Html.Partial("kqd")                        
+                    </div>                  
+                </li> 
+                <li class="ads">
+                    <span>
+                        <img src="../../images/t03.png" />
+                    </span><a target="rightFrame" href="javascript:;" onclick="Delete2()">库区删除</a>
+                </li>
+                <li class="ads" id="addD">
+                    <span>
+                        <img src="../../images/t01.png" />
+                    </span><a target="rightFrame" href="javascript:;" onclick="admin_add3('新增货区名', '/Rms/KwAdd', '400', '200')">新增货区名</a>
+                </li>
+                <li>
+                    <div id="kw">
+                        @Html.Partial("kwd")
+                    </div>
+                </li>
+                <li class="ads">
+                    <span>
+                        <img src="../../images/t03.png" />
+                    </span><a target="rightFrame" href="javascript:;" onclick="Delete3()">货区删除</a>
+                </li>
+                <li class="ads" id="addD">
+                    <span>
+                        <img src="../../images/t01.png" />
+                    </span><a target="rightFrame" href="javascript:;" onclick="admin_add4('新增货位名', '/Rms/HwAdd', '400', '200')">新增货位名</a>
+                </li>
+                <li>
+                    <div id="hw">
+                        @Html.Partial("hwd")
+                    </div>
+                    
+                </li>
+                <li class="ads">
+                    <span>
+                        <img src="../../images/t03.png" />
+                    </span><a target="rightFrame" href="javascript:;" onclick="Delete4()">货位删除</a>
+                </li>                 
+            </ul>
+        </div>
+    </div>
+    <div>
+      <span style="font-size:30px;color:green">物料编码信息:</span>
+       <table class="gridtable">         
+            <tr>
+                <td>图号:</td>
+                <td>@ViewData["fn"]</td>
+                <td>名称:</td>
+                <td>@ViewData["pn"]</td>
+                <td>规格:</td>
+                <td>@ViewData["ps"]</td>
+                <td>材料:</td>
+                <td>@ViewData["pm"]</td>
+            </tr>
+        </table>
+    </div>
+    <span style="font-size:30px;color:green">货物编码:</span>
+    <div id="bianma" style="display:none">
+        @Html.Partial("bianma")
+    </div>
+    @*<div id="taoshu" style="display:none">
+        <label style="font-size:30px;color:green">套数:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="taoshu" id="taoshu"  class="layui-input" />
+        </div>
+    </div>*@
+    <div id="shuliang" style="display:none">
+        <label style="font-size:30px;color:green">数量:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="shuliang" id="shuliang"  class="layui-input" />
+        </div>
+        <button class="layui-btn layui-btn-normal" id="button">确认</button>
+    </div>
+        <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+        <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+        <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+        <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+        <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+        <script type="text/javascript">
+            function admin_add1(title, url, w, h) {
+                layer_show(title, url, w, h);
+            }
+            function admin_add2(title, url, w, h) {
+                layer_show(title, url, w, h);
+            }
+            function admin_add3(title, url, w, h) {
+                layer_show(title, url, w, h);
+            }
+            function admin_add4(title, url, w, h) {
+                layer_show(title, url, w, h);
+            }
+            function Delete1() {
+                var ck = $(".ck").val();
+                layer.confirm('真的要删除吗?', function () {
+                    $.ajax({
+                        type: "post",
+                        url: "/Rms/DelCk?ck=" + ck,
+                        data: { "ck": ck },
+                        async: true,
+                        success: function (data) {
+                            if (data == "true") {
+                                window.parent.location.reload();
+                            }
+                            else {
+                                layer.msg('错误！存在库区不能删除！', { icon: 2 });
+                            }
+                        }
+                    })
+                });
+            }
+            function Delete2() {
+                var Kq = $(".Kq").val();
+                layer.confirm('真的要删除吗?', function () {
+                    $.ajax({
+                        type: "post",
+                        url: "/Rms/DelKq?Kq=" + Kq,
+                        data: { "Kq": Kq },
+                        async: true,
+                        success: function (data) {
+                            if (data == "true") {
+                                window.parent.location.reload();
+                            }
+                            else {
+                                layer.msg('错误！存在货区不能删除', { icon: 2 });
+                            }
+                        }
+                    })
+                });
+            }
+            function Delete3() {
+                var Kw = $(".Kw").val();
+                layer.confirm('真的要删除吗?', function () {
+                    $.ajax({
+                        type: "post",
+                        url: "/Rms/DelKw?Kq=" + Kw,
+                        data: { "Kw": Kw },
+                        async: true,
+                        success: function (data) {
+                            if (data == "true") {
+                                window.parent.location.reload();
+                            }
+                            else {
+                                layer.msg('错误！存在货位不能删除！', { icon: 2 });
+                            }
+                        }
+                    })
+                });
+            }
+            function Delete4() {
+                var Hw = $(".Hw").val();
+                layer.confirm('真的要删除吗?', function () {
+                    $.ajax({
+                        type: "post",
+                        url: "/Rms/DelHw?Hw=" + Hw,
+                        data: { "Hw": Hw },
+                        async: true,
+                        success: function (data) {
+                            if (data == "true") {
+                                window.parent.location.reload();
+                            }
+                            else {
+                                layer.msg('错误！存在物料不能删除', { icon: 2 });
+                            }
+                        }
+                    })
+                });
+            }
+        </script>
+    </body>
+</html>

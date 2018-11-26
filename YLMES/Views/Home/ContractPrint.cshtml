@@ -1,0 +1,573 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <link href="~/css/StyleSheet1.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="~/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            var id = '@ViewData["ContractDetialsCheckId"]';
+    $.ajax({
+        url: '/Home/checkDetail',
+        data: { id: id },
+        type: "get",
+        dataType: "json",
+        success: function (data) {
+            if (data != null) {
+
+                for (var i = 0; i < data.length; i++) {
+                    var ProductName = "<td><label>" + data[i].ProductName + "</label></td>";
+                    var ProductSpec = "<td><label>" + data[i].ProductSpec + "</label></td>";
+                    var Units = "<td><label>" + data[i].Units + "</label></td>";
+                    var Count = "<td><label>" + data[i].Count + "</label></td>";
+                    var Price = "<td><label><input type='text' class='sss'/></label></td>";
+                    var Money = "<td></td>";
+                    var Remarks = "<td><label><input type='text'/></label></td>";
+
+                    $(".ftr").after("<tr class='ji'>" + ProductName + ProductSpec + Count + Units + Price + Money + Remarks + "</tr>");
+                }
+                $(".ji").each(function (i) {
+                    $(".ji: eq(" + i + ") td:eq(4) label input").addClass("class","sss");
+                })
+            }
+        }
+            });
+            var mom = 0;
+
+            $(".jia+li").hide();
+            $("#yf").change(function () {
+                $(".jia").toggle();
+                $(".jia+li").toggle();
+            })
+            $(".sss").change(function () {
+                var mom1 = 0;
+                $(".ji").each(function (i) {
+
+                    var count = $(".ji:eq(" + i + ") td:eq(2) label").text();
+
+                    var price = $(".ji:eq(" + i + ") td:eq(4) label input").val();
+
+                    var num = Number(count) * Number(price)
+
+                    $(".ji:eq(" + i + ") td:eq(5)").text(num);
+                    i++
+                });
+
+                $(".ji td:nth-child(6)").each(function (i) {
+
+
+                    var mo = $(".ji td:nth-child(6):eq(" + i + ")").text();
+                    mom1 = Number(mo) + Number( mom1);
+                    i++;
+                })
+                $(".month td:nth-child(2)").text(mom1);
+                var yu =  $(".l:eq(0) input").val();
+
+                var an = $(".l:eq(1) input").val();
+
+                var num = mom1 + Number(yu) + Number(an);
+                $(".l:eq(2)").text(num);
+                $(".l:eq(3)").text(num * 0.16);
+                $(".l:eq(4)").text(num - num * 0.16);
+                mom=mom1
+            })
+            $(".select").change( function () {
+                var i = $(".select option:selected").val();
+                $(".sele option:eq(" + i + ")").attr("selected", "selected");
+                $(".select option:eq(" + i + ")").attr("selected", "selected");
+                if (i == 0) {
+                    $("table:nth-child(5) tr td span").text("杨厚德");
+                    if ($(".sele option:eq(" + (i + 1) + ")").attr("selected") == "selected")
+                    {
+                        $(".sele option:eq(" + (i + 1) + ")").removeAttr("selected", "selected");
+                    }
+                    if ($(".select option:eq(" + (i + 1) + ")").attr("selected") == "selected")
+                    {
+                        $(".select option:eq(" + (i + 1) + ")").removeAttr("selected", "selected");
+                    }
+                } else if (i == 1) {
+                    $("table:nth-child(5) tr td span").text("刘扬珍");
+                    if ($(".sele option:eq(" + (i - 1) + ")").attr("selected") == "selected")
+                    {
+                        $(".sele option:eq(" + (i - 1) + ")").removeAttr("selected", "selected");
+                    }
+                    if ($(".select option:eq(" + (i - 1) + ")").attr("selected") == "selected")
+                    {
+                        $(".select option:eq(" + (i - 1) + ")").removeAttr("selected", "selected");
+                    }
+                }
+            })
+            $(".sele").change(function  () {
+                var i = $(".sele option:selected").val();
+                $(".select option:eq(" + i + ")").attr("selected", "selected");
+                $(".sele option:eq(" + i + ")").attr("selected", "selected");
+                if (i == 0) {
+                    $("table:nth-child(5) tr td span").text("杨厚德");
+                    if ($(".select option:eq(" + (i + 1) + ")").attr("selected") == "selected")
+                    {
+                        $(".select option:eq(" + (i + 1) + ")").removeAttr("selected", "selected");
+                    }
+                    if ($(".sele option:eq(" + (i + 1) + ")").attr("selected") == "selected")
+                    {
+                        $(".sele option:eq(" + (i + 1) + ")").removeAttr("selected", "selected");
+                    }
+                } else if (i == 1) {
+                    $("table:nth-child(5) tr td span").text("刘扬珍");
+                    if ($(".select option:eq(" + (i - 1) + ")").attr("selected") == "selected")
+                    {
+                        $(".select option:eq(" + (i - 1) + ")").removeAttr("selected","selected");
+                    }
+                    if ($(".sele option:eq(" + (i - 1) + ")").attr("selected") == "selected")
+                    {
+                        $(".sele option:eq(" + (i - 1) + ")").removeAttr("selected","selected");
+                    }
+                }
+            })
+            $(".po").click(function () {
+
+                var shu1 = $(".su1").val();
+                if (shu1[shu1.length - 1] == "%") {
+
+                    shu1 = parseFloat(shu1) / 100;
+
+                }
+                var nu = Number(shu1) * Number(mom);
+
+                $(".su11").text(nu);
+
+                $(".yuan1").text(Transform(nu));
+
+            })
+            $(".po1").click(function () {
+
+                var shu2 = $(".su2").val();
+                if (shu2[shu2.length - 1] == "%") {
+
+                    shu2 = parseFloat(shu2) / 100;
+
+                }
+                var nu = Number(shu2) * Number(mom);
+                $(".su22").text(nu);
+                $(".yuan2").text(Transform(nu));
+            })
+        })
+    </script>
+    <script language=javascript>
+        function doPrint() {
+
+            $(".l").each(function (i) {
+                if (Number($(".l:eq(" + i + ") input").val()) == 0) {
+
+                    $(".l:eq(" + i + ")").parent().hide();
+                }
+                if ($(".l:eq(" + i + ") input").val() == undefined) {
+                    if ($(".l:eq(" + i + ")").text() == 0 || $(".l:eq(" + i + ")").text() == "") {
+
+                        $(".l:eq(" + i + ")").parent().hide();
+
+                    }
+                }
+            })
+            $(":input").each(function (i) {
+                var inq = $(":input:eq(" + i + ")").val()
+                $(":input:eq(" + i + ")").attr("value", inq);
+            })
+            if ($(".pp").children().val() == "") {
+                $(".pp").hide();
+            }
+            bdhtml = window.document.body.innerHTML;
+            sprnstr = "<!--startprint-->";
+            eprnstr = "<!--endprint-->";
+            prnhtml = bdhtml.substring(bdhtml.indexOf(sprnstr) + 17);
+            prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));
+            window.document.body.innerHTML = prnhtml;
+            window.print();
+        }
+    </script>
+
+</head>
+
+<body>
+    <!--startprint-->
+    <table>
+        <tr>
+            <td><label>合同编号：</label><input readonly type="text" value="@ViewData["CuNumber"]" style="border:0" /></td>
+        </tr>
+        <tr>
+            <td><label>需方（甲方）：</label><input readonly value="@ViewData["CuName"]" type="text" /></td>
+            <td>
+                <label style="width:115px">供方（乙方）：</label>
+                <select class="select">
+                    <option value="0">广东友力智能科技有限公司</option>
+                    <option value="1">佛山市顺德区友力帮机械有限公司</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label>地址：</label><input type="text" /></td>
+            <td><label>地址：</label>广东省佛山市顺德区杏坛镇逢简工业区横二路1号</td>
+        </tr>
+        <tr>
+            <td><label>电话：</label><input type="text" /></td>
+            <td><label>电话：</label>0757-29977100</td>
+        </tr>
+        <tr>
+            <td><label>传真：</label><input type="text" /></td>
+            <td><label>传真：</label>0757-29977102</td>
+        </tr>
+        <tr>
+            <td><label>联系人：</label><input type="text" /></td>
+            <td><label>联系人：</label><input type="text" /></td>
+        </tr>
+    </table>
+    <ul>
+        <li><p>一、货物名称及型号规格、数量、单价、金额：</p></li>
+    </ul>
+    <table>
+        <tr class="ftr">
+
+            <th><label>产品名称</label></th>
+            <th><label>规格</label></th>
+            <th><label>数量</label></th>
+            <th><label>单位</label></th>
+            <th><label>单价</label></th>
+            <th><label>金额</label></th>
+            <th><label>备注</label></th>
+        </tr>
+        <tr class="month">
+            <td colspan="5">出厂产品合计金额:</td>
+            <td></td>
+            <td><input type="text" /></td>
+        </tr>
+        <tr>
+            <td colspan='5'>运费</td>
+            <td class="l"><input type='text' class="sss" /></td>
+            <td><input type='text' /></td>
+        </tr>
+        <tr>
+            <td colspan='5'>安装费(派多名工程师安装)</td>
+            <td class="l"><input type='text' class="sss" /></td>
+            <td><input type='text' /></td>
+        </tr>
+        <tr>
+
+            <td colspan='5'>税前价合计:</td>
+            <td class="l"></td>
+            <td><input type='text' /></td>
+        </tr>
+        <tr>
+            <td colspan='5'>税额16%</td>
+            <td class="l"></td>
+            <td><input type='text' /></td>
+        </tr>
+        <tr>
+            <td colspan='5'>税后价合计:</td>
+            <td class="l"></td>
+            <td><input type='text' /></td>
+        </tr>
+        <tr>
+            <td colspan='5'>优惠后价合计:</td>
+            <td class="l"></td>
+            <td><input type='text' /></td>
+        </tr>
+    </table>
+    <ul>
+        <li>
+            <p style="width:350px">说明：<input type="text" style="width:100px" />，不含报价之外的部分。</p>
+        </li>
+        <li>
+            <p>二、付款方式：</p>
+        </li>
+        <li>
+            <p class="po">1、合同签定之日起7日内，甲方需向乙方支付定金即合同总价款<input type="text" class="su1" />&nbsp;&nbsp;即人民币:&nbsp;&nbsp;<span class="su11"></span>&nbsp;&nbsp;<span class="yuan1"></span></p>
+        </li>
+        <li>
+            <p class="po1">2、交货期前三天乙方通知甲方支付发货款：合同总价款<input type="text" class="su2" />&nbsp;&nbsp;即人民币:&nbsp;&nbsp;<span class="su22"></span>&nbsp;&nbsp;<span class="yuan2"></span></p>
+            <p style="width:500px" class="pp"><input type="text" style="width:100%" /></p>
+        </li>
+        <li><p>说明：应甲方要求，需在付款前开具发票的，发票不作为收款依据，以乙方指定银行账户实际到账为准。</p></li>
+        <li>
+            <label>三、设备及货物交货时间：自定金到账日起<input type="text" />日内完成出厂前的检验，自发货款到账日起<input type="text" />日内（国家法定节假日顺延）货物交付清；自安装调试款到账日起<input type="text" />日内完成设备运行调试，如货款拖延则交货期、设备调试期顺延；因设计变更、运输途中各种无法预测的因素或不可抗力的因素可顺延交期。</label>
+        </li>
+        <li>
+            <label>四、包装、运输、收货地址、装卸和收货</label>
+        </li>
+        <li>
+            <p>1、包装方式：乙方满足设备及货物运输例行简易包装；如甲方对商品包装有特殊要求，双方应在合同中注明，所增加的包装费用，由甲方承担。</p>
+        </li>
+        <li>
+            <p>2、运输：由 <input type="text" />  方负责运输并承担运输及保险相关费用。</p>
+        </li>
+        <li>
+            <p style="width:500px"><label>3、收货地址:<input type="text" style="width:400px" /></label></p>
+        </li>
+        <li>
+            <p>4、装卸：设备送到甲方指定收货地址后，由甲方负责卸货到安装现场，卸货费由甲方承担。</p>
+        </li>
+        <li>
+            <p>5、收货：甲方在收到货物时在乙方送货单上签字并盖章，甲方另出具货物收货单给乙方。</p>
+        </li>
+        <li>
+            <p>五、安装调试：</p>
+
+        </li>
+        <li class="jia">
+            <p>1、甲方自行负责安装调试</p>
+        </li>
+        <li>
+            <p>1、甲方需在乙方货物到达前清理好安装现场，确保安装现场具备安装条件：如场地安全、场地卫生、动力气源、动力电源等；如因甲方安装现场条件不具备，则安装调试期顺延；并提供或协助解决乙方安装人员食宿问题。</p>
+
+            <p>2、乙方负责安装，乙方依据双方确定安装规划布局图进行一次性安装调试。乙方在调试过程中负责对甲方的设备使用人员、设备维修人员进行设备操作、日常维护、保养等问题进行培训。</p>
+
+            <p>3、安装完成后，如甲方提出更改安装的，需要双方协议后重新确定安装规划布局图，甲方需另行支付安装费用给乙方。</p>
+
+            <p>4、安装过程中，乙方安装人员客观原因造成工伤事故，相关工伤产生的费用由甲乙双方各承担50%。</p>
+            <p>5、如甲方在设备安装调试完成三天之内无确认设备验收单，又无提出书面异议，视甲方默认合同内产品验收合格；</p>
+
+            <p>6、如因甲方未按期支付货款，导致乙方安装工作人员撤退，需再次安排到现场设备调试工作的，甲方需承担乙方安装调试人员的人工费和差旅费等。</p>
+        </li>
+        <li>
+            <p>六、货物验收标准：</p>
+
+        </li>
+        <li>
+            <p>1、按本合同技术参数标准验收（外观尺寸仅供参考)；</p>
+
+        </li>
+        <li>
+            <p>3、货物安装调试完成三天内，甲方须组织相关人员对设备及货物进行验收；如甲方对设备及货物品质有异议，应在设备及货物安装调完成之日起三天内向乙方提出书面异议，甲方提出的书面异议中，应列明合同编号、运输车辆、到货日期、接货人姓名，说明不符合要求的产品名称、型号、规格、数量、检验方法、检验证明，提出不符合要求的处理意见，以及双方商定的必须说明事项，由双方协商解决；如甲方未按约定期限(安装调试完成三天内)提出书面异议的或超过三天甲方仍不对该设备及货物进行验收，则视为甲方对该设备及货物验收合格；</p>
+
+        </li>
+        <li>
+            <p>4、乙方根据甲方要求定制生产的非标产品，甲乙双方共同承担非标生产开发风险，非标产品需由双方提前确定技术协议，一经确定不得修改，如甲方提出确需修改时，乙方若已按前期技术资料投入生产，此投入部分成本需由甲方承担；定制非标产品要求甲方不得中途终止合同，不得随意拒绝收货或退货，如果设备及货物不符合双方确定的技术要求，乙方负责产品的维护和更换。</p>
+
+        </li>
+        <li>
+            <p>2、乙方保证设备的设计和制造与报价时的产品技术参数相符；</p>
+
+        </li>
+        <li>
+            <p>1、本合同设备自安装调试完成之日起保修期为壹年，在保修期内属于产品质量问题，由乙方负责维修并免收任何费用。在保修期内设备运行如出现故障，接到甲方的书面通知起在24小时内（非节假日）做出回应；在保修期内如因甲方非正确操作、拆移安装、维修保养及电压不稳定、压缩空气中有水、杂油、杂质等或自然灾害等情况造成设备损坏的，不属于保修范围内；但乙方对出厂产品承诺终身维护；</p>
+
+        </li>
+        <li>
+            <p>3、保修期外，乙方对设备的售后服务另收取维护费用。</p>
+
+        </li>
+        <li>
+            <p>八、合同附件：乙方提供的分项报价单和相关技术参数、图纸资料均作为合同附件与合同具有同等法律效力，如与主合同不相符时，则以主合同为准；合同传真件具有同等法律效力。</p>
+
+        </li>
+        <li>
+            <p>九、违约责任：</p>
+
+        </li>
+        <li>
+            <p>1、在合同履行期间，乙方延期交货，除双方协商同意免责外，乙方按每日合同总价款<input type="text" />‰支付违约金给甲方，违约金累计金额不超过合同金额的10%；</p>
+
+        </li>
+        <li>
+            <p>2、在合同履行期间，甲方延期付款，除双方协商同意免责外，甲方按每日合同总价款<input type="text" />‰支付违约金给乙方；</p>
+
+        </li>
+        <li>
+            <p>3、如甲方不能按期付款，除承担以上违约责任以外，并且未付款合同内货物权属归乙方所有。</p>
+
+        </li>
+        <li>
+            <p>4、甲方在合同约定时间内未付清货款或定金款的，乙方有权选择解除合同或停止交货。</p>
+
+        </li>
+        <li>
+            <p>5、甲方无正当理由单方解除合同的，由此给乙方造成的全部经济损失应由甲方赔偿给乙方，已支付的定金无权要求返还。</p>
+
+        </li>
+        <li>
+            <p>十、知识产权：</p>
+
+        </li>
+        <li>
+            <p>1、乙方应保证甲方在使用本合同项下的货物免受第三方侵犯其知识产权、商标权或工业设计权的起诉；</p>
+
+        </li>
+        <li>
+            <p>2、甲方不对乙方的货物的商标、专利是否侵犯他人的权利负责，如因乙方提供货物引发争议或违法导致甲方受损的，乙方应赔偿；</p>
+
+        </li>
+        <li>
+            <p>十一、保密条款：</p>
+
+        </li>
+        <li>
+            <p>1、双方从对方获取的资料和相关的商业秘密进行保密，未经信息披露方书面事先同意，双方均不得将本合同中的内容及在本合同执行过程中获得的对方的商业信息向任何第三方泄露。；</p>
+
+        </li>
+        <li>
+            <p>2、本保密义务在本合同期满、解除或终止后仍然有效。</p>
+
+        </li>
+        <li>
+            <p>十二、不可抗力：本合同任何一方对因不可抗力事件造成延迟履行或无法履行合同约定义务的，不承担责任。不可抗力依据中国法律解释。</p>
+
+
+        </li>
+        <li>
+            <p>十三、争议解决：双方因订立、履行、变更、解除和终止本合同发生争议而协商不成的，双方均可向乙方所在地的人民法院提起诉讼。</p>
+
+        </li>
+        <li>
+            <p>十四、合同效力：本合同壹式叁份，甲方执壹份，乙方执贰份，本合同自双方签字盖章之日起生效，本合同的附件及其补充协议经双方签字盖章后均具有同等效力，甲乙双方应共同遵守执行。</p>
+
+        </li>
+    </ul>
+    <table>
+        <tr>
+            <th><label>甲方</label></th>
+            <th><label>乙方</label></th>
+        </tr>
+        <tr>
+            <td><label>单位名称（章）：</label><input type="text" readonly value="@ViewData["CuName"]" /></td>
+            <td>
+                <label style="width:143px">单位名称（章）：</label>
+                <select class="sele">
+                    <option value="0">广东友力智能科技有限公司</option>
+                    <option value="1">佛山市顺德区友力帮机械有限公司</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label>单位地址：</label><input type="text" /></td>
+            <td><label>单位地址：</label>广东省佛山市顺德区杏坛镇逢简工业区横二路1号</td>
+        </tr>
+        <tr>
+            <td><label>法定代表人：</label><input type="text" /></td>
+            <td><label>法定代表人：</label><span>杨厚德</span></td>
+        </tr>
+        <tr>
+            <td><label>委托代理人：</label><input type="text" /></td>
+            <td><label>委托代理人：</label><input type="text" /></td>
+        </tr>
+        <tr>
+            <td><label>电话：</label><input type="text" /></td>
+            <td><label>电话：</label><input type="text" /></td>
+
+        </tr>
+        <tr>
+            <td><label>传真：</label><input type="text" /></td>
+            <td><label>传真：</label><input type="text" /></td>
+
+        </tr>
+        <tr>
+            <td><label>联系人：</label><input type="text" /></td>
+            <td><label>联系人：</label><input type="text" /></td>
+        </tr>
+        <tr>
+            <td><label>手机：</label><input type="text" /></td>
+            <td><label>手机：</label><input type="text" /></td>
+        </tr>
+        <tr>
+            <td><label>开户银行：</label><input type="text" /></td>
+            <td><label>开户银行：</label>中国银行顺德杏龙支行</td>
+        </tr>
+        <tr>
+            <td><label>账号：</label><input type="text" /></td>
+            <td><label>帐号：</label>728968017298</td>
+        </tr>
+    </table>
+    <!--endprint--><div style="margin:0px auto; text-align:center;font-size:20px;font-weight:bolder;">
+        <p><a style="color:black;list-style-type:none" href="javascript:;" onclick="doPrint()">确认</a></p>
+    </div>
+    <script>
+        function  Transform(number) {
+            number = new  String(parseFloat(number).toFixed(2));
+            //分离整数与小数
+            var  num;
+            var  dig;
+            if (number.indexOf(".")  ==  -1) {
+                num  =  number;
+                dig  =  "";
+            }
+            else {
+                num  =  number.substr(0, number.indexOf("."));
+                dig  =  number.substr( number.indexOf(".") + 1,  number.length);
+            }
+            //转换整数部分
+            var  i = 1;
+            var  len  =  num.length;
+            var  dw2  =  new  Array("", "万", "亿");//大单位
+            var  dw1  =  new  Array("拾", "佰", "千");//小单位
+            var  dw  =  new  Array("", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖");//整数部分用
+            var  dws  =  new  Array("零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖");//小数部分用
+            var  k1 = 0;//计小单位
+            var  k2 = 0;//计大单位
+            var  str = "";
+            for (i = 1; i <= len; i++) {
+                var  n  =  num.charAt(len - i);
+                if (n == "0") {
+                    if (k1 != 0)
+                        str  =  str.substr(1, str.length - 1);
+
+                    if (str.substr(0, 1) != "零"  &&  str.substr(0, 1) != "万"  &&  str.substr(0, 1) != "亿") {
+                        str = "零" + str;
+                    }
+                }
+
+                str  =  dw[Number(n)].concat(str);//加数字
+
+                if (len - i - 1 >= 0)//在数字范围内
+                {
+                    if (k1 != 3)//加小单位
+                    {
+                        str  =  dw1[k1].concat(str);
+                        k1++;
+                    }
+                    else//不加小单位，加大单位
+                    {
+                        k1 = 0;
+                        var  temp  =  str.charAt(0);
+                        if (temp == "万"  ||  temp == "亿")//若大单位前没有数字则舍去大单位
+                            str  =  str.substr( 1,  str.length - 1);
+                        str  =  dw2[k2].concat(str);
+                    }
+                }
+
+                if (k1 == 3)//小单位到千则大单位进一
+                {
+                    k2++;
+                }
+            }
+            if (str.substr(str.length - 1, str.length) == "零") {
+                str = str.substr(0, str.length - 1);
+            }
+            //转换小数部分
+            var  strdig = "";
+            if (Number(dig) == 0) {
+                strdig = "整";
+            }
+            else {
+                for (i = 0; i < 2; i++) {
+                    var  n  =  dig.charAt(i);
+                    if (i == 0  &&  Number(n) == 0)
+                    {
+                        strdig = "零"
+                    }
+                            else
+                    {
+                        strdig  +=  dws[Number(n)] + (i == 0  ?  "角"  :  "分");//加数字
+                    }
+                }
+            }
+            str  +=  "元" + strdig;
+            return   str;
+        }
+    </script>
+</body>
+</html>

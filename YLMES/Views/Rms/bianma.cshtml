@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "bianma";
+}  
+<link href="~/css/style.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+    table.gridtable {
+        font-family: verdana,arial,sans-serif;
+        font-size: 11px;
+        color: #333333;
+        border-width: 1px;
+        border-color: red;
+        border-collapse: collapse;
+    }
+
+        table.gridtable th {
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: red;
+            background-color: #dedede;
+        }
+
+        table.gridtable td {
+            font-size: 15px;
+            text-align: center;
+            width: 150px;
+            height: 20px;
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: red;
+            background-color: #ffd800;
+        }
+</style>
+
+<table class="gridtable">
+    <tr>
+        <td>仓库名:</td>
+        <td>@ViewData["ck"]</td>
+        <td>库区:</td>
+        <td>@ViewData["kq"]</td>
+        <td>货区:</td>
+        <td>@ViewData["hq"]</td>
+        <td>货位:</td>
+        <td>@ViewData["hw"]</td>
+    </tr>
+</table>

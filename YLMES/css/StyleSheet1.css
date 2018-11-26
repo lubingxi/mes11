@@ -1,0 +1,84 @@
+﻿table{
+    margin: 0px auto;
+    border:0px;
+}
+    [colspan] {
+        text-align: center;
+    }
+table{
+    width:85%;
+}
+    table:nth-child(1) input {
+        width: 250px;
+        border: 0;
+    }
+    table:nth-child(5) input {
+        width: 250px;
+        border: 0;
+    }
+    table:nth-child(3) input {
+        width: 100px;
+        border: 0;
+        text-align: center;
+    }
+li input {
+     
+    width: 100px;
+
+
+}
+table:nth-child(5) {
+    width: 1050px;
+    
+    line-height: 30px;
+}
+    table:nth-child(5) label {
+        width: 150px;
+       
+    }
+    
+
+table:nth-child(1) {
+    width: 1050px;
+    line-height: 30px;
+}
+    table:nth-child(3) td:nth-child(3) label {
+        width: 20px;
+    }
+    table:nth-child(3) td:nth-child(1) label {
+        width: 225px;
+    }
+    table:nth-child(3) td:nth-child(2) label {
+        width: 225px;
+    }
+    table:nth-child(3) {
+        width: 1050px;
+        text-align: center;
+        line-height: 30px;
+    }
+td label{
+    display: inline-block;
+    width: 120px;
+}
+
+input {
+    border: 0;
+    font-size: 16px;
+    border-bottom: 1px solid black;
+}
+li {
+    list-style-type:none;
+}
+select {
+    border: 0;
+    list-style-type: none;
+    text-align: center;
+    font-size: inherit;
+    padding-left:0;
+    vertical-align: auto;
+    position: relative;
+    z-index: 1;
+   
+    -moz-appearance: none; /* Firefox */
+    -webkit-appearance: none; /* Safari 和 Chrome */
+}

@@ -1,0 +1,173 @@
+﻿
+@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        $(function () {
+            $(".click").click(function () {
+                $(".tip").fadeIn(200);
+            });
+
+            $(".tiptop a").click(function () {
+                $(".tip").fadeOut(200);
+            });
+
+            $(".sure").click(function () {
+                $(".tip").fadeOut(100);
+            });
+            $("#cancle").click(function () {
+                window.parent.document.getElementById("rightframe").src = "/TaskManagement/PM_ContractReceivablesMain";
+            });
+            //$("#addC").click(function () {
+            //    var sd = $("#u").text();
+            //    window.parent.document.getElementById("rightframe").src = sd;
+            //});
+            $("#btn2").click(function () {
+                $.ajax({
+                    url: "/TaskManagement/ConfirmTheDesign",
+                    type: "post",
+                    dataType: "text",
+                    success: function (data) {
+                        if (data == "true") {
+                            window.setTimeout(function () {
+                               alert("确认成功！")
+                            }, 500);
+                        }
+                        else {
+                            alert("确认失败！");
+                            return;
+                        }
+                    }
+                });
+            });
+            $("#edit").click(function () {
+                window.parent.document.getElementById("rightframe").src = "/TaskManagement/NameTask?id=" + '@Session["id"]';
+            });           
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                $("#btn1").click(function () {                
+                    table.render({
+                        elem: '#tw'
+                   , url: '/TaskManagement/CheckBOMD'
+                   , cols: [[
+                   { field: 'BOM结构', width: 80, title: 'BOM结构' }
+                   , { field: '图号', width: 235, title: '图号' }
+                   , {
+                       field: '上传图片', width: 100, title: '上传图片'
+                   }
+                   , { field: '部件名称', title: '部件名称', width: 180 }
+                   , { field: '部件规格', width: 180, title: '部件规格' }
+                   , { field: '材料', width: 100, title: '材料' }
+                   , { field: '备注', width: 100, title: '备注' }
+                   , { field: '类型', width: 100, title: '类型' }
+                   , { field: '序号', width: 100, title: '序号' }
+                   , { field: 'right', width: 100, align: 'center', toolbar: '#barDemo' }
+                   ]]
+
+                    });
+                });
+                table.on('checkbox(demo)', function (obj) {
+                    console.log(obj)
+                });
+
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;
+                    switch (obj.event) {
+                        case 'add':
+                            tupian = data.上传图片;
+                            tuhao = data.图号
+                            if (tupian == "上传" && tuhao!="") {
+                                var url = "/TaskManagement/UploadPicture?hao=" + tuhao;
+                                layer_show('上传图纸', url, '1000', '700');                          
+                            }
+                            else if (tupian == "" && tuhao != "")
+                            {
+                                var url = "/TaskManagement/UpdatePicture?hao=" + tuhao;
+                                layer_show('查看或更新图纸', url, '1000', '700');
+                            } else
+                            {
+                                layer.msg('没有图号！不用上传!');
+                            }
+                            
+                            break;                        
+                    };
+                });
+
+
+            });
+        })
+
+
+
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" id="add" lay-event="add">操作图纸</a>   
+    </script>
+
+
+</head>
+
+
+<body>
+
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">任务管理</a></li>
+            <li><a href="#">我的任务</a></li>
+            <li><a href="#">完成我的设计</a></li>
+        </ul>
+    </div>
+
+    <div class="rightinfo">
+
+        <div class="tools">  
+            <ul class="toolbar">
+                <li>@Session["ifD"]&nbsp; &nbsp; &nbsp; @Session["nam"]</li>               
+                <li>
+                    @using (Html.BeginForm("StationImport", "TaskManagement", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                          <input type="file" name="files" id="files"/>
+                          <input type="submit" name="Submit" id="Submit" value="导入"/>
+                    }                                         
+                </li>
+                 <button class="btn"><a href="/TaskManagement/Filed?file1=~/BOM/材料清单导入格式模板.xlsx">BOM上传格式下载</a></button>           
+            </ul>
+           &nbsp;&nbsp; <button class="layui-btn" id="btn1" data-type="reload">BOM查询</button>
+           &nbsp;&nbsp; <button class="layui-btn" id="btn2" data-type="reload">确定完成我的设计</button>
+        </div>
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+    </div>
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+            function admin_add(title, url, w, h) {
+                layer_show(title, url, w, h);
+            }
+    </script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+</body>
+</html>

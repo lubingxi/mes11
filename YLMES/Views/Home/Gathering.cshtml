@@ -1,0 +1,284 @@
+﻿
+@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        function admin_add(title, url, w, h) {
+            layer_show(title, url, w, h);
+        }
+        $(function () {
+            $("#cancle").click(function () {
+                window.parent.document.getElementById("rightframe").src = "/Home/PM_ContractReceivablesMain";
+            });
+            $("#approved").click(function () {
+                var bianhao = '@ViewData["CNumbers"]';
+                layer.confirm('是否通过审核！', {
+                    title: "友力提示", skin: "my-skin",
+                    btn: ['确定','取消'], btn1: function () {
+                        layer.closeAll();
+                        $.ajax({
+                            url: "/Home/EditStatus?bianhao=" + bianhao,
+                            type: 'post',
+                            success: function (data) {
+                                if (data == "true") {
+                                    layer.msg("修改成功", { icon: 6 });
+                                    table.reload('twd');
+                                    table.reload('tw');
+                                }
+                                if (data == "false") {
+                                    layer.msg('修改失败!', { icon: 5 });
+                                    return false;
+                                }
+                            }
+                        });
+                    }                   
+                });
+               
+            });
+            $(".click").click(function () {
+                $(".tip").fadeIn(200);
+            });
+
+            $(".tiptop a").click(function () {
+                $(".tip").fadeOut(200);
+            });
+
+            $(".sure").click(function () {
+                $(".tip").fadeOut(100);
+            });
+
+            $(".cancel").click(function () {
+                $(".tip").fadeOut(100);
+            });
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+  
+                    table.render({
+                        elem: '#tw'
+                   , url: '/Home/Get_Datad?id=' + '@ViewData["Receivables"]'
+                   , page: false
+                   , limit: 1
+                   , cols: [[
+                   , { field: 'ID', width: 100, title: '序号', hide: true }
+                   , { field: 'ContractID', width: 200, title: '合同编号' }
+                   , { field: '合同金额', width: 200, title: '合同金额', sort: true }
+                   , {
+                       field: '已收金额', width: 180, title: '已收款金额',
+                   }
+                   , { field: 'NewAmountCollected', width: 180, title: '今收款金额' ,edit:Text}
+                   , { field: 'DateOfReceipt', width: 180, title: '收款时间', edit: Text }
+                    , { field: 'TicketOpeningAndDate', width: 210, title: '发票情况', edit: Text }
+                     , { field: '创建人', width: 150, title: '创建人' }
+                     , { field: '创建时间', width: 150, title: '创建时间' }
+                   , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+                   ]]
+
+                    });
+               
+                table.on('checkbox(demo)', function (obj) {
+                    console.log(obj)
+                });
+
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;
+                    switch (obj.event) {                    
+                        case 'update':
+                            id = data.ContractID;
+                            var newd = data.NewAmountCollected;
+                            var dor = data.DateOfReceipt;
+                            var TicketOpeningAndDate = data.TicketOpeningAndDate;
+                            $.ajax({
+                                url: "/Home/AddShouJiLu?id=" + id + "&NewAmountCollected=" + newd + "&DateOfReceipt="+dor + "&TicketOpeningAndDate=" + TicketOpeningAndDate,
+                                type: 'post',
+                                data: { "id": id, "NewAmountCollected":newd ,"DateOfReceipt":dor,"TicketOpeningAndDate": TicketOpeningAndDate },
+                                async: true,
+                                success: function (data) {
+                                    if (data == "true") {
+                                        layer.msg("添加成功", { icon: 6 });
+                                        table.reload('twd');
+                                        table.reload('tw');
+                                    }
+                                    if (data == "false") {
+                                        layer.msg('数据操作异常!', { icon: 5 });
+                                        return false;
+                                    }
+                                }
+                            });
+                            break;                        
+                    };
+                });
+
+
+            });
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+
+                table.render({
+                    elem: '#twd'
+               , url: '/Home/Get_ReceivablesHistory?id=' + '@ViewData["Receivables"]'
+               , page: false
+               , limit: 1
+               , cols: [[
+               , { field: 'ID', width: 37, title: '序号' }
+               , { field: 'ContractID', width: 200, title: '合同编号' }
+               , { field: '合同金额', width: 200, title: '合同金额', sort: true }
+               , { field: 'NewAmountCollected', width: 180, title: '今收款金额', edit: Text }
+               , { field: 'DateOfReceipt', width: 180, title: '收款时间' }
+                , { field: 'TicketOpeningAndDate', width: 210, title: '发票情况', edit: Text }
+                 , { field: '创建人', width: 150, title: '创建人' }
+                 , { field: '创建时间', width: 150, title: '创建时间' }
+               , { field: 'right', width: 250, align: 'center', toolbar: '#barDemod' }
+               ]]
+
+                });
+
+                table.on('checkbox(demod)', function (obj) {
+                    console.log(obj)
+                });
+                table.on('tool(demod)', function (obj) {
+                    var data = obj.data;
+                    switch (obj.event) {
+                        case 'update':
+                            id = data.ID;
+                            cid = data.ContractID;
+                            newd= data.NewAmountCollected;
+                            dateRec = data.DateOfReceipt;
+                            ticket = data.TicketOpeningAndDate
+                            $.ajax({                               
+                                url: "/Home/XiuShouJilu",
+                                type: 'post',
+                                async: true,
+                                data: { "cid": id,"ContractID": cid,"NewA":newd,"Dtr":dateRec,"Ticket":ticket},                                
+                                success: function (data) {
+                                    if (data == "true") {
+                                        layer.msg("修改成功", { icon: 6 });
+                                        table.reload('twd');
+                                        table.reload('tw');
+                                    }
+                                    if (data == "false") {
+                                        layer.msg('数据操作异常!', { icon: 5 });
+                                        return false;
+                                    }
+                                }
+                            });
+                            break;
+                        case 'delete':
+                            id = data.ID;
+                            ContractID = data.ContractID;
+                            $.ajax({
+                                url: "/Home/DeleteShouJiLu?ID =" + id + "&ContractID=" + ContractID,
+                                type: 'post',
+                                data: { "id": id, "ContractID": ContractID },
+                                async: true,
+                                success: function (data) {
+                                    if (data == "true") {
+                                        layer.msg("删除成功", { icon: 6 });
+                                        table.reload('twd');
+                                        table.reload('tw');
+                                    }
+                                    if (data == "false") {
+                                        layer.msg('数据操作异常!', { icon: 5 });
+                                        return false;
+                                    }
+                                }
+                            });
+                            break;
+                     
+                    };
+                });
+             
+
+
+            });
+        })
+
+
+
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" id="edit" lay-event="update">新增</a>   
+    </script>
+    <script type="text/html" id="barDemod">
+        <a class="layui-btn layui-btn-xs" id="edit" lay-event="update">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete" id="detelete">删除</a>
+    </script>
+
+</head>
+
+
+<body>
+
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">销售管理</a></li>
+            <li><a href="#">销售合同收款</a></li>
+            <li><a href="#">收款情况</a></li>
+        </ul>
+    </div>
+    <label style="font-size:20px;color:green">客户名称：(@ViewData["CNames"])</label>&nbsp;&nbsp;&nbsp;
+    <label style="font-size:20px;color:green">合同编码：(@ViewData["CNumbers"])</label>
+    <div class="rightinfo">
+
+        <div class="tools">
+
+            <ul class="toolbar">
+                <li class="ads" id="addC">
+                    <span>
+                        <img src="../../images/t01.png" />
+                    </span><a target="rightFrame" href="javascript:;" onclick="admin_add('新增收款情况', '/Home/ShouKuangAdd?CNumbers=@ViewData["CNumbers"]', '800', '500')">新增收款情况</a>@*<i hidden=hidden id="u">/Home/ContractAdd</i>*@
+                </li>
+                <li class="click" id="cancle">                             
+                    <span>
+                        <img src="../../images/t02.png" />
+                    </span>返回
+                </li>
+                <li class="click" id="approved">
+                    <span>
+                        <img src="../../images/t04.png" />
+                    </span>审核通过
+                </li>
+            </ul>
+          
+        </div>
+
+
+       
+
+    </div>
+    <table class="tablelist" id="tw" lay-filter="demo"></table>
+    <h2 style="color:blue">收款历史</h2>
+    <table class="tablelist" id="twd" lay-filter="demod"></table>
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+            function admin_add(title, url, w, h) {
+                layer_show(title, url, w, h);
+            }
+    </script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+﻿
+@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        $(document).ready(init);
+        function ca2(cd) {
+            $.ajax({
+                url: "@Url.Action("ca1","Rms")",
+                data: { c1: cd },
+                success: function (data) {
+                    $("#city").html(data);
+                }
+            })
+        }
+        function init(){
+            $("select[name='Category1']").change(function () {
+                var selectCa = $(this).val();
+                ca2(selectCa);
+            })
+        }
+        $(function () {                    
+            $(".tiptop a").click(function () {
+                $(".tip").fadeOut(200);
+            });
+
+            $(".sure").click(function () {
+                $(".tip").fadeOut(100);
+            });
+
+            $(".cancel").click(function () {
+                $(".tip").fadeOut(100);
+            });        
+            });
+    </script>
+
+
+</head>
+
+
+<body>
+
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">原材料仓</a></li>
+            <li><a href="#">物料注册</a></li>
+        </ul>
+    </div>
+
+    <div class="rightinfo">
+
+        <div class="tools">
+
+            <ul class="toolbar">
+                <li class="ads" id="addD">
+                    <span>
+                        <img src="../../images/t01.png" />
+                    </span><a target="rightFrame" href="javascript:;" onclick="admin_add1('新增大类别', '/Rms/DaAdd', '400', '200')">新增大类别</a>
+                </li>               
+                <li>                 
+                    大类别： @Html.DropDownList("Category1", new SelectList(ViewBag.c1, "id", "CategoryName"),"请选择", new { @class="Da"})                                   
+                </li>
+                <li class="ads">
+                    <span>
+                        <img src="../../images/t03.png" />
+                    </span><a target="rightFrame" href="javascript:;" onclick="Delete()">大删除</a>
+                </li>
+                <li class="ads" id="addX">
+                    <span>
+                        <img src="../../images/t02.png" />
+                    </span><a target="rightFrame" href="javascript:;" onclick="admin_add2('新增小类别', '/Rms/XiaoAdd', '400', '200')">新增小类别</a>
+                </li>  
+                <li>
+                    <div id="city">
+                        @Html.Partial("ca1")                       
+                    </div>
+                                 
+                </li>
+                <li class="ads">
+                    <span>
+                        <img src="../../images/t03.png" />
+                    </span><a target="rightFrame" href="javascript:;" onclick="Delete2()">小删除</a>
+                </li>
+                <li class="ad">
+                    <span>
+                        <img src="../../images/t01.png" />
+                    </span><a target="rightFrame" href="javascript:;" onclick="admin_add('新增物料信息', '/Rms/AddMaterial', '1000', '600')">新增物料信息</a>
+                </li>  
+                <li>
+                    关键字查询：
+                    <input class="AllSerach" id="AllSerach" type="text" style="width: 80px;" />
+                </li>
+                 
+            </ul>
+        </div>
+        <table class="tablelist" id="tw" lay-filter="demo"></table>    
+        <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-xs" id="add" lay-event="add">打印</a>
+            <a class="layui-btn layui-btn-xs" id="edit" lay-event="update">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete" data-type="getCheckLength" id="deteleted">删除</a>
+        </script>   
+    </div>
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+            function admin_add1(title, url, w, h) {
+               layer_show(title, url, w, h);
+              
+            }
+            function admin_add(title, url, w, h) {
+                window.parent.document.getElementById("rightframe").src = "/Rms/AddMaterial";
+            }
+            function admin_add2(title, url, w, h) {
+                layer_show(title, url, w, h);
+            }          
+            function Delete() {
+                var delD = $(".Da").val();
+                layer.confirm('真的要删除吗?', function () {
+                    $.ajax({
+                        type: "post",
+                        url: "/Rms/DelD?delD=" + delD,
+                        data: { "delD": delD },
+                        async: true,
+                        success: function (data) {
+                            if (data == "true") {
+                                layer.msg("删除成功!");
+                                window.parent.document.getElementById("rightframe").src = "/Rms/MaterialRegistration";
+                            }
+                            else {
+                                layer.msg('删除失败', { icon: 2 });
+                }
+                        }
+                    })
+                });
+            }
+            function Delete2() {
+                var delD = $(".Xiao").val();
+                layer.confirm('真的要删除吗?', function () {
+                    $.ajax({
+                        type: "post",
+                        url: "/Rms/DelD2?delD=" + delD,
+                        data: { "delD": delD },
+                        async: true,
+                        success: function (data) {
+                            if (data == "true") {
+                                layer.msg("删除成功!");
+                                window.parent.document.getElementById("rightframe").src = "/Rms/MaterialRegistration";
+                            }
+                            else {
+                                layer.msg('删除失败', { icon: 2 });
+                            }
+                        }
+                    })
+                });
+            }           
+    </script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+﻿
+@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        $(function () {
+            $(".click").click(function () {
+                $(".tip").fadeIn(200);
+            });
+
+            $(".tiptop a").click(function () {
+                $(".tip").fadeOut(200);
+            });
+
+            $(".sure").click(function () {
+                $(".tip").fadeOut(100);
+            });
+
+            $(".cancel").click(function () {
+                $(".tip").fadeOut(100);
+            });
+            //查看事件
+            //$(".deleteone").click(function () {
+            //    var type = $(this).data('type');
+            //    active[type] ? active[type].call(this) : '';
+            //    alert("1");
+            //});
+            //var $ = layui.$, active = {
+            //    getCheckLength: function () {
+            //        var checkStatus = table.checkStatus('tw').data = checkStatus.data;
+            //        var IdList = new Array();
+            //        for (var j = 0; j < data.length; j++) {
+            //            IdList[j] = data[j].id;
+            //        }
+            //        var url = "/Home/DeleteList?id=" + IdList;
+            //        layer.confirm('选中了' + data.length + '条数据,真的要删除吗?', function (index) {
+            //            layer.close(index);
+            //            $.ajax({
+            //                type: "post",
+            //                url: url,
+            //                data: { "id": IdList },
+            //                async: true,
+            //                success: function (data) {
+            //                    if (data == "true") {
+            //                        layer.msg('删除成功', { icon: 1 });
+            //                        table.reload('tw');
+            //                    }
+            //                    else {
+            //                        layer.msg('删除失败', { icon: 2 });
+            //                        table.reload('tw');
+            //                    }
+            //                }
+            //            })
+            //        })
+            //    }
+            //}
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                $(".layui-btn").click(function () {
+                    var CuName = $("#CustomerName").val().trim();
+                    var CNumber = $("#ContractNumber").val().trim();
+                    var Select = $("#s option:selected").text();
+                    var Selectd = $("#s2 option:selected").text();
+                    var strattime = $(".strattime").val();
+                    var endtime = $(".endtime").val();
+                    table.render({
+                        elem: '#tw'
+                   , url: '/ProductionPlanning/Get_PP?CName=' + CuName + '&CNumber=' + CNumber + '&Status=' + Select + '&Statusd='+Selectd + '&strattime=' + strattime + '&endtime=' + endtime
+                   , page: true
+                  , toolbar: 'default'
+                   , limit: 15
+                   , cols: [[
+
+                   { field: 'ID', width: 210, title: '序号' }
+                   , { field: 'CustomerName', width: 210, title: '客户名称' }
+                   , { field: 'ContractNumber', width: 235, title: '合同编号', sort: true }
+                   , {
+                       field: '合同签订日期', width: 180, title: '合同签订日期',
+                   }
+                   , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+                   ]]
+
+                    });
+                });
+                table.on('checkbox(demo)', function (obj) {
+                    console.log(obj)
+                });
+
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;
+                    switch (obj.event) {
+                        case 'PPDetials':
+                            id = data.ID;
+                            window.parent.document.getElementById("rightframe").src = "/ProductionPlanning/notice?id=" + id;
+                            break;
+                        case 'check':
+                            id = data.ID;
+                            window.parent.document.getElementById("rightframe").src = "/ProductionPlanning/Contract_Check?id=" + id;
+                            break;                          
+                      
+                    };
+                });
+
+
+            });
+        })
+
+
+
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="PPDetials">订单明细</a>
+        <a class="layui-btn layui-btn-xs" id="check" lay-event="check">查看合同</a>
+    </script>
+
+
+</head>
+
+
+<body>
+
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">生产计划管理</a></li>
+            <li><a href="#">生产订单创建</a></li>
+        </ul>
+    </div>
+
+    <div class="rightinfo">
+
+        <div class="tools">
+
+            <ul class="toolbar">
+                <li>
+                    创建日期：
+                    <input name="strattime" class="strattime" id="test1" type="text" onclick="WdatePicker()" style="width: 80px;" />
+                </li>
+                <li>
+                    到：
+                    <input class="endtime" id="test2" type="text" onclick="WdatePicker()" style="width: 80px;" />
+                </li>
+                <li>
+                    项目状态：
+                    <select name="quiz1" id="s">
+                        <option value="" selected="">全部</option>
+                        <option value="已完成">已完成</option>
+                        <option value="未开始">未开始</option>
+                        <option value="进行中">进行中</option>
+                    </select>
+                </li>
+                <li>
+                    生产订单：
+                    <select name="quiz2" id="s2">
+                        <option value="已转生产订单" selected="">已转生产订单</option>
+                        <option value="未转生产订单">未转生产订单</option>
+                        <option value="全部">全部</option>
+                    </select>
+                </li>
+                <li>
+                    客户名称：
+                    <input class="CustomerName" id="CustomerName" type="text" style="width: 80px;" />
+                </li>
+                <li>
+                    合同编号：
+                    <input class="ContractNumber" id="ContractNumber" type="text" style="width: 80px;" />
+                </li>
+            </ul>
+            <button class="layui-btn" data-type="reload">搜索</button>
+
+
+
+        </div>
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+
+
+
+
+    </div>
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+</body>
+</html>

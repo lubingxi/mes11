@@ -1,0 +1,186 @@
+﻿@{
+    ViewBag.Title = "ca1";
+}
+ 小类别： @Html.DropDownList("Category2", new SelectList(ViewBag.c2, "id","CategoryName"),"请选择",new { @class ="Xiao" })  
+<script type="text/javascript" src="../../js/jquery.js"></script>
+<script>
+    $(function () {
+       
+        layui.use(['table', 'layer'], function () {
+            var table = layui.table, layer = layui.layer;
+            table.render({
+                elem: '#tw'
+           , url: '/Rms/CateCHeck?Da=' + $(".Da").val() + "&Xiao=" + $(".Xiao").val()
+           , page: true
+           , limit: 15
+           , cols: [[
+            { field: 'PartNumber', width: 210, title: '物料名称' }
+           , { field: 'PartSpec', width: 235, title: '规格' }
+           , { field: 'figureNumber', width: 235, title: '图号' }
+            , { field: 'PartMaterial', width: 235, title: '材料' }
+           , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+           ]]
+            });
+            table.on('tool(demo)', function (obj) {
+                var data = obj.data;
+                switch (obj.event) {
+                    case 'add':
+                        figureNumber = data.figureNumber;
+                        PartNumber = data.PartNumber;
+                        PartSpec = data.PartSpec;
+                        PartMaterial = data.PartMaterial;              
+                        layer_show('打印', '/Rms/Pbc?figureNumber=' + figureNumber + '&PartNumber=' + PartNumber + '&PartSpec=' + PartSpec + '&PartMaterial=' + PartMaterial, '1600', '800');
+                        break;
+                    case 'update':
+                        PartNumber = data.PartNumber;
+                        PartSpec = data.PartSpec;
+                        layer_show('修改', '/Rms/PbcUpdate?PartNumber=' + PartNumber + '&PartSpec=' + PartSpec, '1000', '600');
+                        break;
+                    case 'delete':
+                        id = data.ID;
+                        $.ajax({
+                            url: "/Rms/DeleteMaterial",
+                            data: { ID: id },
+                            type: "post",
+                            dataType: "text",
+                            success: function (data) {
+                                if (data == "true") {
+                                    window.setTimeout(function () {
+                                        layer.msg("删除成功!");
+                                        window.parent.document.getElementById("rightframe").src = "/Rms/MaterialRegistration";
+                                    }, 500);
+                                }
+                                else {
+                                    alert("删除失败!");
+                                    return;
+                                }
+                            }
+                        });
+                        break;
+                };
+            });
+        });
+        $(".Xiao").change(function () {
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                table.render({
+                    elem: '#tw'
+               , url: '/Rms/CateCHeck?Da=' + $(".Da").val() + "&Xiao=" + $(".Xiao").val()
+               , page: true
+               , limit: 15
+               , cols: [[
+                 { field: 'PartNumber', width: 210, title: '物料名称' }
+               , { field: 'PartSpec', width: 235, title: '规格' }
+               , { field: 'figureNumber', width: 235, title: '图号' }
+               , { field: 'PartMaterial', width: 235, title: '材料' }
+               , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+               ]]
+                });
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;
+                    switch (obj.event) {
+                        case 'add':
+                            figureNumber = data.figureNumber;
+                            PartNumber = data.PartNumber;
+                            PartSpec = data.PartSpec;
+                            PartMaterial = data.PartMaterial;
+                            layer_show('打印', '/Rms/Pbc?figureNumber=' + figureNumber + '&PartNumber=' + PartNumber + '&PartSpec=' + PartSpec + '&PartMaterial=' + PartMaterial, '1600', '800');
+                            break;
+                        case 'update':
+                            PartNumber = data.PartNumber;
+                            PartSpec = data.PartSpec;
+                            layer_show('修改', '/Rms/PbcUpdate?PartNumber=' + PartNumber + '&PartSpec=' + PartSpec, '1000', '600');
+                            break
+                        case 'delete':
+                            id = data.ID;
+                            $.ajax({
+                                url: "/Rms/DeleteMaterial",
+                                data: { ID: id },
+                                type: "post",
+                                dataType: "text",
+                                success: function (data) {
+                                    if (data == "true") {
+                                        window.setTimeout(function () {
+                                            layer.msg("删除成功!");
+                                            window.parent.document.getElementById("rightframe").src = "/Rms/MaterialRegistration";
+                                        }, 500);
+                                    }
+                                    else {
+                                        alert("删除失败!");
+                                        return;
+                                    }
+                                }
+                            });
+                            break;
+
+                    };
+                });
+            });
+        });
+        $('.AllSerach').bind("input propertychange", function (event) {
+            var s = $('.AllSerach').val();
+            var da = $(".Da").val();
+            var xiao = $(".Xiao").val();
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                table.render({
+                    elem: '#tw'
+               , url: '/Rms/TypeLikeSearch?Da=' + da + "&Xiao=" + xiao + "&pn="+s
+               , page: true
+               , limit: 15
+               , cols: [[
+                 { field: 'PartNumber', width: 210, title: '物料名称' }
+               , { field: 'PartSpec', width: 235, title: '规格' }
+               , { field: 'figureNumber', width: 235, title: '图号' }
+               , { field: 'PartMaterial', width: 235, title: '材料' }
+               , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+               ]]
+                });
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;
+                    switch (obj.event) {
+                        case 'add':
+                            figureNumber = data.figureNumber;
+                            PartNumber = data.PartNumber;
+                            PartSpec = data.PartSpec;
+                            PartMaterial = data.PartMaterial;
+                            layer_show('打印', '/Rms/Pbc?figureNumber=' + figureNumber + '&PartNumber=' + PartNumber + '&PartSpec=' + PartSpec + '&PartMaterial=' + PartMaterial, '1600', '800');
+                            break;
+                        case 'update':
+                            PartNumber = data.PartNumber;
+                            PartSpec = data.PartSpec;
+                            layer_show('修改', '/Rms/PbcUpdate?PartNumber=' + PartNumber + '&PartSpec=' + PartSpec, '1000', '600');
+                            break
+                        case 'delete':
+                            id = data.ID;
+                            $.ajax({
+                                url: "/Rms/DeleteMaterial",
+                                data: { ID: id },
+                                type: "post",
+                                dataType: "text",
+                                success: function (data) {
+                                    if (data == "true") {
+                                        window.setTimeout(function () {
+                                            layer.msg("删除成功!");
+                                            window.parent.document.getElementById("rightframe").src = "/Rms/MaterialRegistration";
+                                        }, 500);
+                                    }
+                                    else {
+                                        alert("删除失败!");
+                                        return;
+                                    }
+                                }
+                            });
+                            break;
+
+                    };
+                });
+            });
+        })
+       $("#AllSerach").propertychange(function () {
+            var s = $(this).val();
+            alert(s);
+           
+        });
+    })
+</script>

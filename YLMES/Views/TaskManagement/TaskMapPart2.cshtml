@@ -1,0 +1,221 @@
+﻿@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        $(function () {
+            var url = "/TaskManagement/CompleteProcessSetting?tastid=" + '@ViewData["taskid"]';
+            $(".click").click(function () {
+                $(".tip").fadeIn(200);
+            });
+
+            $(".tiptop a").click(function () {
+                $(".tip").fadeOut(200);
+            });
+
+            $(".sure").click(function () {
+                $(".tip").fadeOut(100);
+            });
+
+            $(".cancel").click(function () {
+                $(".tip").fadeOut(100);
+            });
+            $("#m1").click(function () {
+                window.parent.document.getElementById("rightframe").src = "/TaskManagement/TaskMapPart?TaskID=" + "@Session["task1"]" + "&ProductName=" + "@Session["ProductName1"]" + "&ProductSpec="+"@Session["ProductSpec2"]";
+            });
+            $("#addC").click(function () {
+                //var sd = $("#u").text();
+                //window.parent.document.getElementById("rightframe").src = sd;
+                alert("功能还没开始!");
+            });
+            $("#edit").click(function () {
+                window.parent.document.getElementById("rightframe").src = "/Home/Eidt";
+            });
+            $("#BindingProductConfirmation").click(function () {
+
+            });
+            $("#ProcessSetup").click(function () {
+
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    async: true,
+                    success: function (data) {
+                        if (data == "true") {
+                            layer.msg("删除成功", { icon: 6 });
+                            table.reload('tw');
+                        }
+                        if (data == "false") {
+                            layer.msg('数据操作异常!', { icon: 5 });
+                            return false;
+                        }
+                    }
+                });
+            });
+
+            layui.use(['table', 'layer'], function () {
+                    var table = layui.table, layer = layui.layer;
+                    table.render({
+                        elem: '#tw'
+                   , url: '/TaskManagement/CheckBOM2?PName=' + '@Session["zi"]'
+                   , cols: [[
+
+                   , { field: '序号', width: 57, title: '序号' }
+                   , { field: '工件编码', width: 200, title: '工件编码' }
+                   , { field: '子件编码', width: 200, title: '子件编码' }
+                   , {
+                       field: '子件数量', width: 100, title: '子件数量'
+                   }
+                   , { field: '原材料用量', title: '原材料用量', width: 200, edit: Text }
+                   , { field: '原材料单位', width: 200, title: '原材料单位', edit: Text }
+                   , { field: '是否组装件', width: 100, title: '是否组装件', }
+                   , { field: '工艺流程', width: 100, title: '工艺流程' }
+                   , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+                   ]]
+
+                    });
+
+                table.on('checkbox(demo)', function (obj) {
+                    console.log(obj)
+                });
+
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;
+                    switch (obj.event) {
+                        case 'add':
+                            id = data.子件编码;
+                            window.parent.document.getElementById("rightframe").src = '/TaskManagement/TaskMapPart3?TaskID=' + '@Session["task3"]' + '&ProductName=' + '@Session["ProductName3"]' + '&ProductSpec=' + '@Session["ProductSpec3"]';
+                            break;
+                        case 'Detials':
+                            id = data.序号;
+                            var url = "/TaskManagement/EditingProcess?id=" + id;
+                            layer_show('修改工件', url, '1000', '700');
+                            break;
+                        case 'delete':
+                            layer.confirm('真的删除行么', function (index) {
+                                id = data.序号;
+
+                                layer.close(index);
+                                var url = "/TaskManagement/DeleteBOM2?id=" + id;
+                                $.ajax({
+                                    url: url,
+                                    type: 'post',
+                                    async: true,
+                                    success: function (data) {
+                                        if (data == "true") {
+                                            layer.msg("删除成功", { icon: 6 });
+                                            table.reload('tw');
+                                        }
+                                        if (data == "false") {
+                                            layer.msg('数据操作异常!', { icon: 5 });
+                                            return false;
+                                        }
+                                    }
+                                });
+                            });
+                            break;
+                        case 'update':
+                            part = data.工件编码;
+                            child = data.子件编码;
+                            dosage = data.原材料用量;
+                            unit = data.原材料单位;
+                            var url = "/TaskManagement/UpdateBOM2?part=" + part + "&child=" + child + "&dosage=" + dosage + "&unit=" + unit;
+                            $.ajax({
+                                url: url,
+                                type: 'post',
+                                async: true,
+                                success: function (data) {
+                                    if (data == "true") {
+                                        layer.msg("修改成功", { icon: 6 });
+                                        table.reload('tw');
+                                    }
+                                    if (data == "false") {
+                                        layer.msg('修改失败!', { icon: 5 });
+                                        return false;
+                                    }
+                                }
+                            });
+                            break;
+                    };
+                });
+
+
+            });
+        })
+
+
+
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" id="add" lay-event="add">子件编码</a>
+        <a class="layui-btn layui-btn-xs" id="detials" lay-event="Detials">工艺流程</a>
+        <a class="layui-btn layui-btn-xs" id="edit" lay-event="update">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete" data-type="getCheckLength" id="delete">删除</a>
+    </script>
+
+
+</head>
+
+
+<body>
+
+    <div class="rightinfo">
+
+        <div class="tools">
+
+            <ul class="toolbar">
+                <li class="ads" id="addC">
+                    <span>
+                        <img src="../../images/t01.png" />
+                    </span><a target="rightFrame">新增子件</a><i hidden=hidden id="u">/TaskManagement/NewChildThing</i>
+                </li>
+                <li>
+                    产品名称：
+                    <input class="ProductName" id="ProductName" type="text" style="width: 180px;" value="@Session["ProductName1"]" />
+                </li>
+                <li>
+                    产品规格：
+                    <input class="ContractNumber" id="ContractNumber" type="text" style="width: 80px;" value="@Session["ProductSpec1"]" />
+                </li>
+                <li>
+                    工作目录：
+                    <a href="#" id="m1">1</a>
+                    <a href="#" id="m2">2</a>
+                </li>
+            </ul>
+            <button class="layui-btn" id="ProcessSetup" data-type="reload">确认完成工艺设置</button>
+        </div>
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+    </div>
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+
+            function admin_add(title, url, w, h) {
+                layer_show(title, url, w, h);
+            }
+    </script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+﻿
+@{
+    ViewBag.Title = "Menu";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+
+    <link rel="Shortcut Icon" href="../../images/logo.gif">
+    <link href="~/css/styled.css" rel="stylesheet" type="text/css" />
+    <meta name="viewport" content="width=device-width" />
+    <title>友力信息管理系统</title>
+    <script language="JavaScript" src="../../js/jquery.js"></script>
+   
+   
+    <script language="javascript">
+        $(function () {
+            $('#Button7').click(function () {
+                window.location.href = "/Home/Index";
+            });
+            $('#Button8').click(function () {
+                window.location.href = "/ContractTwo/LoginContract";
+            });
+
+        });
+       
+    </script>
+</head>
+
+<body  style="background-image:url(../../images/fit.gif)">
+                 
+        @*<div style="margin-left: 80px; margin-top: 44px; height: 150px; width: 100px;">
+            <br />
+            <br />
+            <button id="Button1" class="btn" onmouseover="{this.style.background='#006699'}" onmouseout="this.style.backgroundColor='#175C82';" style="height: 100px; width: 239px; color: white; font-size: large; border-style: dotted; background: #175C82">通讯录</button>
+        </div>
+        <div style="margin-left: 80px; margin-top: 40px; height: 150px; width: 336px;">
+            <br />
+            <br />
+            <button id="Button2" class="btn" onmouseover="{this.style.background='#006699'}" onmouseout="this.style.backgroundColor='#175C82';" style="height: 100px; width: 239px; color: white; font-size: large; border-style: dotted; background: #175C82">考勤系统</button>
+        </div>
+        <div style="margin-left: 80px; margin-top: 60px; height: 150px; width: 336px;">
+            <br />
+            <br />
+            <button id="Button3" class="btn" onmouseover="{this.style.background='#006699'}" onmouseout="this.style.backgroundColor='#175C82';" style="height: 100px; width: 239px; color: white; font-size: large; border-style: dotted; background: #175C82">审批流程</button>
+        </div>
+        <div style="margin-left: 80px; margin-top: 80px; height: 150px; width: 336px;">
+            <br />
+            <br />
+            <button id="Button4" class="btn" onmouseover="{this.style.background='#006699'}" onmouseout="this.style.backgroundColor='#175C82';" style="height: 100px; width: 239px; color: white; font-size: large; border-style: dotted; background: #175C82">报价系统</button>
+        </div>
+        <div style="margin-left: 1580px; margin-top: -780px; height: 150px; width: 336px;">
+            <br />
+            <br />
+            <button id="Button5" class="btn" onmouseover="{this.style.background='#006699'}" onmouseout="this.style.backgroundColor='#175C82';" style="height: 100px; width: 239px; color: white; font-size: large; border-style: dotted; background: #175C82">合同管理</button>
+        </div>
+        <div style="margin-left: 1580px; margin-top: 40px; height: 150px; width: 336px;">
+            <br />
+            <br />
+            <button id="Button6" class="btn" onmouseover="{this.style.background='#006699'}" onmouseout="this.style.backgroundColor='#175C82';" style="height: 100px; width: 239px; color: white; font-size: large; border-style: dotted; background: #175C82">资产管理</button>
+        </div>
+        <div style="margin-left: 1580px; margin-top: 80px; height: 150px; width: 336px;">
+            <br />
+            <br />
+            <button id="Button7" class="btn" onmouseover="{this.style.background='#006699'}" onmouseout="this.style.backgroundColor='#175C82';" style="height: 100px; width: 239px; color: white; font-size: large; border-style: dotted; background: #175C82">项目管理</button>
+        </div>
+        <div style="margin-left: 1580px; margin-top: 60px; height: 150px; width: 336px;">
+            <br />
+            <br />
+            <button id="Button8" class="btn" onmouseover="{this.style.background='#006699'}" onmouseout="this.style.backgroundColor='#175C82';" style="height: 100px; width: 239px; color: white; font-size: large; border-style: dotted; background: #175C82">合同管理2</button>
+        </div>*@
+    <div id="container">
+        <div id="dock">
+            <ul>
+                <li>
+                    <span>通讯录</span> <a href="#">
+                        <img src="~/images/2000px-App_Store_OS_X.svg.png">
+                    </a>
+                <li>
+                    <span>考勤系统</span> <a href="#">
+                        <img src="~/images/2000px-Google_Chrome_icon_(2011).svg.png">
+                    </a>
+                </li>
+                <li>
+                    <span>审核流程</span> <a href="#">
+                        <img src="~/images/siri_by_hs1987-dbd58rs.png">
+                    </a>
+                </li>
+                <li>
+                    <span>报价系统</span> <a href="#">
+                        <img src="~/images/iTunes 1024x1024.png">
+                    </a>
+                </li>
+                <li>
+                    <span>项目管理</span> <a href="#" id="Button7">
+                    <img src="~/images/Mac_Finder_icon_(OS_X_Yosemite).png">
+</a>
+                </li>
+                <li>
+                    <span>资产管理</span> <a href="#">
+                        <img src="~/images/launchpad-icon.png">
+                    </a>
+                </li>
+                <li>
+                    <span>合同管理</span> <a href="#">
+                        <img src="~/images/mozilla-png-file-mozilla-firefox-3-5-logo-256-png-256.png">
+                    </a>
+                </li>
+                <li>
+                    <span>合同管理2</span> <a href="#">
+                        <img src="~/images/siri_by_hs1987-dbd58rs.png">
+                    </a>
+                </li>
+                <li>
+                    <span>iTunes</span> <a href="#">
+                        <img src="~/images/system-preferences-icon.png">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+

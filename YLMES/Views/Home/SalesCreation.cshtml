@@ -1,0 +1,309 @@
+﻿
+@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            if ('@Session["name"]' == '11') {
+                $("#ReviewStatus").attr("value","申请修改");
+            }
+           
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                $("#sele").click(function () {
+                    var CuName = $("#CustomerName").val().trim();
+                    var CNumber = $("#ContractNumber").val().trim();
+                    var Select = $("#ck option:selected").text();
+                    var strattime = $(".strattime").val();
+                    var endtime = $(".endtime").val();
+                    var rs = $("#ReviewStatus").val();
+                    table.render({
+                        elem: '#tw'
+                   , url: '/Home/Get_Data?CName=' + CuName + '&CNumber=' + CNumber + '&Status=' + Select + '&strattime=' + strattime + '&endtime=' + endtime+'&rs='+rs
+                   , page: true
+                   , limit: 15
+                   , toolbar: '#toolbarDemo'
+                   , cols: [[
+                    { type: 'radio' }
+                   , { field: 'id', width: 210, title: '序号', hide: true }
+                   , { field: 'CustomerName', width: 210, title: '客户名称' }
+                   , { field: 'ContractNumber', width: 235, title: '合同编号', event: 'xi' }
+                   , {
+                       field: '合同签订日期', width: 140, title: '签订日期',
+                   }
+                   , { field: '合同金额', title: '合同金额', width: 135 }
+                   , { field: '收款金额', width: 135, title: '收款金额' }
+                   , { field: '是否安装', width: 90, title: '是否安装' }
+                   , { field: '是否运输', width: 90, title: '是否运输' }
+                   , { field: '是否含税', width: 90, title: '是否含税' }
+                   , { field: '合同状态', width: 180, title: '合同状态' }
+                    , { field: '是否通过', width: 120, title: '是否审核' }
+                   , { field: 'right', width: 280, align: 'center', toolbar: '#barDemo' }
+                   ]]
+                    });
+                });
+                table.on('toolbar(demo)', function (obj) {
+                    var checkStatus = table.checkStatus(obj.config.id); //获取选中行状态
+                    var data = checkStatus.data;  //获取选中行数据
+                    var sd = JSON.stringify(data);
+                    var dataObj = eval("(" + sd + ")");//转换为json对象 
+                    switch (obj.event) {
+                        case 'getCheckData':                           
+                            $.each(dataObj, function (idx, item) {
+                                if (idx == 0) {
+                                    if (item.是否通过 == "审核通过") {
+                                        layer.msg('已经审核通过!');
+                                    }
+                                    else {
+                                        var url = "/Home/Audit?id=" + item.id;
+                                        layer.confirm('审核修改是否通过？', {
+                                            btn: ['确定', '取消'], btn1: function () {
+                                                $.ajax({
+                                                    url: url,
+                                                    type: 'post',
+                                                    success: function (data) {
+                                                        if (data == "true") {
+                                                            layer.msg("修改审核通过成功！", { icon: 6 });
+                                                            $("#sele").click();
+                                                        }
+                                                        if (data == "false") {
+                                                            layer.msg('修改审核通过失败！', { icon: 5 });
+                                                            return false;
+                                                        }
+                                                        if (data == "er") {
+                                                            layer.msg('必须指定人修改审核通过才可以进行修改！');
+                                                            return false;
+                                                        }
+                                                    }
+                                                });
+                                            }, btn2: function () {
+                                                layer.msg("取消审核修改！", { icon: 6 });
+                                            }
+                                        });
+                                    }                                 
+                                }
+                            })                          
+                            break;
+                        case 'getCheckAdd':
+                            $.each(dataObj, function (idx, item) {
+                                if (idx == 0) {
+                                    window.parent.document.getElementById("rightframe").src = "/Home/notice?id=" + item.id;
+                                }
+                            })
+                            break;
+                        case 'getCheckDetials':
+                            $.each(dataObj, function (idx, item) {
+                                if (idx == 0) {
+                                    window.parent.document.getElementById("rightframe").src = "/Home/HDetials?id=" + item.id;
+                                }
+                            })
+                            break;
+                        case 'getCheckSubmit':
+                            $.each(dataObj, function (idx, item) {
+                                if (idx == 0) {
+                                    if (item.是否通过 == "审核通过") {
+                                        layer.msg('已经审核不用通过！')
+                                    }
+                                    else if (item.合同状态 == "销售部新建销售合同") {
+                                        layer.msg('不用申请修改！')
+                                    }
+                                    else
+                                    {                                    
+                                        var url = "/Home/Apply?id=" + item.id;
+                                        $.ajax({
+                                            url: url,
+                                            dataType: "text",
+                                            success: function (data) {
+                                                if (data == "true") {
+                                                    layer.msg('申请成功!');
+                                                    $("#sele").click();
+                                                } else {
+                                                    layer.msg('申请失败!');
+                                                }
+                                            }
+                                        });
+                                    }                                                                     
+                                }
+                            })
+                            break;
+                    };
+                });
+                table.on('rowDouble(demo)', function (obj) {
+                    var data = obj.data;
+                    id = data.id;
+                    staus = data.合同状态;
+                    tong = data.是否通过;
+                    if (staus != "销售部新建销售合同" && tong == null || staus != "销售部新建销售合同" && tong == "申请修改" || staus != "销售部新建销售合同" && tong == "") {
+                        layer.msg('不能修改,需要申请修改后通过才可以进行操作');
+                    }
+                    else if (staus != "销售部新建销售合同" && tong == "审核通过")
+                    {
+                        window.parent.document.getElementById("rightframe").src = "/Home/EditContract?id=" + id;
+                    }
+                    else if (staus == "销售部新建销售合同") {
+                        window.parent.document.getElementById("rightframe").src = "/Home/EditContract?id=" + id;
+                    }
+                });
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;
+                    if (obj.event === 'xi') {
+                        id = data.id;
+                        window.parent.document.getElementById("rightframe").src = "/Home/Contract_Checks?id=" + id;
+                    }
+                    switch (obj.event) {
+
+                        case 'add':
+                            id = data.id;
+                            window.parent.document.getElementById("rightframe").src = "/Home/notice?id=" + id;
+                            break;
+                        case 'Detials':
+                            id = data.id;
+                            window.parent.document.getElementById("rightframe").src = "/Home/HDetials?id=" + id;
+                            break;
+                        case 'que':
+                            id = data.id;
+                            statu = data.合同状态;
+                            if (statu != "销售部新建销售合同") {
+                                layer.msg('已经提交过了！')
+                            } else
+                            {
+                                var url = '/Home/SubmitMethod?id=' + id;
+                                $.ajax({
+                                    url: url,
+                                    data: { id: id },
+                                    type: "post",
+                                    dataType: "text",
+                                    success: function (data) {
+                                        if (data == "true") {
+                                            layer.msg('确认成功!');
+                                            $("#sele").click();
+                                        } else {
+                                            layer.msg('确认失败!');
+                                            $("#sele").click();
+                                        }
+                                    }
+                                });
+                            }                          
+                            break;
+                        case 'del':
+                            layer.confirm("真的删除行么", function (index) {
+                                id = data.id;
+                                var url = "/Home/DeleteContractd";
+                                $.ajax({
+                                    url: url,
+                                    data: { id: id },
+                                    type: "post",
+                                    dataType: "text",
+                                    success: function (data) {
+                                        if (data == "true") {
+                                            layer.msg('删除成功');
+                                            $("#sele").click();
+                                        } else {
+                                            layer.msg('信息不可删除');
+                                            $("#sele").click();
+                                        }
+                                    }
+                                });
+                            });
+                            break;
+                    };
+
+                });
+                $("#addC").click(function () {
+                    var sd = $("#u").text();
+                    window.parent.document.getElementById("rightframe").src = sd;
+                });
+
+            });
+        });
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" id="edit" lay-event="que">提交确认</a>     
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" id="del">删除</a>
+    </script>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm"  lay-event="getCheckSubmit">申请修改</button>
+            <button class="layui-btn layui-btn-sm" id="btnsd" lay-event="getCheckData">修改审核通过</button>
+            <button class="layui-btn layui-btn-sm" lay-event="getCheckAdd">发货通知</button>
+            <button class="layui-btn layui-btn-sm" lay-event="getCheckDetials">货物明细</button>
+        </div>
+    </script>
+
+</head>
+
+
+<body>
+
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">销售管理</a></li>
+            <li><a href="#">合同创建</a></li>
+        </ul>
+    </div>
+
+    <div class="rightinfo">
+
+        <div class="tools">
+
+            <ul class="toolbar">
+                <li  id="addC" >
+                    <span>
+                        <img style="margin-bottom:10px" src="../../images/t01.png" />
+                    </span><a target="rightFrame" >新增合同</a><i hidden=hidden id="u">/Home/ContractAdd</i>
+                </li>         
+                <li>
+                    创建日期：
+                    <input name="strattime" class="strattime" id="test1" type="text" onclick="WdatePicker()" style="width: 80px;" />
+                </li>
+                <li>
+                    到：
+                    <input class="endtime" id="test2" type="text" onclick="WdatePicker()" style="width: 80px;" />
+                </li>
+                <li>
+                    项目状态：
+                    @Html.DropDownList("Ck", new SelectList(ViewBag.ck, "ID", "Name"), "全部", new { @class = "ck", @ID = "ck" })
+                </li>
+                <li>
+                    客户名称：
+                    <input class="CustomerName" id="CustomerName" type="text" style="width: 80px;" />
+                </li>
+                <li>
+                    合同编号：
+                    <input class="ContractNumber" id="ContractNumber" type="text" style="width: 80px;" />
+                </li>    
+                <li>
+                    审核状态：
+                    <input class="ReviewStatus" id="ReviewStatus" type="text" style="width: 80px;" />
+                </li>        
+            </ul>
+            <button class="layui-btn" data-type="reload" id="sele">搜索</button>
+        </div>
+        <table class="tablelist" id="tw" lay-filter="demo"></table>   
+    </div>
+   
+    <script type="text/javascript">       
+            function admin_add(title, url, w, h) {
+                layer_show(title, url, w, h);
+            }             
+    </script>
+</body>
+</html>

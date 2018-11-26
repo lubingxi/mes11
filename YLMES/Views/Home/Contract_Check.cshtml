@@ -1,0 +1,190 @@
+﻿@{
+    Layout = null;
+}
+
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE html>
+<html>
+<head>
+    @*<link rel="stylesheet" type="text/css" href="~/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/css/style.css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />*@
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/css/style.css" />
+    <title></title>
+</head>
+<body>
+    <article class="page-container">
+
+        <form class="form form-horizontal layui-form" id="form-article-add">
+            <input type="text" hidden id="ids" value="@ViewData["id"]">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>客户名称：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["CuName"]" placeholder="" id="CuName" name="CuName">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>订单编号：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["CuNumber"]" placeholder="" id="CuNumber" name="CuNumber"><i></i>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>合同金额：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["Money"]" placeholder="" id="Money" name="Money">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>是否安装：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["IfInstall"]" placeholder="" id="IfInstall" name="IfInstall">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>是否含税：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["IfIncludeTax"]" placeholder="" id="IfIncludeTax" name="IfIncludeTax">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>签订日期：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" onfocus="WdatePicker()" id="DateOfSign" name="DateOfSign" class="input-text Wdate" value="@ViewData["DateOfSign"]">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>收款金额：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" readonly="readonly" id="AmountCollected" name="AmountCollected" class="input-text" value="@ViewData["AmountCollected"]">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>是否运输：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["IfTransport"]" placeholder="" id="IfTransport" name="IfTransport">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>合同状态：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    @Html.DropDownList("select", ViewData["select"] as SelectList, new { name = "ck", id = "ck" })
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">收款方式：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <textarea name="Pay" cols="" rows="" id="Pay" class="textarea" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["Pay"]</textarea>
+                    <p class="textarea-numberbar">@*<em class="textarea-length"></em>/200*@</p>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">交期：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <textarea name="SendDate" cols="" rows="" id="SendDate" class="textarea" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["SendDate"]</textarea>
+                    <p class="textarea-numberbar"></p>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">违约条件：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <textarea name="weiyuetiaojian" cols="" rows="" id="weiyuetiaojian" class="textarea" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["weiyuetiaojian"]</textarea>
+                    <p class="textarea-numberbar"></p>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">清单/发货/安装情况：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <table class="tablelist" id="tw" lay-filter="demo"></table>
+                    <p class="textarea-numberbar"></p>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">合同总结：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <textarea name="CZongJie" cols="" rows="" id="CZongJie" class="textarea" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["CZongJie"]</textarea>
+                    <p class="textarea-numberbar"></p>
+                </div>
+            </div>
+            <div class="row cl">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                    <button onclick="" class="btn btn-default radius" id="cancle" type="button">&nbsp;&nbsp;返回&nbsp;&nbsp;<i hidden="hidden" id="u">/Home/PM_Contract_Check</i></button>
+                </div>
+            </div>
+        </form>
+    </article>
+
+    <!--_footer 作为公共模版分离出去-->
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer /作为公共模版分离出去-->
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="~/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+    <script type="text/javascript" src="~/lib/webuploader/0.1.5/webuploader.min.js"></script>
+    <script type="text/javascript" src="~/lib/ueditor/1.4.3/ueditor.config.js"></script>
+    <script type="text/javascript" src="~/lib/ueditor/1.4.3/ueditor.all.min.js"> </script>
+    <script type="text/javascript" src="~/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script>
+        layui.use(['table', 'layer'], function () {
+            var table = layui.table, layer = layui.layer;
+            table.render({
+                elem: '#tw'
+           , url: '/Home/checkDetail?id=' + '@ViewData["ContractDetialsCheckId"]'
+           , cols: [[
+
+           , { field: 'ID', width: 210, title: '序号', hide: true }
+           , { field: 'ProductName', width: 190, title: '产品名称' }
+           , { field: 'ProductSpec', width: 210, title: '产品规格', sort: true }
+           , {
+               field: 'Count', width: 180, title: '合同数量',
+           }
+           , { field: 'Units', title: '单位', width: 180 }
+           , { field: 'DeliveryedCount', width: 180, title: '发货', sort: true }
+           , { field: 'InstalledQuantity', width: 100, title: '安装', }
+           , { field: 'Acceptance', width: 100, title: '是否验收', sort: true }
+          , { field: 'AcceptanceDate', width: 100, title: '验收日期', sort: true }
+           ]]
+
+            });
+
+
+        });
+    </script>
+    <script type="text/javascript">      
+        $(function () {
+
+            $('.skin-minimal input').iCheck({
+                checkboxClass: 'icheckbox-blue',
+                radioClass: 'iradio-blue',
+                increaseArea: '20%'
+            });
+            $("#cancle").click(function () {
+                var sd = $("#u").text();
+                window.parent.document.getElementById("rightframe").src = sd;
+            });
+          
+            $list = $("#fileList"),
+            $btn = $("#btn-star"),
+            state = "pending",
+            uploader;
+
+
+        });
+   
+    </script>
+    <!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>
+
+
