@@ -125,7 +125,7 @@ namespace YLMES.Controllers
                 SqlParameter[] parms = new SqlParameter[2];
                 parms[0] = new SqlParameter("@Type", "ADD");
                 parms[1] = new SqlParameter("@CreatedBy", CreatedBy.ToString());
-                int i = ys.Database.ExecuteSqlCommand("exec SP_PM_ProductLine @Type,'','',@CreatedBy", parms);
+                int i = ys.Database.ExecuteSqlCommand("exec SP_PM_ProductLine @Type,'','','',@CreatedBy", parms);
             }
             return "true";
         }
@@ -143,21 +143,20 @@ namespace YLMES.Controllers
             return "true";
         }
         //修改生产线信息
-        public string UpProduct(string line, string lineID)
+        public string UpProduct(string line, string lineID,string lengsd)
         {
             string CreatedBy = Session["name"].ToString();
 
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
 
-                SqlParameter[] parms = new SqlParameter[4];
+                SqlParameter[] parms = new SqlParameter[5];
                 parms[0] = new SqlParameter("@Type", "Update");
                 parms[1] = new SqlParameter("@line", line);
                 parms[2] = new SqlParameter("@lineID", Int32.Parse(lineID));
-                parms[3] = new SqlParameter("@CreatedBy", CreatedBy.ToString());
-                int i = ys.Database.ExecuteSqlCommand("exec SP_PM_ProductLine @Type,@lineID,@line,@CreatedBy", parms);
-
-
+                parms[3] = new SqlParameter("@LineLength", lengsd);
+                parms[4] = new SqlParameter("@CreatedBy", CreatedBy.ToString());
+                int i = ys.Database.ExecuteSqlCommand("exec SP_PM_ProductLine @Type,@lineID,@line,@LineLength,@CreatedBy", parms);
             }
             return "true";
         }
@@ -607,8 +606,8 @@ namespace YLMES.Controllers
                 SqlParameter[] parms = new SqlParameter[5];
                 parms[0] = new SqlParameter("@TYPE", "ADDWHStorageLocation");
                 parms[1] = new SqlParameter("@WHID", 666);
-                parms[2] = new SqlParameter("@WHAreaID", i);
-                parms[3] = new SqlParameter("@WHStorageLocationID", 999);
+                parms[2] = new SqlParameter("@WHAreaID",999);
+                parms[3] = new SqlParameter("@WHStorageLocationID", i);
                 parms[4] = new SqlParameter("@CreatedBy", name);
                 using (YLMES_newEntities ys = new YLMES_newEntities())
                 {

@@ -18,6 +18,7 @@
     <link rel="stylesheet" type="text/css" href="~/lib/Hui-iconfont/1.0.8/iconfont.css" />
     <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/skin/default/skin.css" id="skin" />
     <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/css/style.css" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
     <link href="~/layui/css/layui.css" rel="stylesheet" />
     <!--[if IE 6]>
     <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
@@ -41,13 +42,13 @@
             <div id="tab-system" class="HuiTab">
                 <div class="tabBar cl">
                     <span>任务信息</span>
-                    <span>技术部</span>
-                    <span>工艺部</span>
-                    <span>采购部</span>
-                    <span>计划部</span>
-                    <span>生产部</span>
-                    <span>成品仓</span>
-                    <span>售后部</span>
+                    <span id="j" style="display:none;">技术部</span>
+                    <span id="g" style="display:none;">工艺部</span>
+                    <span id="c" style="display:none;">采购部</span>
+                    <span id="h" style="display:none;">计划部</span>
+                    <span id="s" style="display:none;">生产部</span>
+                    <span id="p" style="display:none;">成品仓</span>
+                    <span id="b" style="display:none;">售后部</span>
                 </div>
                 <div class="tabCon">
                     <div class="row cl">
@@ -56,7 +57,7 @@
                             任务状态：
                         </label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="website-title"  value="@ViewData["Status"]" class="input-text" readonly="readonly">
+                            <input type="text" id="website-title" disabled value="@ViewData["Status"]" class="input-text" readonly="readonly">
                           
                         </div>
                     </div>
@@ -66,7 +67,7 @@
                             客户名称：
                         </label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="website-Keywords"  value="@ViewData["CustomerName"]" class="input-text" readonly="readonly">
+                            <input type="text" id="website-Keywords" disabled value="@ViewData["CustomerName"]" class="input-text" readonly="readonly">
                         </div>
                     </div>
                     <div class="row cl">
@@ -75,7 +76,7 @@
                             合同编号：
                         </label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="website-description"  value="@ViewData["ContractNumber"]" class="input-text" readonly="readonly">
+                            <input type="text" id="website-description" disabled value="@ViewData["ContractNumber"]" class="input-text" readonly="readonly">
                         </div>
                     </div>
                     <div class="row cl">
@@ -85,7 +86,7 @@
 
                         </label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="pcName"  value="@ViewData["ProductName"]" class="input-text" readonly="readonly">
+                            <input type="text" id="pcName" disabled value="@ViewData["ProductName"]" class="input-text" readonly="readonly">
                         </div>
                     </div>
                     <div class="row cl">
@@ -94,7 +95,7 @@
                             任务名称：
                         </label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="website-uploadfile"  value="@ViewData["TaskName"]" class="input-text" readonly="readonly">
+                            <input type="text" id="website-uploadfile" disabled value="@ViewData["TaskName"]" class="input-text" readonly="readonly">
                         </div>
                     </div>
                     <div class="row cl">
@@ -103,7 +104,7 @@
                             产品规格：
                         </label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="spec"  value="@ViewData["ProductSpec"]" class="input-text" readonly="readonly">
+                            <input type="text" id="spec" disabled value="@ViewData["ProductSpec"]" class="input-text" readonly="readonly">
                         </div>
                     </div>
                     <div class="row cl">
@@ -112,7 +113,7 @@
                             机械/电气：
                         </label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="Choose" value="@ViewData["ifDrive"]" class="input-text" readonly="readonly">
+                            <input type="text" id="Choose" disabled value="@ViewData["ifDrive"]" class="input-text" readonly="readonly">
                         </div>
                     </div>
                     <div class="row cl">
@@ -121,7 +122,7 @@
                             任务类型：
                         </label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="TaskType" value="@ViewData["name"]" class="input-text" readonly="readonly">
+                            <input type="text" id="TaskType" disabled value="@ViewData["name"]" class="input-text" readonly="readonly">
                         </div>
                     </div>
                     <div class="row cl">
@@ -130,7 +131,7 @@
                             紧急程度：
                         </label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="website-copyright" value="@ViewData["PriorityCode"]" class="input-text" readonly="readonly">
+                            <input type="text" id="website-copyright" disabled value="@ViewData["PriorityCode"]" class="input-text" readonly="readonly">
                         </div>
                     </div>
                     <div class="row cl">
@@ -139,34 +140,34 @@
                             任务备注：
                         </label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="website-copyright" value="@ViewData["taskdesc"]" class="input-text" readonly="readonly">
+                            <input type="text" id="website-copyright" disabled value="@ViewData["taskdesc"]" class="input-text" readonly="readonly">
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务附件1：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" name="fileDownA" id="file1" value="@ViewData["file1"]" readonly="readonly">
+                            <input type="text" name="fileDownA" id="file1" disabled value="@ViewData["file1"]" readonly="readonly">
                             <a href="~/TaskManagement/FileADownload?file1=@ViewData["fileDownA"]">下载</a>
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务附件2：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" name="fileDownB" value="@ViewData["file2"]" id="file2" readonly="readonly">
+                            <input type="text" name="fileDownB" disabled value="@ViewData["file2"]" id="file2" readonly="readonly">
                             <a href="~/TaskManagement/FileBDownload?file2=@ViewData["fileDownB"]">下载</a>
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务附件3：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" name="fileDownC" id="file3" value="@ViewData["file3"]" readonly="readonly">
+                            <input type="text" name="fileDownC" id="file3" disabled value="@ViewData["file3"]" readonly="readonly">
                             <a href="~/TaskManagement/FileCDownload?file3=@ViewData["fileDownC"]">下载</a>
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计截至日期：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" onfocus="WdatePicker()" id="JieDate" name="JieDate" readonly="readonly" class="input-text Wdate" value="@ViewData["JieDate"]">
+                            <input type="text"   disabled id="JieDate" name="JieDate" readonly="readonly" class="input-text Wdate" value="@ViewData["JieDate"]">
                         </div>
                     </div>
                 </div>
@@ -174,117 +175,117 @@
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计人：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text"  id="Owner" name="Owner" readonly="readonly" class="input-text" value="@ViewData["Owner"]">
+                            <input type="text" id="Owner" name="Owner" disabled readonly="readonly" class="input-text" value="@ViewData["Owner"]">
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计分值：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="BaseScore" name="BaseScore" readonly="readonly" class="input-text" value="@ViewData["BaseScore"]">
+                            <input type="text" id="BaseScore" name="BaseScore" disabled readonly="readonly" class="input-text" value="@ViewData["BaseScore"]">
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计基准时间：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="BaseTime" name="BaseTime" readonly="readonly" class="input-text" value="@ViewData["BaseTime"]">小时
+                            <input type="text" id="BaseTime" name="BaseTime" disabled readonly="readonly" class="input-text" value="@ViewData["BaseTime"]">小时
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计开始时间：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="ConfirmTime" name="ConfirmTime" readonly="readonly" class="input-text" value="@ViewData["ConfirmTime"]">
+                            <input type="text" id="ConfirmTime" name="ConfirmTime" disabled readonly="readonly" class="input-text" value="@ViewData["ConfirmTime"]">
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计完成时间：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="CompletedTime" name="CompletedTime" readonly="readonly" class="input-text" value="@ViewData["CompletedTime"]">
+                            <input type="text" id="CompletedTime" name="CompletedTime" disabled readonly="readonly" class="input-text" value="@ViewData["CompletedTime"]">
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计是否逾期：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="OverDue" name="OverDue" readonly="readonly" class="input-text" value="@ViewData["OverDue"]">
+                            <input type="text" id="OverDue" name="OverDue" readonly="readonly" disabled class="input-text" value="@ViewData["OverDue"]">
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>审核人：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="QualifiedOwner" name="QualifiedOwner" readonly="readonly" class="input-text" value="@ViewData["QualifiedOwner"]">
+                            <input type="text" id="QualifiedOwner" name="QualifiedOwner" disabled readonly="readonly" class="input-text" value="@ViewData["QualifiedOwner"]">
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>审核分值：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="QualifiedBaseScore" name="QualifiedBaseScore" readonly="readonly" class="input-text" value="@ViewData["QualifiedBaseScore"]">
+                            <input type="text" id="QualifiedBaseScore" name="QualifiedBaseScore" disabled readonly="readonly" class="input-text" value="@ViewData["QualifiedBaseScore"]">
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>审核基准时间：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="QualifiedBaseTime" name="QualifiedBaseTime" readonly="readonly" class="input-text" value="@ViewData["QualifiedBaseTime"]">小时
+                            <input type="text" id="QualifiedBaseTime" name="QualifiedBaseTime" disabled readonly="readonly" class="input-text" value="@ViewData["QualifiedBaseTime"]">小时
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>审核开始时间：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="QualifiedConfirmTime" name="QualifiedConfirmTime" readonly="readonly" class="input-text" value="@ViewData["QualifiedConfirmTime"]">
+                            <input type="text" id="QualifiedConfirmTime" name="QualifiedConfirmTime" disabled readonly="readonly" class="input-text" value="@ViewData["QualifiedConfirmTime"]">
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>审核完成时间：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="QualifiedCompletedTime" name="QualifiedCompletedTime" readonly="readonly" class="input-text" value="@ViewData["QualifiedCompletedTime"]">
+                            <input type="text" id="QualifiedCompletedTime" name="QualifiedCompletedTime" disabled readonly="readonly" class="input-text" value="@ViewData["QualifiedCompletedTime"]">
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>审核是否逾期：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="QualifiedOverDue" name="QualifiedOverDue" readonly="readonly" class="input-text" value="@ViewData["QualifiedOverDue"]">
+                            <input type="text" id="QualifiedOverDue" name="QualifiedOverDue" readonly="readonly" disabled class="input-text" value="@ViewData["QualifiedOverDue"]">
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图纸发行人：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="IssueOwner" name="IssueOwner" readonly="readonly" class="input-text" value="@ViewData["IssueOwner"]">
+                            <input type="text" id="IssueOwner" name="IssueOwner" disabled readonly="readonly" class="input-text" value="@ViewData["IssueOwner"]">
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图纸发行分值：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="IssueBaseScore" name="IssueBaseScore" readonly="readonly" class="input-text" value="@ViewData["IssueBaseScore"]">
+                            <input type="text" id="IssueBaseScore" name="IssueBaseScore" disabled readonly="readonly" class="input-text" value="@ViewData["IssueBaseScore"]">
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图纸发行基准时间：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="IssueBaseTime" name="IssueBaseTime" readonly="readonly" class="input-text" value="@ViewData["IssueBaseTime"]">小时
+                            <input type="text" id="IssueBaseTime" name="IssueBaseTime" disabled readonly="readonly" class="input-text" value="@ViewData["IssueBaseTime"]">小时
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图纸发行开始时间：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="IssueConfirmTime" name="IssueConfirmTime" readonly="readonly" class="input-text" value="@ViewData["IssueConfirmTime"]">
+                            <input type="text" id="IssueConfirmTime" name="IssueConfirmTime" disabled readonly="readonly" class="input-text" value="@ViewData["IssueConfirmTime"]">
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图纸发行完成时间：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="IssueCompletedTime" name="IssueCompletedTime" readonly="readonly" class="input-text" value="@ViewData["IssueCompletedTime"]">
+                            <input type="text" id="IssueCompletedTime" name="IssueCompletedTime" disabled readonly="readonly" class="input-text" value="@ViewData["IssueCompletedTime"]">
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图纸发行是否逾期：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="IssueOverDue" name="IssueOverDue" readonly="readonly" class="input-text" value="@ViewData["IssueOverDue"]">
+                            <input type="text" id="IssueOverDue" name="IssueOverDue" disabled readonly="readonly" class="input-text" value="@ViewData["IssueOverDue"]">
                         </div>
                     </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>最大载重：</label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="CarryingCapacity" name="CarryingCapacity" class="input-text" value="@ViewData["CarryingCapacity"]">
+                            <input type="text" id="CarryingCapacity" name="CarryingCapacity" disabled class="input-text" value="@ViewData["CarryingCapacity"]">
                         </div>
-                    </div>                   
+                    </div>
                 </div>
                 <div class="tabCon">
                     <div class="row cl">
@@ -292,7 +293,7 @@
                         <div class="formControls col-xs-8 col-sm-9">
                             <input type="text" id="PEOwner" name="PEOwner" class="input-text" value="@ViewData["PEOwner"]">
                         </div>
-                    </div> 
+                    </div>
                     <div class="row cl">
                         <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>基准时间：</label>
                         <div class="formControls col-xs-8 col-sm-9">
@@ -466,13 +467,38 @@
       
     </style>
     <script type="text/javascript">
-
+        $(document).keydown(function (e) {
+            switch (e.keyCode) {
+                case 27:
+                    window.history.go(-1);          
+            }
+        });
     $(function () {
         $('.skin-minimal input').iCheck({
             checkboxClass: 'icheckbox-blue',
             radioClass: 'iradio-blue',
             increaseArea: '20%'
         });
+        if ('@ViewData["ifDrive"]' == "设计部完成机械设计" || '@ViewData["ifDrive"]' == "设计部完成电气设计" || '@ViewData["ifDrive"]' == "设计部确认机械设计分配" || '@ViewData["ifDrive"]' == "设计部确认电气设计分配" ) {
+            $("#j").css("display","block");
+        }
+        if ('@ViewData["ifDrive"]' == "设计部确认机械审核分配" || '@ViewData["ifDrive"]' == "设计部确认电气审核分配" || '@ViewData["ifDrive"]' == "设计部确认图纸发行分配" || '@ViewData["ifDrive"]' == "设计部完成图纸发行" || '@ViewData["ifDrive"]' == "设计部完成电气审核" || '@ViewData["ifDrive"]' == "设计部完成机械审核") {
+            $("#j").css("display", "block");
+        }
+        if ('@ViewData["ifDrive"]' == "工艺部确认图纸接收" || '@ViewData["ifDrive"]' == "工艺部完成工艺流程") {
+            $("#g").css("display", "block");
+        }
+        if ('@ViewData["ifDrive"]' == "计划部确认计划分配"  || '@ViewData["ifDrive"]' == "完成排产计划" || '@ViewData["ifDrive"]' == "计划部完成计划") {
+            $("#h").css("display", "block");
+    }
+        if ('@ViewData["ifDrive"]' == "采购部确认采购分配" || '@ViewData["ifDrive"]' == "采购部完成采购") {
+            $("#c").css("display", "block");
+        }
+        if ('@ViewData["ifDrive"]' == "生产部确认生产任务分配" || '@ViewData["ifDrive"]' == "生产部完成生产任务") {
+            $("#s").css("display", "block");
+            //$("#p").css("display", "block");
+            //$("#b").css("display", "block");
+        }
         $("#OK").click(function () {
 
             var taskid = '@ViewData["TaskID"]';
@@ -486,12 +512,8 @@
                     success: function (data) {
                         if (data == "true") {
                             window.setTimeout(function () {
-                                window.parent.document.getElementById("rightframe").src = '/TaskManagement/NameTask?id=' + '@Session["id"]';
+                                window.history.go(-1);
                             }, 500);
-                        }
-                        else {
-                            alert("确认失败!");
-                            return;
                         }
                     }
                 });
@@ -505,7 +527,7 @@
                     success: function (data) {
                         if (data == "true") {
                             window.setTimeout(function () {
-                                window.parent.document.getElementById("rightframe").src = '/TaskManagement/NameTask?id=' + '@Session["id"]';
+                                window.history.go(-1);
                             }, 500);
                         }
                         else {
@@ -524,7 +546,7 @@
                     success: function (data) {
                         if (data == "true") {
                             window.setTimeout(function () {
-                                window.parent.document.getElementById("rightframe").src = '/TaskManagement/NameTask?id=' + '@Session["id"]';
+                                window.history.go(-1);
                             }, 500);
                         }
                         else {
@@ -543,42 +565,57 @@
                     success: function (data) {
                         if (data == "true") {
                             window.setTimeout(function () {
-                                window.parent.document.getElementById("rightframe").src = '/TaskManagement/NameTask?id=' + '@Session["id"]';
-            }, 500);
-            }
-            else {
+                                window.history.go(-1);
+                            }, 500);
+                        }
+                        else {
                             alert("确认失败!");
                             return;
+                        }
+                    }
+                });
             }
-            }
-            });
-	    }
             if ('@ViewData["ifDrive"]' == "设计部完成图纸发行") {
                 if ('@ViewData["SendXing"]' == "标准") {
-                    var url = '/TaskManagement/FinishMyDesign?ifDrive=' + '@ViewData["ifDrives"]' + '&name=' + '@ViewData["names"]' + '&ProjectName=' + '@ViewData["CustomerNames"]';
+                    var url = '/TaskManagement/FinishMyDesign?ifDrive=' + '@ViewData["ifDrives"]' + '&name=' + '@ViewData["names"]' + '&ProjectName=' + '@ViewData["CustomerNames"]' + '&taskid=' + taskid;
                     layer_show("完成我的设计", url, 1400, 800);
                 }
-                else
-                {
+                else {                  
                     $.ajax({
-                        url: "/TaskManagement/UpdateIssueCompleted",
+                        url: "/TaskManagement/CheckBomAll",
                         data: { Taskid: taskid },
                         type: "post",
                         dataType: "text",
                         success: function (data) {
-                            if (data == "true") {
+                            if (data == "true") {                              
                                 window.setTimeout(function () {
-                                    window.parent.document.getElementById("rightframe").src = '/TaskManagement/NameTask?id=' + '@Session["id"]';
+                                    $.ajax({
+                                        url: "/TaskManagement/UpdateIssueCompleted",
+                                        data: { Taskid: taskid },
+                                        type: "post",
+                                        dataType: "text",
+                                        success: function (data) {
+                                            if (data == "true") {
+                                                window.setTimeout(function () {
+                                                    window.history.go(-1);
+                                                }, 500);
+                                            }
+                                            else if (data == "null") {
+                                                alert("任务类型不能为空!");
+                                                return;
+                                            }
+                                        }
+                                    });                                 
                                 }, 500);
                             }
                             else {
-                                alert("确认失败!");
-                                return;
+                                alert("还有图纸没有上传呢！");
+                                url = '/TaskManagement/UploadDrawing?id=' + taskid;
+                                layer_show('图纸操作', url, '1300', '800');
                             }
                         }
-                    });
+                    });               
                 }
-
             }
             if ('@ViewData["ifDrive"]' == "工艺部确认图纸接收") {
                 $.ajax({
@@ -589,7 +626,7 @@
                     success: function (data) {
                         if (data == "true") {
                             window.setTimeout(function () {
-                                window.parent.document.getElementById("rightframe").src = '/TaskManagement/NameTask?id=' + '@Session["id"]';
+                                window.history.go(-1);
                             }, 500);
                         }
                         else {
@@ -600,11 +637,13 @@
                 });
             }
             if ('@ViewData["ifDrive"]' == "工艺部完成工艺流程") {
-            window.parent.document.getElementById("rightframe").src = '/TaskManagement/TaskMapPart?TaskID=' + '@ViewData["ProcessFlow"]' + '&ProductName=' + '@ViewData["ProductNamed"]' + '&ProductSpec=' + '@ViewData["ProductSpecd"]';
+                window.parent.document.getElementById("rightframe").src = '/TaskManagement/TaskMapPart?TaskID=' + '@ViewData["ProcessFlow"]' + '&ProductName=' + '@ViewData["ProductNamed"]' + '&ProductSpec=' + '@ViewData["ProductSpecd"]';
             }
             if ('@ViewData["ifDrive"]' == "设计部完成机械设计" || '@ViewData["ifDrive"]' == "设计部完成电气设计") {
-                var url = '/TaskManagement/FinishMyDesign?ifDrive=' + '@ViewData["ifDrives"]' + '&name=' + '@ViewData["names"]' + '&ProjectName=' + '@ViewData["CustomerNames"]';
-                layer_show("完成我的设计", url, 1400, 800);
+              
+                var url = '/TaskManagement/FinishMyDesign?ifDrive=' + '@ViewData["ifDrives"]' + '&name=' + '@ViewData["names"]' + '&ProjectName=' + '@ViewData["CustomerNames"]' + '&taskid=' + taskid;
+                window.parent.document.getElementById("rightframe").src = url;
+                //layer_show("完成我的设计", url, 1400, 800);
             }
             if ('@ViewData["ifDrive"]' == "设计部完成机械审核" || '@ViewData["ifDrive"]' == "设计部完成电气审核") {
                 layer_show("完成我的审核", '/TaskManagement/TaskScoring?ifDrive=' + '@ViewData["ifDrive"]', 1200, 700);
@@ -618,7 +657,7 @@
                     success: function (data) {
                         if (data == "true") {
                             window.setTimeout(function () {
-                                window.parent.document.getElementById("rightframe").src = "/TaskManagement/NameTask?id=" + "@Session["id"]";
+                                window.history.go(-1);
                             }, 500);
                         }
                         else {
@@ -632,8 +671,25 @@
                 var pcName = $("#pcName").val();
                 var spec = $("#spec").val();
                 var TaskType = $("#TaskType").val();
-                window.parent.document.getElementById("rightframe").src = "/TaskManagement/PMCSettingWO?id=" + taskid + "&ProjectName=" + "@ViewData["CustomerNames"]" + "&pcName=" + pcName + "&spec=" + spec + "&TaskType=" + TaskType + "&Choose=" + Choose;
-            }
+                //var Choose = $("#Choose").val();
+                //$.ajax({
+                //    url: "/TaskManagement/UpdatePMCCompleted",
+                //    data: { Taskid: taskid },
+                //    type: "post",
+                //    dataType: "text",
+                //    success: function (data) {
+                //        if (data == "true") {
+                //            window.setTimeout(function () {
+                                  window.parent.document.getElementById("rightframe").src = "/TaskManagement/PMCSettingWO?id=" + taskid + "&ProjectName=" + "@ViewData["CustomerNames"]" + "&pcName=" + pcName + "&spec=" + spec + "&TaskType=" + TaskType + "&Choose=" + "@Session["type2"]";        
+                //            }, 500);
+                //        }
+                //        else {
+                //            alert("确认失败!");
+                //            return;
+                //        }
+                //    }
+                //});
+                }
             if ('@ViewData["ifDrive"]' == "完成排产计划") {
                 $.ajax({
                     url: "/TaskManagement/Scheduling",
@@ -643,7 +699,7 @@
                     success: function (data) {
                         if (data == "true") {
                             window.setTimeout(function () {
-                                window.parent.document.getElementById("rightframe").src = "/TaskManagement/NameTask?id=" + "@Session["id"]";
+                                window.history.go(-1);
                             }, 500);
                         }
                         else {
@@ -662,7 +718,7 @@
                     success: function (data) {
                         if (data == "true") {
                             window.setTimeout(function () {
-                                window.parent.document.getElementById("rightframe").src = "/TaskManagement/NameTask?id=" + "@Session["id"]";
+                                window.history.go(-1);
                             }, 500);
                         }
                         else {
@@ -673,7 +729,7 @@
                 });
             }
             if ('@ViewData["ifDrive"]' == "采购部完成采购") {
-                window.parent.document.getElementById("rightframe").src = "/TaskManagement/CompletePurchase?type=" + "@Session["type2"]"+"&id"+"@Session["id"]"+"&pjname="+"@ViewData["CustomerNamesv"]";
+                window.parent.document.getElementById("rightframe").src = "/TaskManagement/CompletePurchase?type=" + "@Session["type2"]" + "&id=" + "@Session["id"]" + "&pjname=" + "@ViewData["CustomerNamesv"]";
             }
             if ('@ViewData["ifDrive"]' == "生产部确认生产任务分配") {
                 $.ajax({
@@ -684,7 +740,7 @@
                     success: function (data) {
                         if (data == "true") {
                             window.setTimeout(function () {
-                                window.parent.document.getElementById("rightframe").src = "/TaskManagement/NameTask?id=" + "@Session["id"]";
+                                window.history.go(-1);
                             }, 500);
                         }
                         else {
@@ -694,7 +750,7 @@
                     }
                 });
             }
-            if ('@ViewData["ifDrive"]' == "确认开始投料生产") {
+            @*if ('@ViewData["ifDrive"]' == "确认开始投料生产") {
                 $.ajax({
                     url: "/TaskManagement/ProductStartConfirm",
                     data: { Taskid: taskid },
@@ -703,7 +759,7 @@
                     success: function (data) {
                         if (data == "true") {
                             window.setTimeout(function () {
-                                window.parent.document.getElementById("rightframe").src = "/TaskManagement/NameTask?id=" + "@Session["id"]";
+                                window.history.go(-1);
                             }, 500);
                         }
                         else {
@@ -712,10 +768,11 @@
                         }
                     }
                 });
-            }
-            @*if ('@ViewData["ifDrive"]' == "生产部完成生产任务") {
-                window.parent.document.getElementById("rightframe").src = "/TaskManagement/ProductMS";
             }*@
+            if ('@ViewData["ifDrive"]' == "生产部完成生产任务") {
+                alert("结束！");
+                //window.parent.document.getElementById("rightframe").src = "/TaskManagement/ProductMS";
+            }
         });
         $("#up").click(function () {
             layer_show("任务进度详细", '/TaskManagement/UpdateProgress', 1200, 700);

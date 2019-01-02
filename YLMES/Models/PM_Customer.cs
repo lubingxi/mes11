@@ -22,5 +22,11 @@ namespace YLMES.Models
         public string Contact { get; set; }
         public string CreatedTime { get; set; }
         public string CreatedBy { get; set; }
+        public string Bank { get; set; }
+        public string Account { get; set; }
+        public string Representative { get; set; }
+        public string Principal { get; set; }
+        public string Mobile { get; set; }
+        public string Fax { get; set; }
     }
 }

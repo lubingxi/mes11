@@ -29,5 +29,9 @@ namespace YLMES.Models
         public string CreatedBy { get; set; }
         public string CreatedTime { get; set; }
         public string Status { get; set; }
+        public string Bank { get; set; }
+        public string Account { get; set; }
+        public string Representative { get; set; }
+        public string Principal { get; set; }
     }
 }

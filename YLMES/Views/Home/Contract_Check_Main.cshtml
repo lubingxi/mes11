@@ -80,8 +80,37 @@
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">收款方式：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <textarea name="Pay" cols="" rows="" id="Pay" class="textarea" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["Pay"]</textarea>
-                    <p class="textarea-numberbar">@*<em class="textarea-length"></em>/200*@</p>
+                    <input type="text" class="input-text" value="@ViewData["Pay"]" placeholder="" readonly="readonly" id="Pay" name="Pay">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">订金金额：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["DepositAmount"]" placeholder="" readonly="readonly" id="DepositAmount" name="DepositAmount">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">发货收款金额：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["DeliveryAmount"]" placeholder="" readonly="readonly" id="DeliveryAmount" name="DeliveryAmount">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">安装前金额：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["InstallationAmount"]" placeholder="" readonly="readonly" id="InstallationAmount" name="InstallationAmount">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">验收金额：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["AcceptanceAmount"]" placeholder="" readonly="readonly" id="AcceptanceAmount" name="AcceptanceAmount">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">质保金额：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["QualityAssuranceAmount"]" placeholder="" readonly="readonly" id="QualityAssuranceAmount" name="QualityAssuranceAmount">
                 </div>
             </div>
             <div class="row cl">

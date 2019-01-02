@@ -1,0 +1,178 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" media="all" />
+    <script src="~/laydate/laydate.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <title>采购合同管理</title>
+    <style>
+        .layui-table-cell {
+ 
+            height: inherit;
+        }
+        
+    </style>
+    <script type="text/javascript">
+        layui.use(['layer', 'form', 'laydate', 'element', 'table'], function () {
+            var form = layui.form, layer = layui.layer
+            var laydate = layui.laydate;
+            var element = layui.element;
+            var layer = layui.layer;
+            var table = layui.table;
+            var $ = layui.jquery;
+            var checkStatus;
+            $(document).ajaxStart(function () {
+                name = layer.msg('加载中', {
+                    icon: 16
+                    , shade: 0.01
+                    , time: false
+                });
+            })
+            $(document).ajaxStop(function () {
+                layer.close(name);
+            })
+            $.get("/ApplierList/checkContrType", function (data) {
+                if (data != null) {
+                    for (var i = 0; i < data.length; i++) {
+                        $(".type").append("<option value='" + data[i].id.trim() + "'>" + data[i].type.trim() + "</option>")
+                    }
+                }
+                form.render();
+            });
+            $.get("/ApplierList/checkApplierName", function (data) {
+                if (data != null) {
+                  
+                    for (var i = 0; i < data.length; i++) {
+                        $(".ApplierId").append("<option value='" + data[i].ID + "' >" + data[i].Name + "</option>")
+                    }
+                }
+                form.render('select');
+            })
+           var tableIns= table.render({
+                elem: '#Pco'
+               , url: "/PurchasingManage/chaeckCo"
+               , totalRow: true
+               , cols: [[
+                      { type: "checkbox" }
+                   ,  { field: 'MaterialID', hide: true }
+                   , { field: 'PartNumber', title: '物料名称', totalRowText: '合计:'}
+                    , { field: 'PartSpec', title: '物料规格' }
+                   , { field: 'ActPurchaseQTY', title: '采购数量',totalRow: true }
+                   , { field: 'ActPurchaseQTY', title: '申请数量', totalRow: true}
+                   , { field: 'UnitPrice', title: '单价', totalRow: true}
+                   , { field: 'TotalPrice', title: '总价', totalRow: true}
+                    , { title: '操作', toolbar: '#del', width:250 }
+               ]]
+            })
+            table.on('tool(test)', function (obj) { 
+                var data = obj.data; 
+                var layEvent = obj.event; 
+                if (layEvent === 'del') {
+                    var mid = new Array()
+                    mid[0] = data.MaterialID
+                    layer.confirm('确定撤销么', function (index) {
+                        layer.close(index);
+                        $.post("/PurchasingManage/UpPONO", { mid: mid }, function (data) {
+                            if (data=="true") { 
+                                layer.msg("撤销成功")
+                                $("#check").click()
+                            }
+                        })
+                    });
+                } 
+            });
+            table.on("checkbox(test)", function () {
+                checkStatus = table.checkStatus('Pco');
+            })
+            $("#dels").click(function () {
+                if (checkStatus.data.length == 0) {
+                    layer.msg("请选择一行")
+                } else if (checkStatus.isAll) {
+                    layer.open({
+                        content: '确认全部撤销吗'
+                        , btn: ['确认', '取消']
+                        , yes: function (index, layero) {
+                            var id = new Array()
+                            for (var i = 0; i < checkStatus.data.length; i++) {
+                                id[i] = checkStatus.data[i].MaterialID
+                            }
+                            $.post("/PurchasingManage/UpPONO", { mid: id }, function (data) {
+                                if (data == "true") {
+                                    layer.msg("撤销成功")
+                                    $("#check").click()
+                                    layer.close(index);
+                                }
+                            });
+                        }
+                    })
+                } else {
+                    layer.confirm('确定撤销么', function (index) {
+                        var id = new Array()
+                        for (var i = 0; i < checkStatus.data.length; i++) {
+                            id[i] = checkStatus.data[i].MaterialID
+                        }
+                        $.post("/PurchasingManage/UpPONO", { mid: id }, function (data) {
+                            if (data == "true") {
+                                layer.msg("撤销成功")
+                                $("#check").click()
+                                layer.close(index);
+                            }
+                        });
+                    })
+                }
+            })
+            $("#check").click(function () {
+                var name = $(".ApplierId").val();
+                var type = $(".type").val();
+                tableIns.reload({
+                    where: {
+                        appid: name
+                        , cid: type
+                    }
+                });
+            })
+        })
+
+    </script>
+    <script type="text/html" id="del">
+        <a class="layui-btn layui-btn-danger" lay-event="del">撤销</a>
+    </script>
+</head>
+<body>
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">采购管理</a></li>
+            <li><a href="#">采购合同管理</a></li>
+        </ul>
+    </div>
+    <div class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item" pane>
+            <div class="layui-inline" style="margin-top:5px">
+                <label class="layui-form-label">供应商：</label>
+                <div class="layui-input-block">
+                    <select class="ApplierId" lay-filter="Applier" lay-search><option value="">请选择</option></select>
+                </div>
+            </div>
+            <div class="layui-inline" style="margin-top:5px">
+                <label class="layui-form-label">合同类型：</label>
+                <div class="layui-input-block">
+                    <select class="type" lay-filter="texe"><option value="">请选择</option></select>
+                </div>
+            </div>
+            <button class='layui-btn' id="check">查询</button>
+            <button class='layui-btn' id="dels">撤销选中</button>
+        </div>
+    </div>
+    <table id="Pco" lay-filter="test"></table>
+</body>
+</html>

@@ -20,5 +20,6 @@ namespace YLMES.Models
         public string UpdatedBy { get; set; }
         public string UpdateTime { get; set; }
         public string StatusID { get; set; }
+        public string LineLength { get; set; }
     }
 }

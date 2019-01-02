@@ -1,0 +1,149 @@
+﻿@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript">          
+        $(function () {
+            $("#addC").click(function () {
+                var url = '/ProductionPlanning/StationDetails';
+                layer_show('新增工位类型信息', url,'800', '600');
+            });
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;                  
+                    table.render({
+                    elem: '#tw'
+                   , page: true
+                   , limit: 15
+                   , done: function () {
+                         $("tr a").hide();
+                         $("tr").hover(function () {
+                         $(this).children().last().children().children().toggle();
+                         })
+                     }
+                   , url: '/ProductionPlanning/CheckWorkStation?line=' + '@ViewData["line"]' + '&dan=' + '@ViewData["dan"]' 
+                   , cols: [[
+                   , {
+                          field: '', width: 20, title: '', hide: true
+                      }
+                   , { field: '工位名称', width: 120, title: '工位名称'}
+                   , { field: '工单名称', width: 250, title: '工单名称' }
+                   , { field: '总套数', width: 100, title: '总套数', edit: Text,style: 'color: #009688'}
+                   , { field: '完成套数',width: 100, title: '完成套数' }
+                   , { field: '坏品套数', width: 100, title: '坏品套数' }
+                   , { field: '开始时间', width: 150, title: '开始时间' }
+                       , { field: '结束时间', width: 150, title: '结束时间' }
+                       , { field: '负责人', width: 120, title: '工位负责人', edit: Text, style: 'color: #009688' }
+                   , {
+                       field: '序号', width: 150, title: '序号', hide: true
+                     }
+                   , { field: 'right', width: 150, align: 'center', toolbar: '#barDemo' }
+                   ]]
+
+                    });                         
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;
+                    switch (obj.event) {
+                        case 'delete':
+                            layer.confirm('真的删除行么', function (index) {
+                                id = data.序号;
+                                layer.close(index);
+                                var url = "/ProductionPlanning/DeleteStationDetail?id=" + id;
+                                $.ajax({
+                                    url: url,
+                                    type: 'post',
+                                    success: function (data) {
+                                        if (data == "true") {
+                                            layer.msg("删除成功", { icon: 6 });
+                                            table.reload('tw');
+                                        }
+                                        if (data == "false") {
+                                            layer.msg('数据操作异常!', { icon: 5 });
+                                            return false;
+                                        }
+                                    }
+                                });
+                            });
+                            break;
+                        case 'update':
+                            id = data.序号;
+                            pcs = data.总套数;
+                            res = data.负责人;
+                            var url = "/ProductionPlanning/EditStationDetail?id=" + id+"&pcs="+pcs+"&res="+res;
+                            $.ajax({
+                                url: url,
+                                type: 'post',
+                                success: function (data) {
+                                    if (data == "true") {
+                                        layer.msg("修改成功", { icon: 6 });
+                                        table.reload('tw');
+                                    }
+                                    if (data == "false") {
+                                        layer.msg('数据操作异常!', { icon: 5 });
+                                        return false;
+                                    }
+                                }
+                            });
+                            break;
+                    };
+                });
+            });
+        })
+
+
+
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" id="edit" lay-event="update">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete" data-type="getCheckLength" id="deteleted">删除</a>
+    </script>
+
+
+</head>
+
+
+<body>
+
+    <div class="rightinfo">
+
+        <div class="tools">
+
+            <ul class="toolbar">
+                <li class="ads" id="addC">
+                    <span>
+                        <img src="../../images/t01.png" />
+                    </span><a target="rightFrame">新增工位信息</a><i hidden=hidden id="u"></i>
+                </li>  
+                
+            </ul>
+        </div>
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+    </div>
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+            function admin_add(title, url, w, h) {
+                layer_show(title, url, w, h);
+            }
+    </script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+</body>
+</html>

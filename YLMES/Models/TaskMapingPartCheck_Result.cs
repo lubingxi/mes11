@@ -15,6 +15,7 @@ namespace YLMES.Models
     {
         public int 序号 { get; set; }
         public string 工件编码 { get; set; }
+        public int 子件序号 { get; set; }
         public string 子件编码 { get; set; }
         public Nullable<int> 子件数量 { get; set; }
         public Nullable<int> 原材料用量 { get; set; }

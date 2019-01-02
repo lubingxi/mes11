@@ -1,0 +1,88 @@
+﻿<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE html>
+<html>
+<head>
+    <!--_footer 作为公共模版分离出去-->
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <!--请在下方写此页面业务相关的脚本-->
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.form.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="~/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/css/style.css" />
+
+    <title></title>
+</head>
+<body>
+
+    <article class="page-container">
+        <form class="form form-horizontal layui-form" id="form-article-add">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>工位名称：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    @Html.DropDownList("Station", ViewData["Station"] as SelectList, "请选择", new { name = "Station", id = "Station", @lay_search = "", @lay_filter = "Station" })
+
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>总套数：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="number" class="input-text" oninput='this.value=this.value.replace(/^[0]+[0-9]*$/gi,"")' maxlength="5" id="RecievedPCS" name="RecievedPCS" style="width:200px;">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>负责人：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    @Html.DropDownList("responsible", ViewData["responsible"] as SelectList, "请选择", new { name = "responsible", id = "responsible", @lay_search = "", @lay_filter = "responsible" })
+
+                </div>
+            </div>
+            <div class="row cl">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                    <button onclick="sub()" class="btn btn-primary radius" type="button"><i class="Hui-iconfont">&#xe632;</i>确定</button>
+                </div>
+            </div>
+        </form>
+    </article>
+
+
+    <script type="text/javascript">
+        layui.use(['form'], function () {
+            //var form = layui.form;
+            //form.on('select(Station)', function (data) {
+            //    var Station = data.value
+            //    $("input[name=Station]").val(Station)
+            //})
+            //form.on('select(selects)', function (data) {
+            //    var QualifiedOwner = data.value
+            //    $("input[name=QualifiedOwner]").val(QualifiedOwner)
+
+            //})
+        });
+        function sub() {
+            $("#form-article-add").ajaxSubmit({
+                url: "@Url.Action("AddStationDetails", "ProductionPlanning")",
+                type: "post",
+                success: function (data) {
+                    if (data == "true") {
+                        alert("编辑成功！");
+                        window.parent.location.reload();
+                    }else
+                    {
+                        alert("编辑失败！");
+                    }
+                },
+                error: function (aa) {
+                    alert(aa);
+                }
+            });
+        }
+        $(function () {
+          
+            })
+    </script>
+    <!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

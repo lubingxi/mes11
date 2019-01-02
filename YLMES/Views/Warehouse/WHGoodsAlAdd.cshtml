@@ -1,0 +1,95 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>友力信息管理系统</title>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script src="~/Scripts/jquery.form.js" type="text/javascript"></script>
+    <script>
+        function getQueryString() {
+            var obg = {}, a = '';
+            (a = window.location.search.substr(1)) || (a = window.location.hash.split('?')[1])
+            a.split(/&/g).forEach(function (item) {
+                obg[(item = item.split('='))[0]] = item[1];
+            })
+            return obg
+        }
+    </script>
+
+</head>
+<body>
+
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">采购管理</a></li>
+            <li><a href="#">新增供应商信息</a></li>
+        </ul>
+    </div>
+    <form class="layui-form" id="form-article-add" style="margin-top:20px">
+        <div class="layui-form-item">
+            <label class="layui-form-label">货位名</label>
+            <div class="layui-input-block" style="width:200px">
+                <input type="text" lay-verify="required" name="Name" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9-]+/,'');}).call(this) " placeholder=" 必填" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-block" style="width:200px">
+                <input type="text" lay-verify="required" name="Description" placeholder="选填" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">货区：</label>
+            <div class="layui-input-block" style="width:200px">
+                <input type="text" lay-verify="required" name="StorageName" readonly="readonly" id="name" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" onclick="sub()" style="margin-left:100px">立即提交</button>
+            </div>
+        </div>
+    </form>
+    <script>
+        $(function () {
+
+            $('#name').val(getQueryString().Name);
+
+        });
+        function sub() {
+
+            $("#form-article-add").ajaxSubmit({
+
+                url: "@Url.Action("GoodsAlAdd", "Warehouse")",
+                type: "post",
+            success: function (data) {
+                if (data == "true") {
+                  layer.alert("插入成功");
+                    window.parent.location.reload();
+                } else if (data == "false") {
+                    alert("插入失败");
+                }
+            },
+            error: function (aa) {
+                alert(aa);
+            }
+        });
+        }
+    </script>
+</body>
+
+</html>

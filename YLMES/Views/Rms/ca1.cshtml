@@ -38,23 +38,25 @@
                         break;
                     case 'delete':
                         id = data.ID;
-                        $.ajax({
-                            url: "/Rms/DeleteMaterial",
-                            data: { ID: id },
-                            type: "post",
-                            dataType: "text",
-                            success: function (data) {
-                                if (data == "true") {
-                                    window.setTimeout(function () {
-                                        layer.msg("删除成功!");
-                                        window.parent.document.getElementById("rightframe").src = "/Rms/MaterialRegistration";
-                                    }, 500);
+                        layer.confirm('真的要删除吗?', function () {
+                            $.ajax({
+                                url: "/Rms/DeleteMaterial",
+                                data: { ID: id },
+                                type: "post",
+                                dataType: "text",
+                                success: function (data) {
+                                    if (data == "true") {
+                                        window.setTimeout(function () {
+                                            layer.msg("删除成功!");
+                                            window.parent.document.getElementById("rightframe").src = "/Rms/MaterialRegistration";
+                                        }, 500);
+                                    }
+                                    else {
+                                        alert("删除失败!");
+                                        return;
+                                    }
                                 }
-                                else {
-                                    alert("删除失败!");
-                                    return;
-                                }
-                            }
+                            });
                         });
                         break;
                 };
@@ -93,23 +95,25 @@
                             break
                         case 'delete':
                             id = data.ID;
-                            $.ajax({
-                                url: "/Rms/DeleteMaterial",
-                                data: { ID: id },
-                                type: "post",
-                                dataType: "text",
-                                success: function (data) {
-                                    if (data == "true") {
-                                        window.setTimeout(function () {
-                                            layer.msg("删除成功!");
-                                            window.parent.document.getElementById("rightframe").src = "/Rms/MaterialRegistration";
-                                        }, 500);
+                            layer.confirm('真的要删除吗?', function () {
+                                $.ajax({
+                                    url: "/Rms/DeleteMaterial",
+                                    data: { ID: id },
+                                    type: "post",
+                                    dataType: "text",
+                                    success: function (data) {
+                                        if (data == "true") {
+                                            window.setTimeout(function () {
+                                                layer.msg("删除成功!");
+                                                window.parent.document.getElementById("rightframe").src = "/Rms/MaterialRegistration";
+                                            }, 500);
+                                        }
+                                        else {
+                                            alert("删除失败!");
+                                            return;
+                                        }
                                     }
-                                    else {
-                                        alert("删除失败!");
-                                        return;
-                                    }
-                                }
+                                });
                             });
                             break;
 
@@ -153,23 +157,25 @@
                             break
                         case 'delete':
                             id = data.ID;
-                            $.ajax({
-                                url: "/Rms/DeleteMaterial",
-                                data: { ID: id },
-                                type: "post",
-                                dataType: "text",
-                                success: function (data) {
-                                    if (data == "true") {
-                                        window.setTimeout(function () {
-                                            layer.msg("删除成功!");
-                                            window.parent.document.getElementById("rightframe").src = "/Rms/MaterialRegistration";
-                                        }, 500);
+                            layer.confirm('真的要删除吗?', function () {
+                                $.ajax({
+                                    url: "/Rms/DeleteMaterial",
+                                    data: { ID: id },
+                                    type: "post",
+                                    dataType: "text",
+                                    success: function (data) {
+                                        if (data == "true") {
+                                            window.setTimeout(function () {
+                                                layer.msg("删除成功!");
+                                                window.parent.document.getElementById("rightframe").src = "/Rms/MaterialRegistration";
+                                            }, 500);
+                                        }
+                                        else {
+                                            alert("删除失败!");
+                                            return;
+                                        }
                                     }
-                                    else {
-                                        alert("删除失败!");
-                                        return;
-                                    }
-                                }
+                                });
                             });
                             break;
 

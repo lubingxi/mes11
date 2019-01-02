@@ -1,0 +1,110 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>友力信息管理系统</title>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script>
+        $(document).keydown(function (e) {
+            switch (e.keyCode) {
+                case 13:
+                    $("#PurchaselistSel").click();
+                    break;
+            }
+        });
+        $(function () {
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                    var Name = $('#WarehouseName').val();
+                    table.render({
+                        elem: '#tw'
+                        , url: '/TaskManagement/Departmentlist'
+                        , page: true
+                        , done: function () {
+                            $("tr a").hide();
+                            $("tr").hover(function () {
+                                $(this).children().last().children().children().toggle();
+                            })
+                        }
+                        , limit: 15
+                        , cols: [[
+                            { field: '员工姓名', width: 80, title: '员工姓名' }
+                            , { field: '未逾期任务数', width: 100, title: '未逾期任务数' }
+                            , { field: '逾期任务数', width: 210, title: '逾期任务数' }
+                            , { field: '当前工作状态', width: 235, title: '当前工作状态' }
+                            , { field: '客户名称', width: 180, title: '客户名称' }
+                            , { field: '设计类型', width: 100, title: '设计类型' }
+                            , { field: '总工时', width: 100, title: '总工时' }
+                            , { field: '还剩小时', width: 100, title: '还剩小时' }
+                            , { field: '是否逾期', width: 100, title: '是否逾期' }
+                         //   , { field: 'right', width: 380, align: 'center', toolbar: '#bsarDemo' }
+                        ]]
+                    })               
+            });
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;         
+                $('#PurchaselistSel').click(function () {
+                    var Name = $('#WarehouseName').val();
+                    table.render({
+                        elem: '#tw'
+                , url: '/TaskManagement/Departmentlist?Name=' + Name
+                , page: true
+                , done: function () {
+                            $("tr a").hide();
+                            $("tr").hover(function () {
+                                $(this).children().last().children().children().toggle();
+                            })
+                        }
+                , limit: 15
+                , cols: [[
+                  { field: '员工姓名', width: 80, title: '员工姓名'}
+                , { field: '未逾期任务数', width: 100, title: '未逾期任务数' }
+                , { field: '逾期任务数', width: 210, title: '逾期任务数' }
+                , { field: '当前工作状态', width: 235, title: '当前工作状态' }
+                , { field: '客户名称', width: 180, title: '客户名称' }
+                , { field: '设计类型', width: 100, title: '设计类型' }
+                , { field: '总工时', width: 100, title: '总工时' }
+                , { field: '还剩小时', width: 100, title: '还剩小时' }
+                , { field: '是否逾期', width: 100, title: '是否逾期'}
+             //  , { field: 'right', width: 380, align: 'center', toolbar: '#bsarDemo' }
+                ]]
+                    })
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">统计报表</a></li>
+            <li><a href="#">技术部工作状况</a></li>
+        </ul>
+    </div>
+    <div class="rightinfo">
+        <div class="tools">
+            <ul class="toolbar">
+                <li>
+                    姓名:
+                    <input class="WarehouseName" id="WarehouseName" type="text" style="width: 180px;" />
+                </li>        
+            </ul>
+            <button class="layui-btn" data-type="reload" id="PurchaselistSel">查询</button>
+        </div>
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+    </div>
+</body>
+</html>

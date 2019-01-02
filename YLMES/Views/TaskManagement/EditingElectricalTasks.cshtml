@@ -2,18 +2,22 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <!--_footer 作为公共模版分离出去-->
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <!--请在下方写此页面业务相关的脚本-->
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.form.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="~/static/h-ui/css/H-ui.min.css" />
     <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/css/H-ui.admin.css" />
-    <link rel="stylesheet" type="text/css" href="~/lib/Hui-iconfont/1.0.8/iconfont.css" />
-    <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/skin/default/skin.css" id="skin" />
     <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/css/style.css" />
-    <script src="~/Scripts/jquery.form.js" type="text/javascript"></script>
     <title></title>
 </head>
 <body>
 
     <article class="page-container">
-        <form class="form form-horizontal" id="form-article-add">
+        <form class="form form-horizontal layui-form" id="form-article-add">
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>项目名称：</label>
                 <div class="formControls col-xs-8 col-sm-9">
@@ -54,7 +58,7 @@
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>紧急程度：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["PriorityCode"]" readonly="readonly" placeholder="" id="PriorityCode" name="PriorityCode">
+                    <input type="text" class="input-text" value="@ViewData["PriorityCode"]"  placeholder="" id="PriorityCode" name="PriorityCode">
                 </div>
             </div>
             <div class="row cl">
@@ -72,13 +76,13 @@
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务备注：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["taskdesc"]" placeholder="" readonly="readonly" id="taskdesc" name="taskdesc">
+                    <input type="text" class="input-text" value="@ViewData["taskdesc"]" placeholder="" id="taskdesc" name="taskdesc">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计截至日期：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" onfocus="WdatePicker()" id="JieDate" name="JieDate" readonly="readonly" class="input-text Wdate" value="@ViewData["JieDate"]">
+                    <input type="text" onfocus="WdatePicker()" id="JieDate" name="JieDate"  class="input-text Wdate" value="@ViewData["JieDate"]">
                 </div>
             </div>
             <div class="row cl">
@@ -105,13 +109,19 @@
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计人：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["MachineDesignOwner"]" placeholder="" id="MachineDesignOwner" name="MachineDesignOwner">
+                    @*<input type="text" class="input-text" value="@ViewData["MachineDesignOwner"]" placeholder="" id="MachineDesignOwner" name="MachineDesignOwner">*@
+
+                    @Html.DropDownList("selectd", ViewData["selectd"] as SelectList,"请选择", new { name = "MachineDesignOwner", id = "MachineDesignOwner", @lay_search = "", @lay_filter = "selectd" })
+                    <input type="hidden" name="MachineDesignOwner" value="@ViewData["dianqi"]" />
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>审核人：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["QualifiedOwner"]" placeholder="" id="QualifiedOwner" name="QualifiedOwner">
+                    @*<input type="text" class="input-text" value="@ViewData["QualifiedOwner"]" placeholder="" id="QualifiedOwner" name="QualifiedOwner">*@
+
+                    @Html.DropDownList("selects", ViewData["selects"] as SelectList,"请选择",new { name = "QualifiedOwner", id = "QualifiedOwner", @lay_search = "", @lay_filter = "selects" })
+                    <input type="hidden" name="QualifiedOwner" value="@ViewData["shenhe"]" />
                 </div>
             </div>
             <div class="row cl">
@@ -179,6 +189,18 @@
     <script type="text/javascript" src="~/lib/ueditor/1.4.3/ueditor.all.min.js"> </script>
     <script type="text/javascript" src="~/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
     <script type="text/javascript">
+        layui.use(['form'], function () {
+            var form = layui.form;
+            form.on('select(selectd)', function (data) {
+                var MachineDesignOwner = data.value
+                $("input[name=MachineDesignOwner]").val(MachineDesignOwner)
+            })
+            form.on('select(selects)', function (data) {
+                var QualifiedOwner = data.value
+                $("input[name=QualifiedOwner]").val(QualifiedOwner)
+
+            })
+        });
         $.ready(
            document.getElementById('select').value = '@ViewData["select"]'
            );

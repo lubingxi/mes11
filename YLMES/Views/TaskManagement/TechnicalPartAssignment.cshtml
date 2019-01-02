@@ -19,21 +19,48 @@
              color:#FFF;
         }
     </style>
-    <script type="text/javascript">       
+    <script type="text/javascript">   
+        $(document).keydown(function (e) {
+            switch (e.keyCode) {
+                case 27:
+                    $("#cancle").click();
+                    break;
+                case 13:
+                    $("#sele").click();
+                    break;
+            }       
+        });
         $(function () {
             $(".my-skin .layui-layer-btn2").hide();
             $("#cancle").click(function () {
                 window.parent.document.getElementById("rightframe").src = "/TaskManagement/TaskAllocation";
-            });           
+            });
+            $("#Dis").click(function () {
+                var url = '/TaskManagement/DesignDistribution?ProjectName=' + '@Session["pndd"]';
+                layer_show('机械分配查询', url, '1200', '800');
+            });
+            $("#WorkCondition").click(function () {
+                var url = '/TaskManagement/WorkCheck';
+                layer_show('工作查询', url, '1400', '850');
+            });
             layui.use('table', function () {
-
                 var table = layui.table;
                 table.render({
                     elem: '#tw'
-               , url: '/TaskManagement/TpA'
+                    , url: '/TaskManagement/TpA?DistriBution='+'未分配'
                , page: false
-               , cols: [[
-                { field: '订单产品名称', width: 235, title: '订单产品名称' }
+               , done: function () {
+                   $("tr a").hide();
+                 $("tr").hover(function () {
+
+                     $(this).children().last().children().children().toggle();
+                 })
+
+
+             }
+                    , cols: [[
+               { field: '任务编号', width: 235, title: '任务编号' }
+                ,{ field: '订单产品名称', width: 235, title: '订单产品名称' }
                , { field: '订单产品规格', width: 235, title: '订单产品规格' }
                , { field: '机械任务分配', width: 235, title: '机械任务分配' }
                 , { field: '电气任务分配', width: 235, title: '电气任务分配' }
@@ -87,9 +114,77 @@
                             break;
                     };
                 });
-
             });
+            layui.use('table', function () {
+                var table = layui.table;                                                                 
+                $(".layui-btn").click(function () {
+                    var fenpei = $("#s option:selected").text();
+                    table.render({
+                        elem: '#tw'
+                        , url: '/TaskManagement/TpA?DistriBution=' + fenpei
+                        , page: false
+                        , done: function () {
+                            $("tr a").hide();
+                            $("tr").hover(function () {
+                                $(this).children().last().children().children().toggle();
+                            })
+                        }
+                        , cols: [[
+                            { field: '任务编号', width: 235, title: '任务编号' }
+                            ,{ field: '订单产品名称', width: 235, title: '订单产品名称' }
+                            , { field: '订单产品规格', width: 235, title: '订单产品规格' }
+                            , { field: '机械任务分配', width: 235, title: '机械任务分配' }
+                            , { field: '电气任务分配', width: 235, title: '电气任务分配' }
+                            , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+                        ]]
+                    });
+                    table.on('tool(demo)', function (obj) {
+                        var data = obj.data;
+                        switch (obj.event) {
+                            case 'Detials':
+                                xie = data.机械任务编号;
+                                qi = data.电气任务编号;
+                                var jixie = null;
+                                var kong = '';
+                                var dianqi = null;
+                                if (xie != null) {
+                                    jixie = '机械';
+                                }
+                                else {
+                                    jixie = '';
+                                }
+                                if (qi != null) {
+                                    dianqi = '电气';
 
+                                }
+                                else {
+                                    dianqi = '取消';
+                                }
+                                layer.confirm('请选择任务分配！', {
+                                    title: "友力提示", skin: "my-skin",
+                                    btn: [jixie, kong, dianqi], btn1: function () {
+                                        layer.closeAll();
+                                        var url = '/TaskManagement/EditingMechanicalTasks?TaskID=' + xie;
+                                        layer_show('分配任务', url, '1000', '700');
+                                    },
+                                    btn2: function () {
+                                        return false;
+                                    },
+                                    btn3: function () {
+                                        if (dianqi == '电气') {
+                                            var url = '/TaskManagement/EditingElectricalTasks?TaskID=' + qi;
+                                            layer_show('分配任务', url, '1000', '700');
+                                        } else {
+                                        }
+                                    }
+
+                                });
+                                break;
+                        };
+                    });
+                });
+                
+            });
         })
     </script>
     <script type="text/html" id="barDemo">
@@ -116,13 +211,23 @@
 
         <div class="tools">
 
-            <ul class="toolbar">                         
+            <ul class="toolbar">
                 <li class="click" id="cancle">
                     <span>
                         <img src="../../images/t02.png" />
                     </span>返回
                 </li>
+                <li>
+                    是否分配：
+                    <select name="s" id="s" style="width:100px;">
+                        <option value="未分配">未分配</option>
+                        <option value="已分配">已分配</option>
+                    </select>
+                </li>
             </ul>
+            <button class="layui-btn" data-type="reload" id="sele" usesubmitbehavior=true>搜索</button>
+            <button class="layui-btn" data-type="reload" id="Dis" usesubmitbehavior=true>机械任务分配信息</button>
+            <button class="layui-btn" data-type="reload" id="WorkCondition" usesubmitbehavior=true>工作状况信息</button>
         </div>
 
     </div>

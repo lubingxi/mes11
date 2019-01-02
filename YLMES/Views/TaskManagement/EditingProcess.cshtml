@@ -7,217 +7,513 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <title>友力信息管理系统</title>
-    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
-    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="~/js/jquery-3.3.1.js"></script>
     <link href="~/css/style.css" rel="stylesheet" type="text/css" />
     <link href="~/layui/css/layui.css" rel="stylesheet" />
-    <script type="text/javascript" src="../../js/jquery.js"></script>
     <script src="~/layui/layui.js" type="text/javascript"></script>
-
-
-    <script type="text/javascript">
-        $(function () {
-            var url = "/TaskManagement/CompleteProcessSetting?tastid=" + '@ViewData["taskid"]';
-            $(".click").click(function () {
-                $(".tip").fadeIn(200);
-            });
-
-            $(".tiptop a").click(function () {
-                $(".tip").fadeOut(200);
-            });
-
-            $(".sure").click(function () {
-                $(".tip").fadeOut(100);
-            });
-
-            $(".cancel").click(function () {
-                $(".tip").fadeOut(100);
-            });
-            $("#m1").click(function () {
-                window.parent.document.getElementById("rightframe").src = "/TaskManagement/TaskMapPart?TaskID=" + "@Session["task1"]" + "&ProductName=" + "@Session["ProductName1"]" + "&ProductSpec="+"@Session["ProductSpec2"]";
-            });
-            $("#addC").click(function () {
-                var Routevalue = $(".Route").val();
-                var url = "/TaskManagement/AddRoute?id=" + Routevalue;
-                $.ajax({
-                    url: url,
-                    type: 'post',
-                    async: true,
-                    success: function (data) {
-                        if (data == "true") {
-                            layer.msg("保存成功", { icon: 6 });
-                            table.reload('tw');
-                        }
-                        if (data == "false") {
-                            layer.msg('保存失败!', { icon: 5 });
-                            return false;
-                        }
-                    }
-                });
-            });
-            $("#Save").click(function () {
-                var saveName = $("#ProcessSaveAs").val();
-                var Routevalue = $(".Route").val();
-                var url = "/TaskManagement/SaveRoute?saveName=" + saveName + "&Routevalue="+Routevalue;
-                $.ajax({
-                    url: url,
-                    type: 'post',
-                    async: true,
-                    success: function (data) {
-                        if (data == "true") {
-                            layer.msg("保存成功", { icon: 6 });
-                            table.reload('tw');
-                        }
-                        if (data == "false") {
-                            layer.msg('保存失败!', { icon: 5 });
-                            return false;
-                        }
-                    }
-                });
-            });
-            $("#edit").click(function () {
-                window.parent.document.getElementById("rightframe").src = "/Home/Eidt";
-            });
-            $("#BindingProductConfirmation").click(function () {
-
-            });  
-
-            layui.use(['table', 'layer'], function () {
-                    var table = layui.table, layer = layui.layer;
-                    table.render({
-                        elem: '#tw'
-                   , url: '/TaskManagement/CheckProcess?pn=' + '@ViewData["pn"]'
-                   , cols: [[
-
-                   , { field: '流程序号', width: 60, title: '流程序号',Edit:Text }
-                   , { field: '工位类型', width: 200, title: '工位类型', Edit: Text }
-                   , { field: '单套工时', width: 200, title: '单套工时', Edit: Text }
-                   , {
-                       field: '辅助工时', width: 200, title: '辅助工时', Edit: Text
-                   }
-                   , { field: '工艺要求', title: '工艺要求', width: 200, Edit: Text }
-                   , { field: '编号', width: 100, title: '编号' }
-                   , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
-                   ]]
-
-                    });
-
-                table.on('checkbox(demo)', function (obj) {
-                    console.log(obj)
-                });
-
-                table.on('tool(demo)', function (obj) {
-                    var data = obj.data;
-                    switch (obj.event) {                     
-                        case 'delete':
-                            layer.confirm('真的删除行么', function (index) {
-                                id = data.编号;
-
-                                layer.close(index);
-                                var url = "/TaskManagement/DeleteProcess?id=" + id;
-                                $.ajax({
-                                    url: url,
-                                    type: 'post',
-                                    async: true,
-                                    success: function (data) {
-                                        if (data == "true") {
-                                            layer.msg("删除成功", { icon: 6 });
-                                            table.reload('tw');
-                                        }
-                                        if (data == "false") {
-                                            layer.msg('数据操作异常!', { icon: 5 });
-                                            return false;
-                                        }
-                                    }
-                                });
-                            });
-                            break;
-                        case 'update':
-                            xuhao = data.流程序号;
-                            type = data.工位类型;
-                            dantao = data.单套工时;
-                            fuzhu = data.辅助工时;
-                            yaoqiu = data.工艺要求;
-                            id = data.编号;
-                            var url = "/TaskManagement/UpdateProcess?xuhao=" + xuhao + "&type=" + type + "&dantao=" + dantao + "&fuzhu=" + fuzhu + "&yaoqiu=" + yaoqiu+"&id="+id;
-                            $.ajax({
-                                url: url,
-                                type: 'post',
-                                async: true,
-                                success: function (data) {
-                                    if (data == "true") {
-                                        layer.msg("修改成功", { icon: 6 });
-                                        table.reload('tw');
-                                    }
-                                    if (data == "false") {
-                                        layer.msg('修改失败!', { icon: 5 });
-                                        return false;
-                                    }
-                                }
-                            });
-                            break;
-                    };
-                });
-
-
-            });
-        })
-
-
-
-    </script>
-    <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-xs" id="edit" lay-event="update">编辑</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete" data-type="getCheckLength" id="delete">删除</a>
-    </script>
-
-
-</head>
-
-
-<body>
-
-    <div class="rightinfo">
-
-        <div class="tools">
-
-            <ul class="toolbar">
-                <li class="ads" id="addC">
-                    <span>
-                        <img src="../../images/t01.png" />
-                    </span><a target="rightFrame">新增流程站点</a><i hidden=hidden id="u">/TaskManagement/NewProcess</i>
-                </li>
-                <li>
-                   流程名称：
-                    @Html.DropDownList("RouteName", new SelectList(ViewBag.rn, "ID", "RouteName"), "请选择", new { @class = "Route" })
-                    
-                </li>
-                <li>
-                    流程另存为：
-                    <input class="ProcessSaveAs" id="ProcessSaveAs" type="text" style="width: 80px;" />
-                </li>
-                
-            </ul>
-            <button class="layui-btn" id="Save" data-type="reload">保存</button>
-        </div>
-        <table class="tablelist" id="tw" lay-filter="demo"></table>
-    </div>
-    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
     <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
     <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
     <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <style type="text/css">
+        tr td:nth-child(4) div {
+            overflow: visible;
+            height: auto;
+        }
+    </style>
     <script type="text/javascript">
 
-            function admin_add(title, url, w, h) {
-                layer_show(title, url, w, h);
+        $(function () {
+            if ('@ViewData["ifs"]' == "1") {
+                $('#addC').hide();
             }
+
+            var up = false;
+            var RouteList = new Array()
+
+            $.get("/TaskManagement/CheckProductRouting", function (data) {
+                if (data != null) {
+                    for (var i = 0; i < data.length; i++) {
+
+                        RouteList[i] = data[i].流程.replace(" ", "")
+                    }
+                }
+            })
+            $(".ro").keyup(function () {
+                var Route =""
+                if ($(".ro:eq(0)").val() == "") {
+                    Route = $(".ro:eq(1)").val();
+                } else {
+                    Route = $(".ro:eq(0)").val();
+                }
+                var Route_stu = Route;
+                while (Route_stu.match(" ")) {
+                    Route_stu = Route_stu.replace(" ", "")
+                }
+                for (var i = 0; i < RouteList.length; i++) {
+
+                    if (Route_stu != null && Route_stu != "") {
+
+                        if (RouteList[i] == Route_stu) {
+                            up = false;
+                        
+                            break;
+                        } else {
+                            up = true;
+                        }
+                    } else {
+                        up = false;
+                        break;
+                    }
+                }
+                if (up) {
+                    $(".ro").css("border", "ridge rgba(0,255,0,0.5)")
+                } else {
+                    $(".ro").css("border", "ridge rgba(255,0,0,0.5)")
+
+                }
+            })
+            $(".layui-input-block span").hide();
+
+
+            var PartNumber = '@ViewData["PartNumber"]'
+
+
+
+            if (PartNumber != "") {
+
+                $("#addC").text("新增子流程")
+                $(".navName").text("子流程详情")
+                $(".navRoName").text("子流程名称：")
+            }
+
+
+            layui.use(['table', 'layer', 'form'], function () {
+                var table = layui.table, layer = layui.layer, from = layui.form;
+                var RouteName = "0";
+                
+                $("#checkRo").click(function () {
+                    var StationTypeList = new Array();
+                    table.render({
+                        elem: '#tw'
+                        , url: '/TaskManagement/CheckProductRouting?RouteName=' + RouteName + "&code=0"
+                        , done: function (res) {
+                            $("tr a").hide()
+                            $("tr").hover(function () {
+
+                                $(this).children().last().children().children().toggle();
+                            })
+                            if (res.data != null) {
+                                for (var i = 0; i < res.data.length; i++) {
+                                    StationTypeList[i] = res.data[i].工位类型
+                                }
+                            }
+                        }
+                        , height: 'full-20'
+                        , page: true
+                        , cols: [[
+                            , { field: 'ID', hide: true }
+                            , { field: '流程ID', width: 60, title: '流程序号' }
+                            , { field: '流程', width: 200, title: '流程名称', edit: Text }
+                            , { field: '工位类型', width: 200, title: '工位类型', toolbar: '#sele' }
+
+                            , { field: '单套工时', width: 200, title: '单套工时', edit: Text }
+                            , {
+                                field: '辅助工时', width: 200, title: '辅助工时', edit: Text
+                            }
+                            , { field: '工艺要求', title: '工艺要求', width: 200, edit: Text }
+                            , { field: '编码', width: 100, title: '编号' }
+                            , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+                        ]]
+
+                    });
+                    $.get("/TaskManagement/StationTypeNumber", function (data) {
+                        if (data != null) {
+                            var StationType = 0;
+                            for (var index = 0; index < StationTypeList.length; index++) {
+                                for (var i = 0; i < data.length; i++) {
+                                    if (StationTypeList[index] == data[i].StationType) {
+                                        $(".StationTypeNumber:eq(" + index + ")").append("<option selected>" + data[i].StationType + "</option>")
+                                        StationType = data[i].StationType;
+
+                                    } else {
+                                        $(".StationTypeNumber:eq(" + index + ")").append("<option>" + data[i].StationType + "</option>")
+                                    }
+                                }
+
+                                $("[name=StationTypeid]:eq(" + index + ")").text(StationType)
+
+                            }
+                            from.render()
+                        }
+                    })
+                    from.render()
+                })
+
+                from.on('select(Rout)', function (data) {
+
+                    RouteName = data.value;
+
+                })
+
+                from.on('select(se)', function (data) {
+                    var ddaystrs = new Array();
+                    ddaystrs = data.value.split(" ");
+
+                    $(".ka:eq(0)").empty();
+                    $(".ka:eq(0)").append("<div class='layui-form-mid layui-word-aux'>" + ddaystrs[0] + "<i class='layui-icon layui-icon-close-fill'></i></div>")
+                    $(".layui-input-block span").text(ddaystrs[1])
+                    $.ajax({
+                        url: "/TaskManagement/findTaskMi",
+                        type: "get",
+                        data: { ProductName: ddaystrs[0], ProductSpec: ddaystrs[1] },
+                        dataType: "json",
+                        success: function (data) {
+                            if (data != null) {
+                                $("[name=city1]").empty();
+                                for (var i = 0; i < data.length; i++) {
+
+                                    $("[name=city1]").append("<option>" + data[i].零件名称 + " " + data[i].规格 + "</option>")
+                                }
+
+                            }
+                            from.render();
+                        }
+                    })
+                    from.render();
+                });
+                from.on('select(StationTypeid)', function (data) {
+                    var tr = data.othis
+                    tr.parents("tr").find("span").text(data.value)
+
+                })
+                $("#detail").click(function () {
+                    if (RouteName == "0") {
+                        layer.msg("请选择流程")
+                    } else {
+                        var url = "/TaskManagement/AddProcess?Route=" + RouteName + "&id=Partid" + "&PartId=0";
+                        var index = layer.open({
+                            type: 2,
+                            title:'流程编辑',
+                            content: url,
+                            area: ['1200px', '700px'],
+                            maxmin: true
+                        });
+                        layer.full(index);
+                        
+                    }
+                })
+                table.on('tool(demo)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                    var layEvent = obj.event;
+                    var data = obj.data
+                    var RouteName = data.流程
+                    var id = data.编码;
+                    var tr = obj.tr;
+                    var index = data.ID;
+
+                    if (layEvent === 'up') {
+
+
+                        var WorkSecondPerPCS = data.单套工时
+                        var WorkSecond2PerPCS = data.辅助工时
+                        var require = data.工艺要求
+                        var id = data.流程ID
+                        var StationTypeid = tr.find("span").text()
+                        $.post("/TaskManagement/UpdateProcess", { RouteName: RouteName, WorkSecondPerPCS: WorkSecondPerPCS, WorkSecond2PerPCS: WorkSecond2PerPCS, require: require, id: id, StationType: StationTypeid, index: index }, function (data) {
+                            if (data == "true") {
+                                layer.msg("修改成功")
+                                location.reload()
+                                $("#checkRo").click()
+                            }
+                        })
+                    }
+                    else if (layEvent == 'delete') {
+
+                        if (tr.next().text() == "" && tr.prev().text() == "") {
+                            layer.confirm('继续将会删除流程，确定删除吗', function (index) {
+                                obj.del();
+                                layer.close(index);
+                                var id = data.ID
+                                var Rotueid = data.流程ID
+
+                                $.post("/TaskManagement/DeleteProcess", { id: id, Rotueid: Rotueid }, function (data) {
+                                    if (data == "true") {
+                                        layer.msg("删除成功")
+                                    }
+                                }).error(function (error) { alert(error); })
+                            })
+                        } else {
+                            layer.confirm('确定删除此工艺么', function (index) {
+                                obj.del();
+                                layer.close(index);
+                                var id = data.ID
+
+                                $.post("/TaskManagement/DeleteProcess", { id: id }, function (data) {
+                                    if (data == "true") {
+                                        layer.msg("删除成功")
+                                    }
+
+                                }).error(function (error) { alert(error); })
+                            });
+                        }
+                    }
+                });
+                from.on('select(se1)', function (data) {
+                    var ddaystrs = new Array();
+                    ddaystrs = data.value.split(" ");
+
+                    $(".ka:eq(1)").empty()
+                    $(".ka:eq(1)").append("<div class='layui-form-mid layui-word-aux'>" + ddaystrs[0] + "<i class='layui-icon layui-icon-close-fill'></i></div>")
+
+
+                });
+                from.on('select(se2)', function (data) {
+                    var ddaystrs = new Array();
+                    ddaystrs = data.value.split(" ");
+
+                    $(".ka:eq(2)").empty()
+                    $(".ka:eq(2)").append("<div class='layui-form-mid layui-word-aux'>" + ddaystrs[0] + "<i class='layui-icon layui-icon-close-fill'></i></div>")
+
+
+
+                });
+                from.on('select(se21)', function (data) {
+                    var ddaystrs = new Array();
+                    ddaystrs = data.value.split(" ");
+                    $(".ka1").empty()
+                    $(".ka1").append("<div class='layui-form-mid layui-word-aux'>" + ddaystrs[0] + "<i class='layui-icon layui-icon-close-fill'></i></div>")
+                });
+                $(".ka1").click(function () {
+                    $(this).empty()
+                })
+                    $(".ka").click(function () {
+                        $(this).empty()
+                    })
+                    $(".ka:eq(0)").click(function () {
+                        $(".ka").empty()
+                    })
+                    $("i").hide();
+                    $.ajax({
+                        url: '/TaskManagement/CheckProductRouting',
+                        type: "get",
+                        dataType: "json",
+                        success: function (data) {
+
+                            if (data != null) {
+
+                                for (var i = 0; i < data.length; i++) {
+                                    if (data[i].工艺要求 != null) {
+                                        var bo = true
+                                        $("[name=city2] option").each(function (j) {
+                                            if ($("[name=city2] option:eq(" + j + ")").text() == data[i].流程) {
+                                                bo = false;
+                                            }
+                                        })
+                                        if (bo) {
+                                            $("[name=city2]").append("<option>" + data[i].流程 + "</option>")
+                                        }
+                                    }
+
+                                }
+
+                            }
+                            from.render();
+                        }
+                    })
+
+                    $.ajax({
+                        url: "/TaskManagement/findTask",
+                        type: "get",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data != null) {
+                                for (var i = 0; i < data.length; i++) {
+
+                                    $("[name=city]").append("<option>" + data[i].零件名称 + " " + data[i].规格 + "</option>")
+                                }
+
+                            }
+                            from.render();
+                        }
+                    })
+                    $("#addC").click(function () {
+                        if ('@ViewData["PartId"]' == 0) {
+                            layer.open({
+                                type: 1,
+                                area: ['500px', '600px']
+                                , content: $("#ids")
+                                , btn: ['确定', '取消']
+                                , yes: function (index) {
+                                    if ($(".ka:eq(0)").text() != "") {
+                                        var ProductName = $(".ka:eq(0)").text();
+                                        var ProductSpec = $(".layui-input-block span").text();
+                                        var PartNumber = $(".ka:eq(1)").text();
+                                        var ProcessName = $(".ro:eq(1)").val();
+                                        var Route = $(".ka:eq(2)").text();
+                                        if (ProcessName != "") {
+                                            if (up) {
+                                                window.parent.document.getElementById("rightframe").src = "/TaskManagement/AddProcess?PartNumber=" + PartNumber + "&ProductName=" + ProductName + "&ProductSpec=" + ProductSpec + "&Route=" + Route + "&PartId=0" + "&ProcessName=" + ProcessName;
+                                                layer.close(index);
+                                            } else {
+
+                                                layer.msg("流程名称重复")
+                                            }
+                                        } else {
+
+                                            layer.msg("请输入流程名称");
+                                        }
+
+                                    } else {
+
+                                        layer.msg("请选择零件");
+                                    }
+
+                                }
+                            });
+
+                        } else {
+                            layer.open({
+                                type: 1,
+                               
+                                area: ['400px', '400px'],
+                               
+                                content: $('#tong')
+                                , btn: ['确定', '取消']
+                                , yes: function (index) {
+                                    var id = Number('@ViewData["PartId"]')
+                                    var a = $("input[name=aa]").attr("value");
+                                    var Route = $(".ka1").text();
+                                    var ProcessName = $(".ro:eq(0)").val();
+                                    if (ProcessName != null && ProcessName != "") {
+                                        if (up) {
+                                            window.parent.document.getElementById("rightframe").src = "/TaskManagement/AddProcess?PartId=" + id + "&ProductName=" + '@ViewData["ProductName"]' + "&ProcessName=" + ProcessName + "&PartNumber=" + PartNumber + "&ProductSpec=" + a + "&Route=" + Route
+                                        layer.close(index)
+                                        } else {
+
+                                            layer.msg("流程名称重复")
+                                        }
+                                    } else {
+                                        layer.msg("请输入流程名称");
+                                    }
+
+                                }
+                            });
+                            
+                                    
+                           
+                        }
+                    });
+                });
+            })
+       
+
+
     </script>
-    <script type="text/javascript">
-        $('.tablelist tbody tr:odd').addClass('odd');
+    <script type="text/html" id="barDemo">
+      
+        <a class="layui-btn layui-btn-xs" id="edit" lay-event="up">更新</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete" data-type="getCheckLength" id="delete">删除</a>
     </script>
+    <script type="text/html" id="sele">
+        <select class='StationTypeNumber' lay-filter='StationTypeid' lay-search=lay-search></select>
+        <span name="StationTypeid" class="layui-hide"></span>
+    </script>
+</head>
+<body>
+    <input class="layui-hide" value="@ViewData["ProductSpec"]" name="aa" />
+    <div class="layui-form layui-form-pane" id="tong" style="display:none">
+        <div class="layui-form-item">
+            <label class="layui-form-label">当前零件</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" readonly value="@ViewData["PartNumber"]"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">流程引用</label>
+            <div class="layui-input-block">
+                <select name="city2" lay-filter='se21' lay-search=lay-search></select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">流程名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="Route" required=required lay-verify="required" placeholder="请输入流程名称" autocomplete="off" class="layui-input ro" style="border:ridge rgba(255,0,0,0.5);" />
+            </div>
+        </div>
+        <hr class="layui-bg-black" />
+        <div class="layui-form-item inn">
+            <div class="ka1"></div>
+        </div>
+    </div>
+    <div class="layui-form layui-form-pane" id="ids" style="width:500px;height:500px;display:none;text-align:center">
+        <div class="layui-form-item">
+            <label class="layui-form-label">主零件</label>
+            <div class="layui-input-block">
+                <select name="city" lay-filter='se' lay-search=lay-search></select>
+                <span name='StationType'></span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">子零件</label>
+            <div class="layui-input-block">
+                <select name="city1" lay-filter='se1' lay-search=lay-search></select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">流程引用</label>
+            <div class="layui-input-block">
+                <select name="city2" lay-filter='se2' lay-search=lay-search></select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">流程名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="Route" required=required lay-verify="required" placeholder="请输入流程名称" autocomplete="off" class="layui-input ro" style="border:ridge rgba(255,0,0,0.5);" />
+            </div>
+        </div>
+        <hr class="layui-bg-black" />
+        <div class="layui-form-item inn">
+            <div class="ka"></div>
+            <div class="ka"></div>
+            <div class="ka"></div>
+        </div>
+    </div>
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">工艺流程</a></li>
+            <li><a href="#" class="navName">流程查询</a></li>
+        </ul>
+    </div>
+    <div class="layui-form layui-form-pane">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <div class="layui-input-inline" style="width: 100px;">
+                    <button class="layui-btn" id="addC">新增流程</button>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label navRoName">流程名称：</label>
+                <div class="layui-input-inline" style="width: 350px;">
+                    @Html.DropDownList("RouteName", new SelectList(ViewBag.rn, "RouteName", "RouteName"), "请选择", new { @class = "Route", @lay_search = "lay-search", @lay_filter = "Rout" })
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-inline" style="width: 100px;">
+                    <button class="layui-btn" id="checkRo" data-type="checkRo">搜索</button>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-inline" style="width: 100px;">
+                    <button class="layui-btn" id="detail" data-type="detail">查看详情</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="tablelist" id="tw" lay-filter="demo"></table>
+
 </body>
 </html>

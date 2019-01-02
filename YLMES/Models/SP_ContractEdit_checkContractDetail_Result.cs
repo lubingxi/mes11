@@ -22,5 +22,6 @@ namespace YLMES.Models
         public Nullable<decimal> InstalledQuantity { get; set; }
         public string Acceptance { get; set; }
         public Nullable<System.DateTime> 验收日期 { get; set; }
+        public string Price { get; set; }
     }
 }

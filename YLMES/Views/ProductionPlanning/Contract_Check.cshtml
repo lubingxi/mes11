@@ -6,18 +6,22 @@
 <!DOCTYPE html>
 <html>
 <head>
+    @*<link rel="stylesheet" type="text/css" href="~/static/h-ui/css/H-ui.min.css" />
+        <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/css/H-ui.admin.css" />
+        <link rel="stylesheet" type="text/css" href="~/lib/Hui-iconfont/1.0.8/iconfont.css" />
+        <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/skin/default/skin.css" id="skin" />
+        <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/css/style.css" />
+        <link href="~/layui/css/layui.css" rel="stylesheet" />*@
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="~/static/h-ui/css/H-ui.min.css" />
     <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/css/H-ui.admin.css" />
-    <link rel="stylesheet" type="text/css" href="~/lib/Hui-iconfont/1.0.8/iconfont.css" />
-    <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/skin/default/skin.css" id="skin" />
     <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/css/style.css" />
-    <link href="~/layui/css/layui.css" rel="stylesheet" />
     <title></title>
 </head>
 <body>
     <article class="page-container">
 
-        <form class="form form-horizontal" id="form-article-add">
+        <form class="form form-horizontal layui-form" id="form-article-add">
             <input type="text" hidden id="ids" value="@ViewData["id"]">
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>客户名称：</label>
@@ -70,34 +74,56 @@
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>合同状态：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <span class="select-box">
-                        <select name="select" class="select" id="select">
-                            <option value="0">未开始</option>
-                            <option value="1">进行中</option>
-                            <option value="2">已完成</option>
-                         
-                        </select>
-                    </span>
+                    @Html.DropDownList("select", ViewData["select"] as SelectList, new { name = "ck", id = "ck" })
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">收款方式：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <textarea name="Pay" cols="" rows="" id="Pay" class="textarea" placeholder="说点什么呢" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["Pay"]</textarea>
-                    <p class="textarea-numberbar">@*<em class="textarea-length"></em>/200*@</p>
+                    <input type="text" class="input-text" value="@ViewData["Pay"]" placeholder="" readonly="readonly" id="Pay" name="Pay">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">订金金额：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["DepositAmount"]" placeholder="" readonly="readonly" id="DepositAmount" name="DepositAmount">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">发货收款金额：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["DeliveryAmount"]" placeholder="" readonly="readonly" id="DeliveryAmount" name="DeliveryAmount">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">安装前金额：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["InstallationAmount"]" placeholder="" readonly="readonly" id="InstallationAmount" name="InstallationAmount">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">验收金额：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["AcceptanceAmount"]" placeholder="" readonly="readonly" id="AcceptanceAmount" name="AcceptanceAmount">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">质保金额：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["QualityAssuranceAmount"]" placeholder="" readonly="readonly" id="QualityAssuranceAmount" name="QualityAssuranceAmount">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">交期：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <textarea name="SendDate" cols="" rows="" id="SendDate" class="textarea" placeholder="说点什么呢" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["SendDate"]</textarea>
+                    <textarea name="SendDate" cols="" rows="" id="SendDate" class="textarea" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["SendDate"]</textarea>
                     <p class="textarea-numberbar"></p>
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">违约条件：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <textarea name="weiyuetiaojian" cols="" rows="" id="weiyuetiaojian" class="textarea" placeholder="说点什么呢" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["weiyuetiaojian"]</textarea>
+                    <textarea name="weiyuetiaojian" cols="" rows="" id="weiyuetiaojian" class="textarea" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["weiyuetiaojian"]</textarea>
                     <p class="textarea-numberbar"></p>
                 </div>
             </div>
@@ -111,14 +137,13 @@
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">合同总结：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <textarea name="CZongJie" cols="" rows="" id="CZongJie" class="textarea" placeholder="说点什么呢" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["CZongJie"]</textarea>
+                    <textarea name="CZongJie" cols="" rows="" id="CZongJie" class="textarea" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["CZongJie"]</textarea>
                     <p class="textarea-numberbar"></p>
                 </div>
             </div>
             <div class="row cl">
                 <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
-                    <button onclick="" class="btn btn-default radius" id="cancle" type="button">&nbsp;&nbsp;返回&nbsp;&nbsp;<i hidden="hidden" id="u">/Home/PM_Contract_Check</i></button>
-                    <button onclick="" class="btn btn-default radius" id="dayin" type="button">&nbsp;&nbsp;打印&nbsp;&nbsp;<i hidden="hidden" id="s">/Home/ContractPrint?id=@ViewData["id"]</i></button>
+                    <button onclick="" class="btn btn-default radius" id="cancle" type="button">&nbsp;&nbsp;返回&nbsp;&nbsp;<i hidden="hidden" id="u">/ProductionPlanning/PPCreaty</i></button>
                 </div>
             </div>
         </form>
@@ -166,9 +191,7 @@
         });
     </script>
     <script type="text/javascript">
-        $.ready(
-            document.getElementById('select').value='@ViewData["select"]'
-            )
+
         $(function () {
 
             $('.skin-minimal input').iCheck({

@@ -244,6 +244,9 @@
                                     window.parent.location.reload();
                                 }, 500);
                             }
+                            else if (data == "riqi") {
+                                layer.msg('日期格式不对！');
+                            }
                             else {
                                 alert("添加失败,已存在第一条数据!");
                                 return;

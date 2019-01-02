@@ -26,19 +26,29 @@
                , url: '/Home/NoticeCheck'
                , page: false
               , toolbar: '#toolbarDemo'
-               , limit: 15
+              , limit: 15
+              , done: function () {
+                  $("tr a").hide()
+                  $("tr").hover(function () {
+
+                      $(this).children().last().children().children().toggle();
+                  })
+
+
+              }
                , cols: [[
                  { type: 'radio' }
                 , { field: 'ID', width: 50, title: '序号' }
-               , { field: '客户产品名称', width: 235, title: '客户产品名称', sort: true }
+               , { field: '客户产品名称', width: 235, title: '客户产品名称'}
                , {
                    field: '产品规格', width: 180, title: '产品规格',
                }
                , { field: '单位', title: '单位', width: 180 }
-               , { field: '合同数量', width: 180, title: '合同数量', sort: true }
+               , { field: '合同数量', width: 180, title: '合同数量'}
                , { field: 'InWH', width: 100, title: '入仓数量' }
                , { field: '已发货数量', title: '已发货数量', width: 100}
-               , { field: 'QTY', width: 180, title: '现发货数量', sort: true, edit: 'text', }
+               , { field: 'QTY', width: 180, title: '现发货数量', edit: 'text' }
+               , { field: '库存', width: 180, title: '库存' }
                , { field: 'ShipNoticeNumber', width: 100, title: '发货通知单号', hide: true }
                  , { field: 'StatusID', width: 100, title: '状态' }
                ]]
@@ -90,7 +100,7 @@
                                                 });
                                             }
                                             else if (data == "yiqueren") {
-                                                layer.msg('已确认发送货物通知!不能更改！', { icon: 2 });
+                                                layer.msg('已确认发送货物通知!不能发送！', { icon: 2 });
                                             }
                                             else if (data == "da") {
                                                 layer.msg('数量不能大于合同数量！', { icon: 2 });
@@ -103,7 +113,32 @@
                                     
                                 }
                             })
-                            break;                   
+                            break;
+                        case 'deleteNotice':
+                            $.each(dataObj, function (idx, item) {
+                                if (idx == 0) {
+                                    if (item.StatusID == "已确认发货") {
+                                        layer.msg('不能删除通知单！');
+                                    }
+                                    else
+                                    {
+                                        $.ajax({
+                                            url: "/Home/DeleteNotice?id=" + '@ViewData["idw"]',
+                                            type: 'post',
+                                            success: function (data) {
+                                                if (data == "true") {
+                                                    layer.msg("删除新建通知记录成功！", { icon: 6 });
+                                                }
+                                                if (data == "false") {
+                                                    layer.msg('"删除新建通知记录失败！', { icon: 5 });
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+
+                            });
+                            break;
                     };
                 });                                                      
             });
@@ -135,9 +170,6 @@
         <div class="tools">
 
             <ul class="toolbar">
-                <li class="click">
-                    <span></span><a id="deleteNotice">删除通知单</a>
-                </li>
                 <li class="click" id="cancle">
                     <span>
                         <img src="../../images/t02.png" />
@@ -154,23 +186,6 @@
     <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
     <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
     <script type="text/javascript">
-        $(function () {
-            $("#deleteNotice").click(function () {
-                $.ajax({
-                    url: "/Home/DeleteNotice?id=" + '@ViewData["idw"]',
-                    type: 'post',
-                    async: true,
-                    success: function (data) {
-                        if (data == "true") {
-                            layer.msg("删除新建通知记录成功！", { icon: 6 });
-                        }
-                        if (data == "false") {
-                            layer.msg('已确认发货不能删除通知记录！', { icon: 5 });
-                        }
-                    }
-                });
-            })
-        })
         function HDetials_add(title, url, w, h) {
             layer_show(title, url, w, h);
         }
@@ -181,6 +196,7 @@
     <script type="text/html" id="toolbarDemo">
         <div class="layui-btn-container">
             <button class="layui-btn layui-btn-sm" lay-event="sendNotice">发货通知</button>
+            <button class="layui-btn layui-btn-sm" lay-event="deleteNotice">删除通知单</button>
         </div>
     </script>
 </body>

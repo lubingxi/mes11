@@ -121,7 +121,11 @@
         $(function () {
             document.getElementById('ck').value = '@TempData["cangkuCache"]';
             document.getElementById('Kq').value = '@TempData["kuquCache"]';
-            document.getElementById('Kw').value = '@TempData["kuweiCache"]';                               
+            document.getElementById('Kw').value = '@TempData["kuweiCache"]';
+            
+             if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }  
             $("#button").click(function () {
                 //  var taoshu = $('input[name="taoshu"]').val();
                 var shuliang = $('input[name="shuliang"]').val();

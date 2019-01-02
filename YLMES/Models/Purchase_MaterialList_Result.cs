@@ -22,8 +22,8 @@ namespace YLMES.Models
         public Nullable<int> 申请数量 { get; set; }
         public Nullable<double> 单价 { get; set; }
         public Nullable<double> 总价 { get; set; }
+        public string 物料类别 { get; set; }
         public string 供应商 { get; set; }
-        public string 货品品类 { get; set; }
         public string 级别 { get; set; }
         public string 优势分析 { get; set; }
     }

@@ -1,0 +1,277 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>友力信息管理系统</title>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" media="all" />
+    <script src="~/laydate/laydate.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <style>
+        .layui-table-cell {
+            overflow: inherit;
+            height: auto;
+        }
+    </style>
+    <script type="text/javascript">
+       
+            
+            layui.use(['layer', 'form', 'laydate', 'element', 'table'], function () {
+                var form = layui.form, layer = layui.layer
+                var laydate = layui.laydate;
+                var element = layui.element;
+                var layer = layui.layer;
+                var table = layui.table;
+                var ContractTypeId = new Array();
+                var ApplierId = new Array();
+                var map = new Map();
+                var $ = layui.jquery
+                var checkStatus;
+                var name;
+                function prinup(name, map1, url, cuid) {
+                    map1.forEach(function (value, key) {
+                        
+                        $.ajax({
+                            url: "/PurchasingManage/ByIdfindApplier",
+                            type: "get",
+                            dataType: "json",
+                            data: { id: key },
+                            success: function (data) {
+                                var appname = name + data[0].Name
+                               layer.open({
+                                   type: 2
+                                   , skin: 'layui-layer-lan'
+                                    ,anim: 1
+                                    , title: appname
+                                    , shade: 0
+                                   , maxmin: true
+                                   ,zIndex: layer.zIndex
+                                   , offset: [ 
+                                       Math.random() * ($(window).height() - 300)
+                                       , Math.random() * ($(window).width() - 390)
+                                   ] 
+                                   , content: url + value + "&key=" + key + "&cuid=" + cuid
+                                   , success: function (layero) {
+                                       layer.setTop(layero);
+                                   }
+                                    , cancel: function (index) {
+                                        if (confirm('确定要关闭么')) {
+                                            layer.close(index)
+                                        }
+                                        return false;
+                                    }
+
+                                })
+                            }
+                        })
+                    })
+                }
+                $(document).ajaxStart(function () {
+                    name = layer.msg('加载中', {
+                        icon: 16
+                        , shade: 0.01
+                        , time: false
+                    });
+                })
+                $(document).ajaxStop(function () {
+                    layer.close(name);
+                })
+                table.render({
+                    elem: '#summary'
+                    , url: "/PurchasingManage/checkSummary"
+                    , height: 'full-20'
+                    , cols: [[
+                        { field: 'MaterialID', hide: true }
+                        , { field: 'PartNumber', title: '物料名称' }
+                        , { field: 'PartSpec', title: '物料规格' }
+                        , { field: 'ActPurchaseQTY', title: '采购数量' }
+                        , { field: 'ActPurchaseQTY', title: '申请数量' }
+                        , { field: 'ApplierId', title: '供应商', templet: '#Applier' }
+                        , { field: 'ContractTypeId', title: '合同种类', toolbar: '#se' }
+                    ]]
+                    , done: function (res) {
+                        var typeid = new Array();
+                        var applierid = new Array();
+                        for (var i = 0; i < res.data.length; i++) {
+                            typeid[i] = res.data[i].ContractTypeId;
+                            applierid[i] = res.data[i].ApplierId
+                            res.data[i]["LAY_CHECKED"] = 'true';
+                            checkStatus = table.checkStatus('summary')
+                            ContractTypeId[i] = checkStatus.data[i].ContractTypeId
+                            ApplierId[i] = checkStatus.data[i].ApplierId
+                        }
+
+                        $.get("/ApplierList/checkContrType", function (data) {
+                            if (data != null) {
+                                $(".typeid").empty()
+                                for (var j = 0; j < typeid.length; j++) {
+                                    for (var i = 0; i < data.length; i++) {
+                                        $(".typeid:eq(" + j + ")").append("<option value='" + data[i].id.trim() + "'>" + data[i].type.trim() + "</option>")
+                                    }
+                                    $(".typeid:eq(" + j + ")").val(typeid[j])
+                                }
+
+                            }
+                            form.render('select');
+                        })
+                        $.get("/ApplierList/checkApplierName", function (data) {
+                            if (data != null) {
+                                $(".ApplierId").empty()
+                                for (var j = 0; j < applierid.length; j++) {
+                                    for (var i = 0; i < data.length; i++) {
+                                        $(".ApplierId:eq(" + j + ")").append("<option value='" + data[i].ID + "' selected >" + data[i].Name + "</option>")
+                                    }
+                                    $(".ApplierId:eq(" + j + ")").val(applierid[j])
+                                }
+                            }
+                            form.render('select');
+                        })
+                    }
+                })
+                form.on('select(se)', function (data) {
+                    ContractTypeId[$(".typeid").index(data.elem)] = data.value
+
+                })
+                form.on('select(Applier)', function (data) {
+                    ApplierId[$(".ApplierId").index(data.elem)] = data.value
+
+                })
+                $(".print").click(function () {
+                    var map1 = new Map()
+                    var map2 = new Map()
+                    var map3 = new Map()
+                    var map4 = new Map()
+                    var map5 = new Map()
+
+                    checkStatus = table.checkStatus('summary')
+                    ContractTypeId.forEach(function (value, index) {
+
+                        switch (Number(value)) {
+                            case 1:
+
+                                if (map1.has(ApplierId[index])) {
+                                    var inn = map1.get(ApplierId[index]).length
+                                    map1.get(ApplierId[index])[inn] = checkStatus.data[index].MaterialID
+                                    var app = new Array(get(ApplierId[index]))
+                                    map1.set(ApplierId[index], app );
+                                } else {
+                                    var app = new Array()
+                                    app[0] = checkStatus.data[index].MaterialID
+                                    map1.set(ApplierId[index], app)
+                                }
+                                map.set(value, map1)
+                                break;
+                            case 2:
+                                var inn = 0
+                                if (map2.has(ApplierId[index])) {
+                                    inn = map2.get(ApplierId[index]).length
+                                    map2.get(ApplierId[index])[inn] = checkStatus.data[index].MaterialID
+                                    var app = new Array(map2.get(ApplierId[index]))
+                                    map2.set(ApplierId[index], app);
+                                } else {
+                                    var app = new Array()
+                                    app[0] = checkStatus.data[index].MaterialID
+                                    map2.set(ApplierId[index], app)
+                                }
+
+                                map.set(value, map2)
+                                break;
+                            case 3:
+                                if (map3.has(ApplierId[index])) {
+                                    var inn = map3.get(ApplierId[index]).length
+                                    map3.get(ApplierId[index])[inn] = checkStatus.data[index].MaterialID
+                                    var app = new Array(map3.get(ApplierId[index]))
+                                    map3.set(ApplierId[index], app);
+                                } else {
+
+                                    var app = new Array()
+                                    app[0] = checkStatus.data[index].MaterialID
+                                    map3.set(ApplierId[index], app)
+                                }
+
+                                map.set(value, map3)
+                                break;
+                            case 4:
+
+                                if (map4.has(ApplierId[index])) {
+                                    var inn = map4.get(ApplierId[index]).length
+                                    map4.get(ApplierId[index])[inn] = checkStatus.data[index].MaterialID
+                                    var app = new Array(map4.get(ApplierId[index]))
+                                    map4.set(ApplierId[index],app);
+                                } else {
+
+                                    var app = new Array()
+                                    app[0] = checkStatus.data[index].MaterialID
+                                    map4.set(ApplierId[index], app)
+                                }
+                                map.set(value, map4)
+                                break;
+                            case 5:
+                                if (map5.has(ApplierId[index])) {
+                                    var inn = map5.get(ApplierId[index]).length
+                                    map5.get(ApplierId[index])[inn] = checkStatus.data[index].MaterialID
+                                    var app = new Array(map5.get(ApplierId[index]))
+                                    map5.set(ApplierId[index], app);
+                                } else {
+                                    var app = new Array()
+                                    app[0] = checkStatus.data[index].MaterialID
+                                    map5.set(ApplierId[index], app)
+                                }
+
+                                map.set(value, map5)
+                                break;
+                        }
+                    })
+                    map.forEach(function (map1, key) {
+
+                        switch (Number(key)) {
+                            //设备类
+                            case 1:
+                                prinup('设备合同——供应商:', map1, "/PurchasingManage/P_Contract?value=", 1)
+                                break;
+                            //零星类
+                            case 2:
+                                prinup('零星合同——供应商:', map1, "/PurchasingManage/F_Contract?value=", 2)
+                                break;
+                            //常规类
+                            case 3:
+                                prinup('常规合同——供应商:', map1, "/PurchasingManage/E_Contract?value=", 3)
+                                break;
+                            //外协类
+                            case 4:
+                                prinup('外协合同——供应商:', map1, "/PurchasingManage/O_Contract?value=", 4)
+                                break;
+                            //钢材类
+                            case 5:
+                                prinup('钢材合同——供应商:', map1, "/PurchasingManage/S_Contract?value=", 5)
+                                break;
+                        }
+                    })
+                })
+            })
+    </script>
+    <script type="text/html" id="se">
+        <select class="typeid" lay-filter="se"></select>
+    </script>
+    <script type="text/html" id="Applier">
+        <select class="ApplierId" lay-filter="Applier" lay-search></select>
+    </script>
+</head>
+<body>
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">采购管理</a></li>
+            <li><a href="#">合同生成</a></li>
+        </ul>
+    </div>
+    <button class="layui-btn print">打印合同</button>
+    <table id="summary" lay-filter="summary"></table>
+</body>
+</html>

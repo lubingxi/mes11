@@ -27,5 +27,6 @@ namespace YLMES.Models
         public Nullable<int> EmployeeID { get; set; }
         public Nullable<int> QAEmployeeID { get; set; }
         public string StatusID { get; set; }
+        public Nullable<int> LineID { get; set; }
     }
 }

@@ -152,9 +152,8 @@
                                     window.parent.document.getElementById("rightframe").src = "/Rms/MaterialRegistration";                                   
                                 }, 500);
                             }
-                            else {
-                                alert("新增失败,请重新输入!");
-                                return;
+                            if (data == "two") {
+                               layer.msg('有重复了不能新增!')
                             }
                         }
                     });

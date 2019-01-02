@@ -31,5 +31,13 @@ namespace YLMES.Models
         public string CreatedTime { get; set; }
         public string StatusID { get; set; }
         public string AuditThrough { get; set; }
+        public string IfPayment { get; set; }
+        public string DepositAmount { get; set; }
+        public string DeliveryAmount { get; set; }
+        public string InstallationAmount { get; set; }
+        public string AcceptanceAmount { get; set; }
+        public string QualityAssuranceAmount { get; set; }
+        public Nullable<int> CustomerId { get; set; }
+        public string IsCustomer { get; set; }
     }
 }

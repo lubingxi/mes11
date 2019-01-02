@@ -13,15 +13,11 @@ namespace YLMES.Models
     
     public partial class WOdetail_byStation_Result
     {
+        public int 序号 { get; set; }
+        public string 生产线 { get; set; }
         public string 工单 { get; set; }
         public string 工位类型 { get; set; }
-        public string 开始时间 { get; set; }
-        public string 结束时间 { get; set; }
-        public Nullable<int> 工单套数 { get; set; }
-        public Nullable<int> 收料数量 { get; set; }
-        public Nullable<int> 完成数量 { get; set; }
-        public Nullable<int> 坏品数量 { get; set; }
-        public Nullable<int> 转工序数量 { get; set; }
+        public string 截止日期 { get; set; }
         public string 员工 { get; set; }
     }
 }

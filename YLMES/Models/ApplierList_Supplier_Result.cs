@@ -23,5 +23,9 @@ namespace YLMES.Models
         public string 级别 { get; set; }
         public string 优势分析 { get; set; }
         public string 审核状态 { get; set; }
+        public string 银行账户 { get; set; }
+        public string 法定代表人 { get; set; }
+        public string 委托代理人 { get; set; }
+        public string 开户银行 { get; set; }
     }
 }

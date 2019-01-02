@@ -1,0 +1,228 @@
+﻿@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("#addC").click(function () {
+                var url = '/Home/WriteCuNames';
+                layer_show('新增客户信息', url, '1000', '600');
+            });
+            $(document).keydown(function (e) {
+                if (e.keyCode == 13) {
+                    $(".layui-btn").click();
+                }
+            });
+            $(".click").click(function () {
+                $(".tip").fadeIn(200);
+            });
+            if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }
+            $(".tiptop a").click(function () {
+                $(".tip").fadeOut(200);
+            });
+
+            $(".sure").click(function () {
+                $(".tip").fadeOut(100);
+            });
+
+            $(".cancel").click(function () {
+                $(".tip").fadeOut(100);
+            });
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                $(".layui-btn").click(function () {
+                    var CuName = $("#CustomerName").val().trim();
+                    var Contact = $("#Contact").val().trim();
+                    var CustomerCode = $("#CustomerCode").val().trim();
+                    table.render({
+                        elem: '#tw'
+                   , url: '/Home/CheckCustomer?csc=' + CustomerCode + '&cn=' + CuName + '&c=' + Contact
+                   , page: true
+                   , done: function () {
+                     $("tr a").hide()
+                     $("tr").hover(function () {
+
+                         $(this).children().last().children().children().toggle();
+                     })
+
+
+                 }
+                   , limit: 15
+                   , cols: [[
+                     { field: '', hide:true },
+                   { field: 'ID', width: 100, title: '序号' }
+                   , { field: 'CustomerCode', width: 150, title: '客户编号' }
+                   , { field: 'CustomerName', width: 210, title: '客户名称',edit:true,style: 'color: #009688'}
+                   , { field: 'Address', width: 400, title: '地址', edit: true, style: 'color: #009688' }
+                   , {
+                       field: 'Tel', width: 180, title: '电话', edit: true, style: 'color: #009688'
+                   }
+                   , {
+                       field: 'Contact', width: 180, title: '联系人', edit: true, style: 'color: #009688'
+                   }
+                    , {
+                        field: 'Bank', width: 180, title: '银行名称', edit: true, style: 'color: #009688'
+                    }
+                     , {
+                         field: 'Bank', width: 180, title: '银行名称', edit: true, style: 'color: #009688'
+                     }
+                     , {
+                          field: 'Account', width: 180, title: '委托人', edit: true, style: 'color: #009688'
+                      }
+                     , {
+                           field: 'Representative', width: 180, title: '代理人', edit: true, style: 'color: #009688'
+                       }
+                     , {
+                          field: 'Principal', width: 180, title: '银行账户', edit: true, style: 'color: #009688'
+                     }
+                   , {
+                       field: 'CreatedBy', width: 130, title: '创建人',
+                   }
+                   , { field: 'right', width: 150, align: 'center', toolbar: '#barDemo' }
+                   ]]
+
+                    });
+                });
+                table.on('checkbox(demo)', function (obj) {
+                    console.log(obj)
+                });
+
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;
+                    switch (obj.event) {
+                        case 'update':
+                            id = data.ID;
+                            cn = data.CustomerName;
+                            ad = data.Address;
+                            te = data.Tel;
+                            con = data.Contact;
+                            ban = data.Bank;
+                            acc = data.Account;
+                            rep = data.Representative;
+                            pri = data.Principal;
+                            var urls = '/Home/EditCustomer?id=' + id + '&cn=' + cn + '&ad=' + ad + '&te=' + te + '&con=' + con+'&ban='+ban+'&acc='+acc+'&rep='+rep+'&pri='+pri;
+                            $.ajax({
+                                url: urls,
+                                type: "post",
+                                dataType: "text",
+                                success: function (data) {
+                                    if (data == "true") {
+                                        layer.msg('修改成功!');
+                                        $(".layui-btn").click();
+                                    }
+                                    else {
+                                        layer.msg('修改失败!');
+                                        return;
+                                    }
+                                }
+                            });
+                            break;
+                        case 'delete':
+                            id = data.ID;                                                
+                            layer.confirm("真的删除行么", function (index) {
+                                var urls = '/Home/DelCustomer?id=' + id;
+                                $.ajax({
+                                    url: urls,
+                                    type: "post",
+                                    dataType: "text",
+                                    success: function (data) {
+                                        if (data == "true") {
+                                            layer.msg('删除成功！');
+                                            $(".layui-btn").click();
+                                        }
+                                        else {
+                                            layer.msg('删除失败！');
+                                        }
+                                    }
+                                });
+                            });
+                            break;
+
+                    };
+                });
+
+
+            });
+        })
+
+
+
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="update">编辑</a>
+        <a class="layui-btn layui-btn-xs" id="check" lay-event="delete">删除</a>
+    </script>
+
+
+</head>
+
+
+<body>
+
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">销售管理</a></li>
+            <li><a href="#">客户信息</a></li>
+        </ul>
+    </div>
+
+    <div class="rightinfo">
+
+        <div class="tools">
+
+            <ul class="toolbar">
+                <li id="addC">
+                    <span>
+                        <img style="margin-bottom:10px" src="../../images/t01.png" />
+                    </span><a target="rightFrame">新增客户信息</a>
+                </li>
+                <li>
+                    创建日期：
+                    <input name="strattime" class="strattime" id="strattime" type="text" onclick="WdatePicker()" style="width: 80px;" />
+                </li>
+                <li>
+                    客户名称：
+                    <input class="CustomerName" id="CustomerName" type="text" style="width: 100px;" />
+                </li>
+                <li>
+                    合同ID：
+                    <input class="Contact" id="Contact" type="text" style="width: 100px;" />
+                </li>
+                <li>
+                    客户编号：
+                    <input class="CustomerCode" id="CustomerCode" type="text" style="width: 100px;" />
+                </li>
+            </ul>
+            <button class="layui-btn" data-type="reload">搜索</button>
+        </div>
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+    </div>
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+</body>
+</html>

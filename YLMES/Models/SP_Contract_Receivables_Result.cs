@@ -17,11 +17,13 @@ namespace YLMES.Models
         public int ContractID { get; set; }
         public Nullable<decimal> 合同金额 { get; set; }
         public Nullable<decimal> 已收金额 { get; set; }
-        public Nullable<decimal> newAmountCollected { get; set; }
+        public Nullable<decimal> NewAmountCollected { get; set; }
         public string DateOfReceipt { get; set; }
         public string TicketOpeningAndDate { get; set; }
         public string 创建人 { get; set; }
         public string 创建时间 { get; set; }
         public string 状态 { get; set; }
+        public string 收款类型 { get; set; }
+        public string 合同状态 { get; set; }
     }
 }

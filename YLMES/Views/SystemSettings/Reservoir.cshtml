@@ -1,0 +1,225 @@
+﻿@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        $(function () {           
+            $("#addC").click(function () {
+                var Select = $("#s option:selected").text();
+                var id;
+                if (Select == "成品仓") {
+                    id = 4;
+                } else if (Select == "五金仓") {
+                    id = 2;
+                }
+                else {
+                    id = 1;
+                }
+                if (Select == "--全部--") {
+                    layer.msg("请选择仓库！");
+                } else
+                {
+                    var url = "/SystemSettings/AddReservoir?id=" + id;
+                    $.ajax({
+                        url: url,
+                        type: 'post',
+                        async: true,
+                        success: function (data) {
+                            if (data == "true") {
+                                layer.msg("添加成功", { icon: 6 });
+                                window.parent.document.getElementById("rightframe").src = "/SystemSettings/Reservoir"
+                            }
+                            if (data == "false") {
+                                layer.msg('添加失败!', { icon: 5 });
+                                return false;
+                            }
+
+                        }
+                    });
+                }
+               
+            });
+                   
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                $(".layui-btn").click(function () {
+                    var Reservoir = $("#Reservoir").val().trim();
+                    var Select = $("#s option:selected").text();                   
+                    table.render({
+                    elem: '#tw'
+                   , url: '/SystemSettings/CheckReservoir?select=' + Select + '&Reservoir=' + Reservoir
+                   , page: true
+                   , limit: 15
+                   , done: function () {
+                       $("tr a").hide();
+                       $("tr").hover(function () {
+
+                           $(this).children().last().children().children().toggle();
+                       })
+
+
+                   }
+                   , cols: [[
+                      , {
+                          field: '', width: 20, title: '', hide: true
+                      }
+                   , { field: 'WHArea', width: 150, title: '库区', edit: Text }
+                   , { field: '描述', width: 210, title: '描述', edit: Text }
+                   , { field: '仓库', width: 210, title: '仓库' }
+                   , {
+                       field: '序号', width: 150, title: '序号'
+                   }
+                   , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+                   ]]
+
+                    });
+                });
+                table.on('checkbox(demo)', function (obj) {
+                    console.log(obj)
+                });
+
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;
+                    switch (obj.event) {
+                        case 'delete':
+                            layer.confirm('真的删除行么', function (index) {
+                                id = data.序号;
+
+                                layer.close(index);
+                                var url = "/SystemSettings/DeleteReservoir?WHArea=" + id;
+                                $.ajax({
+                                    url: url,
+                                    type: 'post',
+                                    data: { "id": id },
+                                    async: true,
+                                    success: function (data) {
+                                        if (data == "true") {
+                                            layer.msg("删除成功", { icon: 6 });
+                                            table.reload('tw');
+                                        }
+                                        if (data == "false") {
+                                            layer.msg('数据操作异常!', { icon: 5 });
+                                            return false;
+                                        }
+                                        if (data == "Error") {
+                                            layer.msg('错误！存在货区不能删除！', { icon: 5 });
+                                            return false;
+                                        }
+                                    }
+                                });
+                            });
+                            break;
+                        case 'update':
+                            id = data.序号;
+                            wha = data.WHArea;
+                            ms = data.描述;
+                            wh = data.仓库;
+                            var url = "/SystemSettings/EditReservoir?id=" + id + "&wh=" + wha + "&ms="+ms+"&ck="+wh;
+                            $.ajax({
+                                url: url,
+                                type: 'post',
+                                async: true,
+                                success: function (data) {
+                                    if (data == "true") {
+                                        layer.msg("修改成功", { icon: 6 });
+                                        table.reload('tw');
+                                    }
+                                    if (data == "false") {
+                                        layer.msg('修改失败!', { icon: 5 });
+                                        return false;
+                                    }
+
+                                }
+                            });
+                            break;
+                    };
+                });
+
+
+            });
+        })
+
+
+
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" id="edit" lay-event="update">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete" data-type="getCheckLength" id="deteleted">删除</a>
+    </script>
+
+
+</head>
+
+
+<body>
+
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">系统设置</a></li>
+            <li><a href="#">库区</a></li>
+        </ul>
+    </div>
+
+    <div class="rightinfo">
+
+        <div class="tools">
+
+            <ul class="toolbar">
+                <li class="ads" id="addC">
+                    <span>
+                        <img src="../../images/t01.png" />
+                    </span><a target="rightFrame">新增库区</a><i hidden=hidden id="u">/Home/ContractAdd</i>
+                </li>                
+                <li>
+                    仓库：
+                    <select name="quiz1" id="s">
+                        <option value="" selected="">--全部--</option>
+                        <option value="五金仓">五金仓</option>
+                        <option value="原材料仓">原材料仓</option>
+                        <option value="成品仓">成品仓</option>
+                    </select>
+                </li>
+                <li>
+                    库区：
+                    <input class="Reservoir" id="Reservoir" type="text" style="width: 80px;" />
+                </li>
+             
+            </ul>
+            <button class="layui-btn" data-type="reload">查询</button>
+        </div>
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+    </div>
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+
+            function admin_add(title, url, w, h) {
+                layer_show(title, url, w, h);
+            }
+    </script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+</body>
+</html>

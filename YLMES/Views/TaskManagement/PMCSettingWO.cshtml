@@ -50,7 +50,8 @@
                     success: function (data) {
                         if (data == "true") {
                             window.setTimeout(function () {
-                                alert("确认成功！")
+                                alert("确认成功！");
+                                window.history.go(-2);
                             }, 500);
                         }
                         else {
@@ -63,90 +64,61 @@
             $("#PurchasingApplication").click(function () {
                 window.parent.document.getElementById("rightframe").src = "/TaskManagement/Purchasing?ifDriver="+"@Session["ifB"]"+"&Taskid="+"@ViewData["TaskID2"]";
             });
-            //查看事件
-            //$(".deleteone").click(function () {
-            //    var type = $(this).data('type');
-            //    active[type] ? active[type].call(this) : '';
-            //    alert("1");
-            //});
-            //var $ = layui.$, active = {
-            //    getCheckLength: function () {
-            //        var checkStatus = table.checkStatus('tw').data = checkStatus.data;
-            //        var IdList = new Array();
-            //        for (var j = 0; j < data.length; j++) {
-            //            IdList[j] = data[j].id;
-            //        }
-            //        var url = "/Home/DeleteList?id=" + IdList;
-            //        layer.confirm('选中了' + data.length + '条数据,真的要删除吗?', function (index) {
-            //            layer.close(index);
-            //            $.ajax({
-            //                type: "post",
-            //                url: url,
-            //                data: { "id": IdList },
-            //                async: true,
-            //                success: function (data) {
-            //                    if (data == "true") {
-            //                        layer.msg('删除成功', { icon: 1 });
-            //                        table.reload('tw');
-            //                    }
-            //                    else {
-            //                        layer.msg('删除失败', { icon: 2 });
-            //                        table.reload('tw');
-            //                    }
-            //                }
-            //            })
-            //        })
-            //    }
-            //}
             layui.use(['table', 'layer'], function () {
-                var table = layui.table, layer = layui.layer;                              
+                var table = layui.table, layer = layui.layer;
                     table.render({
                         elem: '#tw'
                    , url: '/TaskManagement/TaskMapingWOCheck?taskid=' + '@ViewData["taskid"]'
                    , limit: 15
-                   , cols: [[
-
-                   , { field: '部件', width: 210, title: '部件', hide: true }
+                   , done: function () {
+                             $("tr a").hide()
+                             $("tr").hover(function () {
+                                 $(this).children().last().children().children().toggle();
+                             })
+                         }
+                        , cols: [[
+                            , { field: '', hide: true }
+                   , { field: '部件', width: 210, title: '部件'}
                    , { field: '订单数量', width: 210, title: '订单数量' }
-                   , { field: '每套数量', width: 235, title: '每套数量', sort: true }
+                   , { field: '每套数量', width: 235, title: '每套数量' }
                    , {
                        field: '工单数量', width: 180, title: '工单数量',
-                   }
-                   , { field: '工单名称', title: '工单名称', width: 180 }
+                     }
+                   , { field: '工单名称', title: '工单名称', width: 250 }
                    , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
                    ]]
 
-                    });
                 });
-                table.on('checkbox(demo)', function (obj) {
-                    console.log(obj)
-                });
-
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
                     switch (obj.event) {
                         case 'add':
-                            id = data.id;
-                            layer.confirm('是否查询库存？', {
-                                title: "友力提示", skin: "my-skin",
-                                btn: ['是', '否'], btn1: function () {
-                                    return
-                                },
-                                btn2: function () {
-                                    PartNumber = data.产品名称;
-                                    TotalPCS = data.订单数量
-                                    TotalQTY = data.工单数量;
-                                    QTYofOneSet = data.每套数量;
-                                    TaskID = data.任务编号;
-                                    $.ajax({
-                                        url: "/TaskManagement/TurnPwo?pcName=" + "@ViewData["pcNamed"]" + "&PartNumber=" + PartNumber + "&TotalPCS=" + TotalPCS + "&TotalQTY=" + TotalQTY + "&QTYofOneSet=" + QTYofOneSet + "&TaskID=" + TaskID,
+                            var truthBeTold = window.confirm("是否有库存“确定”继续。单击“取消”采购申请。")
+                            if (truthBeTold) {
+                             id = data.id;
+                            PartNumber = data.部件;
+                            TotalPCS = data.订单数量
+                            TotalQTY = data.工单数量;
+                            QTYofOneSet = data.每套数量;
+                            TaskID = data.任务编号;
+                            ji = data.部件级别;
+                            spec = data.部件规格;
+                             $.ajax({
+                                 url: "/TaskManagement/TurnPwo?pcName=" + "@ViewData["pcNamed"]" + "&PartNumber=" + PartNumber + "&TotalPCS=" + TotalPCS + "&TotalQTY=" + TotalQTY + "&QTYofOneSet=" + QTYofOneSet + "&TaskID=" + TaskID + "&ji=" + ji + "&spec=" + spec,
                                         type: "post",
                                         dataType: "text",
                                         success: function (data) {
                                             if (data == "true") {
                                                 window.setTimeout(function () {
                                                     layer.msg('转换成功！');
-                                                    table.reload('tw');
+                                                    var url = "/ProductionPlanning/WorkManagement?taskid=" + TaskID + "&cancle=" + "1";
+                                                    var index = layer.open({
+                                                        type: 2,
+                                                        content: url,
+                                                        title: "工单分配",
+                                                        maxmin: true
+                                                    });
+                                                    layer.full(index);
                                                 }, 500);
                                             }
                                             else {
@@ -155,22 +127,32 @@
                                             }
                                         }
                                     });
-                                }
+                            } else {
+                                TaskID = data.任务编号;
+                                PartID = data.部件编号;
+                                var url = '/TaskManagement/Purchasing?Taskid=' + TaskID + '&PartID=' + PartID;
+                                var index = layer.open({
+                                    type: 2,
+                                    title: "采购申请信息",
+                                    content: url,
+                                    maxmin: true
                                 });
-                           
-                            break;                                                                 
+                                layer.full(index);
+                            }                                                      
+                            break;
                     };
                 });
-
-
+                });
             });
-       
-
-
 
     </script>
     <script type="text/html" id="barDemo">
+        {{#  if(d.工单名称 !=null){ }}
+
+        {{# }else { }}
         <a class="layui-btn layui-btn-xs" id="add" lay-event="add">转生产工单</a>
+        {{#  } }}
+
     </script>
 
 
@@ -179,25 +161,25 @@
 
 <body>
 
-    
+
 
     <div class="rightinfo">
 
         <div class="tools">
 
-            <ul class="toolbar">                                     
-              
+            <ul class="toolbar">
+
                 <li>
                     项目名称：
-                    <input class="pjName" id="pjName" type="text" style="width: 80px;" value="@ViewData["pjname"]"/>
+                    <input class="pjName" id="pjName" type="text" style="width:180px;" value="@ViewData["pjname"]" />
                 </li>
                 <li>
                     产品名称：
-                    <input class="pcName" id="pcName" type="text" style="width: 80px;" value="@ViewData["pcName"]"/>
+                    <input class="pcName" id="pcName" type="text" style="width:180px;" value="@ViewData["pcName"]" />
                 </li>
                 <li>
                     产品规格：
-                    <input class="ProductSpecification" id="ProductSpecification" type="text" style="width: 80px;" value="@ViewData["spec"]"/>
+                    <input class="ProductSpecification" id="ProductSpecification" type="text" style="width:120px;" value="@ViewData["spec"]" />
                 </li>
                 <li>
                     任务类型：
@@ -205,10 +187,10 @@
                 </li>
                 <li>
                     机械or电气：
-                    <input class="Choose" id="Choose" type="text" style="width: 80px;" value="@ViewData["Choose"]" />
+                    <input class="Choose" id="Choose" type="text" style="width: 180px;" value="@ViewData["Choose"]" />
                 </li>
             </ul>
-            <button class="layui-btn" id="PurchasingApplication" data-type="reload">采购申请</button>
+            @*<button class="layui-btn" id="PurchasingApplication" data-type="reload">采购申请</button>*@
             <button class="layui-btn" id="Construction" data-type="reload">确认完成建工单</button>
         </div>
         <table class="tablelist" id="tw" lay-filter="demo"></table>
@@ -220,9 +202,9 @@
     <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
     <script type="text/javascript">
 
-            function admin_add(title, url, w, h) {
-                layer_show(title, url, w, h);
-            }
+        function admin_add(title, url, w, h) {
+            layer_show(title, url, w, h);
+        }
     </script>
     <script type="text/javascript">
         $('.tablelist tbody tr:odd').addClass('odd');

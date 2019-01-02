@@ -28,5 +28,6 @@ namespace YLMES.Models
         public string 创建时间 { get; set; }
         public string 状态 { get; set; }
         public string StatusID { get; set; }
+        public Nullable<int> 库存 { get; set; }
     }
 }

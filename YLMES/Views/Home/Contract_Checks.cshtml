@@ -26,37 +26,37 @@
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>客户名称：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["CuName"]" placeholder="" id="CuName" name="CuName">
+                    <input type="text" class="input-text" value="@ViewData["CuName"]" readonly="readonly" placeholder="" id="CuName" name="CuName">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>订单编号：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["CuNumber"]" placeholder="" id="CuNumber" name="CuNumber"><i></i>
+                    <input type="text" class="input-text" value="@ViewData["CuNumber"]" readonly="readonly" placeholder="" id="CuNumber" name="CuNumber"><i></i>
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>合同金额：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["Money"]" placeholder="" id="Money" name="Money">
+                    <input type="text" class="input-text" value="@ViewData["Money"]" readonly="readonly" placeholder="" id="Money" name="Money">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>是否安装：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["IfInstall"]" placeholder="" id="IfInstall" name="IfInstall">
+                    <input type="text" class="input-text" value="@ViewData["IfInstall"]" readonly="readonly" placeholder="" id="IfInstall" name="IfInstall">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>是否含税：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["IfIncludeTax"]" placeholder="" id="IfIncludeTax" name="IfIncludeTax">
+                    <input type="text" class="input-text" value="@ViewData["IfIncludeTax"]" readonly="readonly" placeholder="" id="IfIncludeTax" name="IfIncludeTax">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>签订日期：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" onfocus="WdatePicker()" id="DateOfSign" name="DateOfSign" class="input-text Wdate" value="@ViewData["DateOfSign"]">
+                    <input type="text" onfocus="WdatePicker()" id="DateOfSign" name="DateOfSign" readonly="readonly" class="input-text Wdate" value="@ViewData["DateOfSign"]">
                 </div>
             </div>
             <div class="row cl">
@@ -68,7 +68,7 @@
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>是否运输：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["IfTransport"]" placeholder="" id="IfTransport" name="IfTransport">
+                    <input type="text" class="input-text" value="@ViewData["IfTransport"]" placeholder="" readonly="readonly" id="IfTransport" name="IfTransport">
                 </div>
             </div>
             <div class="row cl">
@@ -76,25 +76,54 @@
                 <div class="formControls col-xs-8 col-sm-9">
                     @Html.DropDownList("select", ViewData["select"] as SelectList, new { name = "ck", id = "ck" })
                 </div>
-            </div>
+            </div>        
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">收款方式：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <textarea name="Pay" cols="" rows="" id="Pay" class="textarea" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["Pay"]</textarea>
-                    <p class="textarea-numberbar">@*<em class="textarea-length"></em>/200*@</p>
+                    <input type="text" class="input-text" value="@ViewData["Pay"]" placeholder="" readonly="readonly" id="Pay" name="Pay">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">订金金额：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["DepositAmount"]" placeholder="" readonly="readonly" id="DepositAmount" name="DepositAmount">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">发货收款金额：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["DeliveryAmount"]" placeholder="" readonly="readonly" id="DeliveryAmount" name="DeliveryAmount">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">安装前金额：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["InstallationAmount"]" placeholder="" readonly="readonly" id="InstallationAmount" name="InstallationAmount">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">验收金额：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["AcceptanceAmount"]" placeholder="" readonly="readonly" id="AcceptanceAmount" name="AcceptanceAmount">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">质保金额：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["QualityAssuranceAmount"]" placeholder="" readonly="readonly" id="QualityAssuranceAmount" name="QualityAssuranceAmount">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">交期：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <textarea name="SendDate" cols="" rows="" id="SendDate" class="textarea" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["SendDate"]</textarea>
+                    <textarea name="SendDate" cols="" rows="" id="SendDate" class="textarea" readonly="readonly" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["SendDate"]</textarea>
                     <p class="textarea-numberbar"></p>
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">违约条件：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <textarea name="weiyuetiaojian" cols="" rows="" id="weiyuetiaojian" class="textarea" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["weiyuetiaojian"]</textarea>
+                    <textarea name="weiyuetiaojian" cols="" rows="" id="weiyuetiaojian" class="textarea" readonly="readonly" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["weiyuetiaojian"]</textarea>
                     <p class="textarea-numberbar"></p>
                 </div>
             </div>
@@ -108,13 +137,14 @@
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">合同总结：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <textarea name="CZongJie" cols="" rows="" id="CZongJie" class="textarea" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["CZongJie"]</textarea>
+                    <textarea name="CZongJie" cols="" rows="" id="CZongJie" readonly="readonly"  class="textarea" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["CZongJie"]</textarea>
                     <p class="textarea-numberbar"></p>
                 </div>
             </div>
             <div class="row cl">
                 <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
                     <button onclick="" class="btn btn-default radius" id="cancle" type="button">&nbsp;&nbsp;返回&nbsp;&nbsp;<i hidden="hidden" id="u">/Home/SalesCreation</i></button>
+                    <button onclick="" class="btn btn-default radius" id="dayin" type="button">&nbsp;&nbsp;打印&nbsp;&nbsp;<i hidden="hidden" id="s">/Home/ContractPrint?id=@ViewData["id"]</i></button>
                 </div>
             </div>
         </form>
@@ -174,7 +204,11 @@
                 var sd = $("#u").text();
                 window.parent.document.getElementById("rightframe").src = sd;
             });
-
+            $("#dayin").click(function () {
+                var sd = $("#s").text();
+                // window.parent.document.getElementById("rightframe").src = sd;
+                location.href = sd;
+            });
             $list = $("#fileList"),
             $btn = $("#btn-star"),
             state = "pending",

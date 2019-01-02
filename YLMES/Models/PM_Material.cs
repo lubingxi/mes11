@@ -33,5 +33,7 @@ namespace YLMES.Models
         public string UpdatedBy { get; set; }
         public string UpdatedTime { get; set; }
         public string Status { get; set; }
+        public string ContractTypeId { get; set; }
+        public string ApplierId { get; set; }
     }
 }

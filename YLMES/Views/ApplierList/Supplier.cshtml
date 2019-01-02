@@ -1,0 +1,98 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <style>
+        .layui-table-cell {
+            overflow: inherit;
+            height: inherit
+        }
+        td:nth-child(3){
+            overflow:hidden
+        }
+       
+    </style>
+    <script src="~/js/Supplier.js"></script>
+    <script type="text/html" id="Category">
+        @Html.DropDownList("Category", new SelectList(ViewBag.Category, "Name", "Name"), "{{d.货品品类}}", new { @class = "Category", @ID = "Category", @lay_filter = "Category" })
+    </script>
+    <script type="text/html" id="Level">
+        @Html.DropDownList("Level", new SelectList(ViewBag.Level, "Name", "Name"), "{{d.级别}}", new { @class = "Level", @ID = "Level", @lay_filter = "Level" })
+    </script>
+    <script type="text/html" id="Advantage">
+        @Html.DropDownList("Advantage", new SelectList(ViewBag.Advantage, "Name", "Name"), "{{d.优势分析}}", new { @class = "Advantage", @ID = "Advantage", @lay_filter = "Advantage" })
+    </script>
+    <script type="text/html" id="bsarDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+        <a class="layui-btn layui-btn-xs" lay-event="sh">审核</a>
+        <a class="layui-btn layui-btn-xs" lay-event="bb">绑定</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" lay-filter="demo">删除</a>
+    </script>
+    <script>
+        $(function () {
+            $("#addD").click(function () {
+                var sd = $("#u").text();
+                window.parent.document.getElementById("rightframe").src = sd;
+            });
+        })
+    </script>
+
+    <style type="text/css">
+        .layui-table-cell {
+            overflow: inherit;
+            height: inherit;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">采购管理</a></li>
+            <li><a href="#">供应商信息</a></li>
+        </ul>
+    </div>
+    <div class="rightinfo">
+        <div class="tools">
+            <ul class="toolbar">
+                <li class="ads" id="addD">
+                    <span>
+                        <img style="margin-bottom:10px" src="../../images/t01.png" />
+                    </span><a target="rightFrame">新增供应商信息</a><i hidden=hidden id="u">/ApplierList/ApplierAdd</i>
+                </li>
+                <li>
+                    供应商名称：
+                    <input class="Name" id="Name" type="text" placeholder="请输入供应商名称：" />
+                </li>
+                <li>
+                    审核状态：
+                    <select name="quiz1" id="s">
+                        <option value="" selected="">全部</option>
+                        <option value="未开始">未审核</option>
+                        <option value="进行中">已审核</option>
+                    </select>
+                </li>
+            </ul>
+            <button class="layui-btn" data-type="reload" id="SupplierSel">查询</button>
+        </div>
+    </div>
+    <table class="tablelist" id="tw" lay-filter="demo"></table>
+
+</body>
+</html>

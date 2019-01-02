@@ -42,23 +42,32 @@ namespace YlMES.Controllers
             {
                 using(YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    SqlParameter[] parms = new SqlParameter[9];
-                    parms[0] = new SqlParameter("@type", "新增");
-                    parms[1] = new SqlParameter("@id","");
-                    parms[2] = new SqlParameter("@Category1ID", c1);
-                    parms[3] = new SqlParameter("@Category2ID", c2);
-                    parms[4] = new SqlParameter("@figureNumber", fn);
-                    parms[5] = new SqlParameter("@PartNumber", pn);
-                    parms[6] = new SqlParameter("@PartSpec", ps);
-                    parms[7] = new SqlParameter("@PartMaterial", pm);
-                    parms[8] = new SqlParameter("@ListType", listType);
-                    ys.Database.ExecuteSqlCommand("exec UpdatePmc  @type,@id,@Category1ID,@Category2ID,@figureNumber,@PartNumber,@PartSpec,@PartMaterial,@ListType", parms);
+                    var sd = ys.PM_Material.Where(p => p.PartNumber == pn && p.PartSpec == ps && p.PartMaterial == pm).FirstOrDefault();
+                    if (sd != null)
+                    {
+                        return Content("two");
+                    }else
+                    {
+                        SqlParameter[] parms = new SqlParameter[9];
+                        parms[0] = new SqlParameter("@type", "新增");
+                        parms[1] = new SqlParameter("@id", "");
+                        parms[2] = new SqlParameter("@Category1ID", c1);
+                        parms[3] = new SqlParameter("@Category2ID", c2);
+                        parms[4] = new SqlParameter("@figureNumber", fn);
+                        parms[5] = new SqlParameter("@PartNumber", pn);
+                        parms[6] = new SqlParameter("@PartSpec", ps);
+                        parms[7] = new SqlParameter("@PartMaterial", pm);
+                        parms[8] = new SqlParameter("@ListType", listType);
+                        ys.Database.ExecuteSqlCommand("exec UpdatePmc  @type,@id,@Category1ID,@Category2ID,@figureNumber,@PartNumber,@PartSpec,@PartMaterial,@ListType", parms);
+                      
+                    }
+                    return Content("true");
                 }
-                return Content("true");
+             
             }
             catch(Exception ex)
             {
-                return Content("false");
+                return Content("true");
             }
            
         }
@@ -124,18 +133,19 @@ namespace YlMES.Controllers
             int sl = int.Parse(shuliang);
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-                var wid = ys.PM_Material.Where(p => p.PartNumber==named).FirstOrDefault();
+                var wid = ys.PM_Material.Where(p => p.PartNumber==named&&p.PartSpec==guige&&p.PartMaterial==cailiao).FirstOrDefault();
                 wuliaoId = wid.ID;
             }
             using (YLMES_newEntities yd = new YLMES_newEntities())
             {
                 string name = Session["name"].ToString();
-                SqlParameter[] parms = new SqlParameter[4];
+                SqlParameter[] parms = new SqlParameter[5];
                 parms[0] = new SqlParameter("@MaterialID",wuliaoId);
-                parms[1] = new SqlParameter("@InQTY", sl);
-                parms[2] = new SqlParameter("@Location", hww);
-                parms[3] = new SqlParameter("@createdBy", name);
-                yd.Database.ExecuteSqlCommand("exec AddPM_MaterialList @MaterialID,@InQTY,@Location,@createdBy", parms);
+                parms[1] = new SqlParameter("@figureNumber",tuhao);
+                parms[2] = new SqlParameter("@InQTY", sl);
+                parms[3] = new SqlParameter("@Location", hww);
+                parms[4] = new SqlParameter("@createdBy", name);
+                yd.Database.ExecuteSqlCommand("exec AddPM_MaterialList @MaterialID,@figureNumber,@InQTY,@Location,@createdBy", parms);
             }
             return View();
         }
@@ -791,7 +801,7 @@ namespace YlMES.Controllers
             {
                 using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    var ss1 = ys.PM_MaterialList.Where(p => p.CreatedBy.Contains(UserName)).ToList();
+                    var ss1 = ys.PM_MaterialList.Where(p => p.CreatedBy.Contains(UserName)).Select(s=> new { s.CreatedBy}).ToList().Distinct();
                     //var list = ys.Database.SqlQuery<PM_WorkOrder>(" SELECT *  FROM PM_WorkOrder ").ToList();
                     return Json(ss1, JsonRequestBehavior.AllowGet);
                 }

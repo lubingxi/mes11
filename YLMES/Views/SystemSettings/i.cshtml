@@ -1,0 +1,71 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="zh-CN" class="translated-ltr">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+
+    <title>模态登录窗口演示</title>
+
+    <link rel="stylesheet" type="text/css" media="all" href="~/css/style1.css">
+
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+
+    <script type="text/javascript" charset="utf-8" src="~/js/jquery.leanModal.min.js"></script>
+
+</head>
+
+
+
+<body>
+
+
+
+    <a target="rightFrame" href="#loginmodal" class="flatbtn" id="modaltrigger">新增工作类型</a>
+
+
+    <div id="loginmodal" style="display:none;">
+
+        <h1><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">用户登录</font></font></h1>
+
+        <form id="loginform" name="loginform" method="post" action="index.html">
+
+            <label for="username"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">用户名：</font></font></label>
+
+            <input type="text" name="username" id="username" class="txtfield" tabindex="1">
+
+
+
+            <label for="password"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">密码：</font></font></label>
+
+            <input type="password" name="password" id="password" class="txtfield" tabindex="2">
+
+
+
+            <div class="center"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><input type="submit" name="loginbtn" id="loginbtn" class="flatbtn-blu hidemodal" value="登录" tabindex="3"></font></font></div>
+
+        </form>
+
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#loginform').submit(function (e) {
+
+                return false;
+
+            });
+
+
+            $('#modaltrigger').leanModal({ top: 110, overlay: 0.45, closeButton: ".hidemodal" });
+
+        });
+    </script>
+
+</body>
+</html>

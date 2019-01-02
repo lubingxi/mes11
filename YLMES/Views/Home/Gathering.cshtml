@@ -11,12 +11,19 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>友力信息管理系统</title>
-    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
     <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
     <link href="~/css/style.css" rel="stylesheet" type="text/css" />
     <link href="~/layui/css/layui.css" rel="stylesheet" />
     <script type="text/javascript" src="../../js/jquery.js"></script>
     <script src="~/layui/layui.js" type="text/javascript"></script>
+    <style type="text/css">
+      .layui-table-cell {
+overflow: visible;
+height: auto;
+white-space: normal;
+}
+    </style>
+
 
 
     <script type="text/javascript">
@@ -24,17 +31,73 @@
             layer_show(title, url, w, h);
         }
         $(function () {
+            if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }
             $("#cancle").click(function () {
                 window.parent.document.getElementById("rightframe").src = "/Home/PM_ContractReceivablesMain";
             });
-            $("#approved").click(function () {
+            $("#throung").click(function () {
                 var bianhao = '@ViewData["CNumbers"]';
-                layer.confirm('是否通过审核！', {
+                if ('@ViewData["name"]' == "11") {
+                    $.ajax({
+                        url: "/Home/EditStatus?bianhao=" + bianhao,
+                        type: 'post',
+                        success: function (data) {
+                            if (data == "true") {
+                                layer.msg("修改成功", { icon: 6 });
+                                table.reload('twd');
+                                table.reload('tw');
+                            }
+                            else if (data == "two") {
+                                layer.msg("已经通过不用审批!", { icon: 6 });
+                            }
+                            if (data == "false") {
+                                layer.msg('修改失败!', { icon: 5 });
+                                return false;
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    layer.msg("只有龙宗德才有资格！");
+                }
+                
+            });
+            //$("#approved").click(function () {
+              
+            //    layer.confirm('是否收到定金！', {
+            //        title: "友力提示", skin: "my-skin",
+            //        btn: ['确定','取消'], btn1: function () {
+            //            layer.closeAll();
+            //            $.ajax({
+            //                url: "/Home/EditStatus?bianhao=" + bianhao,
+            //                type: 'post',
+            //                success: function (data) {
+            //                    if (data == "true") {
+            //                        layer.msg("修改成功", { icon: 6 });
+            //                        table.reload('twd');
+            //                        table.reload('tw');
+            //                    }
+            //                    if (data == "false") {
+            //                        layer.msg('修改失败!', { icon: 5 });
+            //                        return false;
+            //                    }
+            //                }
+            //            });
+            //        }                   
+            //    });
+               
+            //});
+            $("#SendDelivery").click(function () {
+                var bianhao = '@ViewData["CNumbers"]';
+                layer.confirm('是否收到货款！', {
                     title: "友力提示", skin: "my-skin",
-                    btn: ['确定','取消'], btn1: function () {
+                    btn: ['确定', '取消'], btn1: function () {
                         layer.closeAll();
                         $.ajax({
-                            url: "/Home/EditStatus?bianhao=" + bianhao,
+                            url: "/Home/IfPayment?bianhao=" + bianhao,
                             type: 'post',
                             success: function (data) {
                                 if (data == "true") {
@@ -42,15 +105,18 @@
                                     table.reload('twd');
                                     table.reload('tw');
                                 }
+                                if (data == "two") {
+                                    layer.msg("财务已审批合同通过！", { icon: 5 });
+                                }
                                 if (data == "false") {
                                     layer.msg('修改失败!', { icon: 5 });
                                     return false;
                                 }
                             }
                         });
-                    }                   
+                    }
                 });
-               
+
             });
             $(".click").click(function () {
                 $(".tip").fadeIn(200);
@@ -68,59 +134,123 @@
                 $(".tip").fadeOut(100);
             });
             layui.use(['table', 'layer'], function () {
-                var table = layui.table, layer = layui.layer;
+                var table = layui.table, layer = layui.layer, form = layui.form;
   
                     table.render({
                         elem: '#tw'
                    , url: '/Home/Get_Datad?id=' + '@ViewData["Receivables"]'
                    , page: false
                    , limit: 1
-                   , cols: [[
-                   , { field: 'ID', width: 100, title: '序号', hide: true }
-                   , { field: 'ContractID', width: 200, title: '合同编号' }
+                   , done: function () {
+                       $("tr a").hide()
+                       $("tr").hover(function () {
+                           $(this).children().last().children().children().toggle();
+                       });
+                   }
+                   , height: 200
+                        , cols: [[
+                     { field: '', hide: true }
                    , { field: '合同金额', width: 200, title: '合同金额', sort: true }
                    , {
                        field: '已收金额', width: 180, title: '已收款金额',
+                     }
+                   , { field: 'NewAmountCollected', width: 180, title: '今收款金额', edit: Text, style: 'color: #009688' }
+                   , { field: 'DateOfReceipt', width: 180, title: '收款时间', edit: Text, style: 'color: #009688' }
+                   , { field: 'TicketOpeningAndDate', width: 150, title: '发票情况', edit: Text, style: 'color: #009688' }
+                   , {
+                       field: '收款类型', width: 150, title: '收款类型', templet: '#type'
                    }
-                   , { field: 'NewAmountCollected', width: 180, title: '今收款金额' ,edit:Text}
-                   , { field: 'DateOfReceipt', width: 180, title: '收款时间', edit: Text }
-                    , { field: 'TicketOpeningAndDate', width: 210, title: '发票情况', edit: Text }
-                     , { field: '创建人', width: 150, title: '创建人' }
-                     , { field: '创建时间', width: 150, title: '创建时间' }
-                   , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+                   , { field: '创建人', width: 150, title: '创建人' }
+                   , { field: '创建时间', width: 150, title: '创建时间' }
+                   , { field: 'right', width: 100, align: 'center', toolbar: '#barDemo' }
                    ]]
 
                     });
-               
-                table.on('checkbox(demo)', function (obj) {
-                    console.log(obj)
-                });
-
+                var ty = null;
+                var ts = null;           
+                form.on('select(ty)', function (data) {
+                    ty = data.value;
+                });              
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
+                    if (ty == null) {
+                        ty = data.收款类型;
+                        if (ty == '订单金额') {
+                            ty = 1;
+                        } else if (ty == '发货前金额') {
+                            ty = 2;
+                        } else if (ty == '安装前金额') {
+                            ty = 3;
+                        } else if (ty == '验收金额') {
+                            ty = 4;
+                        } else if (ty == '质保金额') {
+                            ty = 5;
+                        }
+                    }
                     switch (obj.event) {                    
                         case 'update':
                             id = data.ContractID;
                             var newd = data.NewAmountCollected;
                             var dor = data.DateOfReceipt;
                             var TicketOpeningAndDate = data.TicketOpeningAndDate;
-                            $.ajax({
-                                url: "/Home/AddShouJiLu?id=" + id + "&NewAmountCollected=" + newd + "&DateOfReceipt="+dor + "&TicketOpeningAndDate=" + TicketOpeningAndDate,
-                                type: 'post',
-                                data: { "id": id, "NewAmountCollected":newd ,"DateOfReceipt":dor,"TicketOpeningAndDate": TicketOpeningAndDate },
-                                async: true,
-                                success: function (data) {
-                                    if (data == "true") {
-                                        layer.msg("添加成功", { icon: 6 });
-                                        table.reload('twd');
-                                        table.reload('tw');
+                            var cAmount = data.合同金额;
+                            var yi = data.已收金额;                         
+                            if (ts == null) {
+                                ts = data.收款类型;                              
+                            }
+                            if (ty == 1) {
+                                $.ajax({
+                                    url: "/Home/AddShouJiLu?id=" + id + "&NewAmountCollected=" + newd + "&DateOfReceipt=" + dor + "&TicketOpeningAndDate=" + TicketOpeningAndDate + "&shou=" + ty,
+                                    type: 'post',
+                                    async: true,
+                                    success: function (data) {
+                                        if (data == "true") {
+                                            window.setTimeout(function () {
+                                                layer.msg("添加成功", { icon: 6 });
+                                                $.ajax({
+                                                    url: "/Home/Chane?he=" + id,
+                                                    type: "post",
+                                                    dataType: "text",
+                                                    success: function (data) {
+                                                        if (data == "true") {
+                                                            layer.msg('收款金额已经足够，已通过可以生产！');
+                                                            table.reload('twd');
+                                                            table.reload('tw');
+                                                        }
+                                                        else {
+                                                            layer.msg('订金还不够！');
+                                                            table.reload('twd');
+                                                            table.reload('tw');
+                                                        }
+                                                    }
+                                                });
+                                            }, 300);
+                                        }
+                                        if (data == "false") {
+                                            layer.msg('数据操作异常!', { icon: 5 });
+                                            return false;
+                                        }
                                     }
-                                    if (data == "false") {
-                                        layer.msg('数据操作异常!', { icon: 5 });
-                                        return false;
+                                });
+                            } else
+                            {
+                                $.ajax({
+                                    url: "/Home/AddShouJiLu?id=" + id + "&NewAmountCollected=" + newd + "&DateOfReceipt=" + dor + "&TicketOpeningAndDate=" + TicketOpeningAndDate + "&shou=" + ty,
+                                    type: 'post',
+                                    async: true,
+                                    success: function (data) {
+                                        if (data == "true") {                                           
+                                            layer.msg("添加成功", { icon: 6 });
+                                            table.reload('twd');
+                                            table.reload('tw');
+                                        }
+                                        if (data == "false") {
+                                            layer.msg('数据操作异常!', { icon: 5 });
+                                            return false;
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            }                          
                             break;                        
                     };
                 });
@@ -128,47 +258,84 @@
 
             });
             layui.use(['table', 'layer'], function () {
-                var table = layui.table, layer = layui.layer;
+                var table = layui.table, layer = layui.layer, form = layui.form;
 
                 table.render({
                     elem: '#twd'
                , url: '/Home/Get_ReceivablesHistory?id=' + '@ViewData["Receivables"]'
                , page: false
-               , limit: 1
+                , height: 800
                , cols: [[
-               , { field: 'ID', width: 37, title: '序号' }
-               , { field: 'ContractID', width: 200, title: '合同编号' }
+               { field: '', hide:true }
                , { field: '合同金额', width: 200, title: '合同金额', sort: true }
-               , { field: 'NewAmountCollected', width: 180, title: '今收款金额', edit: Text }
+               , { field: 'NewAmountCollected', width: 180, title: '今收款金额', edit: Text,style: 'color: #009688' }
                , { field: 'DateOfReceipt', width: 180, title: '收款时间' }
-                , { field: 'TicketOpeningAndDate', width: 210, title: '发票情况', edit: Text }
+                , { field: 'TicketOpeningAndDate', width: 150, title: '发票情况', edit: Text, style: 'color: #009688' }
+                 , {
+                     field: '收款类型', width: 150, title: '收款类型', templet: '#types'
+                 }
                  , { field: '创建人', width: 150, title: '创建人' }
                  , { field: '创建时间', width: 150, title: '创建时间' }
-               , { field: 'right', width: 250, align: 'center', toolbar: '#barDemod' }
+               , { field: 'right', width: 150, align: 'center', toolbar: '#barDemod' }
                ]]
 
                 });
-
+                var twq = null;
+                var tws = null;
+                form.on('select(tys)', function (data) {
+                    twq = data.value;
+                });
                 table.on('checkbox(demod)', function (obj) {
                     console.log(obj)
                 });
                 table.on('tool(demod)', function (obj) {
                     var data = obj.data;
+                    if (twq == null) {
+                        twq = data.收款类型;
+                        if (twq == '订单金额') {
+                            twq = 1;
+                        } else if (ty == '发货前金额') {
+                            twq = 2;
+                        } else if (ty == '安装前金额') {
+                            twq = 3;
+                        } else if (ty == '验收金额') {
+                            twq = 4;
+                        } else if (ty == '质保金额') {
+                            twq = 5;
+                        }                     
+                    }
                     switch (obj.event) {
                         case 'update':
                             id = data.ID;
                             cid = data.ContractID;
                             newd= data.NewAmountCollected;
                             dateRec = data.DateOfReceipt;
-                            ticket = data.TicketOpeningAndDate
-                            $.ajax({                               
+                            ticket = data.TicketOpeningAndDate;
+                            $.ajax({
                                 url: "/Home/XiuShouJilu",
                                 type: 'post',
                                 async: true,
-                                data: { "cid": id,"ContractID": cid,"NewA":newd,"Dtr":dateRec,"Ticket":ticket},                                
+                                data: { "cid": id, "ContractID": cid, "NewA": newd, "Dtr": dateRec, "Ticket": ticket, "jine": twq },
                                 success: function (data) {
                                     if (data == "true") {
                                         layer.msg("修改成功", { icon: 6 });
+                                        $.ajax({
+                                            url: "/Home/Chane?he=" + cid,
+                                            type: "post",
+                                            dataType: "text",
+                                            success: function (data) {
+                                                if (data == "true") {
+                                                    layer.msg('收款金额已经足够,已通过可以生产！');
+                                                    table.reload('twd');
+                                                    table.reload('tw');
+                                                }
+                                                else {
+                                                    layer.msg('订金还不够！');
+                                                    table.reload('twd');
+                                                    table.reload('tw');
+                                                }
+                                            }
+                                        });
                                         table.reload('twd');
                                         table.reload('tw');
                                     }
@@ -177,40 +344,59 @@
                                         return false;
                                     }
                                 }
-                            });
+                            });                        
                             break;
                         case 'delete':
                             id = data.ID;
                             ContractID = data.ContractID;
-                            $.ajax({
-                                url: "/Home/DeleteShouJiLu?ID =" + id + "&ContractID=" + ContractID,
-                                type: 'post',
-                                data: { "id": id, "ContractID": ContractID },
-                                async: true,
-                                success: function (data) {
-                                    if (data == "true") {
-                                        layer.msg("删除成功", { icon: 6 });
-                                        table.reload('twd');
-                                        table.reload('tw');
+                            layer.confirm("真的删除行么", function (index) {
+                                $.ajax({
+                                    url: "/Home/DeleteShouJiLu?id =" + id + "&ContractID=" + ContractID,
+                                    type: 'post',
+                                    async: true,
+                                    data: { "id": id, "ContractID": ContractID },
+                                    success: function (data) {
+                                        if (data == "true") {
+                                            layer.msg("删除成功", { icon: 6 });
+                                            $.ajax({
+                                                url: "/Home/Chane?he=" + ContractID,
+                                                type: "post",
+                                                dataType: "text",
+                                                success: function (data) {
+                                                    if (data == "true") {
+                                                        layer.msg('收款金额已经足够,已通过可以生产！');
+                                                        table.reload('twd');
+                                                        table.reload('tw');
+                                                    }
+                                                    else {
+                                                        layer.msg('订金还不够！');
+                                                        table.reload('twd');
+                                                        table.reload('tw');
+                                                    }
+                                                }
+                                            });
+                                            table.reload('twd');
+                                            table.reload('tw');
+                                        }
+                                        if (data == "false") {
+                                            layer.msg('数据操作异常!', { icon: 5 });
+                                            return false;
+                                        }
                                     }
-                                    if (data == "false") {
-                                        layer.msg('数据操作异常!', { icon: 5 });
-                                        return false;
-                                    }
-                                }
-                            });
+                                });
+                            });                          
                             break;
                      
                     };
-                });
-             
-
-
+                });           
             });
         })
-
-
-
+    </script>  
+    <script type="text/html" id="type">
+        @Html.DropDownList("ty", new SelectList(ViewBag.ty, "id", "Pname"), "{{d.收款类型}}", new { @class = "ty", @ID = "ty", @lay_filter = "ty" })
+    </script>
+    <script type="text/html" id="types">
+        @Html.DropDownList("tys", new SelectList(ViewBag.tys, "id", "Pname"), "{{d.收款类型}}", new { @class = "tys", @ID = "tys", @lay_filter = "tys" })
     </script>
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-xs" id="edit" lay-event="update">新增</a>   
@@ -241,20 +427,30 @@
         <div class="tools">
 
             <ul class="toolbar">
-                <li class="ads" id="addC">
+                @*<li class="ads" id="addC">
                     <span>
                         <img src="../../images/t01.png" />
-                    </span><a target="rightFrame" href="javascript:;" onclick="admin_add('新增收款情况', '/Home/ShouKuangAdd?CNumbers=@ViewData["CNumbers"]', '800', '500')">新增收款情况</a>@*<i hidden=hidden id="u">/Home/ContractAdd</i>*@
-                </li>
+                    </span><a target="rightFrame" href="javascript:;" onclick="admin_add('新增收款目录', '/Home/ShouKuangAdd?CNumbers=@ViewData["CNumbers"]', '800', '500')">新增收款情况</a>@*<i hidden=hidden id="u">/Home/ContractAdd</i>
+                </li>*@
                 <li class="click" id="cancle">                             
                     <span>
                         <img src="../../images/t02.png" />
                     </span>返回
                 </li>
-                <li class="click" id="approved">
+                @*<li class="click" id="approved">
                     <span>
                         <img src="../../images/t04.png" />
-                    </span>审核通过
+                    </span>收到订金可生产
+                </li>*@
+                <li class="click" id="SendDelivery">
+                    <span>
+                        <img src="../../images/t04.png" />
+                    </span>收到提货款可发货
+                </li>
+                <li class="click" id="throung">
+                    <span>
+                        <img src="../../images/t04.png" />
+                    </span>经理审批可生产
                 </li>
             </ul>
           
@@ -265,7 +461,7 @@
 
     </div>
     <table class="tablelist" id="tw" lay-filter="demo"></table>
-    <h2 style="color:blue">收款历史</h2>
+    <h2 style="color:blue">收款明细</h2>
     <table class="tablelist" id="twd" lay-filter="demod"></table>
     <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>

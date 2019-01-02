@@ -13,6 +13,7 @@ namespace YLMES.Models
     
     public partial class PM_ProjectCheckTask2_Result
     {
+        public Nullable<int> 任务编号 { get; set; }
         public string 项目名称 { get; set; }
         public string 订单产品名称 { get; set; }
         public string 订单产品规格 { get; set; }

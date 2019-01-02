@@ -1,0 +1,138 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>友力信息管理系统</title>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script src="~/js/Supplier.js"></script>
+    <script src="~/Scripts/jquery.form.js" type="text/javascript"></script>
+</head>
+<body>
+
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">采购管理</a></li>
+            <li><a href="#">新增供应商信息</a></li>
+        </ul>
+    </div>
+    <form class="layui-form" id="form-article-add" style="margin-top:20px ;margin-left:100px">
+        <div class="layui-form-item">
+            <label class="layui-form-label">仓库：</label>
+            <div class="layui-input-block" style="width:200px">
+                <select name="WHName" id="WHName" lay-verify="" lay-filter="WHName" lay-search></select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">新增库区</label>
+            <div class="layui-input-block" style="width:200px">
+                <input type="text" lay-verify="required" id="WHArea" name="WHArea" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9-]+/,'');}).call(this) " autocomplete="off" class="layui-input">
+                <div class="layui-form-mid layui-word-aux" id="tips"></div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">新增货区</label>
+            <div class="layui-input-block" style="width:200px">
+                <input type="text" lay-verify="required" name="WHStorage" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9-]+/,'');}).call(this) " autocomplete="off" class="layui-input">
+                <div class="layui-form-mid layui-word-aux">辅助文字</div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">新增货位</label>
+            <div class="layui-input-block" style="width:200px">
+                <input type="text" lay-verify="required" name="WHGoodsAl" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9-]+/,'');}).call(this) " autocomplete="off" class="layui-input" />
+                <div class="layui-form-mid layui-word-aux">辅助文字</div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" onclick="sub()" style="margin-left:100px">立即提交</button>
+            </div>
+        </div>
+    </form>
+    <script>
+        $(function () {
+        layui.use(['table', 'layer', 'form'], function () {
+
+            var table = layui.table, layer = layui.layer
+            , form = layui.form;
+
+            $.ajax({
+                type: "POST",
+                url: '/Warehouse/WHName',
+                dataType: "json",
+                success: function (data) {
+                    if (data != null) {
+                        $.each(data, function (i, result) {
+                            $('#WHName').append('<option>' + result.Name + '</option>');
+                        });
+                        form.render();
+                    }
+
+                }
+
+            });
+            var WHName = null;
+
+            form.on('select(WHName)', function (data) {
+                WHName = data.value;
+            });
+
+        });
+        $('#WHArea').blur(function () {
+            var WHArea = $('#WHArea').val();
+            var WHName = $('#WHName').val();
+            if (WHArea > 0)
+            {
+                $.ajax({
+                    url: "/Warehouse/coun",
+                    data: { WHName: WHName },
+                    type: "post",
+                    dataType: "text",
+                    success: function (data) {
+                        if (data != null) {
+                            $.each(JSON.parse(data), function (i, result) {
+                                $('#tips').append('从库区' + (result.WHAreaID+1)+ '到库区' +(result.WHAreaID+parseInt(WHArea)));
+                            });
+                            window.parent.location.reload();
+                        }
+                    }
+                });
+            }
+        });
+        });
+        function sub() {
+           
+                $("#form-article-add").ajaxSubmit({
+
+                    url: "@Url.Action("WHNamebatch", "Warehouse")",
+                    type: "post",
+                    success: function (data) {
+                        if (data == "true") {
+                            alert("插入成功");
+                            window.parent.location.reload();
+                        } else if (data == "false") {
+                            alert("插入失败");
+                        }
+                    },
+                    error: function (aa) {
+                        alert(aa);
+                    }
+                });
+        }
+    </script>
+</body>
+
+</html>

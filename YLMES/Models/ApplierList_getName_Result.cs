@@ -15,7 +15,6 @@ namespace YLMES.Models
     {
         public string 供应商 { get; set; }
         public string 级别 { get; set; }
-        public string 货品品类 { get; set; }
         public string 优势分析 { get; set; }
     }
 }

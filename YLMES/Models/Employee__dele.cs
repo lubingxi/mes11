@@ -17,17 +17,6 @@ namespace YLMES.Models
         public int ID { get; set; }
         public string UserName { get; set; }
         public int CCID { get; set; }
-        public string fingerprint { get; set; }
         public string EmployeeName { get; set; }
-        public string PWD { get; set; }
-        public string Shift { get; set; }
-        public Nullable<System.DateTime> EmploymentDate { get; set; }
-        public string LeaveDate { get; set; }
-        public string DepartMent { get; set; }
-        public string Manager { get; set; }
-        public Nullable<int> auth { get; set; }
-        public string StatusID { get; set; }
-        public string Tel { get; set; }
-        public string IDCard { get; set; }
     }
 }

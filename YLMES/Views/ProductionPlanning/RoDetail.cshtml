@@ -1,0 +1,125 @@
+﻿@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+               layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;             
+                    table.render({
+                        elem: '#tw'
+                        , url: '/ProductionPlanning/CheckRoDetail?id='+'@ViewData["gongdan"]'
+                        , cols: [[
+                            {
+                                field: '', width: 20, title: '', hide: true
+                            }
+                            , { field: '工单', width: 210, title: '工单' }
+                            , { field: '工位类型', width: 150, title: '工位类型' }
+                            , { field: '开始时间', width: 80, title: '开始时间' }
+                            , {
+                                field: '结束时间', width: 80, title: '结束时间',
+                            }
+                            , { field: '工单套数', title: '工单套数', width: 120 }
+                            , { field: '收料数量', width: 100, title: '收料' }
+                            , { field: '完成数量', width: 100, title: '完成', }
+                            , { field: '坏品数量', width: 100, title: '坏品' }
+                            , { field: '转工序数量', width: 100, title: '转工序' }
+                            , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+                        ]]
+                   });
+                   table.on('tool(demo)', function (obj) {
+                       var data = obj.data;
+                       switch (obj.event) {
+                           case 'Detials':
+                               type = data.工位类型;
+                               dan = dan.工单;
+                               var url = '/ProductionPlanning//ByStation?type=' + type + '&dan=' + dan;
+                               layer_show('工单详细员工', url, '1000', '700');
+                               break;
+                       };
+                   });
+                });
+                
+           
+            //layui.use(['table', 'layer'], function () {
+            //    var table = layui.table, layer = layui.layer;
+            //    $(".layui-btn").click(function () {
+            //        table.render({
+            //            elem: '#tw'
+            //            , url: '/ProductionPlanning/CheckRoDetail'
+            //            , cols: [[
+            //                {
+            //                    field: '', width: 20, title: '', hide: true
+            //                }
+            //                , { field: '工单', width: 210, title: '工单' }
+            //                , { field: '工位类型', width: 150, title: '工位类型' }
+            //                , { field: '开始时间', width: 80, title: '开始时间' }
+            //                , {
+            //                    field: '结束时间', width: 80, title: '结束时间',
+            //                }
+            //                , { field: '工单套数', title: '工单套数', width: 120 }
+            //                , { field: '收料数量', width: 100, title: '收料' }
+            //                , { field: '完成数量', width: 100, title: '完成', }
+            //                , { field: '坏品数量', width: 100, title: '坏品' }
+            //                , { field: '转工序数量', width: 100, title: '转工序' }
+            //                , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+            //            ]]
+            //        });
+            //    });
+            //    table.on('tool(demo)', function (obj) {
+            //        var data = obj.data;
+            //        switch (obj.event) {
+            //            case 'Detials':
+            //                type = data.工位类型;
+            //                dan = dan.工单;
+            //                var url = '/ProductionPlanning//ByStation?type=' + type + '&dan=' + dan;
+            //                layer_show('工单详细员工', url, '1000', '700');
+            //                break;
+            //        };
+            //    });
+            //});
+        })
+    </script>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" id="detials" lay-event="Detials">收料</a>
+    </script>
+
+</head>
+
+<body>
+    <div class="rightinfo">   
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+    </div>
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+
+            function admin_add(title, url, w, h) {
+                layer_show(title, url, w, h);
+            }
+    </script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+</body>
+</html>

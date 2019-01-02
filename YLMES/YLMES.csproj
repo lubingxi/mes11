@@ -17,10 +17,14 @@
     <AssemblyName>YLMES</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort>44300</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <IISExpressSSLPort>
+    </IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>
+    </IISExpressUseClassicPipelineMode>
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -35,7 +39,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -172,8 +176,10 @@
     <Content Include="assets\js\supersized-init.js" />
     <Content Include="assets\js\supersized.3.2.7.min.js" />
     <Content Include="Content\Site.css" />
+    <Content Include="css\bdmapStyle.css" />
     <Content Include="css\bootstrap.min.css" />
     <Content Include="css\fresh-bootstrap-table.css" />
+    <Content Include="css\lanrenzhijia.css" />
     <Content Include="css\style1.css" />
     <Content Include="css\styled.css" />
     <Content Include="css\StyleSheet1.css" />
@@ -239,22 +245,54 @@
     <Content Include="Global.asax" />
     <Content Include="images\2000px-App_Store_OS_X.svg.png" />
     <Content Include="images\2000px-Google_Chrome_icon_%282011%29.svg.png" />
+    <Content Include="images\body_bg.jpg" />
     <Content Include="images\Button-Fill-White-Large.png" />
+    <Content Include="images\cloud.png" />
+    <Content Include="images\cloudys_0.png" />
+    <Content Include="images\f07.png" />
     <Content Include="images\fit.gif" />
     <Content Include="images\iTunes 1024x1024.png" />
     <Content Include="images\launchpad-icon.png" />
     <Content Include="images\Mac_Finder_icon_%28OS_X_Yosemite%29.png" />
     <Content Include="images\mozilla-png-file-mozilla-firefox-3-5-logo-256-png-256.png" />
     <Content Include="images\siri_by_hs1987-dbd58rs.png" />
+    <Content Include="images\sun.png" />
+    <Content Include="images\sunshine_0.png" />
     <Content Include="images\system-preferences-icon.png" />
+    <Content Include="img\icon_locate_blue.png" />
+    <Content Include="img\icon_locate_green.png" />
+    <Content Include="img\icon_locate_red.png" />
     <Content Include="jquery.gvChart-1.0.1.js" />
     <Content Include="js\awesomplete.js" />
     <Content Include="js\awesomplete.min.js" />
+    <Content Include="js\Contract.js" />
+    <Content Include="js\echarts.js" />
+    <Content Include="js\index.js" />
+    <Content Include="js\jquery-1.4.4.min.js" />
+    <Content Include="js\jquery-1.7.min.js" />
+    <Content Include="js\jquery-1.8.3.min.js" />
     <Content Include="js\jquery-1.9.1.min.js" />
     <Content Include="js\jquery-3.3.1.js" />
+    <Content Include="js\jquery.bdmap.js" />
+    <Content Include="js\jquery.jqprint-0.3.js" />
     <Content Include="js\jquery.leanModal.min.js" />
+    <Content Include="js\lanrenzhijia.js" />
+    <Content Include="laydate\laydate.js" />
+    <Content Include="laydate\theme\default\font\iconfont.svg" />
+    <Content Include="laydate\theme\default\laydate.css" />
+    <Content Include="js\ProductLine.js" />
+    <Content Include="js\ProductStation.js" />
     <Content Include="js\Purchaselist.js" />
     <Content Include="js\Supplier.js" />
+    <Content Include="layer\layer.js" />
+    <Content Include="layer\mobile\layer.js" />
+    <Content Include="layer\mobile\need\layer.css" />
+    <Content Include="layer\theme\default\icon-ext.png" />
+    <Content Include="layer\theme\default\icon.png" />
+    <Content Include="layer\theme\default\layer.css" />
+    <Content Include="layer\theme\default\loading-0.gif" />
+    <Content Include="layer\theme\default\loading-1.gif" />
+    <Content Include="layer\theme\default\loading-2.gif" />
     <Content Include="layui\css\layui.css" />
     <Content Include="layui\css\layui.mobile.css" />
     <Content Include="layui\css\modules\code.css" />
@@ -1177,6 +1215,16 @@
     <Content Include="lib\zTree\v3\js\jquery.ztree.exedit.js" />
     <Content Include="lib\zTree\v3\js\jquery.ztree.exhide-3.5.js" />
     <Content Include="lib\zTree\v3\js\jquery.ztree.exhide-3.5.min.js" />
+    <Content Include="Models\Model1.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model1.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.cs</LastGenOutput>
+    </Content>
     <Content Include="My97DatePicker4.7.2\calendar.js" />
     <Content Include="My97DatePicker4.7.2\config.js" />
     <Content Include="My97DatePicker4.7.2\lang\en.js" />
@@ -1246,22 +1294,15 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="laydate\theme\default\font\iconfont.eot" />
+    <Content Include="laydate\theme\default\font\iconfont.ttf" />
+    <Content Include="laydate\theme\default\font\iconfont.woff" />
     <EntityDeploy Include="Models\Model1.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model1.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\Model1.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model1.edmx</DependentUpon>
-      <LastGenOutput>Model1.Context.cs</LastGenOutput>
-    </Content>
     <Content Include="Models\Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
-    </Content>
-    <Content Include="Models\Model1.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model1.edmx</DependentUpon>
-      <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
     <None Include="Properties\PublishProfiles\YLMESNew.pubxml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
@@ -1503,9 +1544,11 @@
     <Compile Include="Controllers\ApplierListController.cs" />
     <Compile Include="Controllers\ContractTwoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IncomingController.cs" />
     <Compile Include="Controllers\ProductionPlanningController.cs" />
     <Compile Include="Controllers\PurchasingManageController.cs" />
     <Compile Include="Controllers\RmsController.cs" />
+    <Compile Include="Controllers\StatisticalController.cs" />
     <Compile Include="Controllers\SystemSettingsController.cs" />
     <Compile Include="Controllers\TaskManagementController.cs" />
     <Compile Include="Controllers\TechnicalDepartmentController.cs" />
@@ -1521,6 +1564,9 @@
     <Compile Include="lib\ueditor\1.4.3\net\App_Code\NotSupportedHandler.cs" />
     <Compile Include="lib\ueditor\1.4.3\net\App_Code\PathFormater.cs" />
     <Compile Include="lib\ueditor\1.4.3\net\App_Code\UploadHandler.cs" />
+    <Compile Include="Models\ac.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ApplierList_getName_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1537,6 +1583,12 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\checkBOM_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\checkCoMaterial_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CheckCustomer_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CheckDaTypeChangeXiao_Result.cs">
@@ -1557,6 +1609,9 @@
     <Compile Include="Models\CheckGoods_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CheckMateial_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CheckProcess_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1572,10 +1627,22 @@
     <Compile Include="Models\CheckStorage_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CheckTaskAll_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CheckTaskProgress_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CheckTask_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CheckWarehouse_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CheckWorkStation_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContractType.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\C_Contract.cs">
@@ -1599,10 +1666,19 @@
     <Compile Include="Models\DeleteLocationType_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DeletePM_WorkDetailHistory.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DeleteProcessBOM_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DesignDistribution_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\EditAccessSetup_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EmployeeWorkReport.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Employee__dele.cs">
@@ -1612,6 +1688,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\getPackjobs_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\htmltext.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\InstallHistory_check_Result.cs">
@@ -1645,6 +1724,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MyTaskCheck_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PaymentType.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Permission_Result.cs">
@@ -1842,16 +1924,28 @@
     <Compile Include="Models\ProductDetail_Order_check_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ProductDetail_Order_Confirm_Result.cs">
+    <Compile Include="Models\ProductDetail_Order_Edit_Check_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ProductDetail_Order_Edit_Check_Result.cs">
+    <Compile Include="Models\ProductDetail_Order_Transfer_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProductionName_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PurchaseAll_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PurchaseCo_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PurchaseQTYcheck_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Purchase_MaterialList_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RawWHIQCList_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Raw_MaterialStock_Result.cs">
@@ -1899,6 +1993,12 @@
     <Compile Include="Models\SP_Contract_Receivables_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SP_PM_ApplierList_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1923,7 +2023,49 @@
     <Compile Include="Models\SP_PM_WH_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SP_PM_WorkOrderHistory_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_Warehousesetup_area_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_Warehousesetup_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_Warehousesetup_WHGoodsAl_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_Warehousesetup_WHStorage_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\StationType_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Statisticschar_Departmentlist_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Statistics_Departmentlist_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Statistics_Scroechart_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Statistics_Scroelist_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Statistics_TaskAlllist_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StrToTable_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Summary_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Supplier_MaterialBinding_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagrams.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TableStatus.cs">
@@ -1941,10 +2083,22 @@
     <Compile Include="Models\temp1121.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\toji.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tttb.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\UploadTheDrawings_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserName_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Vague_Material_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WHNameMAX_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\WOCheck_Result.cs">
@@ -2029,7 +2183,6 @@
     <Content Include="Views\Home\HDetailsAddd.cshtml" />
     <Content Include="Views\TaskManagement\TaskMapPart.cshtml" />
     <Content Include="Views\TaskManagement\NewChildThing.cshtml" />
-    <Content Include="Views\TaskManagement\ProcessCard.cshtml" />
     <Content Include="Views\TaskManagement\TaskMapPart2.cshtml" />
     <Content Include="Views\TaskManagement\EditingProcess.cshtml" />
     <Content Include="Views\TaskManagement\PMCSettingWO.cshtml" />
@@ -2051,6 +2204,58 @@
     <Content Include="Views\Rms\MaterialsStock.cshtml" />
     <Content Include="Views\ApplierList\ApplierAdd.cshtml" />
     <Content Include="Views\Home\ContractPrint.cshtml" />
+    <Content Include="Views\Home\HDetiald.cshtml" />
+    <Content Include="Views\Home\Map.cshtml" />
+    <Content Include="Views\Home\WriteCuName.cshtml" />
+    <Content Include="Views\Home\Customer.cshtml" />
+    <Content Include="Views\Home\WriteCuNames.cshtml" />
+    <Content Include="Views\TaskManagement\MoreTask.cshtml" />
+    <Content Include="Views\TaskManagement\NameTasks.cshtml" />
+    <Content Include="Views\TaskManagement\UploadTheDrawings.cshtml" />
+    <Content Include="Views\Home\Flower.cshtml" />
+    <Content Include="Views\TaskManagement\PTask.cshtml" />
+    <Content Include="Views\TaskManagement\UploadDrawing.cshtml" />
+    <Content Include="Views\Home\Loading.cshtml" />
+    <Content Include="Views\Home\Computer.cshtml" />
+    <Content Include="Views\Home\Filelist.cshtml" />
+    <Content Include="Views\Warehouse\Warehousesetup.cshtml" />
+    <Content Include="Views\Warehouse\Warehouseadd.cshtml" />
+    <Content Include="Views\Warehouse\WarehouseArea.cshtml" />
+    <Content Include="Views\Warehouse\Warehousesel.cshtml" />
+    <Content Include="Views\Warehouse\Storage.cshtml" />
+    <Content Include="Views\Warehouse\WHStorage.cshtml" />
+    <Content Include="Views\Warehouse\WHGoodsAlAdd.cshtml" />
+    <Content Include="Views\Warehouse\WHGoodsAl.cshtml" />
+    <Content Include="Views\Warehouse\WHbatch.cshtml" />
+    <Content Include="Views\ApplierList\Material.cshtml" />
+    <Content Include="Views\Statistical\Department.cshtml" />
+    <Content Include="Views\Statistical\Report.cshtml" />
+    <Content Include="Views\Statistical\Scroe.cshtml" />
+    <Content Include="Views\SystemSettings\AddProcessBOM.cshtml" />
+    <Content Include="Views\SystemSettings\Goods.cshtml" />
+    <Content Include="Views\SystemSettings\kqd.cshtml" />
+    <Content Include="Views\SystemSettings\kwd.cshtml" />
+    <Content Include="Views\SystemSettings\Location.cshtml" />
+    <Content Include="Views\SystemSettings\LocationType.cshtml" />
+    <Content Include="Views\SystemSettings\Process.cshtml" />
+    <Content Include="Views\SystemSettings\Reservoir.cshtml" />
+    <Content Include="Views\TaskManagement\AddProcess.cshtml" />
+    <Content Include="Views\ProductionPlanning\Distribution.cshtml" />
+    <Content Include="Views\ProductionPlanning\DistributedQuery.cshtml" />
+    <Content Include="Views\ProductionPlanning\WorkStationDetail.cshtml" />
+    <Content Include="Views\ProductionPlanning\StationDetails.cshtml" />
+    <Content Include="Views\Incoming\IncomingCheck.cshtml" />
+    <Content Include="Views\TaskManagement\DesignDistribution.cshtml" />
+    <Content Include="Views\TaskManagement\WorkCheck.cshtml" />
+    <Content Include="Views\PurchasingManage\E_Contract.cshtml" />
+    <Content Include="Views\PurchasingManage\F_Contract.cshtml" />
+    <Content Include="Views\PurchasingManage\O_Contract.cshtml" />
+    <Content Include="Views\PurchasingManage\PurchaseCou.cshtml" />
+    <Content Include="Views\PurchasingManage\P_Contract.cshtml" />
+    <Content Include="Views\PurchasingManage\SummaryMat.cshtml" />
+    <Content Include="Views\PurchasingManage\S_Contract.cshtml" />
+    <Content Include="Views\TaskManagement\Purchasing.cshtml" />
+    <Content Include="Views\TaskManagement\AddPur.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

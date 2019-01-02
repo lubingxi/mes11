@@ -29,5 +29,8 @@ namespace YLMES.Models
         public Nullable<int> TrasferNextStationQTY { get; set; }
         public string Note { get; set; }
         public string Status { get; set; }
+        public string DueData { get; set; }
+        public Nullable<int> LineID { get; set; }
+        public Nullable<int> EmployeeID { get; set; }
     }
 }

@@ -1,0 +1,352 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Scroe</title>
+</head>
+<body>
+    <div> 
+    </div>
+</body>
+</html><html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript" src="~/js/echarts.js"></script>
+    <script type="text/html" id="bsarDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="sel">生成报表</a>
+    </script>
+    <script>
+
+        $(function () {
+            $('#container').hide();
+            layui.use('laydate', function(){
+                var laydate = layui.laydate;
+
+                //执行一个laydate实例
+                laydate.render({
+                    elem: '#test1' //指定元素
+                });
+            });
+
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                var Name = $('#WarehouseName').val();
+                var StartTime = $('.CreatedTime').val();
+                var EndTime = $('.TimeEnd').val();
+
+
+                $('#PurchaselistSel').click(function () {
+
+                    table.render({
+                        elem: '#tw'
+                , url: '/Statistical/Scroelist?Name=' + Name + '&StartTime=' + StartTime + '&EndTime=' + EndTime
+                , page: true
+                , done: function () {
+                            $("tr a").hide();
+                            $("tr").hover(function () {
+                                $(this).children().last().children().children().toggle();
+                            })
+                        }
+                , limit: 15
+                , cols: [[
+                  { field: '负责人', width: 80, title: '负责人' }
+                , { field: '任务个数', width: 100, title: '任务个数', edit: 'text' }
+                , { field: '分数', width: 210, title: '分数', edit: 'text' }
+                , { field: '奖金', width: 235, title: '奖金' }
+                , { field: '开始时间', width: 180, title: '开始时间' }
+                , { field: '结束时间', width: 200, title: '结束时间' }
+               , { field: 'right', width: 380, align: 'center', toolbar: '#bsarDemo' }
+                ]]
+                    })
+                });
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data //获得当前行数据
+                   , layEvent = obj.event; //获得 lay-event 对应的值
+                    switch (layEvent) {
+                        case 'sel':
+                            $('#container').show();
+                            var dom = document.getElementById("container");
+                            var myChart = echarts.init(dom);
+                            myChart.setOption({
+                                title: {
+                                    text: '个人成绩'
+                                },
+                                toolbox: {
+                                    show: true,
+                                    orient: 'vertical',
+                                    left: 'right',
+                                    top: 'center',
+                                    feature: {
+                                        mark: { show: true },
+                                        dataView: { show: true, readOnly: false },
+                                        magicType: { show: true, type: ['line', 'bar', 'stack', 'tiled'] },
+                                        restore: { show: true },
+                                        saveAsImage: { show: true }
+                                    }
+                                },
+                                color: ['#006699', '#4cabce', '#e5323e'],
+                                tooltip: { trigger: 'axis' },
+                                legend: {
+                                    data: ['任务个数', '分数', '奖金']
+                                },
+                                xAxis: {
+                                    data: []
+                                },
+                                yAxis: {
+                                    type: 'value',
+                                    splitArea: { show: true }
+                                },
+                                series: [{
+                                    name: '任务个数',
+                                    type: 'bar',
+                                    data: []
+                                }, {
+                                    name: '分数',
+                                    type: 'bar',
+                                    data: []
+                                },
+                                 {
+                                     name: '奖金',
+                                     type: 'bar',
+                                     data: []
+                                 }
+                                ]
+                            });
+                            myChart.showLoading();
+                            //通过Ajax获取数据
+                            $.ajax({
+                                type: "post",
+                                async: false, //同步执行
+                                url: '/Statistical/Scroechart?Name=' + data.负责人,
+                                dataType: "json", //返回数据形式为json
+                                success: function (result) {
+                                    if (result) {
+                                        var list = [];
+                                        var label = [];
+                                        var value = [];
+                                        var xAxis = [];
+                                        $.each(result, function (i, p) {
+                                            list.push(p.负责人);
+                                            label.push(p.任务个数);
+                                            xAxis.push(p.分数);
+                                            value.push(p.奖金);
+                                        });
+                                         myChart.hideLoading();
+                                        myChart.setOption({
+                                            xAxis: {
+                                                data:list
+                                            },
+                                            series: [{
+                                                name: '任务个数',
+                                                type: 'bar',
+                                                data: label
+                                            },
+                                            {
+                                                name: '分数',
+                                                type: 'bar',
+                                                data: xAxis
+                                            },
+                                            {
+                                                name: '奖金',
+                                                type: 'bar',
+                                                data: value
+                                            }
+                                            ]
+
+                                        });
+                                    }
+                                },
+                                error: function (errorMsg) {
+                                    alert("不好意思，大爷，图表请求数据失败啦!");
+                                    myChart.hideLoading();
+                                }
+                            });
+
+                            break
+                    }
+                });
+            });
+            $("#ss").click(function () {
+                $('#container').show();
+                var dom = document.getElementById("container");
+                var myChart = echarts.init(dom);
+                myChart.setOption({
+                    title: {
+                        text: '个人成绩'
+                    },
+                    color: ['#006699', '#4cabce', '#e5323e'],
+                    tooltip: { trigger: 'axis' },
+                    legend: {
+                        data: ['任务个数', '分数', '奖金']
+                    },
+                    xAxis: {
+                        data: []
+                    },
+                    yAxis: {
+                        type: 'value',
+                        splitArea: { show: true }
+                    },
+                    series: [{
+                        name: '任务个数',
+                        type: 'bar',
+                        data: []
+                    }, {
+                        name: '分数',
+                        type: 'bar',
+                        data: []
+                    },
+                     {
+                         name: '奖金',
+                         type: 'bar',
+                         data: []
+                     }
+                    ]
+                });
+                myChart.showLoading();
+                //通过Ajax获取数据
+                $.ajax({
+                    type: "post",
+                    async: false, //同步执行
+                    url: '/Statistical/Scroechartlist',
+                    dataType: "json", //返回数据形式为json
+                    success: function (result) {
+                        if (result) {
+                            var list = [];
+                            var label = [];
+                            var value = [];
+                            var xAxis = [];
+                            $.each(result, function (i, p) {
+                                list.push(p.负责人);
+                                label.push(p.任务个数);
+                                xAxis.push(p.分数);
+                                value.push(p.奖金);
+                            });
+                            myChart.hideLoading();
+                            myChart.setOption({
+                                xAxis: {
+                                    data: list
+                                },
+                                series: [{
+                                    name: '任务个数',
+                                    type: 'bar',
+                                    data: label
+                                },
+                                {
+                                    name: '分数',
+                                    type: 'bar',
+                                    data: xAxis
+                                },
+                                {
+                                    name: '奖金',
+                                    type: 'bar',
+                                    data: value
+                                }
+                                ]
+
+                            });
+                        }
+                    },
+                    error: function (errorMsg) {
+                        alert("不好意思，大爷，图表请求数据失败啦!");
+                        myChart.hideLoading();
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">采购管理</a></li>
+            <li><a href="#">采购清单</a></li>
+        </ul>
+    </div>
+    <div class="rightinfo">
+        <div class="tools">
+            <ul class="toolbar">
+                <li>
+                    姓名:
+                    <input class="WarehouseName" id="WarehouseName" type="text" style="width: 180px;" />
+                </li>
+                <li>
+                    开始日期：
+                    <input class="CreatedTime" id="text1" type="text" onclick="WdatePicker()" style="width: 80px;" value="" />
+                </li>
+                <li>
+                    截止日期：
+                    <input class="TimeEnd" type="text" id="text" onclick="WdatePicker()" style="width: 80px;" value="" />
+                </li>
+            </ul>
+            <button class="layui-btn" data-type="reload" id="PurchaselistSel">查询</button>
+            <button class="layui-btn" data-type="reload" id="ss">生成报表</button>
+        </div>
+
+        <div id="container" style="height:500px;width:800px"></div>
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+        @*<script type="text/javascript">
+            function getChartData() {
+                //获得图表的options对象
+                var options = myChart.getOption();
+                //通过Ajax获取数据
+                $.ajax({
+                    type: "post",
+                    async: false, //同步执行
+                    url: '',
+                    data: {},
+                    dataType: "json", //返回数据形式为json
+                    success: function (result) {
+                        if (result) {
+                            var label = [];
+                            var value = [];
+                            var xAxis = [];
+                            $.each(result, function (i, p) {
+                                label[i] = p['bar'];
+                                xAxis[i] = p['time'];
+                                value[i] = p['value'];
+                            });
+                            options.legend.data = label;
+                            options.series[0].data = value;
+                            options.xAxis[0].data = xAxis;
+
+                            myChart.hideLoading();
+                            myChart.setOption(options);
+
+                        }
+                    },
+                    error: function (errorMsg) {
+                        alert("不好意思，大爷，图表请求数据失败啦!");
+                        myChart.hideLoading();
+                    }
+                });
+            }
+                </script>*@
+
+        <script type="text/javascript">
+           // $('#container').hide();
+
+        </script>
+
+    </div>
+</body>
+</html>

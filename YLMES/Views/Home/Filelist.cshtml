@@ -1,0 +1,92 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="~/js/jquery.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#wenjian").click(function () {
+                window.parent.document.getElementById("rightframe").src = "/Home/Computer"
+            });
+            $.ajax({
+                url: "/Home/",
+                data: { UserName: CustomerId },
+                type: "get",
+                dataType: "json",
+                success: function (data) {
+
+                    if (data != null) {
+                        $("[name=Address]").val(data[0].Address);
+                        $("[name=Tel]").val(data[0].Tel);
+                        $("[name=Fax]").val(data[0].Fax);
+                        $("[name=Representative]").val(data[0].Representative);
+                        $("[name=Mobile]").val(data[0].Mobile);
+                        $("[name=Account]").val(data[0].Account);
+                        $("[name=Bank]").val(data[0].Bank);
+                        $("[name=Contact]").val(data[0].Contact);
+                        $("[name=Principal]").val(data[0].Principal);
+                        if (readoly == "2") {
+                            $("[name=PaymentMethod]").text(data[0].PaymentMethod);
+                            $("[name=DeliveryTime]").text(data[0].DeliveryTime)
+                            $("[name=ConditionsOfbreachOfContract]").text(data[0].ConditionsOfbreachOfContract)
+                        }
+                    }
+                }
+
+            });
+        });
+    </script>
+    </head>
+
+
+    <body>
+
+        <div class="place">
+            <span>位置：</span>
+            <ul class="placeul">
+                <li><a href="#">首页</a></li>
+                <li id="wenjian"><a href="#">文件管理</a></li>
+                <li><a href="#">列表</a></li>
+            </ul>
+        </div>
+
+
+        <table class="filetable">
+
+            <thead>
+                <tr>
+                    <th width="25%">名称</th>
+                    <th width="11%">修改日期</th>
+                    <th width="10%">类型</th>
+                    <th width="6%">大小</th>
+                    <th width="48%"></th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td><img src="~/images/f07.png" />Adobe Dreamweaver CS5简体中文绿色</td>
+                    <td>2013/10/14 17:38</td>
+                    <td>文件夹</td>
+                    <td class="tdlast">0 KB</td>
+                    <td></td>
+                </tr>
+
+             
+
+            
+
+               
+
+            </tbody>
+
+
+
+
+        </table>
+    </body>
+    </html>
+    </script>

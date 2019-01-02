@@ -13,12 +13,13 @@ namespace YLMES.Models
     
     public partial class CheckProcess_Result
     {
-        public int 编号 { get; set; }
-        public int 流程名称 { get; set; }
-        public Nullable<int> 流程序号 { get; set; }
+        public Nullable<int> ID { get; set; }
+        public int 流程ID { get; set; }
+        public string 流程 { get; set; }
         public string 工位类型 { get; set; }
         public Nullable<int> 单套工时 { get; set; }
         public Nullable<int> 辅助工时 { get; set; }
         public string 工艺要求 { get; set; }
+        public Nullable<int> 编码 { get; set; }
     }
 }

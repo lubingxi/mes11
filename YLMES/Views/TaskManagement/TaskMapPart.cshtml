@@ -19,20 +19,27 @@
 
 
     <script type="text/javascript">
+        $(document).keydown(function (e) {
+            switch (e.keyCode) {
+                case 27:
+                    window.history.go(-1);
+                    break;          
+            }
+        });
         $(function () {
+         if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }  
             var url = "/TaskManagement/CompleteProcessSetting?tastid=" + '@ViewData["taskid"]';
             $(".click").click(function () {
                 $(".tip").fadeIn(200);
             });
-
             $(".tiptop a").click(function () {
                 $(".tip").fadeOut(200);
             });
-
             $(".sure").click(function () {
                 $(".tip").fadeOut(100);
             });
-
             $(".cancel").click(function () {
                 $(".tip").fadeOut(100);
             });
@@ -47,19 +54,21 @@
             $("#edit").click(function () {
                 window.parent.document.getElementById("rightframe").src = "/Home/Eidt";
             });
+            $("#Process").click(function () {
+               
+            });
             $("#BindingProductConfirmation").click(function () {
 
             });
-            $("#ProcessSetup").click(function () {
-           
+            $("#ProcessSetup").click(function () {          
                 $.ajax({
                     url: url,
                     type: 'post',
                     async: true,
                     success: function (data) {
                         if (data == "true") {
-                            layer.msg("删除成功", { icon: 6 });
-                            table.reload('tw');
+                            layer.msg("完成工艺成功！", { icon: 6 });
+                            window.parent.document.getElementById("rightframe").src = "/TaskManagement/MyTask";
                         }
                         if (data == "false") {
                             layer.msg('数据操作异常!', { icon: 5 });
@@ -74,43 +83,58 @@
                     table.render({
                         elem: '#tw'
                    , url: '/TaskManagement/CheckBOM?PName=' + '@ViewData["ProductName"]'
+                   , done: function () {
+                     $("tr a").hide()
+                     $("tr").hover(function () {
+                         $(this).children().last().children().children().toggle();
+                     })
+                                       }
                    , cols: [[
-
                    , { field: '序号', width: 57, title: '序号' }
-                   , { field: '工件编码', width: 200, title: '工件编码' }
-                   , { field: '子件编码', width: 200, title: '子件编码' }
+                   , { field: '工件编码', width: 230, title: '工件编码' }
+                   , { field: '子件编码', width: 200, title: '子件编码', event: 'zi', style: 'color: red' }
                    , {
                        field: '子件数量', width: 100, title: '子件数量'
                    }
-                   , { field: '原材料用量', title: '原材料用量', width: 200, edit: Text }
-                   , { field: '原材料单位', width: 200, title: '原材料单位', edit: Text }
-                   , { field: '是否组装件', width: 100, title: '是否组装件', }
-                   , { field: '工艺流程', width: 100, title: '工艺流程' }                  
+                   , { field: '原材料用量', title: '原材料用量', width: 200, edit: Text, style: 'color: #009688' }
+                   , { field: '原材料单位', width: 200, title: '原材料单位', edit: Text, style: 'color: #009688' }
+                   , { field: '是否组装件', width: 100, title: '是否组装件', templet: '#dd' }
+                   , { field: '工艺流程', width: 100, title: '工艺流程', event: 'xi', templet: '#cc' }
                    , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
                    ]]
 
-                    });
-               
+                    });              
                 table.on('checkbox(demo)', function (obj) {
                     console.log(obj)
                 });
 
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
-                    switch (obj.event) {
-                        case 'add':
-                            Zi = data.子件编码;
-                            window.parent.document.getElementById("rightframe").src = '/TaskManagement/TaskMapPart2?TaskID=' + '@Session["task2"]' + '&ProductName=' + '@Session["ProductName2"]' + '&ProductSpec=' + '@Session["ProductSpec2"]' + '&zi=' + Zi;
-                            break;
-                        case 'Detials':
+                    if (obj.event === 'xi') {
+                        var zj = data.是否组装件;
+                        if (zj == 0) {
+                            layer.msg('没有流程!');
+                        }
+                        else {
                             pn = data.子件编码;
                             var url = '/TaskManagement/EditingProcess?PartNumber=' + pn;
-                            window.parent.document.getElementById("rightframe").src = url;
-                            break;
+                            var index = layer.open({
+                                type: 2,
+                                content: url,
+                                area: ['1200px', '700px'],
+                                maxmin: true
+                            });
+                            layer.full(index);
+                        }                     
+                    }
+                    if (obj.event === 'zi') {
+                        Zi = data.子件编码;
+                        window.parent.document.getElementById("rightframe").src = '/TaskManagement/TaskMapPart2?TaskID=' + '@Session["task2"]' + '&ProductName=' + '@Session["ProductName2"]' + '&ProductSpec=' + '@Session["ProductSpec2"]' + '&zi=' + Zi;
+                    }
+                    switch (obj.event) {
                         case 'delete':
                             layer.confirm('真的删除行么', function (index) {
                                 id = data.序号;
-
                                 layer.close(index);
                                 var url = "/TaskManagement/DeleteBOM?id=" + id;
                                 $.ajax({
@@ -131,26 +155,39 @@
                             });
                             break;
                         case 'update':
-                            part = data.工件编码;
-                            child = data.子件编码;
+                            id = data.序号;
                             dosage = data.原材料用量;
                             unit = data.原材料单位;
-                            var url = "/TaskManagement/UpdateBOM?part=" + part + "&child=" + child + "&dosage=" + dosage + "&unit=" + unit;
+                                var url = "/TaskManagement/UpdateBOM?id="+id+ "&dosage=" + dosage + "&unit=" + unit;
+                                $.ajax({
+                                    url: url,
+                                    type: 'post',
+                                    async: true,
+                                    success: function (data) {
+                                        if (data == "true") {
+                                            layer.msg("修改成功", { icon: 6 });
+                                            table.reload('tw');
+                                        }
+                                        if (data == "false") {
+                                            layer.msg('用量和单位不能为空！', { icon: 5 });
+                                            return false;
+                                        }
+                                    }
+                                });                                                                                   
+                            break;
+                        case 'subpp':
+                            id = data.子件序号;
+                            var url = "/TaskManagement/SubmitPlan?taskid=" + "@Session["quetask"]" + "&partid=" + id;
                             $.ajax({
                                 url: url,
                                 type: 'post',
                                 async: true,
                                 success: function (data) {
                                     if (data == "true") {
-                                        layer.msg("修改成功", { icon: 6 });
-                                        table.reload('tw');
-                                    }
-                                    if (data == "false") {
-                                        layer.msg('修改失败!', { icon: 5 });
-                                        return false;
+                                        layer.msg("提交成功", { icon: 6 });                                      
                                     }
                                 }
-                            });
+                            });  
                             break;
                     };
                 });
@@ -163,13 +200,24 @@
 
     </script>
     <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-xs" id="add" lay-event="add">子件编码</a>
-        <a class="layui-btn layui-btn-xs" id="detials" lay-event="Detials">工艺流程</a>
         <a class="layui-btn layui-btn-xs" id="edit" lay-event="update">编辑</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete" data-type="getCheckLength" id="delete">删除</a>
+        @*<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="subpp" id="subpp">提交到计划部</a>*@
     </script>
+    <script type="text/html" id="cc">
+        {{#  if(d.工艺流程 != null){ }}
+        <span style="color: red">{{d.工艺流程}}</span>
+        {{#  } else { }}
 
-
+        {{#  } }}
+    </script>
+    <script type="text/html" id="dd">
+        {{#  if(d.是否组装件 == '0'){ }}
+        <span>否</span>
+        {{#  } else if(d.是否组装件 == '1'){ }}
+        <span>是</span> 
+        {{#  } }}
+    </script>
 </head>
 
 
@@ -187,18 +235,19 @@
                 </li>
                 <li>
                     产品名称：
-                    <input class="ProductName" id="ProductName" type="text" style="width: 180px;" value="@ViewData["ProductNamesd"]"/>
+                    <input class="ProductName" id="ProductName" type="text" style="width: 250px;" value="@ViewData["ProductNamesd"]" />
                 </li>
                 <li>
                     产品规格：
-                    <input class="ContractNumber" id="ContractNumber" type="text" style="width: 80px;" value="@ViewData["ProductSpec"]" />
-                </li>            
+                    <input class="ContractNumber" id="ContractNumber" type="text" style="width: 180px;" value="@ViewData["ProductSpec"]" />
+                </li>
                 <li>
                     工作目录：
                     <a href="#" id="m1">1</a>
                     <a href="#" id="m2" hidden="hidden">2</a>
                 </li>
             </ul>
+            <button class="layui-btn" id="Process" data-type="reload">查看工艺流程</button>
             <button class="layui-btn" id="ProcessSetup" data-type="reload">确认完成工艺设置</button>
         </div>
         <table class="tablelist" id="tw" lay-filter="demo"></table>

@@ -1,24 +1,45 @@
 ﻿table{
-    margin: 0px auto;
-    border:0px;
+    margin:0px auto;
+   
 }
+ @media   print   {  
+  body   {   font-size:   10px;
+  } 
+
+  }
+ table{
+    margin-left:45px;
+   
+}
+body {
+    font-size:16px;
+}
+    table td {
+         border:1px solid black;
+    }
+    table{
+        border-collapse: collapse;
+    }
     [colspan] {
         text-align: center;
     }
+    h1{
+       margin:0px auto;
+    }
 table{
-    width:85%;
+    width:80%;
 }
     table:nth-child(1) input {
-        width: 250px;
-        border: 0;
+        width: 350px;
+     
     }
+
     table:nth-child(5) input {
-        width: 250px;
-        border: 0;
+        width: 350px;
+       
     }
     table:nth-child(3) input {
-        width: 100px;
-        border: 0;
+        width: 250px;
         text-align: center;
     }
 li input {
@@ -26,6 +47,9 @@ li input {
     width: 100px;
 
 
+}
+span {
+ display:inline-block;
 }
 table:nth-child(5) {
     width: 1050px;
@@ -42,15 +66,15 @@ table:nth-child(1) {
     width: 1050px;
     line-height: 30px;
 }
-    table:nth-child(3) td:nth-child(3) label {
+    /*table:nth-child(3) td:nth-child(3){
         width: 20px;
     }
-    table:nth-child(3) td:nth-child(1) label {
+    table:nth-child(3) td:nth-child(1){
         width: 225px;
     }
-    table:nth-child(3) td:nth-child(2) label {
+    table:nth-child(3) td:nth-child(2){
         width: 225px;
-    }
+    }*/
     table:nth-child(3) {
         width: 1050px;
         text-align: center;
@@ -60,11 +84,11 @@ td label{
     display: inline-block;
     width: 120px;
 }
-
 input {
     border: 0;
     font-size: 16px;
-    border-bottom: 1px solid black;
+    /*border-bottom: 1px solid black;*/
+    text-align:center;
 }
 li {
     list-style-type:none;

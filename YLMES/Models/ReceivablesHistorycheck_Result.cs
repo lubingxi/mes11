@@ -21,5 +21,6 @@ namespace YLMES.Models
         public string TicketOpeningAndDate { get; set; }
         public string 创建人 { get; set; }
         public string 创建时间 { get; set; }
+        public string 收款类型 { get; set; }
     }
 }

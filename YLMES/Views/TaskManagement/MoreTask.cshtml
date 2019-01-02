@@ -1,0 +1,191 @@
+﻿@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+
+
+    <script type="text/javascript">
+        $(document).keydown(function (e) {
+            switch (e.keyCode) {
+                case 27:
+                    window.history.go(-1);
+                    break;
+            }
+        });
+        $(function () {
+            if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }
+            $(".click").click(function () {
+                $(".tip").fadeIn(200);
+            });
+
+            $(".tiptop a").click(function () {
+                $(".tip").fadeOut(200);
+            });
+
+            $(".sure").click(function () {
+                $(".tip").fadeOut(100);
+            });
+
+            $(".cancel").click(function () {
+                $(".tip").fadeOut(100);
+            });                    
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                table.render({
+                    elem: '#tw'
+               , url: '/TaskManagement/IwantMoreTask'
+               , page: true
+               , toolbar: '#toolbarDemo'
+               , limit: 15
+               , done: function () {
+                 $("tr a").hide()
+                 $("tr").hover(function () {
+
+                     $(this).children().last().children().children().toggle();
+                 })
+
+
+             }
+               , cols: [[
+                 { type: 'radio' }
+               , { field: '任务编号', width: 90, title: '任务编号' }
+               , { field: '任务名称', width: 210, title: '任务名称', event: 'ta', style: "color: red" }
+               , { field: '项目名称', width: 190, title: '项目名称', event: 'xi',style:"color: red" }
+               , { field: '产品名称', width: 220, title: '产品名称' }
+               , { field: '产品规格', width: 220, title: '产品规格' }
+               , { field: '机械设计人', width: 130, title: '机械设计人' }
+               , { field: '电气设计人', width: 130, title: '电气设计人' }
+               , { field: '审核人', width: 130, title: '审核人' }
+               , { field: '发行人', width: 130, title: '发行人' }
+               , { field: '任务状态', width: 200, title: '任务状态' }
+               , { field: 'right', width: 140, align: 'center', toolbar: '#barDemo',hide:true}
+               ]]
+
+                });
+                table.on('toolbar(demo)', function (obj) {
+                    var checkStatus = table.checkStatus(obj.config.id); //获取选中行状态
+                    var data = checkStatus.data;  //获取选中行数据
+                    var sd = JSON.stringify(data);
+                    var dataObj = eval("(" + sd + ")");//转换为json对象 
+                    switch (obj.event) {
+                        case 'getCheckData':
+                            $.each(dataObj, function (idx, item) {
+                                var bianhao = item.任务编号;
+                                var stus = item.任务状态;                              
+                                $.ajax({
+                                    url: "/TaskManagement/UpdateTaskForChangeOwner?task=" + bianhao+"&stus="+stus,
+                                                type: 'post',
+                                                success: function (data) {
+                                                    if (data == "true") {
+                                                        layer.msg("这个设计任务属于你了！", { icon: 6 });
+                                                        table.reload('tw');
+                                                    }
+                                                   else if (data == "pei") {
+                                                        layer.msg('你所选择的要设计才可以哦！', { icon: 5 });
+                                                    }
+                                                }
+                                            });
+                            });
+                            break;
+                        case 'getCheckData2':
+                            $.each(dataObj, function (idx, item) {
+                                var bianhao = item.任务编号;
+                                var stus = item.任务状态;
+                                $.ajax({
+                                    url: "/TaskManagement/updateTFCQO?task=" + bianhao + "&stus=" + stus,
+                                                type: 'post',
+                                                success: function (data) {
+                                                    if (data == "true") {
+                                                        layer.msg("这个审核任务属于你了！", { icon: 6 });
+                                                        table.reload('tw');
+                                                    }
+                                                   else if (data == "pei") {
+                                                        layer.msg('你所选择的要审核才可以哦！', { icon: 5 });
+                                                    }
+                                                }
+                                            });
+                            });
+                            break;
+                        case 'getCheckData3':
+                            $.each(dataObj, function (idx, item) {
+                                var bianhao = item.任务编号;
+                                var stus = item.任务状态;
+                                $.ajax({
+                                    url: "/TaskManagement/UpdateTFCIO?task=" + bianhao + "&stus=" + stus,
+                                                type: 'post',
+                                                success: function (data) {
+                                                    if (data == "true") {
+                                                        layer.msg("这个图纸任务属于你了！", { icon: 6 });
+                                                        table.reload('tw');
+                                                    }
+                                                    if (data == "pei") {
+                                                        layer.msg('你所选择的要图纸才可以哦！', { icon: 5 });
+                                                    }
+                                                }
+                                            });
+                            });
+                            break;
+                    }
+                });
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;
+                    if (obj.event === 'xi') {
+                       id = data.合同序号;
+                       window.parent.document.getElementById("rightframe").src = "/Home/Contract_Checks?id=" + id;
+                    }
+                    if (obj.event === 'ta') {
+                        taskid = data.任务编号;
+                        window.parent.document.getElementById("rightframe").src = "/TaskManagement/NameTasks/?id=" + taskid;
+                    }
+                });
+            });
+        })
+
+
+
+    </script>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="getCheckData" style="height:35px" id="btns">这个设计我要了哦</button>
+            <button class="layui-btn layui-btn-sm" lay-event="getCheckData2" style="height:35px" id="btns">这个审核任务我要了哦</button>
+            <button class="layui-btn layui-btn-sm" lay-event="getCheckData3" style="height:35px" id="btns">这个图纸发行任务我要了哦</button>
+        </div>
+    </script>
+    <script type="text/html" id="barDemo">
+    </script>
+
+</head>
+
+
+<body>
+
+    <div class="rightinfo">
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+
+
+
+
+    </div>
+    <script type="text/javascript">
+    $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+
+</body>
+</html>

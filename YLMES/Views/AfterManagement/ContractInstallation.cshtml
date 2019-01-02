@@ -1,0 +1,147 @@
+﻿@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        $(function () {
+            if ('@Session["name"]' == "") {
+                location.href = '/Home/Login'
+            }
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                    table.render({
+                        elem: '#tw'
+                   , url: '/AfterManagement/CheckContractInstallation?id='+'@ViewData["id"]'
+                   , cols: [[
+                       , {
+                           field: '', width: 20, title: '', hide: true
+                       }
+                   , { field: '序号', width: 210, title: '序号' }
+                   , { field: '合同编号', width: 120, title: '合同编号' }
+                   , { field: '产品名称', width: 200, title: '产品名称' }
+                   , { field: '产品规格', width: 150, title: '产品规格' }
+                   , { field: '单位', width: 80, title: '单位' }
+                   , { field: '合同数量', width: 80, title: '合同数量' }
+                   , { field: '发货数量', width: 80, title: '发货数量' }
+                   , { field: '已安装数量', width: 80, title: '已安装数量' }
+                   , { field: '今安装数量', width: 100, title: '今安装数量', edit: Text, style: 'color: #009688' }
+                   , { field: '完成时间', width: 130, title: '完成时间', edit: Text, style: 'color: #009688' }
+                   , { field: '是否验收', width: 80, title: '是否验收', edit: Text, style: 'color: #009688' }
+                   , { field: '验收时间', width: 130, title: '验收时间', edit: Text, style: 'color: #009688' }
+                   , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+                   ]]
+
+                    });
+            
+                table.on('checkbox(demo)', function (obj) {
+                    console.log(obj)
+                });
+
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;
+                    switch (obj.event) {
+                        case 'add':
+                            tid = data.序号;
+                            cid = data.合同编号;
+                            sn = data.发货数量;
+                            cn = data.合同数量;
+                            yan = data.已安装数量;
+                            jan = data.今安装数量;
+                            fish = data.完成时间;
+                            ifshou = data.是否验收;
+                            shoutime = data.验收时间;
+                            var url = '/AfterManagement/EditContractInstallation?sn=' + sn + '&yan=' + yan + '&jan=' + jan + '&fish=' + fish + '&ifshou=' + ifshou + '&shoutime=' + shoutime + '&pid=' + tid + '&cid=' + cid+'&cn='+cn;
+                            $.ajax({
+                                url: url,
+                                type: 'post',
+                                async: true,
+                                success: function (data) {
+                                    if (data == "true") {
+                                        layer.msg("修改成功!", { icon: 6 });
+                                        table.reload('tw');
+                                    }
+                                    if (data == "da") {
+                                        layer.msg("不能大于合同数量!", { icon: 6 });
+                                    }
+                                    if (data == "false") {
+                                        layer.msg('修改失败!', { icon: 5 });
+                                        return false;
+                                    }
+                                }
+                            });
+                            break;
+                        case 'update':
+                            tid = data.序号;
+                            cid = data.合同编号;
+                            var url = '/AfterManagement/InstallHistory?tid=' + tid + '&cid=' + cid+'&cn='+'@Session["CName2"]'+'&cnb='+'@Session["CNumber2"]';
+                            layer_show('历史记录', url, '1400', '800');
+                            break;
+                    };
+                });
+
+
+            });
+        })
+
+
+
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" id="detials" lay-event="add">修改</a>
+        <a class="layui-btn layui-btn-xs" id="edit" lay-event="update">安装历史记录</a>
+    </script>
+
+
+</head>
+
+
+<body>
+    <div class="rightinfo">
+
+        <div class="tools">
+
+            <ul class="toolbar">          
+                <li>
+                    客户名称：
+                    <input class="CustomerName" id="CustomerName" type="text" style="width: 180px;" value="@ViewData["CName"]" readonly="readonly"/>
+                </li>
+                <li>
+                    合同编号：
+                    <input class="ContractNumber" id="ContractNumber" type="text" style="width: 180px;" value="@ViewData["CNumber"]" readonly="readonly" />
+                </li>
+            </ul>
+        </div>
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+    </div>
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+
+        function admin_add(title, url, w, h) {
+            layer_show(title, url, w, h);
+        }
+    </script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" media="all" />
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <script src="~/js/jquery-3.3.1.js" type="text/javascript"></script>
+    <script src="~/laydate/laydate.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <title>MaterialManagement</title>
+    <style>
+        .layui-table-cell {
+            overflow: inherit;
+            height: inherit;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () { 
+        $(document).ajaxStart(function () {
+            layer.msg('加载中', {
+                icon: 16
+                , shade: 0.01
+                , time: false
+            });
+        })
+        $(document).ajaxStop(function () {
+            layer.closeAll();
+        });
+      
+            
+        layui.use(['table', 'layer', 'form'], function () {
+            
+            
+            var typeid = new Array();
+            var applierid = new Array();
+            var MaterialType = new Array();
+            var table = layui.table, layer = layui.layer
+                , form = layui.form;
+            var tableIns =table.render({
+                elem: '#tw'
+                , url: '/ApplierList/checkMaterial'
+                , page: true
+                , toolbar: 'default' 
+                , limit: 15
+                , cols: [[
+                    { field: 'ID', title: '序号', width: 80 }
+                    , { field: 'figureNumber', title: '图号',width:200 }
+                    , { field: 'PartNumber', title: '物料名称', width: 200}
+                    , { field: 'PartSpec', title: '物料规格', width: 200}
+                    , { field: 'PartMaterial', title: '物料材质', width: 200}
+                    , { field: 'ApplierProductTypeID', title: '物料类型', templet: '#Category', width: 250}
+                    , { field: 'ApplierId', title: '默认供应商', templet: '#Applier', width: 250}
+                    , { field: 'ContractTypeId', title: '合同种类', toolbar: '#se', width:280}
+                    , { align: 'center', toolbar: '#bsarDemo'}
+                ]]
+                , done: function (res) {
+                    for (var i = 0; i < res.data.length; i++) {
+                        typeid[i] = res.data[i].ContractTypeId;
+                        applierid[i] = res.data[i].ApplierId
+                        MaterialType[i] = res.data[i].ApplierProductTypeID
+                    }
+                    
+                    $.get("/ApplierList/checkContrType", function (data) {
+                        if (data != null) {
+                            $(".typeid").empty()
+                            for (var j = 0; j < typeid.length; j++) {
+                                for (var i = 0; i < data.length; i++) {
+                                    if (typeid[j] == data[i].id.trim()) {
+                                        $(".typeid:eq(" + j + ")").append("<option value='" + data[i].id.trim() + "' selected >" + data[i].type.trim() + "</option>")
+                                    } else {
+                                        $(".typeid:eq(" + j + ")").append("<option value='" + data[i].id.trim() + "'>" + data[i].type.trim() + "</option>")
+                                    }
+                                }
+                            }
+                        }
+                        form.render(null,'LAY-table-1');
+                    })
+                    $.get("/ApplierList/checkApplierName", function (data) {
+                        if (data != null) {
+                            $(".ApplierId").empty()
+                            for (var j = 0; j < applierid.length; j++) {
+                                for (var i = 0; i < data.length; i++) {
+                                    if (applierid[j] == data[i].ID) {
+                                        $(".ApplierId:eq(" + j + ")").append("<option value='" + data[i].ID+ "' selected >" + data[i].Name+ "</option>")
+                                    } else {
+                                        $(".ApplierId:eq(" + j + ")").append("<option value='" + data[i].ID + "'>" + data[i].Name+ "</option>")
+                                    }
+                                }
+                            }
+                        }
+                        form.render(null, 'LAY-table-1');
+                    })
+                    $.get("/ApplierList/checkPurchase", function (data) {
+                        if (data != null) {
+                          $(".CategoryId").empty()
+                            for (var j = 0; j < MaterialType.length; j++) {
+                                for (var i = 0; i < data.length; i++) {
+                                    if (MaterialType[j] == data[i].ID) {
+                                        $(".CategoryId:eq(" + j + ")").append("<option value='" + data[i].ID+ "' selected >" + data[i].Name+ "</option>")
+                                    } else {
+                                        $(".CategoryId:eq(" + j + ")").append("<option value='" + data[i].ID+ "'>" + data[i].Name+ "</option>")
+                                    }
+                                }
+                            }
+                        }
+                        form.render(null, 'LAY-table-1');
+                    })
+                }
+            });
+            $.get("/ApplierList/checkContrType", function (data) {
+                if (data != null) {
+                    for (var i = 0; i < data.length; i++) {
+                        $(".type").append("<option value='" + data[i].id.trim() + "'>" + data[i].type.trim() + "</option>")
+                    }
+                }
+                form.render();
+            });
+           
+            $("#check").click(function () {
+                var name = $(".Name").val().trim();
+                var type = $(".type").val();
+                tableIns.reload({
+                    where: {
+                        name:name
+                        ,ContractTypeId:type
+                    }
+                    , page: {
+                        curr: 1
+                    }
+                });
+            })
+            });
+        })
+    </script>
+    <script type="text/html" id="bsarDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+        <a class="layui-btn layui-btn-xs" lay-event="sh">审核</a>
+        <a class="layui-btn layui-btn-xs" lay-event="bb">绑定</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" lay-filter="demo">删除</a>
+    </script>
+    <script type="text/html" id="se" >
+        <select class="typeid" ></select>
+    </script>
+    <script type="text/html" id="Category">
+        <select class="CategoryId"></select>
+    </script>
+    <script type="text/html" id="Applier">
+        <select class="ApplierId"></select>
+    </script>
+</head>
+<body>
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">采购管理</a></li>
+            <li><a href="#">物料信息管理</a></li>
+        </ul>
+    </div>
+    <div class="layui-form layui-form-pane" action="">
+
+        <div class="layui-form-item" pane >
+            <div class="layui-inline" style="margin-top:5px">
+                <label class="layui-form-label">物料名称：</label>
+                <div class="layui-input-block">
+                    <input type="text" name="Name" class="layui-input Name">
+                </div>
+            </div>
+            <div class="layui-inline" style="margin-top:5px">
+                <label class="layui-form-label">合同类型：</label>
+                <div class="layui-input-block">
+                    <select class="type" lay-filter="texe"><option value="">请选择</option></select>
+                </div>
+            </div>
+            <button class='layui-btn' id="check">查询</button>
+        </div>
+    </div>
+    <table id="tw" ></table>
+</body>
+</html>

@@ -18,8 +18,11 @@ namespace YLMES.Models
         public string 产品规格 { get; set; }
         public string 产品型号 { get; set; }
         public Nullable<double> 订单数量 { get; set; }
+        public Nullable<int> 部件编号 { get; set; }
+        public string 部件级别 { get; set; }
+        public string 部件规格 { get; set; }
         public string 部件 { get; set; }
-        public Nullable<int> 每套数量 { get; set; }
+        public int 每套数量 { get; set; }
         public Nullable<double> 工单数量 { get; set; }
         public string 工单名称 { get; set; }
         public string 生成工单 { get; set; }

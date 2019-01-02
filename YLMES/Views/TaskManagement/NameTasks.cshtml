@@ -1,0 +1,506 @@
+﻿<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="~/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="~/static/h-ui.admin/css/style.css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <!--[if IE 6]>
+    <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <!--/meta 作为公共模版分离出去-->
+
+    <title>基本设置</title>
+
+</head>
+<body>
+    <nav class="breadcrumb">
+        <i class="Hui-iconfont">&#xe67f;</i> 首页
+        <span class="c-gray en">&gt;</span>
+        任务管理
+        <span class="c-gray en">&gt;</span>
+        我的任务
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+    </nav>
+    <div class="page-container">
+        <form class="form form-horizontal" id="form-article-add">
+            <div id="tab-system" class="HuiTab">
+                <div class="tabBar cl">
+                    <span>任务信息</span>
+                    <span>技术部</span>
+                    <span>工艺部</span>
+                    <span>采购部</span>
+                    <span>计划部</span>
+                    <span>生产部</span>
+                    <span>成品仓</span>
+                    <span>售后部</span>
+                </div>
+                <div class="tabCon">
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            任务状态：
+                        </label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-title" value="@ViewData["Status"]" class="input-text" readonly="readonly">
+                            
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            下一步：
+                        </label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-title" value="@ViewData["ifDrive"]" class="input-text" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            客户名称：
+                        </label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-Keywords" value="@ViewData["CustomerName"]" class="input-text" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            合同编号：
+                        </label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-description" value="@ViewData["ContractNumber"]" class="input-text" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            产品名称：
+
+                        </label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="pcName" value="@ViewData["ProductName"]" class="input-text" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            任务名称：
+                        </label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-uploadfile" value="@ViewData["TaskName"]" class="input-text" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            产品规格：
+                        </label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="spec" value="@ViewData["ProductSpec"]" class="input-text" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            机械/电气：
+                        </label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="Choose" value="@ViewData["ifDrive"]" class="input-text" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            任务类型：
+                        </label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="TaskType" value="@ViewData["name"]" class="input-text" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            紧急程度：
+                        </label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-copyright" value="@ViewData["PriorityCode"]" class="input-text" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2">
+                            <span class="c-red">*</span>
+                            任务备注：
+                        </label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="website-copyright" value="@ViewData["taskdesc"]" class="input-text" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务附件1：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" name="fileDownA" id="file1" value="@ViewData["file1"]" readonly="readonly">
+                            <a href="~/TaskManagement/FileADownload?file1=@ViewData["fileDownA"]">下载</a>
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务附件2：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" name="fileDownB" value="@ViewData["file2"]" id="file2" readonly="readonly">
+                            <a href="~/TaskManagement/FileBDownload?file2=@ViewData["fileDownB"]">下载</a>
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务附件3：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" name="fileDownC" id="file3" value="@ViewData["file3"]" readonly="readonly">
+                            <a href="~/TaskManagement/FileCDownload?file3=@ViewData["fileDownC"]">下载</a>
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计截至日期：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" onfocus="WdatePicker()" id="JieDate" name="JieDate" readonly="readonly" class="input-text Wdate" value="@ViewData["JieDate"]">
+                        </div>
+                    </div>
+                </div>
+                <div class="tabCon">
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计人：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="Owner" name="Owner" readonly="readonly" class="input-text" value="@ViewData["Owner"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计分值：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="BaseScore" name="BaseScore" readonly="readonly" class="input-text" value="@ViewData["BaseScore"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计基准时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="BaseTime" name="BaseTime" readonly="readonly" class="input-text" value="@ViewData["BaseTime"]">小时
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计开始时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="ConfirmTime" name="ConfirmTime" readonly="readonly" class="input-text" value="@ViewData["ConfirmTime"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计完成时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="CompletedTime" name="CompletedTime" readonly="readonly" class="input-text" value="@ViewData["CompletedTime"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计是否逾期：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="OverDue" name="OverDue" readonly="readonly" class="input-text" value="@ViewData["OverDue"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>审核人：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="QualifiedOwner" name="QualifiedOwner" readonly="readonly" class="input-text" value="@ViewData["QualifiedOwner"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>审核分值：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="QualifiedBaseScore" name="QualifiedBaseScore" readonly="readonly" class="input-text" value="@ViewData["QualifiedBaseScore"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>审核基准时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="QualifiedBaseTime" name="QualifiedBaseTime" readonly="readonly" class="input-text" value="@ViewData["QualifiedBaseTime"]">小时
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>审核开始时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="QualifiedConfirmTime" name="QualifiedConfirmTime" readonly="readonly" class="input-text" value="@ViewData["QualifiedConfirmTime"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>审核完成时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="QualifiedCompletedTime" name="QualifiedCompletedTime" readonly="readonly" class="input-text" value="@ViewData["QualifiedCompletedTime"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>审核是否逾期：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="QualifiedOverDue" name="QualifiedOverDue" readonly="readonly" class="input-text" value="@ViewData["QualifiedOverDue"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图纸发行人：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="IssueOwner" name="IssueOwner" readonly="readonly" class="input-text" value="@ViewData["IssueOwner"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图纸发行分值：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="IssueBaseScore" name="IssueBaseScore" readonly="readonly" class="input-text" value="@ViewData["IssueBaseScore"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图纸发行基准时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="IssueBaseTime" name="IssueBaseTime" readonly="readonly" class="input-text" value="@ViewData["IssueBaseTime"]">小时
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图纸发行开始时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="IssueConfirmTime" name="IssueConfirmTime" readonly="readonly" class="input-text" value="@ViewData["IssueConfirmTime"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图纸发行完成时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="IssueCompletedTime" name="IssueCompletedTime" readonly="readonly" class="input-text" value="@ViewData["IssueCompletedTime"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图纸发行是否逾期：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="IssueOverDue" name="IssueOverDue" readonly="readonly" class="input-text" value="@ViewData["IssueOverDue"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>最大载重：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="CarryingCapacity" name="CarryingCapacity" class="input-text" value="@ViewData["CarryingCapacity"]">
+                        </div>
+                    </div>
+                </div>
+                <div class="tabCon">
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>负责人：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="PEOwner" name="PEOwner" class="input-text" value="@ViewData["PEOwner"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>基准时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="PEBaseTime" name="PEBaseTime" class="input-text" value="@ViewData["PEBaseTime"]">小时
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>开始时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="PEConfirmTime" name="PEConfirmTime" class="input-text" value="@ViewData["PEConfirmTime"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>完成时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="PECompletedTime" name="PECompletedTime" class="input-text" value="@ViewData["PECompletedTime"]">
+                        </div>
+                    </div>
+                </div>
+                <div class="tabCon">
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>负责人：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="PurchaseOwner" name="PurchaseOwner" class="input-text" value="@ViewData["PurchaseOwner"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>基准时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="PurchaseBaseTime" name="PurchaseBaseTime" class="input-text" value="@ViewData["PurchaseBaseTime"]">小时
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>开始时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="PurchaseConfirmTime" name="PurchaseConfirmTime" class="input-text" value="@ViewData["PurchaseConfirmTime"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>完成时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="PurchaseCompletedTime" name="PurchaseCompletedTime" class="input-text" value="@ViewData["PurchaseCompletedTime"]">
+                        </div>
+                    </div>
+                </div>
+                <div class="tabCon">
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>负责人：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="PMCOwner" name="PMCOwner" class="input-text" value="@ViewData["PMCOwner"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>基准时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="PMCBaseTime" name="PMCBaseTime" class="input-text" value="@ViewData["PMCBaseTime"]">小时
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>开始时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="PMCConfirmTime" name="PMCConfirmTime" class="input-text" value="@ViewData["PMCConfirmTime"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>完成时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="PMCCompletedTime" name="PMCCompletedTime" class="input-text" value="@ViewData["PMCCompletedTime"]">
+                        </div>
+                    </div>
+                </div>
+                <div class="tabCon">
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>负责人：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="ProductOwner" name="ProductOwner" class="input-text" value="@ViewData["ProductOwner"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>基准时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="ProductBaseTime" name="ProductBaseTime" class="input-text" value="@ViewData["ProductBaseTime"]">小时
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>开始时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="ProductConfirmTime" name="ProductConfirmTime" class="input-text" value="@ViewData["ProductConfirmTime"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>完成时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="ProductCompletedTime" name="ProductCompletedTime" class="input-text" value="@ViewData["ProductCompletedTime"]">
+                        </div>
+                    </div>
+                </div>
+                <div class="tabCon">
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>负责人：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="WHOwner" name="WHOwner" class="input-text" value="@ViewData["WHOwner"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>基准时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="WHDeliveryBasetime" name="WHDeliveryBasetime" class="input-text" value="@ViewData["WHDeliveryBasetime"]">小时
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>开始时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="WHConfirmTime" name="WHConfirmTime" class="input-text" value="@ViewData["WHConfirmTime"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>完成时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="WHCompletedTime" name="WHCompletedTime" class="input-text" value="@ViewData["WHCompletedTime"]">
+                        </div>
+                    </div>
+                </div>
+                <div class="tabCon">
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>负责人：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="InstallOwner" name="InstallOwner" class="input-text" value="@ViewData["InstallOwner"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>基准时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="InstallBasetime" name="InstallBasetime" class="input-text" value="@ViewData["InstallBasetime"]">小时
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>开始时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="InstallConfirmTime" name="InstallConfirmTime" class="input-text" value="@ViewData["InstallConfirmTime"]">
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>完成时间：</label>
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="text" id="InstallCompletedTime" name="InstallCompletedTime" class="input-text" value="@ViewData["InstallCompletedTime"]">
+                        </div>
+                    </div>
+                    
+               
+            </div>     
+                <div class="row cl">
+
+                </div>   
+        </form>  
+        @*<button class="layui-btn layui-btn-normal" id="OK">返回</button>*@
+    </div>
+
+    <!--_footer 作为公共模版分离出去-->
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+    <script type="text/javascript" src="~/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+    <script type="text/javascript" src="~/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+    <style>
+        #OK {
+            margin-left: 300px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).keydown(function (e) {
+            switch (e.keyCode) {
+                case 27:
+                    window.history.go(-1);
+                    break;
+                case 13:
+                    $(".layui-btn").click();
+                    break;
+            }
+        });
+    $(function () {
+        $('.skin-minimal input').iCheck({
+            checkboxClass: 'icheckbox-blue',
+            radioClass: 'iradio-blue',
+            increaseArea: '20%'
+        });
+        $("#OK").click(function () {
+            //window.parent.document.getElementById("rightframe").src = "/TaskManagement/MoreTask";      
+            window.history.go(-1);
+        });
+        $("#tab-system").Huitab({
+            index: 0
+        });
+    });
+    </script>
+    <!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

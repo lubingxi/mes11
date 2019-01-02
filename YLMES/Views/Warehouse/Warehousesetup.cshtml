@@ -1,0 +1,173 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>友力信息管理系统</title>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/html" id="bsarDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="sel">查看库区</a>
+        <a class="layui-btn layui-btn-xs" lay-event="add">添加仓库</a>
+        <a class="layui-btn layui-btn-xs" lay-event="addWH">增加库区</a>
+        <a class="layui-btn layui-btn-xs" lay-event="updata">更新仓库</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除仓库</a>
+    </script>
+    <script>
+        $(function () {
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                var WarehouseName = $('#WarehouseName').val();
+                var CreatedTimestart = $('.CreatedTime').val();
+                var CreatedTimeEnd = $('.TimeEnd').val();
+                $('#PurchaselistSel').click(function () {
+                    table.render({
+                        elem: '#tw'
+                , url: '/Warehouse/Warehouselist?WarehouseName=' + WarehouseName + '&CreatedTimestart=' + CreatedTimestart + '&CreatedTimeEnd=' + CreatedTimeEnd
+                , page: true
+                , done: function () {
+                            $("tr a").hide();
+                            $("tr").hover(function () {
+                                $(this).children().last().children().children().toggle();
+                            })
+                        }
+                , limit: 15
+                , cols: [[
+                  { field: '序号', width: 80, title: '序号', edit: 'text' }
+                , { field: '仓库名', width: 100, title: '仓库名', edit: 'text' }
+                , { field: '描述', width: 210, title: '描述', edit: 'text' }
+                , { field: '建库时间', width: 235, title: '建库时间' }
+                , { field: '建库人', width: 180, title: '建库人', edit: 'text' }
+                , { field: '状态', width: 100, title: '状态', edit: 'text' }
+               , { field: 'right', width: 380, align: 'center', toolbar: '#bsarDemo' }
+                ]]
+                    })
+                });
+
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data //获得当前行数据
+                   , layEvent = obj.event; //获得 lay-event 对应的值
+                    var id = data.序号;
+                    var Name = data.仓库名;
+                    var Description = data.描述;
+                    var CreatedBy = data.建库人;
+                    var StatusID = data.状态;
+                    switch (layEvent) {
+                        case 'del':
+                            layer.confirm('真的删除行么', function (index) {
+                                $.ajax({
+                                    url: "/Warehouse/Warehousedel",
+                                    data: { id: id },
+                                    type: "post",
+                                    dataType: "text",
+                                    success: function (data) {
+                                        if (data == "true") {
+                                            layer.msg('删除成功');
+                                        } else {
+                                            layer.msg('删除失败');
+                                        }
+                                    }
+                                });
+                                obj.del(); //删除对应行（tr）的DOM结构
+                                layer.close(index);
+                                //向服务端发送删除指令
+                            });
+                            break
+                        case 'sel':
+                            layer.open({
+                                type: 2
+                                , content: '/Warehouse/Warehousesel?id=' + id+'&Name='+Name
+                                ,area: ['90%', '800px']
+                                ,anim: 2
+                            });
+                            break
+                        case 'add':
+                            layer.open({
+                                type: 2
+                               , content: '/Warehouse/Warehouseadd'
+                                , area: ['500px', '400px']
+                               , anim: 2
+                            });
+                            break
+                        case 'updata':
+                            $.ajax({
+                                type: "post",
+                                url: "/Warehouse/Warehouseupdata",
+                                data: {id:id,Name: Name,Description:Description,CreatedBy:CreatedBy,StatusID:StatusID},
+                                dataType: "text",
+                                success: function (data) {
+                                    if (data == "true") {
+                                        layer.msg('修改成功');
+                                        table.render();
+                                    } else {
+                                        layer.msg('修改失败');
+                                    }
+                                }
+                            });
+                            break;
+                        case 'addWH':
+                            layer.open({
+                            type: 2
+                         , content: '/Warehouse/WarehouseArea?Name=' + Name
+                          , area: ['500px', '400px']
+                         , anim: 2
+                            });
+                            break;
+
+                    }
+                });
+            });
+            $('#batch').click(function () {
+                layer.open({
+                    type: 2
+                         , content: '/Warehouse/WHbatch'
+                          , area: ['800px', '800px']
+                         , anim: 2
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">采购管理</a></li>
+            <li><a href="#">采购清单</a></li>
+        </ul>
+    </div>
+    <div class="rightinfo">
+        <div class="tools">
+            <ul class="toolbar">
+                <li>
+                    仓库名称:
+                    <input class="WarehouseName" id="WarehouseName" type="text" style="width: 180px;" />
+                </li>
+                <li>
+                    建库日期：
+                    <input class="CreatedTime" id="text1" type="text" onclick="WdatePicker()" style="width: 80px;" />
+                </li>
+                <li>
+                    到：
+                    <input class="TimeEnd" type="text" id="text2" onclick="WdatePicker()" style="width: 80px;" />
+                </li>
+
+            </ul>
+            <button class="layui-btn" data-type="reload" id="PurchaselistSel">查询</button>
+            <button class="layui-btn" data-type="reload" id="batch">批量添加</button>
+        </div>
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+    </div>
+</body>
+</html>
+

@@ -29,5 +29,12 @@ namespace YLMES.Models
         public string 合同总结 { get; set; }
         public string 合同状态 { get; set; }
         public string 是否通过 { get; set; }
+        public string 货款情况 { get; set; }
+        public string 订单金额 { get; set; }
+        public string 发货收款金额 { get; set; }
+        public string 安装前金额 { get; set; }
+        public string 验收金额 { get; set; }
+        public string 质保金额 { get; set; }
+        public Nullable<int> 客户id { get; set; }
     }
 }

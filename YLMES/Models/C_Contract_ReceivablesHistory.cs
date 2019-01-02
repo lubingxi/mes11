@@ -23,5 +23,6 @@ namespace YLMES.Models
         public string CreatedBy { get; set; }
         public string CreatedTime { get; set; }
         public string Status { get; set; }
+        public Nullable<int> PaymentID { get; set; }
     }
 }

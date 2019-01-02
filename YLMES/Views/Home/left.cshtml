@@ -6,30 +6,259 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>无标题文档</title>
+    <title>友力信息管理系统</title>
     <link href="../../css/style.css" rel="stylesheet" type="text/css" />
     <script language="JavaScript" src="../../js/jquery.js"></script>
 
     <script type="text/javascript">
-$(function(){
-	//导航切换
-	$(".menuson li").click(function(){
-		$(".menuson li.active").removeClass("active")
-		$(this).addClass("active");
-		var sd = $(this).children("i").text();
-		window.parent.document.getElementById("rightframe").src = sd;
-	});
+        $(function () {
+            var d = 0;
+            //	//导航切换
+            if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            } else { 
+            $.ajax({
+                type: "POST",
+                url: '/Home/Jurisdiction',
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    if (data != null) {
+                        $.each(data, function (i, result) {
+                            switch (result.Catelog) {
+                                case "系统设置":
+                                    if ($('#systemsti').attr("id") == undefined) {
+                                        $('.leftmenu').append('<dd><div class="title" id="systemsti"> <span><img src="../../images/leftico01.png" /></span>系统设置 </div> </dd>');
+                                        $('#systemsti').after('<ul class="menuson" id="systemsetup"></ul>');
+                                    }
+                                    switch (result.FuncationName) {
 
-	$('.title').click(function(){
-		var $ul = $(this).next('ul');
-		$('dd').find('ul').slideUp();
-		if($ul.is(':visible')){
-			$(this).next('ul').slideUp();
-		}else{
-			$(this).next('ul').slideDown();
-		}
-	});
-})
+                                        case "权限设置":
+                                            $('#systemsetup').append(' <li><cite></cite><a href="#">权限设置</a><i hidden="hidden">/SystemSettings/Permissions</i></li>');
+                                            break;
+                                        case "生产线":
+                                            $('#systemsetup').append('<li><cite></cite><a href="#">生产线</a><i hidden="hidden">/SystemSettings/ProductLine</i></li>');
+                                            break;
+                                        case "生产工位类型":
+                                            $('#systemsetup').append('<li><cite></cite><a href="#">生产工位类型</a><i hidden="hidden">/SystemSettings/LocationType</i></li>');
+                                            break;
+                                        case "生产工位":
+                                            $('#systemsetup').append('<li><cite></cite><a href="#">生产工位</a><i hidden="hidden">/SystemSettings/ProductStation</i></li>');
+                                            break;
+                                        case "工件库":
+                                            $('#systemsetup').append('<li><cite></cite><a href="#">工件库</a><i hidden="hidden">/SystemSettings/Process</i></li>');
+                                            break;
+                                        case "工艺BOM":
+                                            $('#systemsetup').append('<li><cite></cite><a href="#">工艺BOM</a><i hidden="hidden">/SystemSettings/Process</i></li>');
+                                            break;
+                                        case "工艺流程":
+                                            $('#systemsetup').append('<li><cite></cite><a href="#">工艺流程</a><i hidden="hidden">/TaskManagement/EditingProcess?PartNumber=""</i></li>');
+                                            break;
+                                        case "仓库设置":
+                                            $('#systemsetup').append(' <li><cite></cite><a href="#">仓库设置</a><i hidden="hidden">/Warehouse/Warehousesetup</i></li>');
+                                            break;
+                                    }
+                                    break;
+                                case "销售管理":
+                                    if ($('#distributiontitle').attr("id") == undefined) {
+                                        $('.leftmenu').append('<dd><div class="title" id="distributiontitle">  <span><img src="../../images/leftico01.png" /></span>销售管理 </div> </dd>');
+                                        $('#distributiontitle').after('<ul class="menuson" id="distribution"></ul>');
+                                    }
+                                    switch (result.FuncationName) {
+                                        case "销售合同创建":
+                                            $('#distribution').append('<li class="active"><cite></cite><a target="rightFrame">销售合同创建</a><i hidden>/Home/SalesCreation</i></li>');
+                                            break;
+                                        case "销售合同查询":
+                                            $('#distribution').append('<li><cite></cite><a target="rightFrame">销售合同查询</a><i hidden>/Home/PM_Contract_Check</i></li>');
+                                            break;
+                                        case "销售合同收款":
+                                            $('#distribution').append('<li><cite></cite><a target="rightFrame">销售合同收款</a><i hidden>/Home/PM_ContractReceivablesMain</i></li>');
+                                            break;
+                                    }
+                                    break;
+                                case "生产计划":
+                                    d = 1;
+                                    if ($('#Productionplantitle').attr("id") == undefined) {
+                                        $('.leftmenu').append('<dd><div class="title" id="Productionplantitle">  <span><img src="../../images/leftico01.png" /></span>生产计划 </div> </dd>');
+                                        $('#Productionplantitle').after(' <ul class="menuson" id="Productionplan"></ul>');
+                                    }
+                                    switch (result.FuncationName) {
+                                        case "生产订单创建":
+                                            $('#Productionplan').append('<li><cite></cite><a href="#">生产订单创建</a><i hidden=hidden>/ProductionPlanning/PPCreaty</i></li>');
+                                            break;
+                                        case "工单管理":
+                                            $('#Productionplan').append('<li><cite></cite><a href="#">工单管理</a><i hidden=hidden>/ProductionPlanning/WorkManagement</i></li>');
+                                            break;
+
+                                    }
+                                    break;
+                                case "采购管理":
+                                    if ($('#Purchasetitle').attr("id") == undefined) {
+                                        $('.leftmenu').append('<dd><div class="title" id="Purchasetitle">  <span><img src="../../images/leftico01.png" /></span>采购管理 </div> </dd>');
+                                        $('#Purchasetitle').after('<ul class="menuson" id="Purchase"></ul>');
+                                    }
+                                    switch (result.FuncationName) {
+                                        case "采购清单":
+                                            $('#Purchase').append('<li><cite></cite><a href="#">采购清单</a><i hidden=hidden>/ApplierList/Purchaselist</i></li>');
+                                            break;
+                                        case "物料信息管理":
+                                            $('#Purchase').append('<li><cite></cite><a href="#">物料信息管理</a><i hidden=hidden>/ApplierList/MaterialManagement</i></li>');
+                                            break;
+                                        case "供应商信息管理":
+                                            $('#Purchase').append('<li><cite></cite><a href="#">供应商信息管理</a><i hidden=hidden>/ApplierList/Supplier</i></li>');
+                                            break;
+                                        case "合同管理":
+                                            $('#Purchase').append('<li><cite></cite><a href="#">采购合同管理</a><i hidden=hidden>/PurchasingManage/PurchaseCou</i></li>');
+                                                break;
+                                    }
+                                    break;
+                                case "品质管理":
+                                    if ($('#qualitytitle').attr("id") == undefined) {
+                                        $('.leftmenu').append('<dd><div class="title" id="qualitytitle">  <span><img src="../../images/leftico01.png" /></span>品质管理 </div> </dd>');
+                                        $('#qualitytitle').after(' <ul class="menuson" id="quality"></ul>');
+                                    }
+                                    switch (result.FuncationName) {
+                                        case "品质报告":
+                                            $('#quality').append('<li><cite></cite><a href="#">品质报告</a><i hidden=hidden></i></li>')
+                                            break;
+                                    }
+                                    break;
+                                    //case "成品仓":
+                                    //    $('.leftmenu').append('<dd>  <div class="title">  <span><img src="../../images/leftico01.png" /></span>成品仓 </div> </dd>');
+                                    //    $('.leftmenu').append(' <ul class="menuson"></ul>');
+                                    //    switch (result.FuncationName) {
+                                    //        case "":
+                                    //            break;
+                                    //    }
+                                    //    break;
+                                case "原材料仓":
+                                    if ($('#Rawmaterialtitle').attr("id") == undefined) {
+                                        $('.leftmenu').append('<dd><div class="title" id="Rawmaterialtitle">  <span><img src="../../images/leftico01.png" /></span>原材料仓 </div> </dd>');
+                                        $('#Rawmaterialtitle').after('<ul class="menuson" id="Rawmaterial"></ul>');
+                                    }
+                                    switch (result.FuncationName) {
+                                        case "物料注册":
+                                            $('#Rawmaterial').append('<li><cite></cite><a href="#">物料注册</a><i hidden=hidden>/Rms/MaterialRegistration</i></li>')
+                                            break;
+                                        case "库存查询":
+                                            $('#Rawmaterial').append('<li><cite></cite><a href="#">原材料库存查询</a><i hidden=hidden>/Rms/MaterialsStock</i></li>')
+                                            break;
+                                    }
+                                    break;
+                                case "车间生产管理":
+                                    if ($('#Workshoptitle').attr("id") == undefined) {
+                                        $('.leftmenu').append('<dd><div class="title" id="Workshoptitle">  <span><img src="../../images/leftico01.png" /></span>车间生产管理 </div> </dd>');
+                                        $('#Workshoptitle').after('<ul class="menuson" id="Workshop"></ul>');
+                                    }
+                                    switch (result.FuncationName) {
+                                        case "包装":
+                                            $('#Workshop').append('<li><cite></cite><a href="#">包装</a><i hidden=hidden>/ProductionPlanning/Pack</i></li>')
+                                            break;
+                                    }
+                                    break;
+                                case "任务":
+
+                                    if ($('#task1').attr("id") == undefined) {
+                                        $('.leftmenu').append('<dd><div class="title" id="task1">  <span><img src="../../images/leftico01.png" /></span>任务 </div> </dd>');
+                                        $('#task1').after('<ul class="menuson" id="task"></ul>');
+                                    }
+                                    switch (result.FuncationName) {
+                                        case "任务分配":
+                                            $("#task").append('<li><cite></cite><a href="#">任务分配</a><i hidden="hidden">/TaskManagement/TaskAllocation</i></li>');
+                                            break;
+                                        case "我的任务":
+                                            //if (d == 1) {
+                                            //    $("#task").append('<li><cite></cite><a href="#">我的任务</a><i hidden="hidden">/TaskManagement/PTask</i></li>');
+                                            //} else {
+                                                $("#task").append('<li><cite></cite><a href="#">我的任务</a><i hidden="hidden">/TaskManagement/MyTask</i></li>');
+                                           // }                                          
+                                            break;
+                                        case "已完成的任务":
+                                            $("#task").append('<li><cite></cite><a href="#">已完成的任务</a><i hidden="hidden">/TaskManagement/CompletedTasks</i></li>');
+                                            break;
+                                    }
+                                    break;
+                                case "统计报表":
+                                    if ($('#statisticaltitle').attr("id") == undefined) {
+                                        $('.leftmenu').append('<dd><div class="title" id="statisticaltitle">  <span><img src="../../images/leftico01.png" /></span>统计报表 </div> </dd>');
+                                        $('#statisticaltitle').after('<ul class="menuson" id="stati"></ul>');
+
+                                    }
+                                    switch (result.FuncationName) {
+
+                                        case "任务统计报表":
+                                            $('#stati').append('<li><cite></cite><a href="#">任务统计报表</a><i hidden="hidden">/Statistical/Report</i></li>');
+                                            break;
+                                        case "个人成绩":
+                                            $('#stati').append('<li><cite></cite><a href="#">个人成绩</a><i hidden="hidden">/Statistical/Scroe</i></li>');
+
+                                            break;
+                                        case "部门人员工作状况":
+                                            $('#stati').append('<li><cite></cite><a href="#">部门人员工作状况</a><i hidden="hidden">/Statistical/Department</i></li>');
+                                            break;
+                                        case "生产报表":
+                                            $('#stati').append('<li><cite></cite><a href="#">生产报表</a><i hidden="hidden">/Statistical/sssss</i></li>');
+                                            break;
+                                    }
+                                    break;
+                                case "技术部":
+                                    if ($('#technologytitle').attr("id") == undefined) {
+                                        $('.leftmenu').append('<dd><div class="title" id="technologytitle">  <span><img src="../../images/leftico01.png" /></span>技术部 </div> </dd>');
+                                        $('#technologytitle').after(' <ul class="menuson" id="technology"></ul>');
+                                    }
+                                    switch (result.FuncationName) {
+                                        case "上传图纸":
+                                            $('#technology').append('<li><cite></cite><a href="#">上传图纸</a><i hidden=hidden>/TechnicalDepartment/UploadTheDrawings</i></li>');
+                                            break;
+                                    }
+                                    break;
+                                case "售后":
+                                    if ($('#aftersalestitle').attr("id") == undefined) {
+                                        $('.leftmenu').append('<dd><div class="title" id="aftersalestitle">  <span><img src="../../images/leftico01.png" /></span>售后管理 </div> </dd>');
+                                        $('#aftersalestitle').after('<ul class="menuson" id="aftersales"></ul>');
+                                    }
+                                    switch (result.FuncationName) {
+                                        case "售后安装":
+                                            $('#aftersales').append('<li><cite></cite><a href="#">售后安装</a><i hidden=hidden>/AfterManagement/Installation</i></li>');
+                                            break;
+                                    }
+                                    break;
+                                case "问题讨论区":
+                                    if ($('#discussiontitle').attr("id") == undefined) {
+                                        $('.leftmenu').append('<dd><div class="title" id="discussiontitle">  <span><img src="../../images/leftico01.png" /></span>问题讨论区 </div> </dd>');
+                                        $('#discussiontitle').after('<ul class="menuson" id="discussion"></ul>');
+                                    }
+                                    switch (result.FuncationName) {
+                                        case "问题讨论区":
+                                            $('#discussion').append('<li><cite></cite><a href="#">问题讨论区</a><i hidden=hidden></i></li>');
+                                            break;
+                                    }
+                                    break;
+                            }
+
+
+                        });
+                    }
+                }
+            });
+            $(".menuson li").click(function () {
+                $(".menuson li.active").removeClass("active")
+                $(this).addClass("active");
+                var src = $(this).children("i").text();
+                window.parent.document.getElementById("rightframe").src = '/Home/Loading?src='+src;
+            });
+
+            $('.title').click(function () {
+                var $ul = $(this).next('ul');
+                $('dd').find('ul').slideUp();
+                if ($ul.is(':visible')) {
+                    $(this).next('ul').slideUp();
+                } else {
+                    $(this).next('ul').slideDown();
+                }
+                });
+            }
+        })
     </script>
 
 
@@ -40,109 +269,6 @@ $(function(){
 
     <dl class="leftmenu">
 
-        <dd>
-            <div class="title">
-                <span><img src="../../images/leftico01.png" /></span>销售管理
-            </div>
-            <ul class="menuson">
-                <li class="active"><cite></cite><a target="rightFrame">销售合同创建</a><i hidden>/Home/SalesCreation</i></li>
-                <li><cite></cite><a target="rightFrame">销售合同查询</a><i hidden>/Home/PM_Contract_Check</i></li>
-                <li><cite></cite><a target="rightFrame">销售合同收款</a><i hidden>/Home/PM_ContractReceivablesMain</i></li>
-
-                @*<li><cite></cite><a href="form.html" target="rightFrame">添加编辑</a><i></i></li>
-                    <li><cite></cite><a href="imglist.html" target="rightFrame">图片列表</a><i></i></li>
-                    <li><cite></cite><a href="imglist1.html" target="rightFrame">自定义</a><i></i></li>
-                    <li><cite></cite><a href="tools.html" target="rightFrame">常用工具</a><i></i></li>
-                    <li><cite></cite><a href="filelist.html" target="rightFrame">信息管理</a><i></i></li>
-                    <li><cite></cite><a href="tab.html" target="rightFrame">Tab页</a><i></i></li>
-                    <li><cite></cite><a href="error.html" target="rightFrame">404页面</a><i></i></li>*@
-            </ul>
-        </dd>
-
-
-        <dd>
-            <div class="title">
-                <span><img src="../../images/leftico02.png" /></span>生产计划管理
-            </div>
-            <ul class="menuson">
-                <li><cite></cite><a href="#">生产订单创建</a><i hidden=hidden>/ProductionPlanning/PPCreaty</i></li>
-                <li><cite></cite><a href="#">工单管理</a><i hidden=hidden>/ProductionPlanning/WorkManagement</i></li>
-                <li><cite></cite><a href="#">打包</a><i hidden=hidden>/ProductionPlanning/Pack</i></li>
-            </ul>
-        </dd>
-        <dd>
-            <div class="title">
-                <span><img src="~/images/leftico04.png" /></span>采购管理
-            </div>
-            <ul class="menuson">
-                <li><cite></cite><a href="#">供应商信息管理</a><i hidden=hidden>/ApplierList/Supplier</i></li>
-                <li><cite></cite><a href="#">采购清单</a><i hidden=hidden>/ApplierList/Purchaselist</i></li>
-            </ul>
-        </dd>
-
-        <dd>
-            <div class="title">
-                <span><img src="~/images/leftico04.png" /></span>技术部
-            </div>
-            <ul class="menuson">
-                <li><cite></cite><a href="#">上传图纸</a><i hidden=hidden>/TechnicalDepartment/UploadTheDrawings</i></li>
-            </ul>
-        </dd>
-        <dd>
-            <div class="title">
-                <span><img src="~/images/leftico04.png" /></span>售后管理
-            </div>
-            <ul class="menuson">
-                <li><cite></cite><a href="#">售后安装</a><i hidden=hidden>/AfterManagement/Installation</i></li>
-            </ul>
-        </dd>
-        <dd>
-            <div class="title"><span><img src="../../images/leftico03.png" /></span>原材料仓</div>
-            <ul class="menuson">
-                <li><cite></cite><a href="#">物料注册</a><i hidden=hidden>/Rms/MaterialRegistration</i></li>
-                <li><cite></cite><a href="#">原材料库存查询</a><i hidden=hidden>/Rms/MaterialsStock</i></li>
-                @*<li><cite></cite><a href="#">常用资料</a><i></i></li>
-                <li><cite></cite><a href="#">信息列表</a><i></i></li>
-                <li><cite></cite><a href="#">其他</a><i></i></li>*@
-            </ul>
-        </dd>
-        <dd>
-            <div class="title">
-                <span><img src="../../images/leftico02.png" /></span>成品仓
-            </div>
-            <ul class="menuson">
-                <li>
-                    <cite></cite><a href="#">成品仓库存查询</a><i hidden=hidden>/Warehouse/Stock</i>
-                </li>
-            </ul>
-
-        </dd>
-
-        <dd>
-            <div class="title"><span><img src="../../images/leftico04.png" /></span>任务管理</div>
-            <ul class="menuson">
-                <li><cite></cite><a href="#">任务分配</a><i hidden="hidden">/TaskManagement/TaskAllocation</i></li>
-                <li><cite></cite><a href="#">我的任务</a><i hidden="hidden">/TaskManagement/MyTask</i></li>
-                <li><cite></cite><a href="#">已完成的任务</a><i hidden="hidden">/TaskManagement/CompletedTasks</i></li>
-            </ul>
-
-        </dd>
-
-        <dd>
-            <div class="title"><span><img src="../../images/leftico02.png" /></span>系统设置</div>
-            <ul class="menuson">
-                <li><cite></cite><a href="#">权限设置</a><i hidden="hidden">/SystemSettings/Permissions</i></li>
-                <li><cite></cite><a href="#">生产线</a><i hidden="hidden">/SystemSettings/ProductLine</i></li>
-                <li><cite></cite><a href="#">生产工位类型</a><i hidden="hidden">/SystemSettings/LocationType</i></li>
-                <li><cite></cite><a href="#">生产工位</a><i hidden="hidden">/SystemSettings/ProductStation</i></li>
-                <li><cite></cite><a href="#">工艺BOM</a><i hidden="hidden">/SystemSettings/Process</i></li>
-                <li><cite></cite><a href="#">工艺流程</a><i hidden="hidden">/TaskManagement/EditingProcess?PartNumber=""</i></li>
-                <li><cite></cite><a href="#">库区</a><i hidden="hidden">/SystemSettings/Reservoir</i></li>
-                <li><cite></cite><a href="#">库位</a><i hidden="hidden">/SystemSettings/Location</i></li>
-                <li><cite></cite><a href="#">货位</a><i hidden="hidden">/SystemSettings/Goods</i></li>
-            </ul>
-
-        </dd>
 
     </dl>
 </body>

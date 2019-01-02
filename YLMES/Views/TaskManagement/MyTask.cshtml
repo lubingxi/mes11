@@ -5,26 +5,24 @@
 
 }
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>友力信息管理系统</title>
     <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
-    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
     <link href="~/css/style.css" rel="stylesheet" type="text/css" />
     <link href="~/layui/css/layui.css" rel="stylesheet" />
-    <script type="text/javascript" src="../../js/jquery.js"></script>
     <script src="~/layui/layui.js" type="text/javascript"></script>
-
-
-    <script type="text/javascript">
-        $(function () {
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">  
+        $(function () {        
             $(".click").click(function () {
                 $(".tip").fadeIn(200);
             });
-
             $(".tiptop a").click(function () {
                 $(".tip").fadeOut(200);
             });
@@ -32,14 +30,57 @@
             $(".sure").click(function () {
                 $(".tip").fadeOut(100);
             });
-
+            $(document).keydown(function (e) {
+                if (e.keyCode == 13) {
+                    $(".layui-btn").click();
+                }
+            });
             $(".cancel").click(function () {
                 $(".tip").fadeOut(100);
             });
             $("#addC").click(function () {
                 var sd = $("#u").text();
                 window.parent.document.getElementById("rightframe").src = sd;
-            });        
+            }); 
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;              
+                    var Select = $("#s option:selected").text();
+                    table.render({
+                        elem: '#tw'
+                        , url: '/TaskManagement/TaskDisplay?Status=' + Select
+                        , page: true
+                        , limit: 15
+                        , done: function () {
+                            $("tr a").hide();
+                            $("tr").hover(function () {
+
+                                $(this).children().last().children().children().toggle();
+                            })
+                        }
+                        , cols: [[
+                            { field: '任务名称', width: 220, title: '任务名称' }
+                            , { field: '任务类型', width: 100, title: '任务类型' }
+                            , { field: '设计类型', width: 100, title: '设计类型' }
+                            , { field: '产品名称', width: 210, title: '产品名称' }
+                            , { field: '紧急程度', width: 100, title: '紧急程度' }
+                            , { field: '截止日期', width: 150, title: '截止日期' }
+                            , { field: '机械设计负责人', width: 100, title: '机械设计' }
+                            , { field: '电气设计负责人', width: 100, title: '电气设计' }
+                            , { field: '审核人', width: 100, title: '审核人' }
+                            , { field: '任务状态', width: 210, title: '任务状态' }
+                            , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+                        ]]
+                    });              
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;
+                    switch (obj.event) {
+                        case 'add':
+                            id = data.TaskID;
+                            window.parent.document.getElementById("rightframe").src = "/TaskManagement/NameTask?id=" + id;
+                            break;
+                    };
+                });
+            });
             layui.use(['table', 'layer'], function () {
                 var table = layui.table, layer = layui.layer;
                 $(".layui-btn").click(function () {
@@ -48,8 +89,14 @@
                         elem: '#tw'
                    , url: '/TaskManagement/TaskDisplay?Status=' + Select
                    , page: true
-                  , toolbar: 'default'
                    , limit: 15
+                   , done: function () {
+                       $("tr a").hide();
+                     $("tr").hover(function () {
+
+                         $(this).children().last().children().children().toggle();
+                     })
+                 }
                    , cols: [[
                    { field: '任务名称', width: 220, title: '任务名称' }
                   , { field: '任务类型', width: 100, title: '任务类型' }
@@ -63,7 +110,6 @@
                         , { field: '任务状态', width: 210, title: '任务状态' }
                    , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
                    ]]
-
                     });
                 });
                 table.on('checkbox(demo)', function (obj) {
@@ -79,8 +125,6 @@
                             break;
                     };
                 });
-
-
             });
         })
 
@@ -95,14 +139,14 @@
 </head>
 
 
-<body>
+<body onselectstart="return false;">
 
     <div class="place">
         <span>位置：</span>
         <ul class="placeul">
             <li><a href="#">首页</a></li>
-            <li><a href="#">销售管理</a></li>
-            <li><a href="#">合同创建</a></li>
+            <li><a href="#">任务管理</a></li>
+            <li><a href="#">我的任务</a></li>
         </ul>
     </div>
 
@@ -113,8 +157,8 @@
             <ul class="toolbar">
                 <li class="ads" id="addC">
                     <span>
-                        <img src="../../images/t01.png" />
-                    </span><a target="rightFrame" href="javascript:;">我要更多任务</a><i hidden=hidden id="u">/TaskManagement/MoreTasks</i>
+                        <img style="margin-bottom:10px" src="../../images/t01.png" />
+                    </span><a target="rightFrame" href="javascript:;">我要更多任务</a><i hidden=hidden id="u">/TaskManagement/MoreTask</i>
                 </li>
                 <li>
                     任务状态：

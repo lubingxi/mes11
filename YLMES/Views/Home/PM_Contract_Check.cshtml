@@ -24,11 +24,18 @@
         function admin_add(title, url, w, h) {
             layer_show(title, url, w, h);
         }
-        $(function () {           
+        $(function () {
             $(".click").click(function () {
                 $(".tip").fadeIn(200);
             });
-
+            if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }
+            $(document).keydown(function (e) {
+                if (e.keyCode == 13) {
+                    $(".layui-btn").click();
+                }
+            });
             $(".tiptop a").click(function () {
                 $(".tip").fadeOut(200);
             });
@@ -53,22 +60,30 @@
                         elem: '#tw'
                    , url: '/Home/Get_Data?CName=' + CuName + '&CNumber=' + CNumber + '&Status=' + Select + '&strattime=' + strattime + '&endtime=' + endtime + '&rs=' + rs
                    , page: true
-                  , toolbar: 'default'
                    , limit: 15
+                   , done: function () {
+                       $("tr a").hide();
+                       $("tr").hover(function () {
+
+                           $(this).children().last().children().children().toggle();
+                       })
+
+
+                   }
                    , cols: [[
                    { field: 'CustomerName', width: 210, title: '客户名称' }
-                   , { field: 'ContractNumber', width: 235, title: '合同编号'}
+                   , { field: 'ContractNumber', width: 235, title: '合同编号', event: 'xi', sort: true, templet: '#cc' }
                    , {
-                       field: '合同签订日期', width: 180, title: '签订日期',
+                       field: '合同签订日期', width: 140, title: '签订日期',
                    }
                    , { field: '合同金额', title: '合同金额', width: 180 }
-                   , { field: '收款金额', width: 180, title: '收款金额'}
-                   , { field: '是否安装', width: 100, title: '是否安装'}
-                   , { field: '是否运输', width: 100, title: '是否运输' }
-                   , { field: '是否含税', width: 100, title: '是否含税' }
-                   , { field: '合同状态', width: 180, title: '合同状态' }
+                   , { field: '收款金额', width: 110, title: '收款金额'}
+                   , { field: '是否安装', width: 90, title: '是否安装'}
+                   , { field: '是否运输', width: 90, title: '是否运输' }
+                   , { field: '是否含税', width: 90, title: '是否含税' }
+                   , { field: '合同状态', width: 260, title: '合同状态' }
                    , { field: '是否通过', width: 120, title: '是否审核' }
-                   , { field: 'right', width: 178, align: 'center', toolbar: '#barDemo' }
+                   , { field: '货款情况', width: 120, title: '货款情况' }
                    ]]
 
                     });
@@ -79,12 +94,10 @@
 
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
-                    switch (obj.event) {                    
-                        case 'update':
-                            id = data.id;
-                            window.parent.document.getElementById("rightframe").src = "/Home/Contract_Check?id=" + id;
-                            break;                                          
-                    };
+                    if (obj.event === 'xi') {
+                        id = data.id;
+                        window.parent.document.getElementById("rightframe").src = "/Home/ContractPrint?id=" + id + "&vas=" + "2";
+                    }
                 });
 
 
@@ -94,13 +107,18 @@
              
 
     </script>
-    <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-xs" id="edit" lay-event="update">查看合同</a>
+    <script type="text/html" id="cc">
+        {{#  if(d.ContractNumber != ''){ }}
+        <span style="color: red">{{d.ContractNumber}}</span>
+        {{#  } else { }}
+        {{#  } }}
     </script>
 </head>
 
 
-<body>
+<body onselectstart="return false;">
+
+
     <div class="place">
         <span>位置：</span>
         <ul class="placeul">
@@ -117,11 +135,11 @@
             <ul class="toolbar">
                 <li>
                     创建日期：
-                    <input name="strattime" class="strattime" id="test1" type="text" onclick="WdatePicker()" style="width: 80px;">
+                    <input name="strattime" class="strattime" id="test1" type="text" onclick="WdatePicker()" style="width: 80px;" />
                 </li>
                 <li>
                     到：
-                    <input class="endtime" id="test2" type="text" onclick="WdatePicker()" style="width: 80px;">
+                    <input class="endtime" id="test2" type="text" onclick="WdatePicker()" style="width: 80px;" />
                 </li>
                 <li>
                     项目状态：
@@ -129,23 +147,23 @@
                 </li>
                 <li>
                     客户名称：
-                    <input class="CustomerName" id="CustomerName" type="text" style="width: 80px;">
+                    <input class="CustomerName" id="CustomerName" type="text" style="width: 80px;" />
                 </li>
                 <li>
                     合同编号：
-                    <input class="ContractNumber" id="ContractNumber" type="text" style="width: 80px;">
+                    <input class="ContractNumber" id="ContractNumber" type="text" style="width: 80px;" />
                 </li>
                 <li>
                     审核状态：
                     <input class="ReviewStatus" id="ReviewStatus" type="text" style="width: 80px;" />
-                </li>  
+                </li>
             </ul>
             <button class="layui-btn" data-type="reload">搜索</button>
 
 
 
         </div>
-        <table class="tablelist" id="tw" lay-filter="demo"></table>    
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
 
     </div>
 </body>

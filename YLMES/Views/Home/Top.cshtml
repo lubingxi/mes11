@@ -14,10 +14,22 @@
     <script type="text/javascript">
 $(function(){
 	//顶部导航切换
-	$(".nav li a").click(function(){
-		$(".nav li a.selected").removeClass("selected")
-		$(this).addClass("selected");
-	})
+    //$(".nav li a").click(function () {
+    //    $(".nav li a.selected").removeClass("selected")
+    //    $(this).addClass("selected");
+    //});
+    $('#shou').click(function () {
+        window.parent.document.getElementById("rightframe").src = "/Home/Flower";
+    });
+    $('#map').click(function () {
+        window.parent.document.getElementById("rightframe").src = "/Home/Map";
+    });
+    $('#wenjian').click(function () {
+        window.parent.document.getElementById("rightframe").src = "/Home/Computer";
+    });
+    $('#weixin').click(function () {
+        window.parent.document.getElementById("rightframe").src = "https://wx.qq.com/";
+    });
 })
     </script>  
     <script src="~/layui/layui.js" charset="utf-8"></script>
@@ -55,15 +67,15 @@ $(function(){
         <div class="layui-progress-bar" lay-percent="100%"></div>
     </div>
     <div class="topleft">
-        <a href="main.html" target="_parent"><img src="../../images/logo.png" title="系统首页" /></a>
+        <a href="main.html" target="_parent"><img src="../../images/logo2.png" title="系统首页" /></a>
     </div>
     <ul class="nav">
 
-        <li><a href="default.html" target="rightFrame" class="selected"><img src="../../images/icon01.png" title="信息管理" /><h2>信息管理</h2></a></li>
-        <li><a href="imglist.html" target="rightFrame"><img src="../../images/icon03.png" title="模块设计" /><h2>模块设计</h2></a></li>
+        <li id="shou"><a  target="rightFrame"><img src="../../images/icon01.png" title="信息管理" /><h2>信息管理</h2></a></li>
+        <li id="map"><a target="rightFrame"><img src="../../images/icon03.png" title="查看地图" /><h2>查看地图</h2></a></li>
         <li><a href="tools.html" target="rightFrame"><img src="../../images/icon04.png" title="常用工具" /><h2>常用工具</h2></a></li>
-        <li><a href="computer.html" target="rightFrame"><img src="../../images/icon05.png" title="文件管理" /><h2>文件管理</h2></a></li>
-        <li><a href="tab.html" target="rightFrame"><img src="../../images/icon06.png" title="系统设置" /><h2>系统设置</h2></a></li>
+        <li id="wenjian"><a  target="rightFrame"><img src="../../images/icon05.png" title="文件管理" /><h2>文件管理</h2></a></li>
+        <li><a href="https://wx.qq.com/"  target="_blank"><img src="../../images/icon06.png" title="微信" /><h2>微信</h2></a></li>
     </ul>
 
     <div class="topright">
@@ -74,9 +86,8 @@ $(function(){
         </ul>
 
         <div class="user">
-            <span>admin</span>
-            <i>消息</i>
-            <b>5</b>
+            <span>@Session["name"]</span>
+            <i>欢迎您</i>
         </div>
 
     </div>

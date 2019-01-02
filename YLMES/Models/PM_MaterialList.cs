@@ -20,7 +20,7 @@ namespace YLMES.Models
         public Nullable<int> MaterialID { get; set; }
         public Nullable<int> InPCS { get; set; }
         public Nullable<int> InQTY { get; set; }
-        public string IQC_Result { get; set; }
+        public Nullable<int> IQC_Result { get; set; }
         public Nullable<int> IQCPassQTY { get; set; }
         public Nullable<int> PutOnPCS { get; set; }
         public Nullable<int> PutOnQTY { get; set; }
@@ -34,5 +34,6 @@ namespace YLMES.Models
         public string Status { get; set; }
         public string CreatedTime { get; set; }
         public string CreatedBy { get; set; }
+        public string figureNumber { get; set; }
     }
 }

@@ -24,7 +24,20 @@
             $(".click").click(function () {
                 $(".tip").fadeIn(200);
             });
-
+            if ('@ViewData["dao"]' == "1") {
+                alert('导入成功');
+                $('#btn2').show();
+                $('#btn1').show();
+            }
+            else if ('@ViewData["dao"]' == "2") {
+                $('#btn1').show();
+                $('#btn2').show();
+            }
+            else
+            {
+                $('#btn1').hide();
+                $('#btn2').hide();
+            }
             $(".tiptop a").click(function () {
                 $(".tip").fadeOut(200);
             });
@@ -47,11 +60,12 @@
                     success: function (data) {
                         if (data == "true") {
                             window.setTimeout(function () {
-                               alert("确认成功！")
+                                alert("确认成功！");
+                                window.parent.document.getElementById("rightframe").src = "/TaskManagement/MyTask"
                             }, 500);
                         }
                         else {
-                            alert("确认失败！");
+                            alert("错误!存在没有上传图纸的图号！");
                             return;
                         }
                     }
@@ -59,13 +73,22 @@
             });
             $("#edit").click(function () {
                 window.parent.document.getElementById("rightframe").src = "/TaskManagement/NameTask?id=" + '@Session["id"]';
-            });           
+            });
             layui.use(['table', 'layer'], function () {
                 var table = layui.table, layer = layui.layer;
-                $("#btn1").click(function () {                
+                $("#btn1").click(function () {
                     table.render({
                         elem: '#tw'
                    , url: '/TaskManagement/CheckBOMD'
+                   , done: function () {
+                       $("tr a").hide();
+                     $("tr").hover(function () {
+
+                         $(this).children().last().children().children().toggle();
+                     })
+
+
+                 }
                    , cols: [[
                    { field: 'BOM结构', width: 80, title: 'BOM结构' }
                    , { field: '图号', width: 235, title: '图号' }
@@ -92,21 +115,10 @@
                     switch (obj.event) {
                         case 'add':
                             tupian = data.上传图片;
-                            tuhao = data.图号
-                            if (tupian == "上传" && tuhao!="") {
-                                var url = "/TaskManagement/UploadPicture?hao=" + tuhao;
-                                layer_show('上传图纸', url, '1000', '700');                          
-                            }
-                            else if (tupian == "" && tuhao != "")
-                            {
-                                var url = "/TaskManagement/UpdatePicture?hao=" + tuhao;
-                                layer_show('查看或更新图纸', url, '1000', '700');
-                            } else
-                            {
-                                layer.msg('没有图号！不用上传!');
-                            }
-                            
-                            break;                        
+                            tuhao = data.图号;
+                            var url = "/TaskManagement/UploadTheDrawings?hao=" + tuhao;
+                            layer_show('上传图纸', url, '1000', '700');
+                            break;
                     };
                 });
 
@@ -118,7 +130,7 @@
 
     </script>
     <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-xs" id="add" lay-event="add">操作图纸</a>   
+        <a class="layui-btn layui-btn-xs" id="add" lay-event="add">操作图纸</a>
     </script>
 
 
@@ -139,20 +151,20 @@
 
     <div class="rightinfo">
 
-        <div class="tools">  
+        <div class="tools">
             <ul class="toolbar">
-                <li>@Session["ifD"]&nbsp; &nbsp; &nbsp; @Session["nam"]</li>               
+                <li>@Session["ifD"]&nbsp; &nbsp; &nbsp; @Session["nam"]</li>
                 <li>
                     @using (Html.BeginForm("StationImport", "TaskManagement", FormMethod.Post, new { enctype = "multipart/form-data" }))
                     {
-                          <input type="file" name="files" id="files"/>
-                          <input type="submit" name="Submit" id="Submit" value="导入"/>
-                    }                                         
+                        <input type="file" name="files" id="files" />
+                        <input type="submit" name="Submit" id="Submit" value="导入" />
+                    }
                 </li>
-                 <button class="btn"><a href="/TaskManagement/Filed?file1=~/BOM/材料清单导入格式模板.xlsx">BOM上传格式下载</a></button>           
             </ul>
-           &nbsp;&nbsp; <button class="layui-btn" id="btn1" data-type="reload">BOM查询</button>
-           &nbsp;&nbsp; <button class="layui-btn" id="btn2" data-type="reload">确定完成我的设计</button>
+            <button class="btn"><a href="/TaskManagement/Filed?file1=~/BOM/材料清单导入格式模板.xlsx">BOM上传格式下载</a></button>
+            &nbsp;&nbsp; <button class="layui-btn" id="btn1" data-type="reload">BOM查询</button>
+            &nbsp;&nbsp; <button class="layui-btn" id="btn2" data-type="reload">确定完成我的设计</button>
         </div>
         <table class="tablelist" id="tw" lay-filter="demo"></table>
     </div>
@@ -162,9 +174,9 @@
     <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
     <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
     <script type="text/javascript">
-            function admin_add(title, url, w, h) {
-                layer_show(title, url, w, h);
-            }
+        function admin_add(title, url, w, h) {
+            layer_show(title, url, w, h);
+        }
     </script>
     <script type="text/javascript">
         $('.tablelist tbody tr:odd').addClass('odd');

@@ -36,8 +36,12 @@
             $(".cancel").click(function () {
                 $(".tip").fadeOut(100);
             });
+
             $("#m1").click(function () {
-                window.parent.document.getElementById("rightframe").src = "/TaskManagement/TaskMapPart?TaskID=" + "@Session["task1"]" + "&ProductName=" + "@Session["ProductName1"]" + "&ProductSpec="+"@Session["ProductSpec2"]";
+                window.parent.document.getElementById("rightframe").src = "/TaskManagement/TaskMapPart?TaskID=" + "@Session["task1"]" + "&ProductName=" + "@Session["ProductName1"]" + "&ProductSpec="+"@Session["ProductSpec1"]";
+            });
+            $("#m1").click(function () {
+                window.parent.document.getElementById("rightframe").src = "/TaskManagement/TaskMapPart?TaskID=" + "@Session["task2"]" + "&ProductName=" + "@Session["ProductName2"]" + "&ProductSpec="+"@Session["ProductSpec2"]";
             });
             $("#addC").click(function () {
                 //var sd = $("#u").text();
@@ -74,21 +78,28 @@
                     table.render({
                         elem: '#tw'
                    , url: '/TaskManagement/CheckBOM2?PName=' + '@Session["zi"]'
-                   , cols: [[
+                   , done: function () {
+                     $("tr a").hide()
+                     $("tr").hover(function () {
 
+                         $(this).children().last().children().children().toggle();
+                     })
+
+
+                 }
+                   , cols: [[
                    , { field: '序号', width: 57, title: '序号' }
                    , { field: '工件编码', width: 200, title: '工件编码' }
-                   , { field: '子件编码', width: 200, title: '子件编码' }
+                   , { field: '子件编码', width: 200, title: '子件编码',event: 'zi', style: 'color: red' }
                    , {
                        field: '子件数量', width: 100, title: '子件数量'
-                   }
-                   , { field: '原材料用量', title: '原材料用量', width: 200, edit: Text }
-                   , { field: '原材料单位', width: 200, title: '原材料单位', edit: Text }
-                   , { field: '是否组装件', width: 100, title: '是否组装件', }
-                   , { field: '工艺流程', width: 100, title: '工艺流程' }
+                     }
+                   , { field: '原材料用量', title: '原材料用量', width: 200, edit: Text, style: 'color: #009688' }
+                   , { field: '原材料单位', width: 200, title: '原材料单位', edit: Text, style: 'color: #009688' }
+                   , { field: '是否组装件', width: 100, title: '是否组装件', templet: '#dd' }
+                   , { field: '工艺流程', width: 100, title: '工艺流程',event: 'xi', templet: '#cc' }
                    , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
                    ]]
-
                     });
 
                 table.on('checkbox(demo)', function (obj) {
@@ -97,6 +108,15 @@
 
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
+                    if (obj.event === 'xi') {
+                        pn = data.子件编码;
+                        var url = '/TaskManagement/EditingProcess?PartNumber=' + pn;
+                        window.parent.document.getElementById("rightframe").src = url;
+                    }
+                    if (obj.event === 'zi') {
+                        Zi = data.子件编码;
+                        window.parent.document.getElementById("rightframe").src = '/TaskManagement/TaskMapPart2?TaskID=' + '@Session["task2"]' + '&ProductName=' + '@Session["ProductName2"]' + '&ProductSpec=' + '@Session["ProductSpec2"]' + '&zi=' + Zi;
+                    }
                     switch (obj.event) {
                         case 'add':
                             id = data.子件编码;
@@ -131,11 +151,10 @@
                             });
                             break;
                         case 'update':
-                            part = data.工件编码;
-                            child = data.子件编码;
+                            id = data.序号;
                             dosage = data.原材料用量;
                             unit = data.原材料单位;
-                            var url = "/TaskManagement/UpdateBOM2?part=" + part + "&child=" + child + "&dosage=" + dosage + "&unit=" + unit;
+                            var url = "/TaskManagement/UpdateBOM?id=" + id + "&dosage=" + dosage + "&unit=" + unit;
                             $.ajax({
                                 url: url,
                                 type: 'post',
@@ -146,11 +165,25 @@
                                         table.reload('tw');
                                     }
                                     if (data == "false") {
-                                        layer.msg('修改失败!', { icon: 5 });
+                                        layer.msg('用量和单位不能为空！', { icon: 5 });
                                         return false;
                                     }
                                 }
-                            });
+                            });                         
+                            break;
+                        case 'subpp':
+                             id = data.子件序号;
+                            var url = "/TaskManagement/SubmitPlan?taskid=" + "@Session["quetask2"]" + "&partid=" + id;
+                            $.ajax({
+                                url: url,
+                                type: 'post',
+                                async: true,
+                                success: function (data) {
+                                    if (data == "true") {
+                                        layer.msg("提交成功", { icon: 6 });                                      
+                                    }
+                                }
+                            });  
                             break;
                     };
                 });
@@ -163,12 +196,24 @@
 
     </script>
     <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-xs" id="add" lay-event="add">子件编码</a>
-        <a class="layui-btn layui-btn-xs" id="detials" lay-event="Detials">工艺流程</a>
         <a class="layui-btn layui-btn-xs" id="edit" lay-event="update">编辑</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete" data-type="getCheckLength" id="delete">删除</a>
+        @*<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="subpp"  id="subpp">提交到生产部</a>*@
     </script>
+    <script type="text/html" id="cc">
+        {{#  if(d.工艺流程 != null){ }}
+        <span style="color: red">{{d.工艺流程}}</span>
+        {{#  } else { }}
 
+        {{#  } }}
+    </script>
+    <script type="text/html" id="dd">
+        {{#  if(d.是否组装件 == '0'){ }}
+        <span>否</span>
+        {{#  } else if(d.是否组装件 == '1'){ }}
+        <span>是</span>
+        {{#  } }}
+    </script>
 
 </head>
 
@@ -180,25 +225,25 @@
         <div class="tools">
 
             <ul class="toolbar">
-                <li class="ads" id="addC">
-                    <span>
-                        <img src="../../images/t01.png" />
-                    </span><a target="rightFrame">新增子件</a><i hidden=hidden id="u">/TaskManagement/NewChildThing</i>
-                </li>
+                @*<li class="ads" id="addC">
+                <span>
+                    <img src="../../images/t01.png" />
+                </span><a target="rightFrame">新增子件</a><i hidden=hidden id="u">/TaskManagement/NewChildThing</i>
+            </li>*@
                 <li>
                     产品名称：
-                    <input class="ProductName" id="ProductName" type="text" style="width: 180px;" value="@Session["ProductName1"]" />
+                    <input class="ProductName" id="ProductName" type="text" style="width: 250px;" value="@Session["ProductName1"]" />
                 </li>
                 <li>
                     产品规格：
-                    <input class="ContractNumber" id="ContractNumber" type="text" style="width: 80px;" value="@Session["ProductSpec1"]" />
+                    <input class="ContractNumber" id="ContractNumber" type="text" style="width: 180px;" value="@Session["ProductSpec1"]" />
                 </li>
                 <li>
                     工作目录：
                     <a href="#" id="m1">1</a>
                     <a href="#" id="m2">2</a>
                 </li>
-            </ul>
+            </ul>           
             <button class="layui-btn" id="ProcessSetup" data-type="reload">确认完成工艺设置</button>
         </div>
         <table class="tablelist" id="tw" lay-filter="demo"></table>

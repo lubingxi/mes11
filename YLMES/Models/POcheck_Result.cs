@@ -13,23 +13,7 @@ namespace YLMES.Models
     
     public partial class POcheck_Result
     {
-        public int ID { get; set; }
-        public Nullable<int> 任务编号 { get; set; }
-        public string 采购订单号 { get; set; }
-        public string 部件名称 { get; set; }
-        public string 部件规格 { get; set; }
-        public string 材料 { get; set; }
-        public Nullable<int> 申请采购套数 { get; set; }
-        public Nullable<int> 每套数量 { get; set; }
-        public Nullable<int> 申请采购数量 { get; set; }
-        public string 单位 { get; set; }
-        public Nullable<int> 实际采购套数 { get; set; }
-        public Nullable<int> 实际采购数量 { get; set; }
-        public string 单位1 { get; set; }
-        public Nullable<double> 单价 { get; set; }
-        public Nullable<double> 总价 { get; set; }
-        public string 供应商 { get; set; }
-        public string 备注 { get; set; }
-        public string 类型 { get; set; }
+        public string FuncationName { get; set; }
+        public string Catelog { get; set; }
     }
 }

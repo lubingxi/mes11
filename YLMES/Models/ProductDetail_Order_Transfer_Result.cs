@@ -11,20 +11,20 @@ namespace YLMES.Models
 {
     using System;
     
-    public partial class ProductDetail_Order_Confirm_Result
+    public partial class ProductDetail_Order_Transfer_Result
     {
-        public string msg { get; set; }
-        public int 产品序号 { get; set; }
-        public string 项目名称 { get; set; }
-        public Nullable<int> 合同ID { get; set; }
-        public string 合同编号 { get; set; }
-        public string 产品名称 { get; set; }
+        public string 转生产订单 { get; set; }
+        public int ID { get; set; }
+        public string CustomerName { get; set; }
+        public int ContractID { get; set; }
+        public string Contractnumber { get; set; }
+        public string ProductName { get; set; }
         public string 客户产品名称 { get; set; }
         public string 产品规格 { get; set; }
         public string 单位 { get; set; }
-        public Nullable<double> 合同数量 { get; set; }
+        public Nullable<decimal> 合同数量 { get; set; }
         public string 产品类型 { get; set; }
-        public string 截止日期 { get; set; }
+        public Nullable<System.DateTime> 截止日期 { get; set; }
         public string 创建人 { get; set; }
         public string 创建时间 { get; set; }
         public string 速度 { get; set; }
@@ -34,9 +34,11 @@ namespace YLMES.Models
         public string 工件主要材质 { get; set; }
         public string 工件最大最小外形尺寸 { get; set; }
         public string 工件来料输送方式 { get; set; }
+        public Nullable<int> 产品类型序号 { get; set; }
         public string 滚筒直径 { get; set; }
         public string 滚筒材质 { get; set; }
         public string 滚筒表面处理形式 { get; set; }
+        public string 是否动力 { get; set; }
         public string 滚筒输送形式 { get; set; }
         public string 主梁材质 { get; set; }
         public string 工件重量 { get; set; }
