@@ -1734,9 +1734,12 @@
           <Parameter Name="OutgoingTimeEnd" Type="varchar" Mode="In" />
         </Function>
         <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
-        <Function Name="GeneratPO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="GenerateOrders" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaskID" Type="int" Mode="In" />
+          <Parameter Name="IDs" Type="varchar" Mode="In" />
           <Parameter Name="ListType" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GeneratPO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IDs" Type="varchar" Mode="In" />
         </Function>
         <Function Name="getPackjobs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -1833,6 +1836,7 @@
           <Parameter Name="ListType" Type="varchar" Mode="In" />
           <Parameter Name="Units" Type="varchar" Mode="In" />
           <Parameter Name="Note" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
         </Function>
         <Function Name="PM_AssignTasksCheck" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RwapStatusID" Type="varchar" Mode="In" />
@@ -1992,9 +1996,13 @@
         <Function Name="POcheck" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="type" Type="varchar" Mode="In" />
           <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="Taskid" Type="int" Mode="In" />
         </Function>
         <Function Name="PONO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PoNoCheck" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Taskid" Type="int" Mode="In" />
         </Function>
         <Function Name="ProcessBOM" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PartNumber" Type="varchar" Mode="In" />
@@ -2824,12 +2832,16 @@
           <Parameter Name="index" Type="varchar" Mode="In" />
         </Function>
         <Function Name="UpdatePurchaseQTY" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ActPurchasePCS" Type="int" Mode="In" />
-          <Parameter Name="Purchasepcs" Type="int" Mode="In" />
+          <Parameter Name="QTYofPCS" Type="int" Mode="In" />
+          <Parameter Name="MaterialID" Type="int" Mode="In" />
           <Parameter Name="ApplyPurchasePCS" Type="int" Mode="In" />
           <Parameter Name="TaskID" Type="int" Mode="In" />
           <Parameter Name="Units" Type="varchar" Mode="In" />
           <Parameter Name="Note" Type="varchar" Mode="In" />
+          <Parameter Name="type" Type="varchar" Mode="In" />
+          <Parameter Name="ActPCS" Type="int" Mode="In" />
+          <Parameter Name="price" Type="int" Mode="In" />
+          <Parameter Name="id" Type="int" Mode="In" />
         </Function>
         <Function Name="updateQualifiedCompleted" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaskID" Type="int" Mode="In" />
@@ -5128,9 +5140,12 @@
             <Parameter Name="OutgoingTime" Mode="In" Type="String" />
             <Parameter Name="OutgoingTimeEnd" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="GeneratPO">
+          <FunctionImport Name="GenerateOrders">
             <Parameter Name="TaskID" Mode="In" Type="Int32" />
+            <Parameter Name="IDs" Mode="In" Type="String" />
             <Parameter Name="ListType" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GeneratPO">
             <Parameter Name="IDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="getPackjobs" ReturnType="Collection(YLMES_newModel.getPackjobs_Result)">
@@ -5227,6 +5242,7 @@
             <Parameter Name="ListType" Mode="In" Type="String" />
             <Parameter Name="Units" Mode="In" Type="String" />
             <Parameter Name="Note" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="PM_AssignTasksCheck" ReturnType="Collection(YLMES_newModel.PM_AssignTasksCheck_Result)">
             <Parameter Name="RwapStatusID" Mode="In" Type="String" />
@@ -5386,9 +5402,13 @@
           <FunctionImport Name="POcheck" ReturnType="Collection(YLMES_newModel.POcheck_Result)">
             <Parameter Name="type" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="Taskid" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PONO" ReturnType="Collection(String)">
             <Parameter Name="Status" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PoNoCheck" ReturnType="Collection(YLMES_newModel.PoNoCheck_Result)">
+            <Parameter Name="Taskid" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ProcessBOM" ReturnType="Collection(YLMES_newModel.ProcessBOM_Result)">
             <Parameter Name="PartNumber" Mode="In" Type="String" />
@@ -6208,12 +6228,16 @@
             <Parameter Name="index" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="UpdatePurchaseQTY">
-            <Parameter Name="ActPurchasePCS" Mode="In" Type="Int32" />
-            <Parameter Name="Purchasepcs" Mode="In" Type="Int32" />
+            <Parameter Name="QTYofPCS" Mode="In" Type="Int32" />
+            <Parameter Name="MaterialID" Mode="In" Type="Int32" />
             <Parameter Name="ApplyPurchasePCS" Mode="In" Type="Int32" />
             <Parameter Name="TaskID" Mode="In" Type="Int32" />
             <Parameter Name="Units" Mode="In" Type="String" />
             <Parameter Name="Note" Mode="In" Type="String" />
+            <Parameter Name="type" Mode="In" Type="String" />
+            <Parameter Name="ActPCS" Mode="In" Type="Int32" />
+            <Parameter Name="price" Mode="In" Type="Int32" />
+            <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="updateQualifiedCompleted">
             <Parameter Name="TaskID" Mode="In" Type="Int32" />
@@ -6689,6 +6713,26 @@
         <ComplexType Name="POcheck_Result">
           <Property Type="String" Name="FuncationName" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Catelog" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="PoNoCheck_Result">
+          <Property Type="Int32" Name="序号" Nullable="false" />
+          <Property Type="Int32" Name="任务编号" Nullable="true" />
+          <Property Type="String" Name="采购订单号" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="部件名称" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="部件规格" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="材料" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="申请采购套数" Nullable="true" />
+          <Property Type="Int32" Name="每套数量" Nullable="true" />
+          <Property Type="Int32" Name="申请采购数量" Nullable="true" />
+          <Property Type="Int32" Name="实际采购套数" Nullable="true" />
+          <Property Type="Int32" Name="实际采购数量" Nullable="true" />
+          <Property Type="String" Name="单位" Nullable="true" MaxLength="10" />
+          <Property Type="Double" Name="单价" Nullable="true" />
+          <Property Type="Double" Name="总价" Nullable="true" />
+          <Property Type="String" Name="供应商" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="备注" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="类型" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="采购订单状态" Nullable="true" MaxLength="20" />
         </ComplexType>
         <ComplexType Name="ProcessBOM_Result">
           <Property Type="Int32" Name="序号" Nullable="false" />
@@ -9178,6 +9222,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GenerateOrders" FunctionName="YLMES_newModel.Store.GenerateOrders" />
           <FunctionImportMapping FunctionImportName="GeneratPO" FunctionName="YLMES_newModel.Store.GeneratPO" />
           <FunctionImportMapping FunctionImportName="getPackjobs" FunctionName="YLMES_newModel.Store.getPackjobs">
             <ResultMapping>
@@ -9417,6 +9462,30 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="PONO" FunctionName="YLMES_newModel.Store.PONO" />
+          <FunctionImportMapping FunctionImportName="PoNoCheck" FunctionName="YLMES_newModel.Store.PoNoCheck">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="YLMES_newModel.PoNoCheck_Result">
+                <ScalarProperty Name="序号" ColumnName="序号" />
+                <ScalarProperty Name="任务编号" ColumnName="任务编号" />
+                <ScalarProperty Name="采购订单号" ColumnName="采购订单号" />
+                <ScalarProperty Name="部件名称" ColumnName="部件名称" />
+                <ScalarProperty Name="部件规格" ColumnName="部件规格" />
+                <ScalarProperty Name="材料" ColumnName="材料" />
+                <ScalarProperty Name="申请采购套数" ColumnName="申请采购套数" />
+                <ScalarProperty Name="每套数量" ColumnName="每套数量" />
+                <ScalarProperty Name="申请采购数量" ColumnName="申请采购数量" />
+                <ScalarProperty Name="实际采购套数" ColumnName="实际采购套数" />
+                <ScalarProperty Name="实际采购数量" ColumnName="实际采购数量" />
+                <ScalarProperty Name="单位" ColumnName="单位" />
+                <ScalarProperty Name="单价" ColumnName="单价" />
+                <ScalarProperty Name="总价" ColumnName="总价" />
+                <ScalarProperty Name="供应商" ColumnName="供应商" />
+                <ScalarProperty Name="备注" ColumnName="备注" />
+                <ScalarProperty Name="类型" ColumnName="类型" />
+                <ScalarProperty Name="采购订单状态" ColumnName="采购订单状态" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="ProcessBOM" FunctionName="YLMES_newModel.Store.ProcessBOM">
             <ResultMapping>
               <ComplexTypeMapping TypeName="YLMES_newModel.ProcessBOM_Result">

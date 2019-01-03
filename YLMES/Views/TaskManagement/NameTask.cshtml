@@ -113,7 +113,7 @@
                             机械/电气：
                         </label>
                         <div class="formControls col-xs-8 col-sm-9">
-                            <input type="text" id="Choose" disabled value="@ViewData["ifDrive"]" class="input-text" readonly="readonly">
+                            <input type="text" id="Choose" disabled value="@ViewData["tasktype"]" class="input-text" readonly="readonly">
                         </div>
                     </div>
                     <div class="row cl">
@@ -729,7 +729,7 @@
                 });
             }
             if ('@ViewData["ifDrive"]' == "采购部完成采购") {
-                window.parent.document.getElementById("rightframe").src = "/TaskManagement/CompletePurchase?type=" + "@Session["type2"]" + "&id=" + "@Session["id"]" + "&pjname=" + "@ViewData["CustomerNamesv"]";
+                window.parent.document.getElementById("rightframe").src = "/TaskManagement/CompletePurchase?Taskid=" + taskid;
             }
             if ('@ViewData["ifDrive"]' == "生产部确认生产任务分配") {
                 $.ajax({

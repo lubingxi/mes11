@@ -61,7 +61,7 @@
                         id = $(this).find("input").val();
                         table.render({
                             elem: '#tw'
-                            , url: "/ApplierList/checkPurchaselist?id=" + '@ViewData["taskid"]'
+                            , url: "/ApplierList/checkPurchaselist?id=" + id
                             , cols: [[
                                 { type: 'checkbox', LAY_CHECKED: booo.get(index) }
                                 , { field: 'MaterialID', hide: true }
@@ -94,8 +94,7 @@
                     });
                     $(".bt").click(function () {
                         index = $(".bt").index(this)
-                      
-                       
+                                           
                         if ($(this).prev().css("background-color") == "rgb(255, 0, 0)") {
                             $(this).prev().css("background-color", "rgb(255, 184, 0)")
                             booo.set(index, false)
@@ -140,7 +139,6 @@
                             } else {
                                 Stat = true;
                             }
-                            
                         })
                         if (Stat) { 
                             $(".Purchase").append("<button class='layui-btn layui-btn-warm bu'>" + data[i].TaskName + "<input type='text' class='layui-hide' value='" + data[i].TaskID + "'/></button>")

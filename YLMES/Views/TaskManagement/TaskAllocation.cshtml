@@ -73,12 +73,14 @@
                     var data = obj.data;
                     if (obj.event === 'xi') {
                         id = data.序号;
-                        window.parent.document.getElementById("rightframe").src = "/TaskManagement/Contract_Check?id=" + id;
+                        var src = "/TaskManagement/Contract_Check?id=" + id;
+                        window.parent.document.getElementById("rightframe").src = '/Home/Loading?src=' + src;
                     }
                     switch (obj.event) {
                         case 'update':
                             customerName = data.contractNumber;
-                            window.parent.document.getElementById("rightframe").src = "/TaskManagement/TechnicalPartAssignment?customerName=" + customerName;
+                            var src = "/TaskManagement/TechnicalPartAssignment?customerName=" + customerName;
+                            window.parent.document.getElementById("rightframe").src = '/Home/Loading?src=' + src;
                             break;
                     };
                 });
@@ -124,12 +126,14 @@
                     var data = obj.data;
                     if (obj.event === 'xi') {
                         id = data.序号;
-                        window.parent.document.getElementById("rightframe").src = "/TaskManagement/Contract_Check?id=" + id;
+                        var src = "/TaskManagement/Contract_Check?id=" + id;
+                        window.parent.document.getElementById("rightframe").src = '/Home/Loading?src=' + src;
                     }
                     switch (obj.event) {
                         case 'update':
                             customerName = data.contractNumber;
-                            window.parent.document.getElementById("rightframe").src = "/TaskManagement/TechnicalPartAssignment?customerName=" + customerName;
+                            var src = "/TaskManagement/TechnicalPartAssignment?customerName=" + customerName;
+                            window.parent.document.getElementById("rightframe").src = '/Home/Loading?src=' + src;
                             break;
                     };
                 });

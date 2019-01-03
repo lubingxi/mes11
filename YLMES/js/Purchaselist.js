@@ -3,7 +3,7 @@
     layui.use(['table','layer', 'form'], function () {
         table = layui.table, layer = layui.layer
         , form = layui.form,jquery=layui.$;
-        $("#PurchaselistSel").click(function () {
+        $("#check").click(function () {
             var PONO = $(".PONO").val().trim();
             var CreatedTime = $("#text1").val();
             var CreatedTimeEnd = $("#text2").val();          

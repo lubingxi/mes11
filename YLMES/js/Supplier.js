@@ -68,16 +68,12 @@
 
             if (Category1 == null) {
                 Category = data.货品品类;
-
             }
             if (Level1 == null) {
                 Level = data.级别;
-
             }
             if (Advantage1 == null) {
                 Advantage = data.优势分析;
-
-
             }
             if (layEvent === 'detail') {
                 layer.msg(Level)

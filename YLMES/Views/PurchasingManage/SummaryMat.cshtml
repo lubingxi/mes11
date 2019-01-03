@@ -29,7 +29,7 @@
                 var table = layui.table;
                 var ContractTypeId = new Array();
                 var ApplierId = new Array();
-                var map = new Map();
+              
                 var $ = layui.jquery
                 var checkStatus;
                 var name;
@@ -115,7 +115,6 @@
                                     }
                                     $(".typeid:eq(" + j + ")").val(typeid[j])
                                 }
-
                             }
                             form.render('select');
                         })
@@ -134,26 +133,24 @@
                     }
                 })
                 form.on('select(se)', function (data) {
-                    ContractTypeId[$(".typeid").index(data.elem)] = data.value
-
+                    ContractTypeId[$(".typeid").index(data.elem)] = data.value;
                 })
                 form.on('select(Applier)', function (data) {
-                    ApplierId[$(".ApplierId").index(data.elem)] = data.value
+                    ApplierId[$(".ApplierId").index(data.elem)] = data.value;
 
                 })
                 $(".print").click(function () {
-                    var map1 = new Map()
-                    var map2 = new Map()
-                    var map3 = new Map()
-                    var map4 = new Map()
-                    var map5 = new Map()
-
-                    checkStatus = table.checkStatus('summary')
+                    var map = new Map();
+                    var map1 = new Map();
+                    var map2 = new Map();
+                    var map3 = new Map();
+                    var map4 = new Map();
+                    var map5 = new Map();
+                    checkStatus = table.checkStatus('summary');
                     ContractTypeId.forEach(function (value, index) {
 
                         switch (Number(value)) {
                             case 1:
-
                                 if (map1.has(ApplierId[index])) {
                                     var inn = map1.get(ApplierId[index]).length
                                     map1.get(ApplierId[index])[inn] = checkStatus.data[index].MaterialID
@@ -169,7 +166,7 @@
                             case 2:
                                 var inn = 0
                                 if (map2.has(ApplierId[index])) {
-                                    inn = map2.get(ApplierId[index]).length
+                                    var inn = map2.get(ApplierId[index]).length
                                     map2.get(ApplierId[index])[inn] = checkStatus.data[index].MaterialID
                                     var app = new Array(map2.get(ApplierId[index]))
                                     map2.set(ApplierId[index], app);

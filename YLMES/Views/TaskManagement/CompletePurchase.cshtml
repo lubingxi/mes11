@@ -9,7 +9,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>友力信息管理系统</title>
     <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
-    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
     <link href="~/css/style.css" rel="stylesheet" type="text/css" />
     <link href="~/layui/css/layui.css" rel="stylesheet" />
     <script type="text/javascript" src="../../js/jquery.js"></script>
@@ -18,13 +17,6 @@
     <script type="text/javascript">
 
         $(function () {
-            $(".click").click(function () {
-                $(".tip").fadeIn(200);
-            });
-
-            $(".tiptop a").click(function () {
-                $(".tip").fadeOut(200);
-            });
             $("#ArrivalNotice").click(function () {
                 var danhao = $(".pn").find(":selected").text();
                 $.ajax({
@@ -46,7 +38,7 @@
                 });
             });
             $("#GenerateContractNumber").click(function () {
-                var taskid =  '@Session["TaskID3"]';
+                var taskid = '@Session["TaskID3"]';
                 $.ajax({
                     url: "/TaskManagement/EQProcurement?taskid=" + taskid,
                     type: "post",
@@ -65,59 +57,44 @@
                     }
                 });
             });
-            $(".sure").click(function () {
-                $(".tip").fadeOut(100);
-            });
-
-            $(".cancel").click(function () {
-                $(".tip").fadeOut(100);
-            });
             layui.use(['table', 'layer'], function () {
                 var table = layui.table, layer = layui.layer;
-                $(document).on("change", "#change", function (e) {
-                    var change = $("#change").val();
-                    table.render({
-                        elem: '#tw'
-                   , url: '/TaskManagement/CheckpurChaseOrder?pid=' + $('.pn').val()
-                   , page: true
-                   , limit: 20
-                   , cols: [[
-                    { type: 'checkbox', fixed: 'left' }
-                   , { field: '采购订单号', width: 210, title: '采购订单号', hide: true }
-                   , { field: '部件名称', width: 200, title: '部件名称' }
-                   , { field: '部件规格', width: 200, title: '部件规格' }
-                   , {
-                       field: '材料', width: 180, title: '材料', edit: Text
-                   }
-                   , { field: '申请采购套数', title: '申请套数', width: 180, edit: Text }
-                   , { field: '每套数量', width: 150, title: '每套数量' }
-                   , { field: '实际采购套数', width: 150, title: '实际套数', }
-                   , { field: '实际采购数量', width: 100, title: '实际数量', edit: Text }
-                   , { field: '单位', width: 100, title: '单位', edit: Text }
-                   , { field: '单价', width: 100, title: '单价' }
-                   , { field: '总价', width: 150, title: '总价' }
-                   , { field: '供应商', width: 150, title: '供应商' }
-                    , { field: 'ID', width: 150, title: 'ID' }
-                   , { field: 'right', width: 178, align: 'center', toolbar: '#barDemo' }
-                   ]]
-
-                    });
+                table.render({
+                    elem: '#tw'
+                    , url: '/TaskManagement/CheckpurChaseOrder?taskid='+'@ViewData["taskidc"]'                  
+                    , totalRow: true
+                    , cols: [[
+                         { field: '采购订单号', width: 210, title: '采购订单号' }
+                        , { field: '部件名称', width: 200, title: '部件名称', totalRowText: '合计：' }
+                        , { field: '部件规格', width: 200, title: '部件规格' }
+                        , {
+                            field: '材料', width: 100, title: '材料'
+                         }
+                        , { field: '申请采购套数', title: '申请套数', width: 100, edit: Text, style:'color:#009688' }
+                        , { field: '每套数量', width: 150, title: '每套数量', edit: Text, style: 'color: #009688' }
+                        , { field: '实际采购套数', width: 100, title: '实际套数',edit: Text, style: 'color:#009688' }
+                        , { field: '实际采购数量', width: 100, title: '实际数量' }
+                        , { field: '单位', width: 100, title: '单位', edit: Text, style: 'color: #009688'}
+                        , { field: '单价', width: 100, title: '单价', edit: Text, style: 'color: #009688' }
+                        , { field: '总价', width: 150, title: '总价', totalRow: true }
+                        , { field: '供应商', width: 150, title: '供应商' }
+                        , { fixed: 'right', width: 180, align: 'center', toolbar: '#barDemo' }
+                    ]]
                 });
-                table.on('checkbox(demo)', function (obj) {
-                    console.log(obj)
-                });
-
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
                     switch (obj.event) {
                         case 'update':
-                            tid = data.任务编号;
+                            tid = data.序号;
                             caigouspc = data.申请采购套数;
-                            caigoucount = data.申请采购数量;
+                            pcsNumber = data.每套数量;
+                            actspc = data.实际采购套数;                          
                             unit = data.单位;
                             beizhu = data.备注;
+                            price = data.单价;
                             $.ajax({
-                                url: "/TaskManagement/EditPurchase?afps=" + caigouspc + "&QRequested=" + caigoucount + "&unit=" + unit + "&desic=" + beizhu+"&tid="+tid,
+                                url: "/TaskManagement/EditPurchased",
+                                data: { taskid: tid, shenPcs: caigouspc, pNumber: pcsNumber, ActSpc: actspc, Unit: unit, note: beizhu, Price: price },
                                 type: "post",
                                 dataType: "text",
                                 success: function (data) {
@@ -132,54 +109,49 @@
                                         return;
                                     }
                                 }
+                            });                     
+                            break;
+                        case 'shen':
+                            var url = '/ApplierList/Purchaselist';
+                            var index = layer.open({
+                                type: 2,
+                                title: "采购清单信息",
+                                content: url,
+                                maxmin: true
+                            });
+                            layer.full(index);                            
+                            break;
+                        case 'sendNotice':
+                            hao = data.采购订单号;                        
+                            $.ajax({
+                                url: "/TaskManagement/SendNotice?hao=" + hao,
+                                type: "post",
+                                dataType: "text",
+                                success: function (data) {
+                                    if (data == "true") {
+                                        window.setTimeout(function () {
+                                            layer.msg("已确认收到发货通知！");
+                                            table.reload('tw');
+                                        }, 500);
+                                    }
+                                }
                             });
                             break;
-
                     };
                 });
-
-
             });
-            var $ = layui.$, active = {
-                getCheckData: function () { //获取选中数据
-                    var checkStatus = table.checkStatus('tw')
-                    , data = checkStatus.data;                 
-                    var hao = new Array();                  
-                    for (var j = 0; j < data.length; j++) {
-                        hao[j] = data[j].采购订单号;
-                    }                                                                               
-                                layer.confirm('是否生成合同号！', {
-                                    btn: ['确定', '取消'], btn1: function () {
-                                        $.ajax({
-                                            url: "/TaskManagement/ContractNo?hao=" + hao,
-                                            type: 'post',
-                                            success: function (data) {
-                                                if (data == "true") {
-                                                    layer.msg("生成合同号成功！", { icon: 6 });
-                                                }
-                                                if (data == "false") {
-                                                    layer.msg('生成合同号失败！', { icon: 5 });
-                                                    return false;
-                                                }
-                                            }
-                                        });
-                                    }, btn2: function () {
-                                        alert("取消生成合同号！");
-                                    }
-                                });
-                            
-                          
-                            
-                       
-                   
-                }
-            };
-        })
-
+        });        
 
     </script>
     <script type="text/html" id="barDemo">
+        {{#  if(d.采购订单号 != null && d.采购订单状态 != '待IQC'){ }}
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="sendNotice">发送到货通知</a>
+        {{#  } else if(d.采购订单号 == null){ }}
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="shen">生成采购清单</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="update">编辑</a>
+        {{#  } else { }}
+
+        {{#  } }}
     </script>
 </head>
 
@@ -188,25 +160,7 @@
 
     <div class="rightinfo">
 
-        <div class="tools">
-
-            <ul class="toolbar">
-                <li>
-                    清单查询：
-                    <select name="quiz1" id="change">
-                        <option value="" selected="">全部</option>
-                        <option value="原材料">原材料</option>
-                        <option value="外购件">外购件</option>
-                    </select>
-                </li>
-                <li>
-                    订单号:
-                    @Html.DropDownList("Ordernumber", new SelectList(ViewBag.pn, "ID", "PONO"), new { @class = "pn" })                    
-                </li>
-            </ul>
-            <button class="layui-btn layui-btn-sm" lay-event="getCheckData" style="height:35px" id="btns">生成合同号</button>
-            <button class="layui-btn" id="ArrivalNotice" data-type="reload">发送到货通知</button>
-        </div>
+        
         <table class="tablelist" id="tw" lay-filter="demo"></table>
 
     </div>

@@ -121,7 +121,59 @@
                 }
                 form.render();
             });
-           
+
+            var Level1 = null;
+            var Advantage1 = null;
+            var ApplierProductTypeID = null;
+            form.on('select(CategoryId)', function (data) {
+                var areaId = data.value;
+                
+                var oin = data.othis;
+                ApplierProductTypeID = data.value;
+                // layer.msg(ApplierProductTypeID);
+                $.ajax({
+                    type: 'POST',
+                    url: '/ApplierList/Supp',
+                    data: { ids: areaId },
+                    dataType: 'json',
+                    success: function (data) {
+                        var e = oin.parent().parent().next().children().children()
+                        var r = oin.parent().parent().next().next().children().children();
+                        var a = oin.parent().parent().next().next().next().children().children();
+                        e.empty();
+                        r.empty();
+                        a.empty();
+                        for (var i = 0; i < data.length; i++) {
+                            e.append("<option>" + data[i].供应商 + "</option>");
+                            r.append("<option>" + data[i].级别 + "</option>");
+                            a.append("<option>" + data[i].优势分析 + "</option>");
+                        }
+                        if (data.length == 0) {
+                            e.append("<dd>没有选项</dd>");
+                            r.append("<dd>没有选项</dd>");
+                            a.append("<dd>没有选项</dd>");
+                        }
+                        form.render();
+                    }
+                });
+
+            });
+            form.on('select(typeid)', function (data) {
+                //得到select原始DOM对象
+                Level1 = data.value;
+                // layer.msg(Level1)
+                //得到被选中的值
+
+            });
+            form.on('select(ApplierId)', function (data) {
+                //得到select原始DOM对象
+                Advantage1 = data.value;
+                //layer.msg(Advantage1)
+                //得到被选中的值
+
+            });
+
+
             $("#check").click(function () {
                 var name = $(".Name").val().trim();
                 var type = $(".type").val();
@@ -145,13 +197,13 @@
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" lay-filter="demo">删除</a>
     </script>
     <script type="text/html" id="se" >
-        <select class="typeid" ></select>
+        <select class="typeid" lay-filter="typeid" lay_search=""></select>
     </script>
     <script type="text/html" id="Category">
-        <select class="CategoryId"></select>
+        <select class="CategoryId" lay-filter="CategoryId" lay_search=""></select>
     </script>
     <script type="text/html" id="Applier">
-        <select class="ApplierId"></select>
+        <select class="ApplierId"lay-filter="ApplierId" lay_search=""></select>
     </script>
 </head>
 <body>

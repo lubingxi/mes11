@@ -20,21 +20,7 @@
 
     <script type="text/javascript">
         $(function () {
-            $(".click").click(function () {
-                $(".tip").fadeIn(200);
-            });
-
-            $(".tiptop a").click(function () {
-                $(".tip").fadeOut(200);
-            });
-
-            $(".sure").click(function () {
-                $(".tip").fadeOut(100);
-            });
-
-            $(".cancel").click(function () {
-                $(".tip").fadeOut(100);
-            });
+            
             $("#addC").click(function () {
                 var sd = $("#u").text();
                 window.parent.document.getElementById("rightframe").src = sd;
@@ -201,7 +187,6 @@
     <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
     <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
     <script type="text/javascript">
-
         function admin_add(title, url, w, h) {
             layer_show(title, url, w, h);
         }

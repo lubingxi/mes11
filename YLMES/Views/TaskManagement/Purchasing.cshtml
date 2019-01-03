@@ -34,6 +34,7 @@
             });
           
             $("#SubmitPurchase").click(function () {
+                layer.confirm("是否提交采购申请？", function () {
                 var taskid =  '@Session["TaskID3"]';
                 $.ajax({
                     url: "/TaskManagement/EQProcurement?taskid=" + taskid,
@@ -42,8 +43,8 @@
                     success: function (data) {
                         if (data == "true") {
                             window.setTimeout(function () {
-                                layer.msg("编辑成功！");
-                                table.reload('tw');
+                                layer.msg("提交到采购申请！");
+                                window.parent.document.getElementById("rightframe").src = "/TaskManagement/MyTask";
                             }, 500);
                         }
                         else {
@@ -52,6 +53,7 @@
                         }
                     }
                 });
+                });                
             });
             layui.use(['table', 'layer'], function () {
                 var table = layui.table, layer = layui.layer;

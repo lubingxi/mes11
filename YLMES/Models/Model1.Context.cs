@@ -1086,21 +1086,30 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Finished_stock_Result>("Finished_stock", customerNameParameter, createdTimeParameter, createdTimeEndParameter, outgoingTimeParameter, outgoingTimeEndParameter);
         }
     
-        public virtual int GeneratPO(Nullable<int> taskID, string listType, string iDs)
+        public virtual int GenerateOrders(Nullable<int> taskID, string iDs, string listType)
         {
             var taskIDParameter = taskID.HasValue ?
                 new ObjectParameter("TaskID", taskID) :
                 new ObjectParameter("TaskID", typeof(int));
     
-            var listTypeParameter = listType != null ?
-                new ObjectParameter("ListType", listType) :
-                new ObjectParameter("ListType", typeof(string));
-    
             var iDsParameter = iDs != null ?
                 new ObjectParameter("IDs", iDs) :
                 new ObjectParameter("IDs", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GeneratPO", taskIDParameter, listTypeParameter, iDsParameter);
+            var listTypeParameter = listType != null ?
+                new ObjectParameter("ListType", listType) :
+                new ObjectParameter("ListType", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GenerateOrders", taskIDParameter, iDsParameter, listTypeParameter);
+        }
+    
+        public virtual int GeneratPO(string iDs)
+        {
+            var iDsParameter = iDs != null ?
+                new ObjectParameter("IDs", iDs) :
+                new ObjectParameter("IDs", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GeneratPO", iDsParameter);
         }
     
         public virtual ObjectResult<getPackjobs_Result> getPackjobs(string tYPE, string workorderNO)
@@ -1401,7 +1410,7 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PM_AddPurld", taskIDParameter, materialIDParameter, applyPCSParameter, applyQTYParameter, qtyofPCSParameter);
         }
     
-        public virtual int PM_AddPurlist(Nullable<int> taskID, string material, string partSpec, string partMaterial, Nullable<int> applyPCS, Nullable<int> qtyofPCS, string listType, string units, string note)
+        public virtual int PM_AddPurlist(Nullable<int> taskID, string material, string partSpec, string partMaterial, Nullable<int> applyPCS, Nullable<int> qtyofPCS, string listType, string units, string note, string userName)
         {
             var taskIDParameter = taskID.HasValue ?
                 new ObjectParameter("TaskID", taskID) :
@@ -1439,7 +1448,11 @@ namespace YLMES.Models
                 new ObjectParameter("Note", note) :
                 new ObjectParameter("Note", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PM_AddPurlist", taskIDParameter, materialParameter, partSpecParameter, partMaterialParameter, applyPCSParameter, qtyofPCSParameter, listTypeParameter, unitsParameter, noteParameter);
+            var userNameParameter = userName != null ?
+                new ObjectParameter("UserName", userName) :
+                new ObjectParameter("UserName", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PM_AddPurlist", taskIDParameter, materialParameter, partSpecParameter, partMaterialParameter, applyPCSParameter, qtyofPCSParameter, listTypeParameter, unitsParameter, noteParameter, userNameParameter);
         }
     
         public virtual ObjectResult<PM_AssignTasksCheck_Result> PM_AssignTasksCheck(string rwapStatusID, string createdTimeStart, string salesOrder, string projectName, string statusID)
@@ -2026,7 +2039,7 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PMCCompleted", taskIDParameter);
         }
     
-        public virtual ObjectResult<POcheck_Result> POcheck(string type, string userName)
+        public virtual ObjectResult<POcheck_Result> POcheck(string type, string userName, Nullable<int> taskid)
         {
             var typeParameter = type != null ?
                 new ObjectParameter("type", type) :
@@ -2036,7 +2049,11 @@ namespace YLMES.Models
                 new ObjectParameter("UserName", userName) :
                 new ObjectParameter("UserName", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<POcheck_Result>("POcheck", typeParameter, userNameParameter);
+            var taskidParameter = taskid.HasValue ?
+                new ObjectParameter("Taskid", taskid) :
+                new ObjectParameter("Taskid", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<POcheck_Result>("POcheck", typeParameter, userNameParameter, taskidParameter);
         }
     
         public virtual ObjectResult<string> PONO(string status)
@@ -2046,6 +2063,15 @@ namespace YLMES.Models
                 new ObjectParameter("Status", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("PONO", statusParameter);
+        }
+    
+        public virtual ObjectResult<PoNoCheck_Result> PoNoCheck(Nullable<int> taskid)
+        {
+            var taskidParameter = taskid.HasValue ?
+                new ObjectParameter("Taskid", taskid) :
+                new ObjectParameter("Taskid", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PoNoCheck_Result>("PoNoCheck", taskidParameter);
         }
     
         public virtual ObjectResult<ProcessBOM_Result> ProcessBOM(string partNumber, string partSpec, string partMaterial)
@@ -5050,15 +5076,15 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateProcess", stationTypeParameter, sortIDParameter, workHoursParameter, workHours2Parameter, requireParameter, iDParameter, createdByParameter, routeNameParameter, indexParameter);
         }
     
-        public virtual int UpdatePurchaseQTY(Nullable<int> actPurchasePCS, Nullable<int> purchasepcs, Nullable<int> applyPurchasePCS, Nullable<int> taskID, string units, string note)
+        public virtual int UpdatePurchaseQTY(Nullable<int> qTYofPCS, Nullable<int> materialID, Nullable<int> applyPurchasePCS, Nullable<int> taskID, string units, string note, string type, Nullable<int> actPCS, Nullable<int> price, Nullable<int> id)
         {
-            var actPurchasePCSParameter = actPurchasePCS.HasValue ?
-                new ObjectParameter("ActPurchasePCS", actPurchasePCS) :
-                new ObjectParameter("ActPurchasePCS", typeof(int));
+            var qTYofPCSParameter = qTYofPCS.HasValue ?
+                new ObjectParameter("QTYofPCS", qTYofPCS) :
+                new ObjectParameter("QTYofPCS", typeof(int));
     
-            var purchasepcsParameter = purchasepcs.HasValue ?
-                new ObjectParameter("Purchasepcs", purchasepcs) :
-                new ObjectParameter("Purchasepcs", typeof(int));
+            var materialIDParameter = materialID.HasValue ?
+                new ObjectParameter("MaterialID", materialID) :
+                new ObjectParameter("MaterialID", typeof(int));
     
             var applyPurchasePCSParameter = applyPurchasePCS.HasValue ?
                 new ObjectParameter("ApplyPurchasePCS", applyPurchasePCS) :
@@ -5076,7 +5102,23 @@ namespace YLMES.Models
                 new ObjectParameter("Note", note) :
                 new ObjectParameter("Note", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdatePurchaseQTY", actPurchasePCSParameter, purchasepcsParameter, applyPurchasePCSParameter, taskIDParameter, unitsParameter, noteParameter);
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            var actPCSParameter = actPCS.HasValue ?
+                new ObjectParameter("ActPCS", actPCS) :
+                new ObjectParameter("ActPCS", typeof(int));
+    
+            var priceParameter = price.HasValue ?
+                new ObjectParameter("price", price) :
+                new ObjectParameter("price", typeof(int));
+    
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdatePurchaseQTY", qTYofPCSParameter, materialIDParameter, applyPurchasePCSParameter, taskIDParameter, unitsParameter, noteParameter, typeParameter, actPCSParameter, priceParameter, idParameter);
         }
     
         public virtual int updateQualifiedCompleted(Nullable<int> taskID, string machineDesignScore, string electricalDesignScore, string suggestedPoints)

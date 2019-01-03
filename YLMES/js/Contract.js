@@ -129,12 +129,42 @@ layui.use(['layer', 'form', 'laydate', 'element', 'table'], function () {
     }
     $(document).ajaxStop(function () {
         layer.closeAll();
+        $(".layui-elem-field input").each(function (i) {
+            var len = $(".layui-elem-field input:eq("+i+")").val().length * 16;
+            if (len == 0) {
+                $(".layui-elem-field input:eq(" + i + ")").css("width", 10 + "px");
+            }
+            else {
+                $(".layui-elem-field input:eq(" + i + ")").css("width", len + "px");
+            }
+        })
+        $(".layui-elem-field input").change(function () {
+            var len = $(this).val().length * 16;
+
+            if (len == 0) {
+                $(this).css("width", 10 + "px");
+            }
+            else {
+                $(this).css("width", len + "px");
+            }
+        });
+        $(".layui-elem-field input").keyup(function () {
+            var len = $(this).val().length * 16;
+           
+            if (len == 0) {
+                $(this).css("width", 10 + "px");
+            }
+            else {
+                $(this).css("width", len + "px");
+            }
+        }); $(".layui-elem-field input").css("padding", "0px");
         $(".print").click(function () {
-            $(":input").css("border", "0px")
-            $("button").hide()
+            $(":input").css("border", "0px");
+            $("button").hide();
             $(".layui-form-radio").hide()
             $(".layui-form-item").css({ "border": "0px", "background-color": "rgba(255,0,0,0)" })
-            $("i").hide()
+            $("i").hide();
+        
             $(":input").each(function (i) {
                 $(":input:eq(" + i + ")").attr("value", $(":input:eq(" + i + ")").val());
             })
@@ -161,17 +191,18 @@ layui.use(['layer', 'form', 'laydate', 'element', 'table'], function () {
     tableins = table.render({
         elem: '#summary1'
         , url: "/PurchasingManage/checkSummary?ids=" + $(".appvalue").val()
-        , totalRow: true
+
         , cols: [[
-            { type: "numbers", width: 50 }
+            {  hide: true }
+            , { type: "numbers", width: 50, style: 'text-align:center' }
             , { field: 'MaterialID', hide: true }
-            , { field: 'PartNumber', title: '名称', totalRowText: '合计:' }
-            , { field: 'PartSpec', title: '规格' }
-            , { field: 'ActPurchaseQTY', title: '数量', totalRow: true }
-            , { title: '单位' }
-            , { field: 'UnitPrice', title: '含税单价（元）', edit: "text", totalRow: true }
-            , { field: 'TotalPrice', title: '含税金额（元）', totalRow: true }
-            , { field: 'beiz', title: '备注' }
+            , { field: 'PartNumber', width: 200, title: '名称', style: 'text-align:center' }
+            , { field: 'PartSpec', width: 200, title: '规格', style: 'text-align:center' }
+            , { field: 'ActPurchaseQTY', width: 100, title: '数量', style: 'text-align:center' }
+            , { title: '单位',width: 200 }
+            , { field: 'UnitPrice', width: 200, title: '含税单价（元）', edit: "text", style: 'text-align:center' }
+            , { field: 'TotalPrice', width: 200, title: '含税金额（元）', style: 'text-align:center' }
+            , { field: 'beiz', width: 200, title: '备注', style: 'text-align:center' }
         ]]
         , done: function (res) {
 

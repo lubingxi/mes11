@@ -86,24 +86,37 @@ namespace YLMES.Controllers
             {
                 Status = "";
             }
-            Dictionary<string, Object> hasmap;
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-
-                SqlParameter[] parms = new SqlParameter[3];
+                SqlParameter[] parms = new SqlParameter[18];
                 parms[0] = new SqlParameter("@Type", "sel");
-                parms[1] = new SqlParameter("@ApplierName", Name);
-                parms[2] = new SqlParameter("@Status", Status);
-                var list = ys.Database.SqlQuery<ApplierList_Supplier_Result>("exec ApplierList_Supplier @Type,'',@ApplierName,'','','','','','','','','','',@Status", parms).ToList();
-                hasmap = new Dictionary<string, Object>();
+                parms[1] = new SqlParameter("@ApplierID", 666);
+                parms[2] = new SqlParameter("@ApplierName", Name);
+                parms[3] = new SqlParameter("@Address", "");
+                parms[4] = new SqlParameter("@Contact", "");
+                parms[5] = new SqlParameter("@Tel", "");
+                parms[6] = new SqlParameter("@Mobile", "");
+                parms[7] = new SqlParameter("@Category", "");
+                parms[8] = new SqlParameter("@Level", "");
+                parms[9] = new SqlParameter("@Advantage", "");
+                parms[10] = new SqlParameter("@Note", "");
+                parms[11] = new SqlParameter("@Fax", "");
+                parms[12] = new SqlParameter("@CreatedBy", "");
+                parms[13] = new SqlParameter("@Principal", "");
+                parms[14] = new SqlParameter("@Representative", "");
+                parms[15] = new SqlParameter("@Account", "");
+                parms[16] = new SqlParameter("@Bank", "");
+                parms[17] = new SqlParameter("@Status", Status);
+                var list = ys.Database.SqlQuery<ApplierList_Supplier_Result>("exec  ApplierList_Supplier  @Type,@ApplierID,@ApplierName,@Address,@Contact,@Tel,@Mobile,@Category,@Level,@Advantage,@Note,@Fax,@CreatedBy,@Principal,@Representative,@Account,@Bank,@Status", parms).ToList();
+                Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
                 PageList<ApplierList_Supplier_Result> pageList = new PageList<ApplierList_Supplier_Result>(list, page, limit);
                 int count = list.Count();
                 hasmap.Add("code", 0);
                 hasmap.Add("msg", "");
                 hasmap.Add("count", count);
                 hasmap.Add("data", pageList);
-            }
-            return Json(hasmap, JsonRequestBehavior.AllowGet);
+                return Json(hasmap, JsonRequestBehavior.AllowGet);
+            }        
         }
         #endregion
         #region 更新
