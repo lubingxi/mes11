@@ -28,18 +28,14 @@
                 }
             });
             layui.use(['table', 'layer'], function () {
-                var table = layui.table, layer = layui.layer;
-         
+                var table = layui.table, layer = layui.layer;         
                 var department="";
                 $(document).on("change", 'select#department', function () {
                     console.log(department=$(this).val());
-                  });
-
-                $('#PurchaselistSel').click(function () {
-                    var Name = $('#WarehouseName').val();
-                    table.render({
+                  });                              
+                var tableIns=table.render({
                         elem: '#tw'
-                , url: '/Statistical/Departmentlist?Name=' + Name + '&department=' + department
+                , url: '/Statistical/Departmentlist'
                 , page: true
                 , done: function () {
                             $("tr a").hide();
@@ -59,11 +55,17 @@
                 , { field: '还剩小时', width: 100, title: '还剩小时' }
                 , { field: '是否逾期', width: 100, title: '是否逾期'}
                , { field: 'right', width: 380, align: 'center', toolbar: '#bsarDemo' }
-                ]]
-                    })
+                ]]                   
                 });
-
-
+                $("#PurchaselistSel").click(function () {
+                    var Name = $('#WarehouseName').val();
+                    tableIns.reload({
+                        where: {
+                            Name: Name
+                            , department: department
+                        }
+                    });
+                }); 
             });
         });
     </script>

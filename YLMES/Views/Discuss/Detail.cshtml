@@ -1,0 +1,290 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Fly Template v3.0，基于 layui 的极简社区页面模版</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    @*<link href="~/layui/css/layui.css" rel="stylesheet" />*@
+    <link href="~/css/global.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="~/js/jquery.js"></script>
+    <link href="~/Content/Layui-KnifeZ/css/layui.css" rel="stylesheet" />
+    <script src="~/Content/Layui-KnifeZ/layui.js"></script>
+    <script src="~/Content/ace/ace.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/css/rocketTop.css">
+    <script type="text/javascript" src="~/js/rocketTop.js"></script>
+    <script type="text/javascript">
+
+        $(document).keydown(function (e) {
+            switch (e.keyCode) {
+                case 27:
+                    window.history.go(-1);
+                    break;
+            }
+        });
+
+        function getQueryString() {
+            var obg = {}, a = '';
+            (a = window.location.search.substr(1)) || (a = window.location.hash.split('?')[1])
+            a.split(/&/g).forEach(function (item) {
+                obg[(item = item.split('='))[0]] = item[1];
+            })
+            return obg
+        }
+
+        function accept(Commentsid) {
+            var id = getQueryString().id;
+            $.ajax({
+                url: "/Discuss/Adopt",
+                type: "post",
+                data: { id: id, CommentsID: Commentsid },
+                dataType: "text",
+                success: function (data) {
+                    if (data != null) {
+                        if (data == "false") {
+                            alert('请求异常');
+                        } else if (data == "true") {
+                            alert('已采纳');
+                            $('#ss').empty();
+                            $('#jieda').empty();
+                            getlist(id)
+                        }
+                    }
+                }
+            });
+        }
+        //删除评论
+        function delss(Commentsid) {
+            var msg = confirm("确定要删除评论吗？");
+            if (msg == true) {
+                var id = getQueryString().id;
+                $.ajax({
+                    url: "/Discuss/Commentdel",
+                    type: "post",
+                    data: { id: id, CommentsID: Commentsid },
+                    dataType: "text",
+                    success: function (data) {
+                        if (data != null) {
+                            if (data == "false") {
+                                alert('删除失败');
+                            } else if (data == "true") {
+                                alert('删除成功');
+                                $('#ss').empty();
+                                $('#jieda').empty();
+                                getlist(id);
+
+                            }
+                        }
+                    }
+                });
+            }         
+        }
+        function getlist(id) {
+            $.ajax({
+                url: "/Discuss/Detaillist",
+                type: "post",
+                data: { id: id },
+                dataType: "json",
+                success: function (data) {
+                    if (data != null) {
+                        var list = data['list'];
+                        var lisst = data['data'];
+                        if (list != null) {
+                            $.each(list, function (i, result) {
+                                $('#ss').append('<h1>' + result.Title + '</h1> <div class="fly-detail-info"> <span class="layui-badge layui-bg-green fly-detail-column" id="dynamic">动态</span> <div class="fly-admin-box" data-id="123"> <span class="layui-btn layui-btn-xs jie-admin" type="del" id="dellist" >删除</span> </div> <span class="fly-list-nums"> <a href="#comment"><i class="iconfont" id="comment" title="回答">&#xe60c;</i>' + result.Answer + '</a> </span> </div> <div class="detail-about"> <i class="fly-avatar" href="/Discuss/UserHome"> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"> </i> <div class="fly-detail-user">  <i href="/Discuss/UserHome" class="fly-link"> <cite id="name">' + result.EmployeeName + '</cite> </i> <span id="Time">' + result.PostingTime + '</span> </div> <div class="detail-hits" id="LAY_jieAdmin" data-id="123"></div> </div>  <div class="detail-body photos"> <p id="substance"> ' + result.Substance + '</p> <p id="imges" >  </p> </div>');
+                                if (result.Picture != null && result.Picture != "") {
+                                    $('#imges').append('<img src="/Forumimages/"' + result.Picture + '>');
+                                }
+                                if (result.Status == "未结") {
+                                    $('#dynamic').after('<span class="layui-badge" style="background-color: #999;">未结</span>');
+                                } else if (result.Status == "已结") {
+                                    $('#dynamic').after('<span class="layui-badge" style="background-color: #5FB878;">已结</span>');
+                                }
+                            });
+                        } else {
+                            alert('请求异常');
+                        }
+                        if (lisst != null) {
+                            $.each(lisst, function (i, res) {
+                                switch (res.Status) {
+                                    case "已采纳":
+                                        $('#jieda').append('<li data-id="111" class="jieda-daan"> <div class="detail-about detail-about-reply"> <a class="fly-avatar" href=""> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt=" "> </a> <div class="fly-detail-user"> <a href="" class="fly-link"> <cite>' + res.EmployeeName + '</cite>  </div> <div class="detail-hits"> <span>' + res.CommentsTime + '</span></div> <i class="iconfont icon-caina" title="最佳答案"></i> </div> <div class="detail-body jieda-body photos"> <p>' + res.Comments + '</p> </div> <div class="jieda-reply"> <div class="jieda-admin"> <button style="background-color:#1E9FFF;color:#fff;border:2px sold ##FFB800" type="del"onclick="delss(' + res.id + ')">删除</button> </div> </div></li>');
+                                        break;
+                                    case "未采纳":
+                                        $('#jieda').append('<li data-id="111"><div class="detail-about detail-about-reply"><a class="fly-avatar" href=""> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt=" "> </a> <div class="fly-detail-user"> <a href="" class="fly-link"> <cite>' + res.EmployeeName + '</cite> </a> </div> <div class="detail-hits"> <span>' + res.CommentsTime + '</span> </div> </div> <div class="detail-body jieda-body photos"> <p>' + res.Comments + '</p></div> <div class="jieda-reply"><div class="jieda-admin"><button type="del" style="background-color:#1E9FFF;color:#fff;border:2px sold ##FFB800" id="del" onclick="delss(' + res.id + ')">删除</button> <button style="background-color:#1E9FFF;color:#fff;border:2px sold ##FFB800" class="jieda-accept" type="accept" id="accept" onclick="accept(' + res.id + ')">采纳</button></div> </div></li>');
+                                        break;
+                                }
+                            });
+                        } else {
+                            $('#jieda').append('<li class="fly-none">消灭零回复</li>');
+                        }
+                        //编辑帖子
+                        //$('#edist').click(function () {
+
+                        //});
+                        //删除帖子
+                        $('#dellist').click(function () {
+                            $.ajax({
+                                url: "/Discuss/Detaildel",
+                                type: "post",
+                                data: { id: id },
+                                dataType: "text",
+                                success: function (data) {
+                                    if (data != null) {
+                                        if (data == "false") {
+                                            alert('删除失败')
+                                        } else if (data == "true") {
+                                            alert('删除成功');
+                                            self.location = document.referrer;
+                                        }
+                                    }
+                                }
+                            });
+                        });
+                    }
+                }
+            });
+        }
+        $(function () {
+             if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }
+            $('#fanhui').click(function () {
+                window.history.go(-1);
+            });
+            $('.rest').click(function () {
+               $('#layeditDemo').val()="";
+            });
+            var id = getQueryString().id;
+            getlist(id);
+            $('#DetailOK').click(function () {
+                var Comments = $("#layeditDemo").val();
+                alert(Comments);
+                $.ajax({
+                    url: "/Discuss/Commentadd",
+                    type: "post",
+                    data: { id: id, Comments: Comments, CommentsPicture: "" },
+                    dataType: "text",
+                    success: function (data) {
+                        if (data != null) {
+                            if (data == "false") {
+                                alert('评论失败')
+                            } else if (data == "true") {
+                                alert('评论成功');
+                                $('#ss').empty();
+                                $('#jieda').empty();
+                                getlist(id);
+                            }
+                        }
+                    }
+                });
+            });
+
+        });
+    </script>
+    <script>
+        layui.use(['layedit', 'layer', 'jquery'], function () {
+            var $ = layui.jquery;
+            var layedit = layui.layedit;
+            layedit.set({
+                //暴露layupload参数设置接口 --详细查看layupload参数说明
+                uploadImage: {
+                    url: '/Discuss/LayUploadFile',
+                    accept: 'image',
+                    acceptMime: 'image/*',
+                    exts: 'jpg|png|gif|bmp|jpeg',
+                    src: File,
+                    size: '10240'
+                }
+                , uploadVideo: {
+                    url: '/Attachment/LayUploadFile',
+                    accept: 'video',
+                    acceptMime: 'video/*',
+                    exts: 'mp4|flv|avi|rm|rmvb',
+                    size: '20480'
+                }
+                //右键删除图片/视频时的回调参数，post到后台删除服务器文件等操作，
+                //传递参数：
+                //图片： imgpath --图片路径
+                //视频： filepath --视频路径 imgpath --封面路径
+                , calldel: {
+                    url: '/Attachment/DeleteFile'
+                }
+                //开发者模式 --默认为false
+                , devmode: true
+                //插入代码设置
+                , codeConfig: {
+                    hide: true,  //是否显示编码语言选择框
+                    default: 'javascript' //hide为true时的默认语言格式
+                }
+                , tool: [
+                    'html', 'code', 'strong', 'italic', 'underline', 'del', 'addhr', '|', 'fontFomatt', 'colorpicker', 'face'
+                    , '|', 'left', 'center', 'right', '|', 'link', 'unlink', 'image_alt', 'anchors'
+                ]
+                , height: '90%'
+            });
+            var ieditor = layedit.build('layeditDemo');
+        })
+    </script>
+</head>
+<body style="overflow-y:hidden;background-color:#fff;">
+    <div id="shape">
+        <div class="shapeColor">
+            <div class="shapeFly">
+            </div>
+        </div>
+    </div>
+    <div class="fly-header layui-bg-blue" style="text-align:center;height:57px;background-color:#1E9FFF;border-bottom:2px solid #FFB800;">
+        <label style="font-size:40px;">友力问题讨论区</label>
+    </div>
+
+
+    <div class="fly-panel fly-column">
+        <div class="layui-container" style="margin-left:800px;">
+            @*<ul class="layui-clear">
+                    <li><i id="question" style="cursor:pointer;" onclick="self.location=document.referrer;">返回</i></li>
+                </ul>*@
+            @*<div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;">
+                    <a href="/Discuss/Posting" class="layui-btn">发表新帖</a>
+                </div>*@
+            <button class="layui-btn" id="fanhui">返回</button>
+        </div>
+    </div>
+    <div class="layui-container" style="width:100%;margin-left:280px">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md8 content detail">
+                <div class="fly-panel detail-box" id="ss">
+                </div>
+                <div class="fly-panel detail-box" id="flyReply">
+                    <fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
+                        <legend>回帖</legend>
+                    </fieldset>
+                    <ul class="jieda" id="jieda"></ul>
+                    <div class="layui-form layui-form-pane">
+                        <form>
+                            <div class="layui-form-item layui-form-text">
+                                <a name="comment"></a>
+                                <div class="layui-input-block">
+                                    <textarea id="layeditDemo"></textarea>
+                                    @*<textarea id="L_content" name="content" required lay-verify="required" placeholder="请输入内容" class="layui-textarea fly-editor" style="height: 150px;"></textarea>*@
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <button class="layui-btn" id="DetailOK">提交回复</button>                                
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

@@ -79,10 +79,44 @@ namespace YLMES.Controllers
             return Json(hasmap,JsonRequestBehavior.AllowGet);
             }
         }
+        //修改物料信息
+        public ActionResult EditMaterialInformation(string id,string apid,string Applierid, string typeid)
+        {
+            try
+            {
+                int ids = int.Parse(id);
+                int apsid = int.Parse(apid);
+                int appid = int.Parse(Applierid);
+                int tid = int.Parse(typeid);
+                using(YLMES_newEntities ys = new YLMES_newEntities())
+                {
+                    PM_Material pm = ys.PM_Material.Where(c => c.ID == ids).First();
+                    pm.ApplierProductTypeID = apsid;
+                    pm.ApplierId = Applierid;
+                    pm.ContractTypeId = typeid;
+                    ys.SaveChanges();
+                }
+                return Content("true");
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Content("false");
+            }
+           
+        }
         #region 查询
         public JsonResult GetSupplierlist(string Name, string Status, int page, int limit)
         {
             if (Status == "全部")
+            {
+                Status = "";
+            }
+            if (Name == null)
+            {
+                Name = "";
+            }
+            if (Status == null)
             {
                 Status = "";
             }
@@ -124,7 +158,7 @@ namespace YLMES.Controllers
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-                SqlParameter[] parms = new SqlParameter[14];
+                SqlParameter[] parms = new SqlParameter[17];
                 parms[0] = new SqlParameter("@Type", "Updata");
                 parms[1] = new SqlParameter("@ApplierID", ApplierID);
                 parms[2] = new SqlParameter("@ApplierName", ApplierName);
@@ -132,16 +166,40 @@ namespace YLMES.Controllers
                 parms[4] = new SqlParameter("@Contact", Contact);
                 parms[5] = new SqlParameter("@Tel", Tel);
                 parms[6] = new SqlParameter("@Mobile", Mobile);
-                parms[7] = new SqlParameter("@CategoryID", Category);
-                parms[8] = new SqlParameter("@LevelID", Level);
-                parms[9] = new SqlParameter("@AdvantageID", Advantage);
-                parms[10] = new SqlParameter("@Principal", Principal);
-                parms[11] = new SqlParameter("@Representative", Representative);
-                parms[12] = new SqlParameter("@Account", Account);
-                parms[13] = new SqlParameter("@Bank", Bank);
-                int i = ys.Database.ExecuteSqlCommand("exec [ApplierList_Supplier] @Type,@ApplierID,@ApplierName,@Address,@Contact,@Tel,@Mobile,@CategoryID,@LevelID,@AdvantageID,'','','',@Principal,@Representative,@Account,@Bank", parms);
+                parms[7] = new SqlParameter("@Category", Category);
+                parms[8] = new SqlParameter("@Level", Level);
+                parms[9] = new SqlParameter("@Advantage", Advantage);
+                parms[10] = new SqlParameter("@Note", "");
+                parms[11] = new SqlParameter("@Fax", "");
+                parms[12] = new SqlParameter("@CreatedBy", "");
+                parms[13] = new SqlParameter("@Principal", "");
+                parms[14] = new SqlParameter("@Representative", "");
+                parms[15] = new SqlParameter("@Account", "");
+                parms[16] = new SqlParameter("@Bank", "");
+                int i = ys.Database.ExecuteSqlCommand("exec ApplierList_Supplier @Type,@ApplierID,@ApplierName,@Address,@Contact,@Tel,@Mobile,@Category,@Level,@Advantage,'','',''," +
+                                                      "@Principal,@Representative,@Account,@Bank", parms);
 
                 return "true";
+            }
+        }
+        //修改地址
+        public ActionResult EditDress(string ApplierID,string Dress)
+        {
+            try
+            {
+                using(YLMES_newEntities ys = new YLMES_newEntities())
+                {
+                    int aid = int.Parse(ApplierID);
+                    PM_ApplierList pa = ys.PM_ApplierList.Where(p => p.ID == aid).First();
+                    pa.Address = Dress;
+                    ys.SaveChanges();
+                }
+                return Content("true");
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Content("false");
             }
         }
         #endregion
@@ -254,13 +312,16 @@ namespace YLMES.Controllers
         #region 显示采购清单
         //查询采购清单
         public ActionResult checkPurchaselist(string id) {
+
             List<PurchaseAll_Result> list = null;
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                 if (id == null)
                 {
                     id = "";
-                };
+                }
+
+                
                 SqlParameter[] parms = new SqlParameter[2];
                 parms[0] = new SqlParameter("@Type","");
                 parms[1] = new SqlParameter("@id", id);
@@ -301,7 +362,6 @@ namespace YLMES.Controllers
         }
         //物料信息管理
         public ActionResult MaterialManagement() {
-
             return View();
         }
         public JsonResult GetPurchaselist(string PONO, string CreatedTime, string CreatedTimeEnd, int page, int limit)
@@ -381,13 +441,12 @@ namespace YLMES.Controllers
         #region 绑定供应商名称
         public JsonResult Supp(string ids)
         {
-
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-                SqlParameter[] parms = new SqlParameter[2];
-                parms[0] = new SqlParameter("@Type", "SupvpliserName");
-                parms[1] = new SqlParameter("@CategoryID", ids);
-                var list = ys.Database.SqlQuery<ApplierList_getName_Result>("exec ApplierList_getName @Type,@CategoryID", parms).ToList();
+                int id = int.Parse(ids);
+                SqlParameter[] parms = new SqlParameter[1];
+                parms[0] = new SqlParameter("@CategoryID", id);
+                var list = ys.Database.SqlQuery<ApplierList_getName_Result>("exec ApplierList_getName @CategoryID", parms).ToList();
                 return Json(list, JsonRequestBehavior.AllowGet);
             }
 

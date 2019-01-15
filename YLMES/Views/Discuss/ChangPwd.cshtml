@@ -1,0 +1,56 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>UserData</title>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body>
+    <blockquote class="layui-elem-quote">用户信息</blockquote>
+    <form class="layui-form layui-form-pane" id="userEditForm" lay-filter="form" style="padding-left:100px;">
+        <input class="layui-hide" name="id">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="PWD" required lay-verify="required|pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item" style="padding-left:20px">
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">更新</button>
+            </div>
+            <div class="layui-input-inline">
+                <button type="reset" class="layui-btn layui-btn-primary reset">重置</button>
+            </div>
+        </div>
+    </form>
+    <script>
+        !function () {
+            "use strict";
+            layui.use(['form', 'layer', 'element'], function () {
+                var form = layui.form, layer = layui.layer, element = layui.element;
+                var $ = layui.jquery
+                form.on('submit(formDemo)', function () {
+                    layer.confirm('更新将重新登陆确定更新?', { icon: 3, title: '提示' }, function (index) {
+                        var pwd = $('.layui-input').val();          
+                        $.post("/Discuss/Changepwd", { pwd: pwd, type: "up" }, function (data) {
+                            if (data == "true") {
+                                window.top.location = '/Home/Login';
+                            }
+                        });
+                    });
+                    return false;
+                })
+            });
+        }()
+    </script>
+</body>
+</html>

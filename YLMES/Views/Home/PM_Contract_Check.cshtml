@@ -20,14 +20,17 @@
     <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
     <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
     <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <style type="text/css">
+        .btn-click {
+            color: blue;
+        }
+    </style>
     <script type="text/javascript">
         function admin_add(title, url, w, h) {
             layer_show(title, url, w, h);
         }
         $(function () {
-            $(".click").click(function () {
-                $(".tip").fadeIn(200);
-            });
+
             if ('@Session["name"]' == "") {
                 window.top.location = '/Home/Login';
             }
@@ -36,29 +39,12 @@
                     $(".layui-btn").click();
                 }
             });
-            $(".tiptop a").click(function () {
-                $(".tip").fadeOut(200);
-            });
 
-            $(".sure").click(function () {
-                $(".tip").fadeOut(100);
-            });
-
-            $(".cancel").click(function () {
-                $(".tip").fadeOut(100);
-            });
             layui.use(['table', 'layer'], function () {
                 var table = layui.table, layer = layui.layer;
-                $(".layui-btn").click(function () {
-                    var CuName = $("#CustomerName").val().trim();
-                    var CNumber = $("#ContractNumber").val().trim();
-                    var Select = $("#ck option:selected").text();
-                    var strattime = $(".strattime").val();
-                    var endtime = $(".endtime").val();
-                    var rs = $("#ReviewStatus").val();
-                    table.render({
-                        elem: '#tw'
-                   , url: '/Home/Get_Data?CName=' + CuName + '&CNumber=' + CNumber + '&Status=' + Select + '&strattime=' + strattime + '&endtime=' + endtime + '&rs=' + rs
+                    var tableIns=table.render({
+                     elem: '#tw'
+                   , url: '/Home/Get_Data'
                    , page: true
                    , limit: 15
                    , done: function () {
@@ -66,9 +52,7 @@
                        $("tr").hover(function () {
 
                            $(this).children().last().children().children().toggle();
-                       })
-
-
+                       });
                    }
                    , cols: [[
                    { field: 'CustomerName', width: 210, title: '客户名称' }
@@ -87,6 +71,24 @@
                    ]]
 
                     });
+
+                $(".layui-btn").click(function () {
+                    var CuName = $("#CustomerName").val().trim();
+                    var CNumber = $("#ContractNumber").val().trim();
+                    var Select = $("#ck option:selected").text();
+                    var strattime = $(".strattime").val();
+                    var endtime = $(".endtime").val();
+                    var rs = $("#ReviewStatus").val();
+                    tableIns.reload({
+                        where: {
+                            CName: CuName
+                            , CNumber: CNumber
+                            , Status: Select
+                            , strattime: strattime
+                            , endtime: endtime
+                            , rs: rs
+                        }
+                    });
                 });
                 table.on('checkbox(demo)', function (obj) {
                     console.log(obj)
@@ -104,12 +106,12 @@
             });
 
         })
-             
+
 
     </script>
     <script type="text/html" id="cc">
         {{#  if(d.ContractNumber != ''){ }}
-        <span style="color: red">{{d.ContractNumber}}</span>
+        <span style="color:red;cursor:pointer;" id="hovers">{{d.ContractNumber}}</span>
         {{#  } else { }}
         {{#  } }}
     </script>

@@ -40,15 +40,8 @@
                 $(".tip").fadeOut(100);
             });
             layui.use(['table', 'layer'], function () {
-                var table = layui.table, layer = layui.layer;
-                $(".layui-btn").click(function () {
-                    var CuName = $("#CustomerName").val().trim();
-                    var CNumber = $("#ContractNumber").val().trim();
-                    var Select = $("#ck option:selected").text();
-                    var strattime = $(".strattime").val();
-                    var endtime = $(".endtime").val();
-                    var rs = $("#ReviewStatus").val();
-                    table.render({
+                var table = layui.table, layer = layui.layer;              
+                var tableIns=table.render({
                         elem: '#tw'
                         , done: function () {
                             $("tr a").hide()
@@ -56,7 +49,7 @@
                                 $(this).children().last().children().children().toggle();
                             })
                         }
-                   , url: '/Home/Get_Datas?CName=' + CuName + '&CNumber=' + CNumber + '&Status=' + Select + '&strattime=' + strattime + '&endtime=' + endtime + '&rs=' + rs
+                   , url: '/Home/Get_Datas'
                    , page: true
                    , limit: 15
                    , cols: [[
@@ -78,7 +71,25 @@
                    ]]
 
                     });
-                });
+               
+                $(".layui-btn").click(function () {
+                    var CuName = $("#CustomerName").val().trim();
+                    var CNumber = $("#ContractNumber").val().trim();
+                    var Select = $("#ck option:selected").text();
+                    var strattime = $(".strattime").val();
+                    var endtime = $(".endtime").val();
+                    var rs = $("#ReviewStatus").val();
+                    tableIns.reload({
+                        where: {
+                            CName: CuName
+                            , CNumber: CNumber
+                            , Status: Select
+                            , strattime: strattime
+                            , endtime: endtime
+                            , rs: rs
+                        }
+                    });
+                })
                 table.on('checkbox(demo)', function (obj) {
                     console.log(obj)
                 });
@@ -119,7 +130,7 @@
     </script>
     <script type="text/html" id="cc">
         {{#  if(d.ContractNumber != ''){ }}
-        <span style="color: red">{{d.ContractNumber}}</span>
+        <span style="color: red;cursor:pointer;">{{d.ContractNumber}}</span>
         {{#  } else { }}
         {{#  } }}
     </script>

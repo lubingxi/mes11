@@ -1,0 +1,311 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>基于 layui 的极简社区页面模版</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/css/global.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/css/rocketTop.css">
+    <script type="text/javascript" src="~/js/rocketTop.js"></script>
+    <style type="text/css">
+        .btn-click {
+            color: blue;
+            font-weight: bold;
+            font-style: normal;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+             if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }
+            $('#Article').empty();
+            $.ajax({
+                url: "/Discuss/Article",
+                type: "post",
+                data: { Columns: "" },
+                dataType: "text",
+                success: function (data) {
+                    if (data != null) {
+                        $.each(JSON.parse(data), function (i, result) {
+                            $('#Article').append(' <li><a href="" class="fly-avatar"> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="贤心"> </a><h2> <a class="layui-badge">' + result.Columns + '</a> <a href="/Discuss/Detail?id=' + result.id + '&name=' + result.EmployeeName + '">' + result.Title + '</a></h2> <div class="fly-list-info"><a link> <cite>' + result.EmployeeName + '</cite></a> <span>' + result.PostingTime + '</span><span class="layui-badge fly-badge-accept layui-hide-xs">' + result.Status + '</span> <span class="fly-list-nums"> <i class="iconfont icon-pinglun1" title="回答"></i> ' + result.Answer + '</span> </div> </li>');
+                        });
+                    }
+                }
+            });
+
+            $('.layui-clear li').each(function (index) {
+                $(this).click(function () {
+                    $(".btn-click").removeClass("btn-click");
+                    $(this).addClass("btn-click");
+                });
+            });
+
+            $('.fly-filter i').click(function () {
+                $(".btn-click").removeClass("btn-click");
+                $(this).addClass("btn-click");
+            });
+
+            $('#discuss').click(function () {
+                $('#Article').empty();
+                $.ajax({
+                    url: "/Discuss/Article",
+                    data: { Columns: "讨论" },
+                    type: "post",
+                    dataType: "text",
+                    success: function (data) {
+                        if (data != null) {
+                            $.each(JSON.parse(data), function (i, result) {
+                                $('#Article').append(' <li><a href="" class="fly-avatar"> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="贤心"> </a><h2> <a class="layui-badge">' + result.Columns + '</a> <a href="/Discuss/Detail?id=' + result.id + '&name=' + result.EmployeeName + '">' + result.Title + '</a></h2> <div class="fly-list-info"><a  link> <cite>' + result.EmployeeName + '</cite></a> <span>' + result.PostingTime + '</span><span class="layui-badge fly-badge-accept layui-hide-xs">' + result.Status + '</span> <span class="fly-list-nums"> <i class="iconfont icon-pinglun1" title="回答"></i> ' + result.Answer + '</span> </div> </li>');
+                            });
+                        }
+                    }
+                });
+            });
+            $('#question').click(function () {
+                $('#Article').empty();
+                $.ajax({
+                    url: "/Discuss/Article",
+                    type: "post",
+                    data: { Columns: "提问" },
+                    dataType: "text",
+                    success: function (data) {
+                        if (data != null) {
+                            $.each(JSON.parse(data), function (i, result) {
+                                $('#Article').append(' <li><a href="" class="fly-avatar"> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="贤心"> </a><h2> <a class="layui-badge">' + result.Columns + '</a> <a href="/Discuss/Detail?id=' + result.id + '&name=' + result.EmployeeName + '">' + result.Title + '</a></h2> <div class="fly-list-info"><a  link> <cite>' + result.EmployeeName + '</cite></a> <span>' + result.PostingTime + '</span><span class="layui-badge fly-badge-accept layui-hide-xs">' + result.Status + '</span> <span class="fly-list-nums"> <i class="iconfont icon-pinglun1" title="回答"></i> ' + result.Answer + '</span> </div> </li>');
+
+                            });
+                        }
+                    }
+                });
+            });
+            $('#share').click(function () {
+                $('#Article').empty();
+                $.ajax({
+                    url: "/Discuss/Article",
+                    type: "post",
+                    data: { Columns: "分享" },
+                    dataType: "text",
+                    success: function (data) {
+                        if (data != null) {
+                            $.each(JSON.parse(data), function (i, result) {
+                                $('#Article').append(' <li><a href="#" class="fly-avatar"> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="贤心"> </a><h2> <a class="layui-badge">' + result.Columns + '</a> <a href="/Discuss/Detail?id=' + result.id + '&name=' + result.EmployeeName + '">' + result.Title + '</a></h2> <div class="fly-list-info"><a  link> <cite>' + result.EmployeeName + '</cite></a> <span>' + result.PostingTime + '</span><span class="layui-badge fly-badge-accept layui-hide-xs">' + result.Status + '</span> <span class="fly-list-nums"> <i class="iconfont icon-pinglun1" title="回答"></i> ' + result.Answer + '</span> </div> </li>');
+                            });
+                        }
+                    }
+                });
+
+            });
+            $('#proposal').click(function () {
+                $('#Article').empty();
+                $.ajax({
+                    url: "/Discuss/Article",
+                    type: "post",
+                    data: { Columns: "建议" },
+                    dataType: "text",
+                    success: function (data) {
+                        if (data != null) {
+                            $.each(JSON.parse(data), function (i, result) {
+                                $('#Article').append(' <li><a href="" class="fly-avatar"> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="贤心"> </a><h2> <a class="layui-badge">' + result.Columns + '</a> <a href="/Discuss/Detail?id=' + result.id + '&name=' + result.EmployeeName + '">' + result.Title + '</a></h2> <div class="fly-list-info"><a  link> <cite>' + result.EmployeeName + '</cite></a> <span>' + result.PostingTime + '</span><span class="layui-badge fly-badge-accept layui-hide-xs">' + result.Status + '</span> <span class="fly-list-nums"> <i class="iconfont icon-pinglun1" title="回答"></i> ' + result.Answer + '</span> </div> </li>');
+
+                            });
+                        }
+                    }
+                });
+
+            });
+            $('#notice').click(function () {
+                $('#Article').empty();
+                $.ajax({
+                    url: "/Discuss/Article",
+                    type: "post",
+                    data: { Columns: "公告" },
+                    dataType: "text",
+                    success: function (data) {
+                        if (data != null) {
+                            $.each(JSON.parse(data), function (i, result) {
+                                $('#Article').append(' <li><a href="" class="fly-avatar"> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="贤心"> </a><h2> <a class="layui-badge">' + result.Columns + '</a> <a href="/Discuss/Detail?id=' + result.id + '&name=' + result.EmployeeName + '">' + result.Title + '</a></h2> <div class="fly-list-info"><a  link> <cite>' + result.EmployeeName + '</cite></a> <span>' + result.PostingTime + '</span><span class="layui-badge fly-badge-accept layui-hide-xs">' + result.Status + '</span> <span class="fly-list-nums"> <i class="iconfont icon-pinglun1" title="回答"></i> ' + result.Answer + '</span> </div> </li>');
+                            });
+                        }
+                    }
+                });
+
+            });
+            $('#comprehensive').click(function () {
+                $('#Article').empty();
+                $.ajax({
+                    url: "/Discuss/Article",
+                    type: "post",
+                    data: { Columns: "" },
+                    dataType: "text",
+                    success: function (data) {
+                        if (data != null) {
+                            $.each(JSON.parse(data), function (i, result) {
+                                $('#Article').append(' <li><a href="" class="fly-avatar"> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="贤心"> </a><h2> <a class="layui-badge">' + result.Columns + '</a> <a href="/Discuss/Detail?id=' + result.id + '&name=' + result.EmployeeName + '">' + result.Title + '</a></h2> <div class="fly-list-info"><a link> <cite>' + result.EmployeeName + '</cite></a> <span>' + result.PostingTime + '</span><span class="layui-badge fly-badge-accept layui-hide-xs">' + result.Status + '</span> <span class="fly-list-nums"> <i class="iconfont icon-pinglun1" title="回答"></i> ' + result.Answer + '</span> </div> </li>');
+                            });
+                        }
+                    }
+                });
+            });
+            $('#unfinished').click(function () {
+                $('#Article').empty();
+                $.ajax({
+                    url: "/Discuss/Unfinished",
+                    type: "post",
+                    data: { Status: "未结" },
+                    dataType: "text",
+                    success: function (data) {
+                        if (data != null) {
+                            $.each(JSON.parse(data), function (i, result) {
+                                $('#Article').append(' <li><a href="" class="fly-avatar"> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="贤心"> </a><h2> <a class="layui-badge">' + result.Columns + '</a> <a href="/Discuss/Detail?id=' + result.id + '&name=' + result.EmployeeName + '">' + result.Title + '</a></h2> <div class="fly-list-info"><a link> <cite>' + result.EmployeeName + '</cite></a> <span>' + result.PostingTime + '</span><span class="layui-badge fly-badge-accept layui-hide-xs">' + result.Status + '</span> <span class="fly-list-nums"> <i class="iconfont icon-pinglun1" title="回答"></i> ' + result.Answer + '</span> </div> </li>');
+                            });
+                        }
+                    }
+                });
+            });
+            $('#Alreadyknot').click(function () {
+                $('#Article').empty();
+                $.ajax({
+                    url: "/Discuss/Unfinished",
+                    type: "post",
+                    data: { Status: "已结" },
+                    dataType: "text",
+                    success: function (data) {
+                        if (data != null) {
+                            $.each(JSON.parse(data), function (i, result) {
+                                $('#Article').append(' <li><a href="" class="fly-avatar"> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="贤心"> </a><h2> <a class="layui-badge">' + result.Columns + '</a> <a href="/Discuss/Detail?id=' + result.id + '&name=' + result.EmployeeName + '">' + result.Title + '</a></h2> <div class="fly-list-info"><a  link> <cite>' + result.EmployeeName + '</cite></a> <span>' + result.PostingTime + '</span><span class="layui-badge fly-badge-accept layui-hide-xs">' + result.Status + '</span> <span class="fly-list-nums"> <i class="iconfont icon-pinglun1" title="回答"></i> ' + result.Answer + '</span> </div> </li>');
+                            });
+                        }
+                    }
+                });
+            });
+            $('#Newest').click(function () {
+                $('#Article').empty();
+                $.ajax({
+                    url: "/Discuss/Newest",
+                    type: "post",
+                    dataType: "text",
+                    success: function (data) {
+                        if (data != null) {
+                            $.each(JSON.parse(data), function (i, result) {
+                                $('#Article').append(' <li><a href="" class="fly-avatar"> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="贤心"> </a><h2> <a class="layui-badge">' + result.Columns + '</a> <a href="/Discuss/Detail?id=' + result.id + '&name=' + result.EmployeeName + '">' + result.Title + '</a></h2> <div class="fly-list-info"><a  link> <cite>' + result.EmployeeName + '</cite></a> <span>' + result.PostingTime + '</span><span class="layui-badge fly-badge-accept layui-hide-xs">' + result.Status + '</span> <span class="fly-list-nums"> <i class="iconfont icon-pinglun1" title="回答"></i> ' + result.Answer + '</span> </div> </li>');
+                            });
+                        }
+                    }
+                });
+            });
+            $('#Hottest').click(function () {
+                $('#Article').empty();
+                $.ajax({
+                    url: "/Discuss/Hottest",
+                    type: "post",
+                    dataType: "text",
+                    success: function (data) {
+                        if (data != null) {
+                            $.each(JSON.parse(data), function (i, result) {
+                                $('#Article').append(' <li><a href="" class="fly-avatar"> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="贤心"> </a><h2> <a class="layui-badge">' + result.Columns + '</a> <a href="/Discuss/Detail?id=' + result.id + '&name=' + result.EmployeeName + '">' + result.Title + '</a></h2> <div class="fly-list-info"><a link> <cite>' + result.EmployeeName + '</cite></a> <span>' + result.PostingTime + '</span><span class="layui-badge fly-badge-accept layui-hide-xs">' + result.Status + '</span> <span class="fly-list-nums"> <i class="iconfont icon-pinglun1" title="回答"></i> ' + result.Answer + '</span> </div> </li>');
+                            });
+                        }
+                    }
+                });
+            });
+            layui.use(['table', 'layer'], function () {
+                $('#publish').click(function () {
+                    layer.open({
+                        type: 2
+                        , area: ['80%', '80%']
+                        , content: '/Discuss/Posting'
+                        , anim: 2
+                    });
+                });
+                $('.fa').click(function () {
+                    layer.open({
+                        type: 2
+                        , area: ['80%', '80%']
+                        , content: '/Discuss/UserIndex'
+                        , anim: 2
+                        , title:'我发表的帖子'
+                    });
+                });
+                $('.password').click(function () {
+                    layer.open({
+                        type: 2
+                        , area: ['60%', '40%']
+                        , content: '/Discuss/ChangPwd'
+                        , anim: 2
+                    });
+                });
+            });
+
+        });
+    </script>
+</head>
+<body style="overflow-y: hidden;background-color:#fff;">
+    <div id="shape">
+        <div class="shapeColor">
+            <div class="shapeFly">
+            </div>
+        </div>
+    </div>
+    <div class="fly-header layui-bg-blue" style="text-align:center;height:57px;border-bottom:2px solid #FFB800;">
+        <label style="font-size:40px;">友力问题讨论区</label>
+    </div>
+    <div class="fly-panel fly-column">
+        <div class="layui-container">
+            <ul class="layui-clear">
+                <li><i id="question" class="titles" style="cursor:pointer;margin-left:20px;font-style:normal;">提问</i></li>
+                <li><i id="share" class="titles" style="cursor:pointer;margin-left:20px;font-style:normal;">分享</i></li>
+                <li><i id="discuss" class="titles" style="cursor:pointer;margin-left:20px;font-style:normal;">讨论</i></li>
+                <li><i id="proposal" class="titles" style="cursor:pointer;margin-left:20px;font-style:normal;">建议</i></li>
+                <li><i id="notice" class="titles" style="cursor:pointer;margin-left:20px;font-style:normal;">公告</i></li>
+                <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
+                <!-- 用户登入后显示 -->
+                <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block fa"><a href="#">我发表的贴</a></li>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block password"><a href="#">修改密码</a></li>
+                @*<li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/Discuss/UserIndex">我收藏的贴</a></li>*@
+            </ul>
+            <div class="fly-column-right layui-hide-xs">
+                <span class="fly-search"><i class="layui-icon"></i></span>
+                <i id="publish" class="layui-btn">发表新帖</i>
+            </div>
+            @*<div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;">
+                    <a href="/Discuss/Posting" class="layui-btn">发表新帖</a>
+                </div>*@
+        </div>
+    </div>
+    <div class="layui-container" style="width:100% ;margin-left:120px">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md8">
+                <div class="fly-panel" style="margin-bottom: 0; width:100% ;margin-left:120px">
+                    <div class="fly-panel-title fly-filter">
+                        <i id="comprehensive" class="layui-this" style="cursor:pointer">综合</i>
+                        <span class="fly-mid"></span>
+                        <i id="unfinished" style="cursor:pointer">未结</i>
+                        <span class="fly-mid"></span>
+                        <i id="Alreadyknot" style="cursor:pointer">已结</i>
+                        <span class="fly-mid"></span>
+                        <span class="fly-filter-right layui-hide-xs">
+                            <i id="Newest" class="layui-this" style="cursor:pointer">按最新</i>
+                            <span class="fly-mid" style="cursor:pointer"></span>
+                            <i id="Hottest" style="cursor:pointer">按热议</i>
+                        </span>
+                    </div>
+                    <ul class="fly-list" id="Article" style="width:100% ;"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -41,7 +41,8 @@ white-space: normal;
                 var bianhao = '@ViewData["CNumbers"]';
                 if ('@ViewData["name"]' == "11") {
                     $.ajax({
-                        url: "/Home/EditStatus?bianhao=" + bianhao,
+                        url: "/Home/EditStatus",
+                        data: { bianhao: bianhao },
                         type: 'post',
                         success: function (data) {
                             if (data == "true") {
@@ -97,7 +98,8 @@ white-space: normal;
                     btn: ['确定', '取消'], btn1: function () {
                         layer.closeAll();
                         $.ajax({
-                            url: "/Home/IfPayment?bianhao=" + bianhao,
+                            url: "/Home/IfPayment",
+                            data: { bianhao: bianhao },
                             type: 'post',
                             success: function (data) {
                                 if (data == "true") {
@@ -200,9 +202,9 @@ white-space: normal;
                             }
                             if (ty == 1) {
                                 $.ajax({
-                                    url: "/Home/AddShouJiLu?id=" + id + "&NewAmountCollected=" + newd + "&DateOfReceipt=" + dor + "&TicketOpeningAndDate=" + TicketOpeningAndDate + "&shou=" + ty,
+                                    url: "/Home/AddShouJiLu",
                                     type: 'post',
-                                    async: true,
+                                    data: { id: id, NewAmountCollected: newd, DateOfReceipt: dor, TicketOpeningAndDate: TicketOpeningAndDate, shou: ty},
                                     success: function (data) {
                                         if (data == "true") {
                                             window.setTimeout(function () {
@@ -235,9 +237,9 @@ white-space: normal;
                             } else
                             {
                                 $.ajax({
-                                    url: "/Home/AddShouJiLu?id=" + id + "&NewAmountCollected=" + newd + "&DateOfReceipt=" + dor + "&TicketOpeningAndDate=" + TicketOpeningAndDate + "&shou=" + ty,
+                                    url: "/Home/AddShouJiLu",
                                     type: 'post',
-                                    async: true,
+                                    data: { id: id, NewAmountCollected: newd, DateOfReceipt: dor, TicketOpeningAndDate: TicketOpeningAndDate, shou: ty },
                                     success: function (data) {
                                         if (data == "true") {                                           
                                             layer.msg("添加成功", { icon: 6 });
@@ -351,7 +353,7 @@ white-space: normal;
                             ContractID = data.ContractID;
                             layer.confirm("真的删除行么", function (index) {
                                 $.ajax({
-                                    url: "/Home/DeleteShouJiLu?id =" + id + "&ContractID=" + ContractID,
+                                    url: "/Home/DeleteShouJiLu",
                                     type: 'post',
                                     async: true,
                                     data: { "id": id, "ContractID": ContractID },

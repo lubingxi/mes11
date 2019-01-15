@@ -11,7 +11,7 @@ namespace YLMES.Models
 {
     using System;
     
-    public partial class Statistics_Departmentlist_Result
+    public partial class StatisticsDepartmentlist_Result
     {
         public string 员工姓名 { get; set; }
         public string 部门 { get; set; }

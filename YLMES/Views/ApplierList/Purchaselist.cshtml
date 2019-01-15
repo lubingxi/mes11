@@ -16,14 +16,13 @@
         .layui-btn {
             padding: 0px 7px;
         }
-
-            .layui-btn + .layui-btn {
+        .layui-btn + .layui-btn {
                 margin-left: 0px
             }
     </style>
     <script type="text/javascript">
- 
-            
+
+
         layui.use(['layer', 'form', 'laydate', 'element', 'table'], function () {
             var form = layui.form, layer = layui.layer, $ = layui.jquery;
             var laydate = layui.laydate;
@@ -94,7 +93,7 @@
                     });
                     $(".bt").click(function () {
                         index = $(".bt").index(this)
-                                           
+
                         if ($(this).prev().css("background-color") == "rgb(255, 0, 0)") {
                             $(this).prev().css("background-color", "rgb(255, 184, 0)")
                             booo.set(index, false)
@@ -117,10 +116,9 @@
                 PurchaseMap()
                 booo.set(index, false)
                 if (checkStatus.isAll) {
-                    $(".bt:eq(" + index + ") i:eq(1)").show()
-                    $(".bt:eq(" + index + ") i:eq(0)").hide()
-                    $(".bu:eq(" + index + ")").css("background-color", "rgb(255, 0, 0)")
-
+                    $(".bt:eq(" + index + ") i:eq(1)").show();
+                    $(".bt:eq(" + index + ") i:eq(0)").hide();
+                    $(".bu:eq(" + index + ")").css("background-color", "rgb(255, 0, 0)");
                 } else {
                     $(".bt:eq(" + index + ") i:eq(0)").show()
                     $(".bt:eq(" + index + ") i:eq(1)").hide()
@@ -131,6 +129,8 @@
                 if (data != null) {
                     var Stat = true;
                     var index = 0;
+                    var taskid = '@ViewData["taskid"]';
+
                     for (var i = 0; i < data.length; i++) {
                         $(".bu").each(function (j) {
                             if ($(".bu:eq(" + j + ") input").val() == data[i].TaskID) {
@@ -140,11 +140,21 @@
                                 Stat = true;
                             }
                         })
-                        if (Stat) { 
+                        if (Stat) {
+                            if (taskid!= null &&taskid!= "") {
+                                if (taskid== data[i].TaskID) {
+                                $(".Purchase").append("<button class='layui-btn layui-btn-warm bu'>" + data[i].TaskName + "<input type='text' class='layui-hide' value='" + data[i].TaskID + "'/></button>")
+                                $(".bu:eq(" + index + ")").after("<button class='layui-btn layui-btn-radius layui-btn-primary bt' style='border:0px'></button>")
+                                    $(".bt:eq(" + index + ")").append("<i class='layui-icon layui-icon-add-1' style='font-size: 25px; color:#000000'></i><i class='layui-icon layui-icon-ok' style='font-size: 25px;color:#000000;display:none'></i>")
+                                    index++;
+                                }
+                            } else {
+
                             $(".Purchase").append("<button class='layui-btn layui-btn-warm bu'>" + data[i].TaskName + "<input type='text' class='layui-hide' value='" + data[i].TaskID + "'/></button>")
                             $(".bu:eq(" + index + ")").after("<button class='layui-btn layui-btn-radius layui-btn-primary bt' style='border:0px'></button>")
                             $(".bt:eq(" + index + ")").append("<i class='layui-icon layui-icon-add-1' style='font-size: 25px; color:#000000'></i><i class='layui-icon layui-icon-ok' style='font-size: 25px;color:#000000;display:none'></i>")
-                            index++;
+                                index++;
+                            }
                         }
                     }
                 }
@@ -156,12 +166,11 @@
                 $(this).text("采购清单列表")
             })
             $(".prin").click(function () {
-                
+
                 var PurchaseKey = new Array()
                 var PurchaseValue = new Array()
                 var i=0
                 map.forEach(function (value, key) {
-                    
                     PurchaseKey[i] = key
                     PurchaseValue[i] = value
                     i++

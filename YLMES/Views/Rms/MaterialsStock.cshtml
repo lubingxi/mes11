@@ -171,16 +171,10 @@
             $(".tip").fadeOut(100);
         });
         layui.use(['table', 'layer'], function () {
-            var table = layui.table, layer = layui.layer;
-            $(".layui-btn").click(function () {
-                var ProjectName = $("#CustomerName").val();
-                var PartNumber = $("#search-input").val();
-                var CreatedTime = $(".dee").val();
-                var CreatedTimeEnd = $("#test2").val();
-                var CreatedBy = $("#Name").val();
-                table.render({
-                    elem: '#tw'
-                 , url: '/Rms/GetmaterialsStock?ProjectName=' + ProjectName + '&PartNumber=' + PartNumber + '&PartSpec=' + PartNumber + '&CreatedTimeEnd=' + CreatedTimeEnd + '&CreatedTime=' + CreatedTime + '&CreatedBy=' + CreatedBy
+            var table = layui.table, layer = layui.layer;                
+                var tableIns=table.render({
+                   elem: '#tw'
+                 , url: '/Rms/GetmaterialsStock'
                  , page: true
                  , limit: 15
                  , cols: [[
@@ -195,7 +189,21 @@
                  , { field: '入库时间', width: 160, title: '入库时间' }
                  , { field: '操作员', width: 100, title: '操作员' }
                  ]]
-
+                });          
+            $(".layui-btn").click(function () {
+                var ProjectName = $("#CustomerName").val();
+                var PartNumber = $("#search-input").val();
+                var CreatedTime = $(".dee").val();
+                var CreatedTimeEnd = $("#test2").val();
+                var CreatedBy = $("#Name").val();
+                tableIns.reload({
+                    where: {
+                        ProjectName: ProjectName
+                      , PartNumber: PartNumber                      
+                      , CreatedTimeEnd: CreatedTimeEnd
+                      , CreatedTime: CreatedTime
+                      , CreatedBy: CreatedBy
+                    }
                 });
             });
         });

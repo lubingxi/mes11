@@ -749,14 +749,34 @@ namespace YlMES.Controllers
         {
             return View();
         }
-        public JsonResult GetmaterialsStock(string ProjectName, string PartNumber, string PartSpec, string CreatedTimeEnd, string CreatedTime, string CreatedBy)
+        public JsonResult GetmaterialsStock(string ProjectName, string PartNumber,string CreatedTimeEnd, string CreatedTime, string CreatedBy)
         {
+            if (ProjectName == null)
+            {
+                ProjectName = "";
+            }
+            if (PartNumber == null)
+            {
+                PartNumber = "";
+            }
+            if(CreatedTimeEnd==null)
+            {
+                CreatedTimeEnd = "";
+            }
+            if (CreatedTime == null)
+            {
+                CreatedTime = "";
+            }
+            if (CreatedBy == null)
+            {
+                CreatedBy = "";
+            }
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                 SqlParameter[] parms = new SqlParameter[6];
                 parms[0] = new SqlParameter("@ProjectName", ProjectName);
                 parms[1] = new SqlParameter("@PartNumber", PartNumber);
-                parms[2] = new SqlParameter("@PartSpec", PartSpec);
+                parms[2] = new SqlParameter("@PartSpec", "");
                 parms[3] = new SqlParameter("@CreatedTimeEnd", CreatedTimeEnd);
                 parms[4] = new SqlParameter("@CreatedTime", CreatedTime);
                 parms[5] = new SqlParameter("@CreatedBy", CreatedBy);

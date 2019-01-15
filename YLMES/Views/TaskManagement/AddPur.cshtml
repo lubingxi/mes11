@@ -44,7 +44,7 @@
                 <select name="PartMaterial" id="PartMaterial" lay-verify="" lay-filter="PartMaterial" lay-search><option value="">直接选择或搜索选择</option></select>
             </div>
         </div>
-        <div class="layui-form-item" id="partmat">
+        <div class="layui-form-item layui-form" id="partmat">
             <label class="layui-form-label">类型</label>
             <div class="layui-input-block" style="width:400px">
                 <select name="type" id="type" lay-verify="required">
@@ -85,11 +85,6 @@
         </div>
     </div>
     <script>  
-        $(function () {
-            if ('@Session["name"]' == "") {
-                window.top.location = '/Home/Login';
-            }
-        });
             layui.use(['layer', 'form', 'jquery'], function () {
                 var form = layui.form, layer = layui.layer, $ = layui.jquery;
                 form.render();
@@ -108,13 +103,17 @@
                         }
                     }
                 });
+               if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }
                 form.on('select(Material)', function (data) {                    
                     Material = data.value;
                     $("#spec").css("display", "block");
                     $("#partmat").css("display", "none");
                     $.ajax({
                         type: "POST",
-                        url: '/TaskManagement/CheckGetSpec?PartNumber=' + Material,
+                        url: '/TaskManagement/CheckGetSpec',
+                        data: { PartNumber: Material},
                         dataType: "json",
                         success: function (data) {
                             if (data != null) {
@@ -134,7 +133,8 @@
                     $("#partmat").css("display", "block");
                     $.ajax({
                         type: "POST",
-                        url: '/TaskManagement/CheckGetPartMaterial?PartSpec=' + PartSpec,
+                        url: '/TaskManagement/CheckGetPartMaterial',
+                        data: { PartSpec: PartSpec},
                         dataType: "json",
                         success: function (data) {
                             if (data != null) {
@@ -161,8 +161,8 @@
                     var type = $("#type option:selected").text();
                     $.ajax({
                         type: "POST",
-                        url: '/TaskManagement/AddPurlist?Material=' + Material + '&PartSpec=' + PartSpec + '&PartMaterial=' + PartMaterial + '&ApplyPCS=' + ApplyPCS + '&qtyofPCS=' + qtyofPCS+'&type='+type
-                            + '&Taskid=' + '@ViewData["purcha"]' + '&unit=' + unit + '&desc=' + desc,
+                        url: '/TaskManagement/AddPurlist',
+                        data: { Material: Material, PartSpec: PartSpec, PartMaterial: PartMaterial, ApplyPCS: ApplyPCS, qtyofPCS: qtyofPCS, type: type, Taskid: '@ViewData["purcha"]', unit: unit, desc: desc},
                         dataType: "text",
                         success: function (data) {
                             if (data == "true") {

@@ -175,11 +175,122 @@
     <Content Include="assets\js\scripts.js" />
     <Content Include="assets\js\supersized-init.js" />
     <Content Include="assets\js\supersized.3.2.7.min.js" />
+    <Content Include="Content\ace\ace.js" />
+    <Content Include="Content\ace\mode-html.js" />
+    <Content Include="Content\ace\snippets\html.js" />
+    <Content Include="Content\ace\theme-tomorrow.js" />
+    <Content Include="Content\ace\worker-html.js" />
+    <Content Include="Content\Layui-KnifeZ\css\layui.css" />
+    <Content Include="Content\Layui-KnifeZ\css\layui.mobile.css" />
+    <Content Include="Content\Layui-KnifeZ\css\modules\code.css" />
+    <Content Include="Content\Layui-KnifeZ\css\modules\laydate\default\laydate.css" />
+    <Content Include="Content\Layui-KnifeZ\css\modules\layer\default\icon-ext.png" />
+    <Content Include="Content\Layui-KnifeZ\css\modules\layer\default\icon.png" />
+    <Content Include="Content\Layui-KnifeZ\css\modules\layer\default\layer.css" />
+    <Content Include="Content\Layui-KnifeZ\css\modules\layer\default\loading-0.gif" />
+    <Content Include="Content\Layui-KnifeZ\css\modules\layer\default\loading-1.gif" />
+    <Content Include="Content\Layui-KnifeZ\css\modules\layer\default\loading-2.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\0.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\1.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\10.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\11.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\12.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\13.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\14.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\15.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\16.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\17.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\18.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\19.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\2.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\20.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\21.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\22.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\23.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\24.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\25.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\26.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\27.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\28.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\29.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\3.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\30.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\31.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\32.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\33.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\34.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\35.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\36.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\37.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\38.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\39.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\4.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\40.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\41.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\42.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\43.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\44.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\45.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\46.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\47.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\48.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\49.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\5.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\50.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\51.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\52.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\53.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\54.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\55.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\56.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\57.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\58.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\59.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\6.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\60.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\61.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\62.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\63.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\64.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\65.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\66.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\67.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\68.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\69.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\7.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\70.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\71.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\8.gif" />
+    <Content Include="Content\Layui-KnifeZ\images\face\9.gif" />
+    <Content Include="Content\Layui-KnifeZ\layui.all.js" />
+    <Content Include="Content\Layui-KnifeZ\layui.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\carousel.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\code.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\colorpicker.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\element.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\flow.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\form.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\jquery.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\laydate.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\layedit-原版.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\layedit.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\layer.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\laypage.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\laytpl.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\mobile.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\rate.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\slider.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\table.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\tree.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\upload.js" />
+    <Content Include="Content\Layui-KnifeZ\lay\modules\util.js" />
     <Content Include="Content\Site.css" />
     <Content Include="css\bdmapStyle.css" />
     <Content Include="css\bootstrap.min.css" />
     <Content Include="css\fresh-bootstrap-table.css" />
+    <Content Include="css\global.css" />
     <Content Include="css\lanrenzhijia.css" />
+    <Content Include="css\rocketTop.css" />
     <Content Include="css\style1.css" />
     <Content Include="css\styled.css" />
     <Content Include="css\StyleSheet1.css" />
@@ -255,6 +366,9 @@
     <Content Include="images\launchpad-icon.png" />
     <Content Include="images\Mac_Finder_icon_%28OS_X_Yosemite%29.png" />
     <Content Include="images\mozilla-png-file-mozilla-firefox-3-5-logo-256-png-256.png" />
+    <Content Include="images\qian.png" />
+    <Content Include="images\rocket.png" />
+    <Content Include="images\rocketFly.gif" />
     <Content Include="images\siri_by_hs1987-dbd58rs.png" />
     <Content Include="images\sun.png" />
     <Content Include="images\sunshine_0.png" />
@@ -266,8 +380,12 @@
     <Content Include="js\awesomplete.js" />
     <Content Include="js\awesomplete.min.js" />
     <Content Include="js\Contract.js" />
+    <Content Include="js\Contracts.js" />
+    <Content Include="js\draggable.js" />
     <Content Include="js\echarts.js" />
+    <Content Include="js\EZView.js" />
     <Content Include="js\index.js" />
+    <Content Include="js\jquery-1.11.0.min.js" />
     <Content Include="js\jquery-1.4.4.min.js" />
     <Content Include="js\jquery-1.7.min.js" />
     <Content Include="js\jquery-1.8.3.min.js" />
@@ -276,7 +394,10 @@
     <Content Include="js\jquery.bdmap.js" />
     <Content Include="js\jquery.jqprint-0.3.js" />
     <Content Include="js\jquery.leanModal.min.js" />
+    <Content Include="js\jquery.media.js" />
+    <Content Include="js\jquery.min.js" />
     <Content Include="js\lanrenzhijia.js" />
+    <Content Include="js\rocketTop.js" />
     <Content Include="laydate\laydate.js" />
     <Content Include="laydate\theme\default\font\iconfont.svg" />
     <Content Include="laydate\theme\default\laydate.css" />
@@ -1304,6 +1425,10 @@
     <Content Include="Models\Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
+    <Content Include="Content\Layui-KnifeZ\font\iconfont.eot" />
+    <Content Include="Content\Layui-KnifeZ\font\iconfont.svg" />
+    <Content Include="Content\Layui-KnifeZ\font\iconfont.ttf" />
+    <Content Include="Content\Layui-KnifeZ\font\iconfont.woff" />
     <None Include="Properties\PublishProfiles\YLMESNew.pubxml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="css\bootstrap-table.css" />
@@ -1535,7 +1660,9 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="website.publishproj" />
+    <Content Include="website.publishproj">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -1543,6 +1670,7 @@
     <Compile Include="Controllers\AfterManagementController.cs" />
     <Compile Include="Controllers\ApplierListController.cs" />
     <Compile Include="Controllers\ContractTwoController.cs" />
+    <Compile Include="Controllers\DiscussController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IncomingController.cs" />
     <Compile Include="Controllers\ProductionPlanningController.cs" />
@@ -1687,6 +1815,15 @@
     <Compile Include="Models\Finished_stock_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Forum_Commentlist_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Forum_Newest_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Forum_Postings_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\getPackjobs_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1721,6 +1858,9 @@
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\MyCompletedTaskCheck_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MyPost_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MyTaskCheck_Result.cs">
@@ -1781,6 +1921,12 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_FinshGoodsLocation.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PM_Forum.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PM_Forum_Comments.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_FunctionList.cs">
@@ -2047,7 +2193,7 @@
     <Compile Include="Models\Statisticschar_Departmentlist_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Statistics_Departmentlist_Result.cs">
+    <Compile Include="Models\StatisticsDepartmentlist_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Statistics_Scroechart_Result.cs">
@@ -2185,7 +2331,6 @@
     <Content Include="Views\Home\Contract_Check_Main.cshtml" />
     <Content Include="Views\Home\HDetailsAddd.cshtml" />
     <Content Include="Views\TaskManagement\TaskMapPart.cshtml" />
-    <Content Include="Views\TaskManagement\NewChildThing.cshtml" />
     <Content Include="Views\TaskManagement\TaskMapPart2.cshtml" />
     <Content Include="Views\TaskManagement\EditingProcess.cshtml" />
     <Content Include="Views\TaskManagement\PMCSettingWO.cshtml" />
@@ -2259,6 +2404,15 @@
     <Content Include="Views\PurchasingManage\S_Contract.cshtml" />
     <Content Include="Views\TaskManagement\Purchasing.cshtml" />
     <Content Include="Views\TaskManagement\AddPur.cshtml" />
+    <Content Include="Views\TaskManagement\CompletePurchase.cshtml" />
+    <Content Include="Views\TechnicalDepartment\CheckPdf.cshtml" />
+    <Content Include="Views\Discuss\Detail.cshtml" />
+    <Content Include="Views\Discuss\Index.cshtml" />
+    <Content Include="Views\Discuss\Posting.cshtml" />
+    <Content Include="Views\Discuss\UserHome.cshtml" />
+    <Content Include="Views\Discuss\UserIndex.cshtml" />
+    <Content Include="Views\Discuss\ChangPwd.cshtml" />
+    <Content Include="Views\TaskManagement\BatchUpload.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

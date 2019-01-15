@@ -9,15 +9,16 @@
     <title>友力信息管理系统</title>
     <link href="../../css/style.css" rel="stylesheet" type="text/css" />
     <script language="JavaScript" src="../../js/jquery.js"></script>
-
+    <link href="~/layui/css/layui.css" rel="stylesheet" media="all" />
+    <script src="~/layui/layui.js" type="text/javascript"></script>
     <script type="text/javascript">
+
         $(function () {
-            var d = 0;
             //	//导航切换
             if ('@Session["name"]' == "") {
                 window.top.location = '/Home/Login';
-            } else { 
-            $.ajax({
+            } else {
+                $.ajax({
                 type: "POST",
                 url: '/Home/Jurisdiction',
                 dataType: "json",
@@ -89,7 +90,6 @@
                                         case "工单管理":
                                             $('#Productionplan').append('<li><cite></cite><a href="#">工单管理</a><i hidden=hidden>/ProductionPlanning/WorkManagement</i></li>');
                                             break;
-
                                     }
                                     break;
                                 case "采购管理":
@@ -157,7 +157,6 @@
                                     }
                                     break;
                                 case "任务":
-
                                     if ($('#task1').attr("id") == undefined) {
                                         $('.leftmenu').append('<dd><div class="title" id="task1">  <span><img src="../../images/leftico01.png" /></span>任务 </div> </dd>');
                                         $('#task1').after('<ul class="menuson" id="task"></ul>');
@@ -167,11 +166,12 @@
                                             $("#task").append('<li><cite></cite><a href="#">任务分配</a><i hidden="hidden">/TaskManagement/TaskAllocation</i></li>');
                                             break;
                                         case "我的任务":
-                                            //if (d == 1) {
-                                            //    $("#task").append('<li><cite></cite><a href="#">我的任务</a><i hidden="hidden">/TaskManagement/PTask</i></li>');
-                                            //} else {
+                                            if (result.Manager == "覃炯仁") {
+                                                $("#task").append('<li><cite></cite><a href="#">我的任务</a><i hidden="hidden">/TaskManagement/PTask</i></li>');
+                                            }
+                                            else {
                                                 $("#task").append('<li><cite></cite><a href="#">我的任务</a><i hidden="hidden">/TaskManagement/MyTask</i></li>');
-                                           // }                                          
+                                            }
                                             break;
                                         case "已完成的任务":
                                             $("#task").append('<li><cite></cite><a href="#">已完成的任务</a><i hidden="hidden">/TaskManagement/CompletedTasks</i></li>');
@@ -182,7 +182,6 @@
                                     if ($('#statisticaltitle').attr("id") == undefined) {
                                         $('.leftmenu').append('<dd><div class="title" id="statisticaltitle">  <span><img src="../../images/leftico01.png" /></span>统计报表 </div> </dd>');
                                         $('#statisticaltitle').after('<ul class="menuson" id="stati"></ul>');
-
                                     }
                                     switch (result.FuncationName) {
 
@@ -191,7 +190,6 @@
                                             break;
                                         case "个人成绩":
                                             $('#stati').append('<li><cite></cite><a href="#">个人成绩</a><i hidden="hidden">/Statistical/Scroe</i></li>');
-
                                             break;
                                         case "部门人员工作状况":
                                             $('#stati').append('<li><cite></cite><a href="#">部门人员工作状况</a><i hidden="hidden">/Statistical/Department</i></li>');
@@ -230,7 +228,7 @@
                                     }
                                     switch (result.FuncationName) {
                                         case "问题讨论区":
-                                            $('#discussion').append('<li><cite></cite><a href="#">问题讨论区</a><i hidden=hidden></i></li>');
+                                            $('#discussion').append('<li><cite></cite><a href="#">问题讨论区</a><i hidden=hidden>/Discuss/Index</i></li>');
                                             break;
                                     }
                                     break;
@@ -267,9 +265,6 @@
 <body style="background:#f0f9fd;">
     <div class="lefttop"><span></span>通讯录</div>
 
-    <dl class="leftmenu">
-
-
-    </dl>
+    <dl class="leftmenu"></dl>
 </body>
 </html>

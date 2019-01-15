@@ -112,7 +112,8 @@
                             });                     
                             break;
                         case 'shen':
-                            var url = '/ApplierList/Purchaselist';
+                            taskid = data.任务编号;
+                            var url = '/ApplierList/Purchaselist?id=' + taskid;
                             var index = layer.open({
                                 type: 2,
                                 title: "采购清单信息",
@@ -121,22 +122,42 @@
                             });
                             layer.full(index);                            
                             break;
-                        case 'sendNotice':
-                            hao = data.采购订单号;                        
-                            $.ajax({
-                                url: "/TaskManagement/SendNotice?hao=" + hao,
-                                type: "post",
-                                dataType: "text",
-                                success: function (data) {
-                                    if (data == "true") {
-                                        window.setTimeout(function () {
-                                            layer.msg("已确认收到发货通知！");
-                                            table.reload('tw');
-                                        }, 500);
+                        case 'que':
+                            layer.confirm("确认审核通过吗？", function (index) {
+                                hao = data.采购订单号;
+                                $.ajax({
+                                    url: "/TaskManagement/SendAudit?hao=" + hao,
+                                    type: "post",
+                                    dataType: "text",
+                                    success: function (data) {
+                                        if (data == "true") {
+                                            window.setTimeout(function () {
+                                                layer.msg("已确认审核通过！");
+                                                table.reload('tw');
+                                            }, 500);
+                                        }
                                     }
-                                }
+                                });
                             });
                             break;
+                        case 'sendNotice':
+                            layer.confirm("确认收到货物吗？", function (index) {
+                                hao = data.采购订单号;
+                                $.ajax({
+                                    url: "/TaskManagement/SendNotice?hao=" + hao,
+                                    type: "post",
+                                    dataType: "text",
+                                    success: function (data) {
+                                        if (data == "true") {
+                                            window.setTimeout(function () {
+                                                layer.msg("已确认收到发货通知！");
+                                                table.reload('tw');
+                                            }, 500);
+                                        }
+                                    }
+                                });
+                            });
+                            break;                       
                     };
                 });
             });
@@ -149,6 +170,8 @@
         {{#  } else if(d.采购订单号 == null){ }}
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="shen">生成采购清单</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="update">编辑</a>
+        {{#  } else if(d.采购订单号 != null && d.采购订单状态 == '待审核'){ }}
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="que">确认全部审核通过</a>
         {{#  } else { }}
 
         {{#  } }}

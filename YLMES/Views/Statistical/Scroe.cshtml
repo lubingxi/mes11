@@ -34,30 +34,28 @@
         <a class="layui-btn layui-btn-xs" lay-event="sel">生成报表</a>
     </script>
     <script>
-
+        $(document).keydown(function (e) {
+            switch (e.keyCode) {
+                case 13:
+                    $("#PurchaselistSel").click();
+                    break;
+            }
+        });
         $(function () {
+
             $('#container').hide();
             layui.use('laydate', function(){
                 var laydate = layui.laydate;
-
                 //执行一个laydate实例
                 laydate.render({
                     elem: '#test1' //指定元素
                 });
             });
-
             layui.use(['table', 'layer'], function () {
-                var table = layui.table, layer = layui.layer;
-                var Name = $('#WarehouseName').val();
-                var StartTime = $('.CreatedTime').val();
-                var EndTime = $('.TimeEnd').val();
-
-
-                $('#PurchaselistSel').click(function () {
-
-                    table.render({
+                var table = layui.table, layer = layui.layer;             
+                   var tableIns=table.render({
                         elem: '#tw'
-                , url: '/Statistical/Scroelist?Name=' + Name + '&StartTime=' + StartTime + '&EndTime=' + EndTime
+                , url: '/Statistical/Scroelist'
                 , page: true
                 , done: function () {
                             $("tr a").hide();
@@ -74,9 +72,20 @@
                 , { field: '开始时间', width: 180, title: '开始时间' }
                 , { field: '结束时间', width: 200, title: '结束时间' }
                , { field: 'right', width: 380, align: 'center', toolbar: '#bsarDemo' }
-                ]]
-                    })
+                ]]                   
                 });
+                $("#PurchaselistSel").click(function () {
+                    var Name = $('#WarehouseName').val();
+                    var StartTime = $('.CreatedTime').val();
+                    var EndTime = $('.TimeEnd').val();
+                    tableIns.reload({
+                        where: {
+                            Name: Name
+                           ,StartTime: StartTime
+                           ,EndTime: EndTime
+                        }
+                    });
+                }); 
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data //获得当前行数据
                    , layEvent = obj.event; //获得 lay-event 对应的值

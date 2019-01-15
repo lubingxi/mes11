@@ -38,11 +38,19 @@ namespace YLMES.Controllers
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
+                if (Name == null)
+                {
+                    Name = "";
+                }
+                if(department==null)
+                {
+                    department = "";
+                }
                 SqlParameter[] parms = new SqlParameter[2];
                 parms[0] = new SqlParameter("@owner", Name);
                 parms[1] = new SqlParameter("@Depart", department);
-                var list = ys.Database.SqlQuery<Statistics_Departmentlist_Result>(" exec [Statistics_Departmentlist]@owner,@Depart", parms).ToList();
-                PageList<Statistics_Departmentlist_Result> pageList = new PageList<Statistics_Departmentlist_Result>(list, page, limit);
+                var list = ys.Database.SqlQuery<StatisticsDepartmentlist_Result>(" exec [StatisticsDepartmentlist]@owner,@Depart", parms).ToList();
+                PageList<StatisticsDepartmentlist_Result> pageList = new PageList<StatisticsDepartmentlist_Result>(list, page, limit);
                 Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
                 int count = list.Count();
                 hasmap.Add("code", 0);
@@ -79,6 +87,18 @@ namespace YLMES.Controllers
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
+                if (ProjectName == null)
+                {
+                    ProjectName = "";
+                }
+                if(Name==null)
+                {
+                    Name = "";
+                }
+                if(IsOverDue==null)
+                {
+                    IsOverDue = "";
+                }
                 SqlParameter[] parms = new SqlParameter[3];
                 parms[0] = new SqlParameter("@ProjectName", ProjectName);
                 parms[1] = new SqlParameter("@owner", Name);
@@ -134,6 +154,18 @@ namespace YLMES.Controllers
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
+                if (Name == null)
+                {
+                    Name = "";
+                }
+                if(StartTime==null)
+                {
+                    StartTime = "";
+                }
+                if(EndTime==null)
+                {
+                    EndTime = "";
+                }
                 SqlParameter[] parms = new SqlParameter[3];
                 parms[0] = new SqlParameter("@owner", Name);
                 parms[1] = new SqlParameter("@startTime", StartTime);

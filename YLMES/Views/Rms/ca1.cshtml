@@ -13,6 +13,12 @@
            , url: '/Rms/CateCHeck?Da=' + $(".Da").val() + "&Xiao=" + $(".Xiao").val()
            , page: true
            , limit: 15
+           , done: function () {
+                    $("tr a").hide()
+                    $("tr").hover(function () {
+                        $(this).children().last().children().children().toggle();
+                    })
+                }
            , cols: [[
             { field: 'PartNumber', width: 210, title: '物料名称' }
            , { field: 'PartSpec', width: 235, title: '规格' }
@@ -70,6 +76,12 @@
                , url: '/Rms/CateCHeck?Da=' + $(".Da").val() + "&Xiao=" + $(".Xiao").val()
                , page: true
                , limit: 15
+               , done: function () {
+                        $("tr a").hide()
+                        $("tr").hover(function () {
+                            $(this).children().last().children().children().toggle();
+                        })
+                    }
                , cols: [[
                  { field: 'PartNumber', width: 210, title: '物料名称' }
                , { field: 'PartSpec', width: 235, title: '规格' }
@@ -129,7 +141,13 @@
                 var table = layui.table, layer = layui.layer;
                 table.render({
                     elem: '#tw'
-               , url: '/Rms/TypeLikeSearch?Da=' + da + "&Xiao=" + xiao + "&pn="+s
+                , url: '/Rms/TypeLikeSearch?Da=' + da + "&Xiao=" + xiao + "&pn=" + s
+                , done: function () {
+                        $("tr a").hide()
+                        $("tr").hover(function () {
+                            $(this).children().last().children().children().toggle();
+                        })
+                    }
                , page: true
                , limit: 15
                , cols: [[

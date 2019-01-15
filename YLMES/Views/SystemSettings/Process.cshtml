@@ -76,25 +76,18 @@
             //    window.parent.document.getElementById("rightframe").src = "/Home/Eidt";
             //});
             layui.use(['table', 'layer'], function () {
-                var table = layui.table, layer = layui.layer;
-                $("#Search").click(function () {
-                    var Name = $("#Name").val().trim();
-                    var PartSpec = $("#PartSpec").val().trim();
-                    var Material = $("#Material").text();
-                    table.render({
-                        elem: '#tw'
-                  , url: '/SystemSettings/CheckProcessBOM?Name=' + Name + '&PartSpec=' + PartSpec + '&Material=' + Material
+                var table = layui.table, layer = layui.layer;                                   
+                var tableIns=table.render({
+                    elem: '#tw'
+                  , url: '/SystemSettings/CheckProcessBOM'
                   , page: true
                   , limit: 15
-                        , done: function () {
-                            ifs = $("#checks").text();
+                  , done: function () {
+                     ifs = $("#checks").text();
                      $("tr a").hide();
                      $("tr").hover(function () {
-
                          $(this).children().last().children().children().toggle();
                      })
-
-
                  }
                    , cols: [[
                        { filed: '', hide: true }
@@ -115,13 +108,20 @@
                          , { field: '子BOM', width: 100, title: '子件', event: 'zi',templet: '#bom', align: 'center' }
                          , { field: 'right',title:'操作', width: 130, align: 'center', toolbar: '#barDemo'}
 
-                   ]]
-
+                   ]]                   
+                });
+                $("#Search").click(function () {
+                    var Name = $("#Name").val().trim();
+                    var PartSpec = $("#PartSpec").val().trim();
+                    var Material = $("#Material").text();
+                    tableIns.reload({
+                        where: {
+                            Name: Name
+                          , PartSpec: PartSpec
+                          , Material: Material
+                        }
                     });
-                });
-                table.on('checkbox(demo)', function (obj) {
-                    console.log(obj)
-                });
+                });             
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
                     if (obj.event === 'zi') {

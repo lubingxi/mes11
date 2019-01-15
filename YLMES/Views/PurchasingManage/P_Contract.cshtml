@@ -18,8 +18,9 @@
     </script>
     <style>
         .layui-form-label {
-            width: 115px;
-            text-align: left
+            width: 160px;
+            text-align: left;
+            font-size: 25px;
         }
 
         .layui-inline input {
@@ -27,24 +28,26 @@
         }
 
         .layui-inline label {
-            width: 70px
+            width: 85px
         }
 
         .layui-input {
             text-align: center;
             display: inline-block;
-            width: 80%;
+            background-color: #4fe2ff;
+            width: 100%;
         }
 
         table input {
             width: 200px
         }
 
-        .aa {
+        /*.aa {
             margin-left: 900px
-        }
+        }*/
 
         .layui-table th {
+            border: 2px solid #000;
             text-align: center;
         }
 
@@ -58,12 +61,16 @@
             margin-right: 0px;
         }
 
+        .layui-field-box .layui-unselect {
+            width: 130px
+        }
+
         .layui-select-title input {
-            width: 350px;
+            width: 400px;
         }
 
         table .layui-unselect {
-            width: 485px;
+            width: 430px;
         }
 
         .layui-elem-field legend {
@@ -74,6 +81,7 @@
         .layui-elem-field {
             font-size: 16px;
             font-weight: 400;
+            border-width: 0px;
         }
 
         .layui-field-box {
@@ -82,7 +90,7 @@
             line-height: 30px;
         }
 
-            .layui-field-box input{
+            .layui-field-box input {
                 width: 150px;
                 margin-right: 0px;
                 display: inline-block;
@@ -90,18 +98,88 @@
                 border-bottom: 0.6px solid
             }
 
+        .aa {
+            margin-left: 900px
+        }
+
         tr .layui-table-edit {
             width: 100%;
             border: 1px solid;
         }
+
+        .layui-table td {
+            font-size: 20px;
+            border: 2px solid #000;
+        }
+
+        .layui-table tr {
+            font-size: 20px;
+            border: 2px solid #000;
+        }
+
         .k input {
             width: 360px
         }
-        .layui-field-box .layui-unselect {
-            width: 100px
-        }
+
         [type="tel"] {
             width: 81%
+        }
+
+        .layui-unselect {
+            margin: auto;
+        }
+    </style>
+
+    <style media="print">
+        h1 {
+            font-size: 50px;
+            font-weight: bold;
+        }
+
+        .layui-form-label {
+            font-size: 24px;
+            font-weight: bold;
+            border:0px;
+        }
+
+        .layui-elem-field legend {
+            font-size: 30px;
+        }
+
+        .layui-elem-field {
+            font-size: 25px;
+        }
+
+        .layui-form {
+            font-size: 25px;
+        }
+
+        .layui-form-table {
+            font-size: 25px;
+            text-align: center;
+        }
+
+        .layui-table-cell {
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .layui-unselect {
+            font-size: 25px;
+        }
+
+        .layui-input {
+            width: 450px;
+            background-color: #fff;
+            font-size: 24px;
+        }
+
+        a {
+            font-size: 25px;
+        }
+
+        th {
+            font-size: 20px;
         }
     </style>
     <title>设备购销合同</title>
@@ -113,38 +191,40 @@
     <input value="@foreach (var value in @ViewData["value"] as List<string>) {@value} " class="layui-hide appvalue" />
     <div style="text-align:center;width:1500px;margin:0px auto">
         <h1>购销合同</h1>
-        <div class="layui-form layui-form-pane aa" style="width:300px;">
+        <div class="layui-form layui-form-pane aa" style="width:400px;">
             <div class="layui-form-item">
-                <label class="layui-form-label">合同编号：</label>
+                <label class="layui-form-label" style="width:160px;border:0px;">合同编号：</label>
                 <div class="layui-input-block">
-                    <input type="text" name="title" autocomplete="off" placeholder="请输入标题" class="layui-input" value="YL-201807030001" style="width:100%">
+                    <input type="text" name="title" autocomplete="off" placeholder="请输入标题" class="layui-input" value="YL-201807030001" style="width:82%">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">合同日期：</label>
+                <label class="layui-form-label" style="width:160px;border:0px;">合同日期：</label>
                 <div class="layui-input-block">
-                    <input type="text" name="title" autocomplete="off" placeholder="请输入日期" id="test1" class="layui-input" style="width:100%">
+                    <input type="text" name="title" autocomplete="off" placeholder="请输入日期" id="test1" class="layui-input" style="width:82%">
                 </div>
             </div>
         </div>
+
         <div class="layui-form layui-form-pane" style="width:580px;">
             <div class="layui-form-item">
-                <label class="layui-form-label" style="width:150px">  甲方（供货方）：</label>
-                <div class="layui-input-block" style="left:-47px">
-                    <select style="width:350px;margin-right:0px" class="se">
+                <label class="layui-form-label" style="width:200px;font-size:20px;border:0px">  甲方（供货方）：</label>
+                <div class="layui-input-block" style="left:-20px">
+                    <select style="width:430px" class="se">
                         <option value="0" selected=selected>广东友力智能科技有限公司</option>
                         <option value="1">佛山市顺德区友力帮机械有限公司</option>
                     </select>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label" style="width:150px">乙方（供货方）：</label>
-                <div class="layui-input-block" style="left:-20px;">
-                    <select name=Party_b lay-search lay-filter="Party_b"></select>
+                <label class="layui-form-label" style="width:200px;font-size:20px;border:0px;">乙方（供货方）：</label>
+                <div class="layui-input-block" style="left:-15px;">
+                    <select name="Party_b" lay-search lay-filter="Party_b"></select>
                     <button class="layui-btn layui-btn-radius layui-btn-primary" style="border:0px;width:50px"><i class="layui-icon layui-icon-add-1" style="font-size: 25px; color:#000000;"></i></button>
                 </div>
             </div>
         </div>
+
         <fieldset class="layui-elem-field layui-field-title" style="text-indent:3em;text-align:left;border-width:0px;padding-left:0px;">
             <legend style="margin-left:0px;">为维护双方的合法权益，维护交易秩序，经双方友好协商，根据《中华人民共和国合同法》等法律、法规和规范性文件的相关规定，遵循平等、自愿、公平、诚实守信的原则，就甲方向乙方采购货物达成以下条款：</legend>
         </fieldset>
@@ -157,8 +237,8 @@
         <fieldset class="layui-elem-field">
             <legend>2.交货期限：</legend>
             <div class="layui-field-box layui-form">
-                <p><input type="radio" name="sex" value="nan">1.合同签订之日起<input type="text" class="layui-input" />天内交付甲方使用。</p>
-                <p><input type="radio" name="sex" value="nv">1.甲方向乙方支付订金之日起<input type="text" class="layui-input" />天内交付甲方使用。</p>
+                <div class="aa" style="margin-left:-80px;"><p><input type="radio" name="sex" value="nan">1.合同签订之日起<input type="text" class="layui-input" />天内交付甲方使用。</p></div>
+                <div class="aa" style="margin-left:-80px;"><p><input type="radio" name="sex" value="nv">1.甲方向乙方支付订金之日起<input type="text" class="layui-input" />天内交付甲方使用。</p></div>
             </div>
         </fieldset>
         <fieldset class="layui-elem-field">
@@ -217,12 +297,12 @@
         </fieldset>
         <fieldset class="layui-elem-field">
             <legend>10.付款方式</legend>
-            <div class="layui-field-box layui-form sp">
-                <p><input type="radio" name="sex" value="nan">1.货到后月结<input class="layui-input" value="30" />天，即月结后次月1日至10日双方财务确定月对帐单后30天转帐或支票支付（付款前乙方需提供含16%增值税专用发票）；</p>
-                <p><input type="radio" name="sex" value="nan">2.货到付款，货到甲方工厂内或指定地址，经甲方验收合格确认无误后支付（付款前乙方需提供含16%增值税专用发票）；</p>
-                <p><input type="radio" name="sex" value="nan">3.合同签订生效后甲方支付总金额的<input class="layui-input" value="30" />%即<span></span>订金，甲方于乙方按时将设备或货物运抵交付地点后10天内支付合同总金额的<input class="layui-input" value="40" />%即<span></span>（付款前乙方需提供含16%增值税专用发票），甲方于所有设备及货物安装调试完毕、验收合格并且试运行无异常满一个月后10天内支付合同总价款的<input class="layui-input" value="20" />%即<span></span>，合同总价款的<input class="layui-input" value="10" />%即<span></span>作为质保金在设备及货物质保期满后10个工作日(不含节假日)内结清。</p>
-                <p><input type="radio" name="sex" value="nan">4.合同签订生效后甲方支付总金额的<input class="layui-input" value="30" />%即<span></span>订金，卖方货物具备发挥条件通知买方支付合同总金额的<input class="layui-input" value="70" />%即<span></span>（付款前乙方需提供含16%增值税专用发票。）</p>
-                <p><input type="radio" name="sex" value="nan">5.款到发货。（付款后一个星期内提供含16%的增值税专用发票。）</p>
+            <div class="layui-field-box layui-form sp" id="sp">
+                <div class="aa" style="margin-left:-80px;"><p><input type="radio" name="sex" value="nan">1.货到后月结<input class="layui-input" value="30" />天，即月结后次月1日至10日双方财务确定月对帐单后30天转帐或支票支付（付款前乙方需提供含16%增值税专用发票）；</p></div>
+                <div class="aa" style="margin-left:-80px;"><p><input type="radio" name="sex" value="nan">2.货到付款，货到甲方工厂内或指定地址，经甲方验收合格确认无误后支付（付款前乙方需提供含16%增值税专用发票）；</p></div>
+                <div class="aa" style="margin-left:-80px;"><p><input type="radio" name="sex" value="nan">3.合同签订生效后甲方支付总金额的<input class="layui-input" value="30" />%即<span></span>订金，甲方于乙方按时将设备或货物运抵交付地点后10天内支付合同总金额的<input class="layui-input" value="40" />%即<span></span>（付款前乙方需提供含16%增值税专用发票），甲方于所有设备及货物安装调试完毕、验收合格并且试运行无异常满一个月后10天内支付合同总价款的<input class="layui-input" value="20" />%即<span></span>，合同总价款的<input class="layui-input" value="10" />%即<span></span>作为质保金在设备及货物质保期满后10个工作日(不含节假日)内结清。</p></div>
+                <div class="aa" style="margin-left:-80px;"><p><input type="radio" name="sex" value="nan">4.合同签订生效后甲方支付总金额的<input class="layui-input" value="30" />%即<span></span>订金，卖方货物具备发挥条件通知买方支付合同总金额的<input class="layui-input" value="70" />%即<span></span>（付款前乙方需提供含16%增值税专用发票。）</p></div>
+                <div class="aa" style="margin-left:-80px;"><p><input type="radio" name="sex" value="nan">5.款到发货。（付款后一个星期内提供含16%的增值税专用发票。）</p></div>
             </div>
         </fieldset>
         <fieldset class="layui-elem-field">
@@ -265,75 +345,75 @@
                 <p>1.本合同壹式叁份，乙方执壹份，甲方执贰份，本合同自双方签字盖章之日起生效，本合同 的附件及其补充协议经双方签字盖章后均具有同等效力，甲乙双方应共同遵守执行。</p>
             </div>
         </fieldset>
-        <table class="layui-table layui-form" style="text-align:left">
+        <table class="layui-table layui-form" style="text-align:left;border:2px solid #000;">
             <thead>
-                <tr>
-                    <th colspan="2">甲方</th>
-                    <th colspan="2">乙方</th>
+                <tr style="border:2px solid #000;">
+                    <th colspan="2" style="font-size:25px;font-weight:bold;">甲方</th>
+                    <th colspan="2" style="font-size:25px;font-weight:bold;">乙方</th>
                 </tr>
             </thead>
-            <tr>
-                <td colspan="2">
+            <tr style="border:2px solid #000;">
+                <td colspan="2" style="border:2px solid #000;">
                     <div class="layui-form-item">
-                        <label class="layui-form-label">单位名称（章）：</label>
+                        <label class="layui-form-label" style="width:200px;">单位名称（章）：</label>
                         <div class="layui-input-block">
-                            <select style="width:450px" class="se">
+                            <select style="width:400px" class="se">
                                 <option value="0" selected=selected>广东友力智能科技有限公司</option>
                                 <option value="1">佛山市顺德区友力帮机械有限公司</option>
                             </select>
                         </div>
                     </div>
                 </td>
-                <td colspan="2">
+                <td colspan="2" style="border:2px solid #000;">
                     <div class="layui-form-item">
-                        <label class="layui-form-label">单位名称（章）： </label>
+                        <label class="layui-form-label" style="width:200px;">单位名称（章）： </label>
                         <div class="layui-input-block">
-                            <input type="text" name="Party_b" class="layui-input">
+                            <input type="text" name="Party_b" class="layui-input" style="width:300px">
                         </div>
                     </div>
                 </td>
             </tr>
-            <tr>
-                <td colspan="2">
+            <tr style="border:2px solid #000;">
+                <td colspan="2" style="border:2px solid #000;">
                     <div class="layui-form-item">
                         <label class="layui-form-label">单位地址：</label>
                         <div class="layui-input-block">
-                            <input type="text" class="layui-input" value="广东省佛山市顺德区杏坛镇逢简工业区横二路1号">
+                            <input type="text" class="layui-input" value="广东省佛山市顺德区杏坛镇逢简工业区横二路1号" style="width:490px;">
                         </div>
                     </div>
                 </td>
-                <td colspan="2">
+                <td colspan="2" style="border:2px solid #000;">
                     <div class="layui-form-item">
                         <label class="layui-form-label">单位地址：</label>
                         <div class="layui-input-block">
-                            <input type="text" class="layui-input" name="Address">
+                            <input type="text" class="layui-input" name="Address" style="width:410px">
                         </div>
                     </div>
                 </td>
             </tr>
-            <tr>
-                <td colspan="2">
+            <tr style="border:2px solid #000;">
+                <td colspan="2" style="border:2px solid #000;">
                     <div class="layui-form-item">
                         <label class="layui-form-label">委托代表人：</label>
                         <div class="layui-input-block">
-                            <input type="text" class="layui-input" value="朱小梅">
+                            <input type="text" class="layui-input" value="朱小梅" style="width:250px">
                         </div>
                     </div>
                 </td>
-                <td colspan="2">
+                <td colspan="2" style="border:2px solid #000;">
                     <div class="layui-form-item">
                         <label class="layui-form-label">委托代理人：</label>
                         <div class="layui-input-block">
-                            <input type="text" class="layui-input" name="Principal">
+                            <input type="text" class="layui-input" name="Principal" style="width:250px">
                         </div>
                     </div>
                 </td>
             </tr>
-            <tr>
-                <td colspan="2">
+            <tr style="border:2px solid #000;">
+                <td colspan="2" style="border:2px solid #000;">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">联系人：</label>
+                            <label class="layui-form-label" style="width:130px;">联系人：</label>
                             <div class="layui-input-inline">
                                 <input class="layui-input" type="text" />
                             </div>
@@ -347,7 +427,7 @@
                     </div>
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">电话号码：</label>
+                            <label class="layui-form-label" style="width:130px;">电话号码：</label>
                             <div class="layui-input-inline">
                                 <input class="layui-input" type="text" />
                             </div>
@@ -360,10 +440,10 @@
                         </div>
                     </div>
                 </td>
-                <td colspan="2">
+                <td colspan="2" style="border:2px solid #000;">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">联系人：</label>
+                            <label class="layui-form-label" style="width:130px;">联系人：</label>
                             <div class="layui-input-inline">
                                 <input class="layui-input" type="text" name="Contact" />
                             </div>
@@ -377,7 +457,7 @@
                     </div>
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">电话号码：</label>
+                            <label class="layui-form-label" style="width:130px;">电话号码：</label>
                             <div class="layui-input-inline">
                                 <input class="layui-input" type="text" name="Tel" />
                             </div>
@@ -391,67 +471,125 @@
                     </div>
                 </td>
             </tr>
-            <tr>
-                <td rowspan="2" style="width:100px">
+            <tr style="border:2px solid #000;">
+                <td rowspan="2" style="width:180px;font-size:25px;font-weight:bold;">
                     开户银行及账号
                 </td>
-                <td>
+                <td style="border:2px solid #000;">
                     <div class="layui-form-item">
                         <label class="layui-form-label"> 开户行：</label>
                         <div class="layui-input-inline k">
-                            <input class="layui-input" type="text" />
+                            <input class="layui-input" type="text" style="width:250px;" />
                         </div>
                     </div>
                 </td>
-                <td rowspan="2" style="width:100px">
+                <td rowspan="2" style="width:180px;font-size:25px;font-weight:bold;">
                     开户银行及账号
                 </td>
-                <td>
+                <td style="border:2px solid #000;">
                     <div class="layui-form-item">
                         <label class="layui-form-label"> 开户行：</label>
                         <div class="layui-input-inline k">
-                            <input class="layui-input" type="text" name="Bank" />
+                            <input class="layui-input" type="text" name="Bank" style="width:250px;" />
                         </div>
                     </div>
                 </td>
             </tr>
-            <tr>
-                <td>
+            <tr style="border:2px solid #000;">
+                <td style="border:2px solid #000;">
                     <div class="layui-form-item">
                         <label class="layui-form-label"> 账号：</label>
                         <div class="layui-input-inline k">
-                            <input class="layui-input" type="text" />
+                            <input class="layui-input" type="text" style="width:250px;" />
                         </div>
                     </div>
                 </td>
-                <td>
+                <td style="border:2px solid #000;">
                     <div class="layui-form-item">
                         <label class="layui-form-label"> 账号：</label>
                         <div class="layui-input-inline k">
-                            <input class="layui-input" type="text" name="Account" />
+                            <input class="layui-input" type="text" name="Account" style="width:250px;" />
                         </div>
                     </div>
                 </td>
             </tr>
-            <tr>
-                <td colspan="2">
+            <tr style="border:2px solid #000;">
+                <td colspan="2" style="border:2px solid #000;">
                     <div class="layui-form-item">
                         <label class="layui-form-label">签约日期：</label>
                         <div class="layui-input-block">
-                            <input type="tel" name="title" autocomplete="off" placeholder="请输入日期" id="test1-1" class="layui-input">
+                            <input type="tel" name="title" autocomplete="off" id="test1-1" class="layui-input" />
                         </div>
                     </div>
                 </td>
-                <td colspan="2">
+                <td colspan="2" style="border:2px solid #000;">
                     <div class="layui-form-item">
                         <label class="layui-form-label">签约日期：</label>
                         <div class="layui-input-block">
-                            <input type="tel" name="title" autocomplete="off" placeholder="请输入日期" id="test1-2" class="layui-input">
+                            <input type="tel" name="title" autocomplete="off" id="test1-2" class="layui-input">
                         </div>
                     </div>
                 </td>
             </tr>
         </table>
+        <a>备注：此合同需总经理审批后再加盖公司公章方能生效，如未经以上流程均视为无效合同，我司则不承担任何法律责任。</a>
+        <br />
+        <table class="layui-table layui-form" style="text-align:left;border:0px solid #000;">
+
+            <tr style="border:0px solid #000;">
+                <td colspan="2" style="border:0px solid #000;">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">合同签订人： </label>
+
+                    </div>
+                </td>
+                <td colspan="2" style="border:0px solid #000;">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">合同审核人： </label>
+
+                    </div>
+                </td>
+                <td colspan="2" style="border:0px solid #000;">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">财务审核： </label>
+
+                    </div>
+                </td>
+                <td colspan="2" style="border:0px solid #000;">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">总经办审核： </label>
+
+                    </div>
+                </td>
+            </tr>
+            <tr style="border:0px solid #000;">
+                <td colspan="2" style="border:0px solid #000;">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">时间： </label>
+
+                    </div>
+                </td>
+                <td colspan="2" style="border:0px solid #000;">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">时间： </label>
+
+                    </div>
+                </td>
+                <td colspan="2" style="border:0px solid #000;">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">时间： </label>
+
+                    </div>
+                </td>
+                <td colspan="2" style="border:0px solid #000;">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">时间： </label>
+
+                    </div>
+                </td>
+            </tr>
+        </table>
+
     </div>
 </body>
 </html>

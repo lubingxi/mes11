@@ -49,6 +49,18 @@ namespace YLMES.Controllers
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
+                if (WarehouseName == null)
+                {
+                    WarehouseName = "";
+                }
+                if(CreatedTimestart==null)
+                {
+                    CreatedTimestart = "";
+                }
+                if (CreatedTimeEnd == null)
+                {
+                    CreatedTimeEnd = "";
+                }
                 SqlParameter[] parms = new SqlParameter[4];
                 parms[0] = new SqlParameter("@Type", "Warehouselist");
                 parms[1] = new SqlParameter("@WarehouseName", WarehouseName);

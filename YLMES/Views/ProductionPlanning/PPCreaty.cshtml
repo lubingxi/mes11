@@ -42,16 +42,10 @@
                 $(".tip").fadeOut(100);
             });
             layui.use(['table', 'layer'], function () {
-                var table = layui.table, layer = layui.layer;
-                $(".layui-btn").click(function () {
-                    var CuName = $("#CustomerName").val().trim();
-                    var CNumber = $("#ContractNumber").val().trim();
-                    var Selectd = $("#s2 option:selected").text();
-                    var strattime = $(".strattime").val();
-                    var endtime = $(".endtime").val();
-                    table.render({
-                        elem: '#tw'
-                   , url: '/ProductionPlanning/Get_PP?CName=' + CuName + '&CNumber=' + CNumber + '&Statusd='+Selectd + '&strattime=' + strattime + '&endtime=' + endtime
+                var table = layui.table, layer = layui.layer;               
+                    var tableIns=table.render({
+                     elem: '#tw'
+                   , url: '/ProductionPlanning/Get_PP'
                    , page: true
                    , done: function () {
                       $("tr a").hide()
@@ -59,9 +53,7 @@
 
                           $(this).children().last().children().children().toggle();
                       })
-
-
-                  }
+                     }
                    , limit: 15
                    , cols: [[
                    { field: 'ID', width: 210, title: '序号' }
@@ -72,13 +64,23 @@
                    }
                    , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
                    ]]
-
+                    });               
+                $(".layui-btn").click(function () {
+                    var CuName = $("#CustomerName").val().trim();
+                    var CNumber = $("#ContractNumber").val().trim();
+                    var Selectd = $("#s2 option:selected").text();
+                    var strattime = $(".strattime").val();
+                    var endtime = $(".endtime").val();
+                    tableIns.reload({
+                        where: {
+                            CName: CuName
+                            , CNumber: CNumber
+                            , Statusd: Selectd
+                            , strattime: strattime
+                            , endtime: endtime                           
+                        }
                     });
                 });
-                table.on('checkbox(demo)', function (obj) {
-                    console.log(obj)
-                });
-
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
                     switch (obj.event) {

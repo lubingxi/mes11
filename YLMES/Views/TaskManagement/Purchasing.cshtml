@@ -37,8 +37,9 @@
                 layer.confirm("是否提交采购申请？", function () {
                 var taskid =  '@Session["TaskID3"]';
                 $.ajax({
-                    url: "/TaskManagement/EQProcurement?taskid=" + taskid,
+                    url: "/TaskManagement/EQProcurement",
                     type: "post",
+                    data: { taskid: taskid},
                     dataType: "text",
                     success: function (data) {
                         if (data == "true") {
@@ -90,8 +91,9 @@
                             units = data.单位;
                             note = data.备注;
                             $.ajax({
-                                url: "/TaskManagement/EditPurchase?taskid=" + tid + "&matrterID=" + mid + "&ApplayPcs=" + AppPcs + "&PcsNumber=" + PcsNumber + "&unit=" + units + "&note=" + note,
+                                url: "/TaskManagement/EditPurchase",
                                 type: "post",
+                                data: { taskid: tid, matrterID: mid, ApplayPcs: AppPcs, PcsNumber: PcsNumber, unit: units, note: note},
                                 dataType: "text",
                                 success: function (data) {
                                     if (data == "true") {

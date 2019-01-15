@@ -7,20 +7,28 @@ layui.use(['layer', 'form', 'laydate', 'element', 'table'], function () {
     var layer = layui.layer;
     var table = layui.table;
     var tableins;
-    $ = layui.jquery;
+    $ = layui.jquery;   
     var checkStatus = table.checkStatus('summary1')
     $("body div:first").css("height", "2350")
     laydate.render({
-        elem: '#test1'
+        elem: '#test1',
+        value: new Date(),
+        done: function (value, date) { }
     });
     laydate.render({
-        elem: '#test1-1'
+        elem: '#test1-1',
+        value: new Date(),
+        done: function (value, date) { }
     });
     laydate.render({
-        elem: '#test1-2'
+        elem: '#test1-2',
+        value: new Date(),
+        done: function (value, date) { }
     });
     laydate.render({
-        elem: '#test1-3'
+        elem: '#test1-3',
+        value: new Date(),
+        done: function (value, date) { }
     });
     laydate.render({
         elem: '#test1-4'
@@ -127,8 +135,10 @@ layui.use(['layer', 'form', 'laydate', 'element', 'table'], function () {
            
         }
     }
+ 
     $(document).ajaxStop(function () {
         layer.closeAll();
+ 
         $(".layui-elem-field input").each(function (i) {
             var len = $(".layui-elem-field input:eq("+i+")").val().length * 16;
             if (len == 0) {
@@ -145,7 +155,7 @@ layui.use(['layer', 'form', 'laydate', 'element', 'table'], function () {
                 $(this).css("width", 10 + "px");
             }
             else {
-                $(this).css("width", len + "px");
+                $(this).css("width", len+5 + "px");
             }
         });
         $(".layui-elem-field input").keyup(function () {
@@ -155,16 +165,21 @@ layui.use(['layer', 'form', 'laydate', 'element', 'table'], function () {
                 $(this).css("width", 10 + "px");
             }
             else {
-                $(this).css("width", len + "px");
+                $(this).css("width", len+5 + "px");
             }
-        }); $(".layui-elem-field input").css("padding", "0px");
+        });
+      
+        $(".layui-elem-field input").css("padding", "0px");
         $(".print").click(function () {
+            $(".layui-form-radio").each(function (i) {
+                if ($(".layui-form-radio:eq(" + i + ")").attr("class") != "layui-unselect layui-form-radio layui-form-radioed") {
+                    $(this).parents(".aa").hide();                  
+                }
+            });
             $(":input").css("border", "0px");
             $("button").hide();
-            $(".layui-form-radio").hide()
-            $(".layui-form-item").css({ "border": "0px", "background-color": "rgba(255,0,0,0)" })
             $("i").hide();
-        
+            
             $(":input").each(function (i) {
                 $(":input:eq(" + i + ")").attr("value", $(":input:eq(" + i + ")").val());
             })
@@ -177,6 +192,9 @@ layui.use(['layer', 'form', 'laydate', 'element', 'table'], function () {
             window.print();
         })
     });
+    //form.on('radio', function (data) {
+    //    alert($(data.elem).next().attr("class"))
+    //});  
     $.get("/ApplierList/checkApplierName", function (data) {
         for (var i = 0; i < data.length; i++) {
             if (data != null && data != "") {
@@ -191,18 +209,18 @@ layui.use(['layer', 'form', 'laydate', 'element', 'table'], function () {
     tableins = table.render({
         elem: '#summary1'
         , url: "/PurchasingManage/checkSummary?ids=" + $(".appvalue").val()
-
+        , totalRow: true
         , cols: [[
             {  hide: true }
-            , { type: "numbers", width: 50, style: 'text-align:center' }
+            , { type: "numbers", width: 50, style: 'text-align:center;vertical-align:middle;', hide: true  }
             , { field: 'MaterialID', hide: true }
-            , { field: 'PartNumber', width: 200, title: '名称', style: 'text-align:center' }
-            , { field: 'PartSpec', width: 200, title: '规格', style: 'text-align:center' }
-            , { field: 'ActPurchaseQTY', width: 100, title: '数量', style: 'text-align:center' }
-            , { title: '单位',width: 200 }
-            , { field: 'UnitPrice', width: 200, title: '含税单价（元）', edit: "text", style: 'text-align:center' }
-            , { field: 'TotalPrice', width: 200, title: '含税金额（元）', style: 'text-align:center' }
-            , { field: 'beiz', width: 200, title: '备注', style: 'text-align:center' }
+            , { field: 'PartNumber', width: 240, title: '名称', style: 'text-align:center;vertical-align:middle;', totalRowText: '合计：' }
+            , { field: 'PartSpec', width: 220, title: '规格', style: 'text-align:center;vertical-align:middle;' }
+            , { field: 'ActPurchaseQTY', width: 140, title: '数量', style: 'text-align:center;vertical-align:middle;', totalRow: true }
+            , { title: '单位',width: 140 }
+            , { field: 'UnitPrice', width: 250, title: '含税单价（元）', edit: "text", style: 'text-align:center;vertical-align:middle;', totalRow: true }
+            , { field: 'TotalPrice', width: 250, title: '含税金额（元）', style: 'text-align:center;vertical-align:middle;', totalRow: true }
+            , { field: 'beiz', width: 210, title: '备注', style: 'text-align:center;vertical-align:middle;' }
         ]]
         , done: function (res) {
 

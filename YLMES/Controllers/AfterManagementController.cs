@@ -25,6 +25,22 @@ namespace YLMES.Controllers
         //显示售后安装
         public ActionResult CheckInstallation(string CName, string CNumber, string strattime, string endtime,int page,int limit)
         {
+            if (CName == null)
+            {
+                CName = "";
+            }
+            if (CNumber == null)
+            {
+                CNumber = "";
+            }
+            if(strattime==null)
+            {
+                strattime = "";
+            }
+            if (endtime == null)
+            {
+                endtime = "";
+            }
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                 SqlParameter[] parms = new SqlParameter[6];

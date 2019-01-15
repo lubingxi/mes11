@@ -1,61 +1,61 @@
 ﻿$(function () {
     layui.use(['table', 'layer', 'form'], function () {
-
         var table = layui.table, layer = layui.layer
         , form = layui.form;
-        $("#SupplierSel").click(function () {
-            var NameSearch = $("#Name").val().trim();
-            var Select = $("#s option:selected").text();
-            table.render({
+        var tableIns=table.render({
                 elem: '#tw'
-                , url: '/ApplierList/GetSupplierlist?Name=' + NameSearch + '&Status=' + Select
+                , url: '/ApplierList/GetSupplierlist'
                 , page: true
                 , height: 'full-20'
                 , limit: 15
                 , cols: [[
                  { field: '序号', width: 80, title: '序号' }
-               , { field: '名称', width: 205, title: '名称', edit: Text }
-               , { field: '地址',  title: '地址', edit: Text }
-               , { field: '联系人', width: 90, title: '联系人', edit: Text }
-               , { field: '电话', width: 190, title: '电话', edit: Text }
-               , { field: '手机', width: 190, title: '手机', edit: Text }
-               , { field: '货品品类', width: 150, title: '货品品类', toolbar: "#Category" }
-               , { field: '级别', width: 150, title: '级别', toolbar: "#Level" }
-               , { field: '优势分析', width: 200, title: '优势分析  ', toolbar: "#Advantage" }
+               , { field: '名称', width: 205, title: '名称', edit: Text,style:"color:#009688" }
+                    , { field: '地址', title: '地址', edit: Text, event: 'setSign', style: "color:#009688" }
+                    , { field: '联系人', width: 90, title: '联系人', edit: Text, style: "color:#009688" }
+                    , { field: '电话', width: 190, title: '电话', edit: Text, style: "color:#009688" }
+                    , { field: '手机', width: 190, title: '手机', edit: Text, style: "color:#009688" }
+                    , { field: '货品品类', width: 150, title: '货品品类', toolbar: "#Category"}
+                    , { field: '级别', width: 150, title: '级别', toolbar: "#Level" }
+                    , { field: '优势分析', width: 200, title: '优势分析  ', toolbar: "#Advantage" }
                , { field: '审核状态', width: 100, title: '审核状态' }
                , { field: 'right', width: 238, align: 'center', toolbar: '#bsarDemo' }
                 ]]
+            });      
+        $("#SupplierSel").click(function () {
+            var NameSearch = $("#Name").val().trim();
+            var Select = $("#s option:selected").text();
+            tableIns.reload({
+                where: {
+                    Name: NameSearch
+                    , Status: Select
+                }
             });
-        });
+        })
         var Category1 = null;
         var Level1 = null;
         var Advantage1 = null;
         form.on('select(Category)', function (data) {
-
             //得到select原始DOM对象
-            Category1 = data.value;
-            layer.msg(Category1)
-          
-
+            Category1 = data.value;                  
         });
         form.on('select(Level)', function (data) {
             //得到select原始DOM对象
-            Level1 = data.value;
-            layer.msg(Level1)
+            Level1 = data.value;            
             //得到被选中的值
-
         });
         form.on('select(Advantage)', function (data) {
             //得到select原始DOM对象
-            Advantage1 = data.value;
-            layer.msg(Advantage1)
+            Advantage1 = data.value;      
             //得到被选中的值
 
         });
+       
+
 
         table.on('tool(demo)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
             var data = obj.data //获得当前行数据
-                , layEvent = obj.event; //获得 lay-event 对应的值  
+            , layEvent = obj.event; //获得 lay-event 对应的值  
             var ApplierID = data.序号;
             var ApplierName = data.名称;
             var Address = data.地址;
@@ -65,7 +65,27 @@
             var Category = Category1;
             var Level = Level1;
             var Advantage = Advantage1;
-
+            if (obj.event === 'setSign') {
+                layer.prompt({
+                    formType: 2
+                    , title: '修改地址'
+                    , value: data.sign
+                }, function (value, index) {
+                    layer.close(index);
+                    $.ajax({
+                        url: "/ApplierList/EditDress",
+                        data: { ApplierID: ApplierID, Dress: value},
+                        type: "post",
+                        dataType: "text",
+                        success: function (data) {
+                            if (data == "true") {
+                                layer.msg('修改成功');
+                                $("#SupplierSel").click();
+                            }
+                        }
+                    });
+                });
+            }
             if (Category1 == null) {
                 Category = data.货品品类;
             }
@@ -76,7 +96,7 @@
                 Advantage = data.优势分析;
             }
             if (layEvent === 'detail') {
-                layer.msg(Level)
+                
             } else if (layEvent === 'del') {
                 layer.confirm('真的删除行么', function (index) {
                     $.ajax({
@@ -137,7 +157,7 @@
                layer.open({
                     type: 2
                  , content: '/ApplierList/Material?ApplierID=' + ApplierID
-                  , area: ['80%', '60%']
+                  , area: ['80%', '80%']
                  , anim: 2
                 });
             }

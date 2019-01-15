@@ -543,17 +543,41 @@ namespace YlMES.Controllers
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                 SqlParameter[] parms = new SqlParameter[6];
-                if (Statusd == "全部")
+                if (CName == null)
+                {
+                    CName = "";
+                }
+                if (CNumber == null)
+                {
+                    CNumber = "";
+                }
+                if (Statusd == null)
                 {
                     Statusd = "全部";
                 }
-                if (Statusd == "已转生产订单")
+                else if (Statusd == "全部")
+                {
+                    Statusd = "全部";
+                }
+                if (Statusd == null)
+                {
+                    Statusd = "已转生产订单";
+                }
+                else if (Statusd == "已转生产订单")
                 {
                     Statusd = "已转生产订单";
                 }
                 if (Statusd == "未转生产订单")
                 {
                     Statusd = "未转生产订单";
+                }
+                if (strattime == null)
+                {
+                    strattime = "";
+                }
+                if (endtime == null)
+                {
+                    endtime = "";
                 }
                 parms[0] = new SqlParameter("@CreatedTimeStart", strattime);
                 parms[1] = new SqlParameter("@CreatedTimeEnd", endtime);

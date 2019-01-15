@@ -25,34 +25,40 @@
     <script>
         $(function () {
             layui.use(['table', 'layer'], function () {
-                var table = layui.table, layer = layui.layer;
-                var WarehouseName = $('#WarehouseName').val();
-                var CreatedTimestart = $('.CreatedTime').val();
-                var CreatedTimeEnd = $('.TimeEnd').val();
-                $('#PurchaselistSel').click(function () {
-                    table.render({
-                        elem: '#tw'
-                , url: '/Warehouse/Warehouselist?WarehouseName=' + WarehouseName + '&CreatedTimestart=' + CreatedTimestart + '&CreatedTimeEnd=' + CreatedTimeEnd
-                , page: true
-                , done: function () {
-                            $("tr a").hide();
-                            $("tr").hover(function () {
-                                $(this).children().last().children().children().toggle();
-                            })
+                var table = layui.table, layer = layui.layer;                            
+                var tableIns=table.render({
+                    elem: '#tw'
+                    , url: '/Warehouse/Warehouselist'
+                    , page: true
+                    , done: function () {
+                        $("tr a").hide();
+                        $("tr").hover(function () {
+                            $(this).children().last().children().children().toggle();
+                        })
+                    }
+                    , limit: 15
+                    , cols: [[
+                        { field: '序号', width: 80, title: '序号', edit: 'text' }
+                        , { field: '仓库名', width: 100, title: '仓库名', edit: 'text' }
+                        , { field: '描述', width: 210, title: '描述', edit: 'text' }
+                        , { field: '建库时间', width: 235, title: '建库时间' }
+                        , { field: '建库人', width: 180, title: '建库人', edit: 'text' }
+                        , { field: '状态', width: 100, title: '状态', edit: 'text' }
+                        , { field: 'right', width: 380, align: 'center', toolbar: '#bsarDemo' }
+                    ]]
+                });                
+                $("#PurchaselistSel").click(function () {
+                    var WarehouseName = $('#WarehouseName').val();
+                    var CreatedTimestart = $('.CreatedTime').val();
+                    var CreatedTimeEnd = $('.TimeEnd').val();
+                    tableIns.reload({
+                        where: {
+                            WarehouseName: WarehouseName
+                            , CreatedTimestart: CreatedTimestart
+                            , CreatedTimeEnd: CreatedTimeEnd
                         }
-                , limit: 15
-                , cols: [[
-                  { field: '序号', width: 80, title: '序号', edit: 'text' }
-                , { field: '仓库名', width: 100, title: '仓库名', edit: 'text' }
-                , { field: '描述', width: 210, title: '描述', edit: 'text' }
-                , { field: '建库时间', width: 235, title: '建库时间' }
-                , { field: '建库人', width: 180, title: '建库人', edit: 'text' }
-                , { field: '状态', width: 100, title: '状态', edit: 'text' }
-               , { field: 'right', width: 380, align: 'center', toolbar: '#bsarDemo' }
-                ]]
-                    })
-                });
-
+                    });
+                }); 
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data //获得当前行数据
                    , layEvent = obj.event; //获得 lay-event 对应的值

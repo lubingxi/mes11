@@ -150,12 +150,6 @@
                    , url: '/ProductionPlanning/Productlist?WorkorderNO=' + WorkorderNO
                    , page: true
                    , limit: 15
-                   , done: function () {
-                       $("tr a").hide()
-                       $("tr").hover(function () {
-                           $(this).children().last().children().children().toggle();
-                       })
-                   }
                    , cols: [[
                     { field: '项目名称', width: 250, title: '项目名称' }
                    , { field: '产品名称', width: 235, title: '产品名称', sort: true }

@@ -20,6 +20,13 @@
             <a class="layui-btn layui-btn-xs" lay-event="sel">生成报表</a>
         </script>*@
     <script  type="text/javascript">
+        $(document).keydown(function (e) {
+            switch (e.keyCode) {
+                case 13:
+                    $("#PurchaselistSel").click();
+                    break;
+            }
+        });
     $(function () {
             $('#container').hide();
         $.ajax({
@@ -43,11 +50,9 @@
             $(document).on("change", 'select#IsOverDue', function () {
                 console.log(IsOverDue = $(this).val());
             });
-
-            $('#PurchaselistSel').click(function () {
-                table.render({
+                var tableIns=table.render({
                     elem: '#tw'
-            , url: '/Statistical/Reportlist?ProjectName=' + ProjectName + '&Name=' + Name + '&IsOverDue=' + IsOverDue
+            , url: '/Statistical/Reportlist'
             , page: true
             , done: function () {
                 $("tr a").hide();
@@ -62,18 +67,17 @@
             , { field: '是否逾期', width: 130, title: '是否逾期' }
             , { field: '数量', width: 130, title: '数量' }
            , { field: 'right', width: 380, align: 'center', toolbar: '#bsarDemo' }
-            ]]
-                })
+            ]]                
             });
-            //table.on('tool(demo)', function (obj) {
-            //    var data = obj.data //获得当前行数据
-            //   , layEvent = obj.event; //获得 lay-event 对应的值
-            //    switch (layEvent) {
-            //        case 'sel':
-
-            //            break
-            //    }
-            //});
+            $("#PurchaselistSel").click(function () {              
+                tableIns.reload({
+                    where: {
+                        ProjectName: ProjectName
+                        , Name: Name
+                        , IsOverDue: IsOverDue
+                    }
+                });
+            });  
 
         });
         $('#department').click(function () {

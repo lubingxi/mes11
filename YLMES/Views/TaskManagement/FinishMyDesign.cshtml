@@ -24,19 +24,74 @@
             $(".click").click(function () {
                 $(".tip").fadeIn(200);
             });
+
             if ('@ViewData["dao"]' == "1") {
                 alert('导入成功');
                 $('#btn2').show();
                 $('#btn1').show();
+                $('#btn3').show();
             }
             else if ('@ViewData["dao"]' == "2") {
                 $('#btn1').show();
                 $('#btn2').show();
+                $('#btn3').show();
+                layui.use(['table', 'layer'], function () {
+                    var table = layui.table, layer = layui.layer;
+                        table.render({
+                            elem: '#tw'
+                            , url: '/TaskManagement/CheckBOMD'
+                            //  , done: function () {
+                            //      $("tr a").hide();
+                            //    $("tr").hover(function () {
+                            //        $(this).children().last().children().children().toggle();
+                            //    })
+
+
+                            //}
+                            , cols: [[
+                                { field: 'BOM结构', width: 80, title: 'BOM结构' }
+                                , { field: '图号', width: 235, title: '图号' }
+                                , {
+                                    field: '上传图片', width: 100, title: '上传图片'
+                                }
+                                , { field: '部件名称', title: '部件名称', width: 180 }
+                                , { field: '部件规格', width: 180, title: '部件规格' }
+                                , { field: '材料', width: 150, title: '材料' }
+                                , { field: '备注', width: 100, title: '备注' }
+                                , { field: '类型', width: 100, title: '类型' }
+                                , { field: '序号', width: 100, title: '序号' }
+                                , { field: 'right', width: 100, align: 'center', toolbar: '#barDemo' }
+                            ]]                       
+                    });
+                    table.on('tool(demo)', function (obj) {
+                        var data = obj.data;
+                        switch (obj.event) {
+                            case 'add':
+                                tupian = data.上传图片;
+                                tuhao = data.图号;
+                                var index = layer.open({
+                                    type: 2,
+                                    anim: 1,
+                                    title: '上传图纸',
+                                    maxmin: true,
+                                    content: '/TaskManagement/UploadTheDrawings?hao=' + tuhao,
+                                    cancel: function () {
+                                        $("#btn1").click();
+                                    }
+                                });
+                                layer.full(index);
+                                break;
+                        };
+                    });
+
+
+                });
             }
             else
             {
                 $('#btn1').hide();
                 $('#btn2').hide();
+                $('#btn3').hide();
             }
             $(".tiptop a").click(function () {
                 $(".tip").fadeOut(200);
@@ -48,10 +103,18 @@
             $("#cancle").click(function () {
                 window.parent.document.getElementById("rightframe").src = "/TaskManagement/PM_ContractReceivablesMain";
             });
-            //$("#addC").click(function () {
-            //    var sd = $("#u").text();
-            //    window.parent.document.getElementById("rightframe").src = sd;
-            //});
+            $("#btn3").click(function () {
+                layui.use(['table', 'layer'], function () {
+                    var layer = layui.layer;
+                    layer.open({
+                        type: 2
+                        , area: ['70%', '70%']
+                        , title:'上传文件'
+                        , content: '/TaskManagement/BatchUpload?taskid='+'@ViewData["taskid"]'
+                        , anim: 2
+                    });
+                });               
+            });
             $("#btn2").click(function () {
                 $.ajax({
                     url: "/TaskManagement/ConfirmTheDesign",
@@ -80,15 +143,12 @@
                     table.render({
                         elem: '#tw'
                    , url: '/TaskManagement/CheckBOMD'
-                   , done: function () {
-                       $("tr a").hide();
-                     $("tr").hover(function () {
-
-                         $(this).children().last().children().children().toggle();
-                     })
-
-
-                 }
+                 //  , done: function () {
+                 //    $("tr a").hide();
+                 //    $("tr").hover(function () {
+                 //    $(this).children().last().children().children().toggle();
+                 //    })
+                 //}
                    , cols: [[
                    { field: 'BOM结构', width: 80, title: 'BOM结构' }
                    , { field: '图号', width: 235, title: '图号' }
@@ -97,13 +157,12 @@
                    }
                    , { field: '部件名称', title: '部件名称', width: 180 }
                    , { field: '部件规格', width: 180, title: '部件规格' }
-                   , { field: '材料', width: 100, title: '材料' }
+                   , { field: '材料', width: 150, title: '材料' }
                    , { field: '备注', width: 100, title: '备注' }
                    , { field: '类型', width: 100, title: '类型' }
                    , { field: '序号', width: 100, title: '序号' }
                    , { field: 'right', width: 100, align: 'center', toolbar: '#barDemo' }
                    ]]
-
                     });
                 });
                 table.on('checkbox(demo)', function (obj) {
@@ -115,9 +174,18 @@
                     switch (obj.event) {
                         case 'add':
                             tupian = data.上传图片;
-                            tuhao = data.图号;
-                            var url = "/TaskManagement/UploadTheDrawings?hao=" + tuhao;
-                            layer_show('上传图纸', url, '1000', '700');
+                            tuhao = data.图号;                          
+                            var index = layer.open({
+                                type: 2,
+                                anim: 1,
+                                title: '上传图纸',
+                                maxmin: true,
+                                content: '/TaskManagement/UploadTheDrawings?hao=' + tuhao,
+                                cancel: function () {
+                                    $("#btn1").click();
+                                }
+                            });
+                            layer.full(index);
                             break;
                     };
                 });
@@ -130,7 +198,10 @@
 
     </script>
     <script type="text/html" id="barDemo">
+        {{#  if(d.图号 != ''){ }}
         <a class="layui-btn layui-btn-xs" id="add" lay-event="add">操作图纸</a>
+        {{#  } else { }}
+        {{#  } }}
     </script>
 
 
@@ -164,6 +235,7 @@
             </ul>
             <button class="btn"><a href="/TaskManagement/Filed?file1=~/BOM/材料清单导入格式模板.xlsx">BOM上传格式下载</a></button>
             &nbsp;&nbsp; <button class="layui-btn" id="btn1" data-type="reload">BOM查询</button>
+            &nbsp;&nbsp; <button class="layui-btn" id="btn3" data-type="reload">批量上传</button>
             &nbsp;&nbsp; <button class="layui-btn" id="btn2" data-type="reload">确定完成我的设计</button>
         </div>
         <table class="tablelist" id="tw" lay-filter="demo"></table>

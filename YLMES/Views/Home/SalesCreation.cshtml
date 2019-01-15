@@ -33,25 +33,16 @@
                 window.top.location = '/Home/Login';
             }        
             layui.use(['table', 'layer'], function () {
-                var table = layui.table, layer = layui.layer;
-                $("#sele").click(function () {
-                    var CuName = $("#CustomerName").val().trim();
-                    var CNumber = $("#ContractNumber").val().trim();
-                    var Select = $("#ck option:selected").text();
-                    var strattime = $(".strattime").val();
-                    var endtime = $(".endtime").val();
-                    var rs = $("#ReviewStatus").val();
-                    table.render({
-                        elem: '#tw'
-                   , url: '/Home/Get_Data?CName=' + CuName + '&CNumber=' + CNumber + '&Status=' + Select + '&strattime=' + strattime + '&endtime=' + endtime+'&rs='+rs
+                var table = layui.table, layer = layui.layer;             
+                var tableIns =table.render({
+                     elem: '#tw' 
+                   , url: '/Home/Get_Data'
                    , page: true
                    , done: function () {
                              $("tr a").hide()
                              $("tr").hover(function () {
                                  $(this).children().last().children().children().toggle();
                              })
-
-
                          }
                    , limit: 15
                    , toolbar: '#toolbarDemo'
@@ -73,8 +64,25 @@
                    , { field: '货款情况', width: 90, title: '货款情况' }
                    , { field: 'right', width: 140, align: 'center', toolbar: '#barDemo' }
                    ]]
+                    });           
+                $("#sele").click(function () {
+                    var CuName = $("#CustomerName").val().trim();
+                    var CNumber = $("#ContractNumber").val().trim();
+                    var Select = $("#ck option:selected").text();
+                    var strattime = $(".strattime").val();
+                    var endtime = $(".endtime").val();
+                    var rs = $("#ReviewStatus").val();
+                    tableIns.reload({
+                        where: {
+                            CName: CuName
+                            , CNumber: CNumber
+                            , Status: Select
+                            , strattime: strattime
+                            , endtime: endtime
+                            , rs: rs
+                        }
                     });
-                });
+                })
                 table.on('toolbar(demo)', function (obj) {
                     var checkStatus = table.checkStatus(obj.config.id); //获取选中行状态
                     var data = checkStatus.data;  //获取选中行数据
@@ -88,11 +96,11 @@
                                         layer.msg('已经审核通过!');
                                     }
                                     else {
-                                        var url = "/Home/Audit?id=" + item.id;
                                         layer.confirm('审核修改是否通过？', {
                                             btn: ['确定', '取消'], btn1: function () {
                                                 $.ajax({
-                                                    url: url,
+                                                    url: "/Home/Audit",
+                                                    data: { id: item.id },
                                                     type: 'post',
                                                     success: function (data) {
                                                         if (data == "true") {
@@ -154,9 +162,9 @@
                                     }
                                     else
                                     {                                    
-                                        var url = "/Home/Apply?id=" + item.id;
                                         $.ajax({
-                                            url: url,
+                                            url: "/Home/Apply",
+                                            data: { id: item.id },
                                             dataType: "text",
                                             success: function (data) {
                                                 if (data == "true") {
@@ -212,9 +220,8 @@
                                 layer.msg('已经提交过了！')
                             } else
                             {
-                                var url = '/Home/SubmitMethod?id=' + id;
                                 $.ajax({
-                                    url: url,
+                                    url: "/Home/SubmitMethod",
                                     data: { id: id },
                                     type: "post",
                                     dataType: "text",
@@ -233,9 +240,8 @@
                         case 'del':
                             layer.confirm("真的删除行么", function (index) {
                                 id = data.id;
-                                var url = "/Home/DeleteContractd";
                                 $.ajax({
-                                    url: url,
+                                    url: "/Home/DeleteContractd",
                                     data: { id: id },
                                     type: "post",
                                     dataType: "text",
@@ -257,14 +263,20 @@
                     };
 
                 });
-                $("#addC").click(function () {
-                    var truthBeTold = window.confirm("是否客户合同“确定”继续。单击“取消”公司合同。")
-                    if (truthBeTold) {
-                        window.parent.document.getElementById("rightframe").src = "/Home/ContractAdd";
-                    } else {
-                        var sd = $("#u").text();
-                        window.parent.document.getElementById("rightframe").src = sd;
-                    }                                        
+                $("#addC").click(function () {                
+                    layer.open({
+                        content: '是否客户合同“是”继续。单击“否”公司合同。'
+                        , btn: ['是', '否']
+                        , yes: function (index, layero) {
+                            window.parent.document.getElementById("rightframe").src = "/Home/ContractAdd";
+                        }
+                        , btn2: function (index, layero) {
+                            var sd = $("#u").text();
+                            window.parent.document.getElementById("rightframe").src = sd;
+                        }                      
+                        , cancel: function () {
+                        }
+                    });
                 });
                 $("#addD").click(function () {
                     var sd = $("#s").text();
@@ -287,7 +299,7 @@
     </script>
     <script type="text/html" id="cc">
         {{#  if(d.ContractNumber != ''){ }}
-        <span style="color: red">{{d.ContractNumber}}</span>
+        <span style="color:red;cursor:pointer;">{{d.ContractNumber}}</span>
         {{#  } else { }}
         {{#  } }}
     </script>

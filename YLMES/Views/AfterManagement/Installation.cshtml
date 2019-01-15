@@ -28,15 +28,10 @@
                 }
             });
             layui.use(['table', 'layer'], function () {
-                var table = layui.table, layer = layui.layer;
-                $(".layui-btn").click(function () {
-                    var CuName = $("#CustomerName").val().trim();
-                    var CNumber = $("#ContractNumber").val().trim();
-                    var strattime = $(".strattime").val();
-                    var endtime = $(".endtime").val();
-                    table.render({
+                var table = layui.table, layer = layui.layer;                             
+                    var tableIns =table.render({
                         elem: '#tw'
-                   , url: '/AfterManagement/CheckInstallation?CName=' + CuName + '&CNumber=' + CNumber + '&strattime=' + strattime + '&endtime=' + endtime
+                   , url: '/AfterManagement/CheckInstallation'
                    , page: true
                    , limit: 15
                    , cols: [[
@@ -44,8 +39,8 @@
                            field: '', width: 20, title: '', hide: true
                        }
                    , { field: 'id', width: 100, title: '序号' }
-                   , { field: 'CustomerName', width: 180, title: '客户名称' }
-                   , { field: 'ContractNumber', width: 180, title: '合同编号', event: 'xi', style: 'color: red' }
+                   , { field: 'CustomerName', width: 250, title: '客户名称' }
+                       , { field: 'ContractNumber', width: 180, title: '合同编号', event: 'xi', style: 'color: red;cursor:pointer;' }
                    , {
                        field: '合同签订日期', width: 120, title: '合同签订日期',
                    }
@@ -56,7 +51,19 @@
                     , { field: '是否含税', width: 100, title: '含税' }
                    , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
                    ]]
-
+                    });
+                $(".layui-btn").click(function () {
+                    var CuName = $("#CustomerName").val().trim();
+                    var CNumber = $("#ContractNumber").val().trim();
+                    var strattime = $(".strattime").val();
+                    var endtime = $(".endtime").val();
+                    tableIns.reload({
+                        where: {
+                            CName: CuName
+                            , CNumber: CNumber
+                            , strattime: strattime
+                            , endtime: endtime
+                        }
                     });
                 });
                 table.on('tool(demo)', function (obj) {
@@ -134,7 +141,6 @@
     <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
     <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
     <script type="text/javascript">
-
         function admin_add(title, url, w, h) {
             layer_show(title, url, w, h);
         }

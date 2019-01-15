@@ -1,11 +1,9 @@
 ﻿$(function () {
     layui.use(['table', 'layer','form'], function () {
-        var table = layui.table, layer = layui.layer,form=layui.form;
-        $("#Search").click(function () {
-            var NameSearch = $("#Name").val().trim();
-            table.render({
+        var table = layui.table, layer = layui.layer,form=layui.form;          
+        var tableIns=table.render({
                 elem: '#tw'
-                , url: '/SystemSettings/SeProductStation?Name=' + NameSearch
+                , url: '/SystemSettings/SeProductStation'
                 , page: true
                 , limit: 15
                 , cols: [[
@@ -17,7 +15,13 @@
                     , { width: 210, title: '线别', templet: '#titleTpl' }
                     , { width: 178, align: 'center', toolbar: '#barDemo'}
                 ]]
-
+            });       
+        $("#Search").click(function () {
+            var NameSearch = $("#Name").val().trim();
+            tableIns.reload({
+                where: {
+                    Name: NameSearch                  
+                }
             });
         });
         var StationType1 = null;

@@ -1,5 +1,7 @@
 ﻿@{
-    Layout = null;
+                /**/
+
+                Layout = null;
 
 
 }
@@ -23,13 +25,13 @@
             switch (e.keyCode) {
                 case 27:
                     window.history.go(-1);
-                    break;          
+                    break;
             }
         });
         $(function () {
          if ('@Session["name"]' == "") {
                 window.top.location = '/Home/Login';
-            }  
+            }
             var url = "/TaskManagement/CompleteProcessSetting?tastid=" + '@ViewData["taskid"]';
             $(".click").click(function () {
                 $(".tip").fadeIn(200);
@@ -55,12 +57,12 @@
                 window.parent.document.getElementById("rightframe").src = "/Home/Eidt";
             });
             $("#Process").click(function () {
-               
+
             });
             $("#BindingProductConfirmation").click(function () {
 
             });
-            $("#ProcessSetup").click(function () {          
+            $("#ProcessSetup").click(function () {
                 $.ajax({
                     url: url,
                     type: 'post',
@@ -77,9 +79,9 @@
                     }
                 });
             });
-          
+
             layui.use(['table', 'layer'], function () {
-                    var table = layui.table, layer = layui.layer;                                 
+                    var table = layui.table, layer = layui.layer;
                     table.render({
                         elem: '#tw'
                    , url: '/TaskManagement/CheckBOM?PName=' + '@ViewData["ProductName"]'
@@ -103,7 +105,7 @@
                    , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
                    ]]
 
-                    });              
+                    });
                 table.on('checkbox(demo)', function (obj) {
                     console.log(obj)
                 });
@@ -125,7 +127,7 @@
                                 maxmin: true
                             });
                             layer.full(index);
-                        }                     
+                        }
                     }
                     if (obj.event === 'zi') {
                         Zi = data.子件编码;
@@ -173,7 +175,7 @@
                                             return false;
                                         }
                                     }
-                                });                                                                                   
+                                });
                             break;
                         case 'subpp':
                             id = data.子件序号;
@@ -184,10 +186,10 @@
                                 async: true,
                                 success: function (data) {
                                     if (data == "true") {
-                                        layer.msg("提交成功", { icon: 6 });                                      
+                                        layer.msg("提交成功", { icon: 6 });
                                     }
                                 }
-                            });  
+                            });
                             break;
                     };
                 });
@@ -215,7 +217,7 @@
         {{#  if(d.是否组装件 == '0'){ }}
         <span>否</span>
         {{#  } else if(d.是否组装件 == '1'){ }}
-        <span>是</span> 
+        <span>是</span>
         {{#  } }}
     </script>
 </head>
@@ -247,7 +249,7 @@
                     <a href="#" id="m2" hidden="hidden">2</a>
                 </li>
             </ul>
-            <button class="layui-btn" id="Process" data-type="reload">查看工艺流程</button>
+            @*<button class="layui-btn" id="Process" data-type="reload">查看工艺流程</button>*@
             <button class="layui-btn" id="ProcessSetup" data-type="reload">确认完成工艺设置</button>
         </div>
         <table class="tablelist" id="tw" lay-filter="demo"></table>
@@ -259,9 +261,9 @@
     <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
     <script type="text/javascript">
 
-            function admin_add(title, url, w, h) {
-                layer_show(title, url, w, h);
-            }
+        function admin_add(title, url, w, h) {
+            layer_show(title, url, w, h);
+        }
     </script>
     <script type="text/javascript">
         $('.tablelist tbody tr:odd').addClass('odd');

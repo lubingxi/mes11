@@ -46,24 +46,17 @@
                 $(".tip").fadeOut(100);
             });
             layui.use(['table', 'layer'], function () {
-                var table = layui.table, layer = layui.layer;
-                $(".layui-btn").click(function () {
-                    var CuName = $("#CustomerName").val().trim();
-                    var Contact = $("#Contact").val().trim();
-                    var CustomerCode = $("#CustomerCode").val().trim();
-                    table.render({
-                        elem: '#tw'
-                   , url: '/Home/CheckCustomer?csc=' + CustomerCode + '&cn=' + CuName + '&c=' + Contact
+                var table = layui.table, layer = layui.layer;              
+                    var tableIns=table.render({
+                     elem: '#tw'
+                   , url: '/Home/CheckCustomer'
                    , page: true
                    , done: function () {
                      $("tr a").hide()
                      $("tr").hover(function () {
-
                          $(this).children().last().children().children().toggle();
                      })
-
-
-                 }
+                     }
                    , limit: 15
                    , cols: [[
                      { field: '', hide:true },
@@ -95,11 +88,21 @@
                    , {
                        field: 'CreatedBy', width: 130, title: '创建人',
                    }
-                   , { field: 'right', width: 150, align: 'center', toolbar: '#barDemo' }
-                   ]]
-
-                    });
+                   , { fixed: 'right', width: 150, align: 'center', toolbar: '#barDemo' }
+                   ]]                  
                 });
+                $(".layui-btn").click(function () {
+                    var CuName = $("#CustomerName").val().trim();
+                    var Contact = $("#Contact").val().trim();
+                    var CustomerCode = $("#CustomerCode").val().trim();
+                    tableIns.reload({
+                        where: {
+                            csc: CustomerCode
+                          , cn: CuName
+                          , c: Contact                            
+                        }
+                    });
+                })
                 table.on('checkbox(demo)', function (obj) {
                     console.log(obj)
                 });

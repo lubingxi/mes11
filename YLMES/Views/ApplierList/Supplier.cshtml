@@ -28,18 +28,18 @@
     </style>
     <script src="~/js/Supplier.js"></script>
     <script type="text/html" id="Category">
-        @Html.DropDownList("Category", new SelectList(ViewBag.Category, "Name", "Name"), "{{d.货品品类}}", new { @class = "Category", @ID = "Category", @lay_filter = "Category" })
+        @Html.DropDownList("Category", new SelectList(ViewBag.Category, "Name", "Name"), "{{d.货品品类}}", new { @class = "Category", @ID = "Category", @lay_filter = "Category" ,@lay_search="" })
     </script>
     <script type="text/html" id="Level">
         @Html.DropDownList("Level", new SelectList(ViewBag.Level, "Name", "Name"), "{{d.级别}}", new { @class = "Level", @ID = "Level", @lay_filter = "Level" })
     </script>
     <script type="text/html" id="Advantage">
-        @Html.DropDownList("Advantage", new SelectList(ViewBag.Advantage, "Name", "Name"), "{{d.优势分析}}", new { @class = "Advantage", @ID = "Advantage", @lay_filter = "Advantage" })
+        @Html.DropDownList("Advantage", new SelectList(ViewBag.Advantage, "Name", "Name"), "{{d.优势分析}}", new { @class = "Advantage", @ID = "Advantage", @lay_filter = "Advantage", @lay_search = "" })
     </script>
     <script type="text/html" id="bsarDemo">
         <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
         <a class="layui-btn layui-btn-xs" lay-event="sh">审核</a>
-        <a class="layui-btn layui-btn-xs" lay-event="bb">绑定</a>
+        @*<a class="layui-btn layui-btn-xs" lay-event="bb">绑定</a>*@
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" lay-filter="demo">删除</a>
     </script>
     <script>

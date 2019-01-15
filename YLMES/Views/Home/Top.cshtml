@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="~/layui/css/layui.css" media="all">
     <script language="JavaScript" src="../../js/jquery.js"></script>
     <script type="text/javascript">
+        function exits() {
+        window.top.location = '/Home/Login';
+        }
 $(function(){
 	//顶部导航切换
     //$(".nav li a").click(function () {
@@ -35,6 +38,11 @@ $(function(){
     <script src="~/layui/layui.js" charset="utf-8"></script>
     <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
     <script>
+        $(function () {
+              if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            } 
+        });
         layui.use('element', function () {
             var $ = layui.jquery
             , element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
@@ -71,18 +79,19 @@ $(function(){
     </div>
     <ul class="nav">
 
-        <li id="shou"><a  target="rightFrame"><img src="../../images/icon01.png" title="信息管理" /><h2>信息管理</h2></a></li>
+        <li id="shou"><a target="rightFrame"><img src="../../images/icon01.png" title="信息管理" /><h2>信息管理</h2></a></li>
         <li id="map"><a target="rightFrame"><img src="../../images/icon03.png" title="查看地图" /><h2>查看地图</h2></a></li>
         <li><a href="tools.html" target="rightFrame"><img src="../../images/icon04.png" title="常用工具" /><h2>常用工具</h2></a></li>
-        <li id="wenjian"><a  target="rightFrame"><img src="../../images/icon05.png" title="文件管理" /><h2>文件管理</h2></a></li>
-        <li><a href="https://wx.qq.com/"  target="_blank"><img src="../../images/icon06.png" title="微信" /><h2>微信</h2></a></li>
+        <li id="wenjian"><a target="rightFrame"><img src="../../images/icon05.png" title="文件管理" /><h2>文件管理</h2></a></li>
+        <li><a href="https://wx.qq.com/" target="_blank"><img src="../../images/icon06.png" title="微信" /><h2>微信</h2></a></li>
+        <li><a href="https://chuan.wellsign.cn/" target="_blank"><img src="../../images/qian.png" title="微信" /><h2>好签小程序</h2></a></li>
     </ul>
 
     <div class="topright">
         <ul>
             <li><span><img src="../../images/help.png" title="帮助" class="helpimg" /></span><a href="#">帮助</a></li>
             <li><a href="#">关于</a></li>
-            <li><a href="/Home/Login" target="_parent">退出</a></li>
+            <li><a href="javascript:void(0);"  onclick="exits()">退出</a></li>
         </ul>
 
         <div class="user">

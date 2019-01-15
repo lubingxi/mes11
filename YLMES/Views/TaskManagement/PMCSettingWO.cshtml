@@ -78,10 +78,12 @@
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
                     switch (obj.event) {
-                        case 'add':
-                            var truthBeTold = window.confirm("是否有库存“确定”继续。单击“取消”采购申请。")
-                            if (truthBeTold) {
-                             id = data.id;
+                        case 'add':                              
+                            layer.open({
+                                content: '是否有库存“确定”继续。单击“申请”采购申请。'
+                                , btn: ['继续', '申请']
+                                , yes: function (index, layero) {
+                                    id = data.id;
                             PartNumber = data.部件;
                             TotalPCS = data.订单数量
                             TotalQTY = data.工单数量;
@@ -113,18 +115,22 @@
                                             }
                                         }
                                     });
-                            } else {
-                                TaskID = data.任务编号;
-                                PartID = data.部件编号;
-                                var url = '/TaskManagement/Purchasing?Taskid=' + TaskID + '&PartID=' + PartID;
-                                var index = layer.open({
-                                    type: 2,
-                                    title: "采购申请信息",
-                                    content: url,
-                                    maxmin: true
-                                });
-                                layer.full(index);
-                            }                                                      
+                                }
+                                , btn2: function (index, layero) {
+                                    TaskID = data.任务编号;
+                                    PartID = data.部件编号;
+                                    var url = '/TaskManagement/Purchasing?Taskid=' + TaskID + '&PartID=' + PartID;
+                                    var index = layer.open({
+                                        type: 2,
+                                        title: "采购申请信息",
+                                        content: url,
+                                        maxmin: true
+                                    });
+                                    layer.full(index);
+                                }                             
+                                , cancel: function () {                                    
+                                }
+                            });
                             break;
                     };
                 });

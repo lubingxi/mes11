@@ -98,7 +98,10 @@ namespace YLMES.Controllers
             Dictionary<string, Object> hasmap;
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-
+                if (Name == null)
+                {
+                    Name = "";
+                }
                 SqlParameter[] parms = new SqlParameter[2];
                 parms[0] = new SqlParameter("@Type", "check");
                 parms[1] = new SqlParameter("@Station", Name);
@@ -262,6 +265,18 @@ namespace YLMES.Controllers
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
+                if (Name == null)
+                {
+                    Name = "";
+                }
+                if (PartSpec == null)
+                {
+                    PartSpec = "";
+                }
+                if(Material==null)
+                {
+                    Material = "";
+                }
                 SqlParameter[] parms = new SqlParameter[3];
                 parms[0] = new SqlParameter("@PartNumber", Name);
                 parms[1] = new SqlParameter("@PartSpec", PartSpec);

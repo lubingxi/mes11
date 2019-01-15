@@ -1,0 +1,96 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+        function admin_add(title, url, w, h) {
+            layer_show(title, url, w, h);
+        }
+        $(function () {
+            $(".click").click(function () {
+                $(".tip").fadeIn(200);
+            });
+            if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }
+            $(document).keydown(function (e) {
+                if (e.keyCode == 13) {
+                    $(".layui-btn").click();
+                }
+            });
+            $(".tiptop a").click(function () {
+                $(".tip").fadeOut(200);
+            });
+
+            $(".sure").click(function () {
+                $(".tip").fadeOut(100);
+            });
+
+            $(".cancel").click(function () {
+                $(".tip").fadeOut(100);
+            });
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                    var tableIns=table.render({
+                     elem: '#tw'
+                   , url: '/Discuss/CheckMyPost'
+                   , page: true
+                   , limit: 15
+                   , cols: [[
+                   { field: '帖子标题', title: '帖子标题', width: 550 }
+                   ,{ field: '状态', width: 150, title: '状态'}
+                   ,{ field: '发布时间', width: 150, title: '发表时间'}
+                   , {field: '回答人数', width: 150, title: '评论人数' }
+                   ]]
+                });
+                $(document).on("change", ".Substance", function (e) {
+                    var Substance = $("#Substance").val().trim();
+                    tableIns.reload({
+                        where: {
+                            Substance: Substance
+                        }
+                    });
+                });
+            });
+
+        })
+
+
+    </script>
+
+</head>
+
+
+<body onselectstart="return false;">
+    <div class="rightinfo">
+        <div class="tools">
+            <ul class="toolbar">
+                <li>
+                    帖子标题：
+                    <input class="Substance" id="Substance" type="text" style="width: 80px;" />
+                </li>
+            </ul>
+        </div>
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+    </div>
+</body>
+</html>
+

@@ -46,26 +46,25 @@
                 elem: '#tw'
                 , url: '/ApplierList/checkMaterial'
                 , page: true
-                , toolbar: 'default' 
                 , limit: 15
                 , cols: [[
-                    { field: 'ID', title: '序号', width: 80 }
-                    , { field: 'figureNumber', title: '图号',width:200 }
+                    { hide: true }
+                    ,{ field: 'ID', title: '序号', width: 70 }
+                    //, { field: 'figureNumber', title: '图号',width:200 }
                     , { field: 'PartNumber', title: '物料名称', width: 200}
                     , { field: 'PartSpec', title: '物料规格', width: 200}
                     , { field: 'PartMaterial', title: '物料材质', width: 200}
                     , { field: 'ApplierProductTypeID', title: '物料类型', templet: '#Category', width: 250}
                     , { field: 'ApplierId', title: '默认供应商', templet: '#Applier', width: 250}
                     , { field: 'ContractTypeId', title: '合同种类', toolbar: '#se', width:280}
-                    , { align: 'center', toolbar: '#bsarDemo'}
+                    , { align: 'center', toolbar: '#bsarDemo', width: 200}
                 ]]
                 , done: function (res) {
                     for (var i = 0; i < res.data.length; i++) {
                         typeid[i] = res.data[i].ContractTypeId;
                         applierid[i] = res.data[i].ApplierId
                         MaterialType[i] = res.data[i].ApplierProductTypeID
-                    }
-                    
+                    }                 
                     $.get("/ApplierList/checkContrType", function (data) {
                         if (data != null) {
                             $(".typeid").empty()
@@ -98,7 +97,7 @@
                     })
                     $.get("/ApplierList/checkPurchase", function (data) {
                         if (data != null) {
-                          $(".CategoryId").empty()
+                            $(".CategoryId").empty();
                             for (var j = 0; j < MaterialType.length; j++) {
                                 for (var i = 0; i < data.length; i++) {
                                     if (MaterialType[j] == data[i].ID) {
@@ -112,6 +111,8 @@
                         form.render(null, 'LAY-table-1');
                     })
                 }
+
+
             });
             $.get("/ApplierList/checkContrType", function (data) {
                 if (data != null) {
@@ -122,14 +123,13 @@
                 form.render();
             });
 
-            var Level1 = null;
-            var Advantage1 = null;
-            var ApplierProductTypeID = null;
+          
             form.on('select(CategoryId)', function (data) {
                 var areaId = data.value;
                 
                 var oin = data.othis;
-                ApplierProductTypeID = data.value;
+                var index = $("tbody .CategoryId").index(data.elem)
+                table.cache.tw[index].ApplierProductTypeID = data.value
                 // layer.msg(ApplierProductTypeID);
                 $.ajax({
                     type: 'POST',
@@ -137,42 +137,53 @@
                     data: { ids: areaId },
                     dataType: 'json',
                     success: function (data) {
-                        var e = oin.parent().parent().next().children().children()
-                        var r = oin.parent().parent().next().next().children().children();
-                        var a = oin.parent().parent().next().next().next().children().children();
-                        e.empty();
-                        r.empty();
-                        a.empty();
+                        var e = oin.parent().parent().next().children().children();                        
+                        e.empty();  
+                        e.append("<option>请选择</option>");
                         for (var i = 0; i < data.length; i++) {
-                            e.append("<option>" + data[i].供应商 + "</option>");
-                            r.append("<option>" + data[i].级别 + "</option>");
-                            a.append("<option>" + data[i].优势分析 + "</option>");
+                            e.append("<option value=" + data[i].序号+">" + data[i].供应商 + "</option>");
                         }
                         if (data.length == 0) {
-                            e.append("<dd>没有选项</dd>");
-                            r.append("<dd>没有选项</dd>");
-                            a.append("<dd>没有选项</dd>");
+                            e.append("<dd>没有选项</dd>");                 
                         }
                         form.render();
                     }
                 });
 
             });
-            form.on('select(typeid)', function (data) {
-                //得到select原始DOM对象
-                Level1 = data.value;
-                // layer.msg(Level1)
-                //得到被选中的值
-
-            });
             form.on('select(ApplierId)', function (data) {
-                //得到select原始DOM对象
-                Advantage1 = data.value;
-                //layer.msg(Advantage1)
-                //得到被选中的值
-
+                var index = $("tbody .ApplierId").index(data.elem)
+                table.cache.tw[index].ApplierId = data.value
             });
+           
+            form.on('select(typeid)', function (data) {
+                var index = $("tbody .typeid").index(data.elem)
+                table.cache.tw[index].ContractTypeId = data.value
+            });
+            table.on('tool(demo)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                var data = obj.data //获得当前行数据
+                    , layEvent = obj.event; //获得 lay-event 对应的值  
+                if (layEvent === 'edit') {
+                    id = data.ID;
+                    apid = data.ApplierProductTypeID;
+                    Applier = data.ApplierId;
+                    type = data.ContractTypeId;
+                    $.ajax({
+                        type: 'POST',
+                        url: '/ApplierList/EditMaterialInformation',
+                        data: { id: id, apid: apid, Applierid: Applier, typeid: type },
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data == "true") {
+                                layer.msg("修改成功！");
+                                $("#check").click();
+                            }
+                        }
+                    });
+                }
 
+            
+            });
 
             $("#check").click(function () {
                 var name = $(".Name").val().trim();
@@ -192,18 +203,15 @@
     </script>
     <script type="text/html" id="bsarDemo">
         <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
-        <a class="layui-btn layui-btn-xs" lay-event="sh">审核</a>
-        <a class="layui-btn layui-btn-xs" lay-event="bb">绑定</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" lay-filter="demo">删除</a>
     </script>
     <script type="text/html" id="se" >
-        <select class="typeid" lay-filter="typeid" lay_search=""></select>
+        <select class="typeid" lay-filter="typeid" ></select>
     </script>
     <script type="text/html" id="Category">
-        <select class="CategoryId" lay-filter="CategoryId" lay_search=""></select>
+        <select class="CategoryId" lay-filter="CategoryId" lay-search=lay-search></select>
     </script>
     <script type="text/html" id="Applier">
-        <select class="ApplierId"lay-filter="ApplierId" lay_search=""></select>
+        <select class="ApplierId"lay-filter="ApplierId"></select>
     </script>
 </head>
 <body>
@@ -217,7 +225,7 @@
     </div>
     <div class="layui-form layui-form-pane" action="">
 
-        <div class="layui-form-item" pane >
+        <div class="layui-form-item" pane>
             <div class="layui-inline" style="margin-top:5px">
                 <label class="layui-form-label">物料名称：</label>
                 <div class="layui-input-block">
@@ -233,6 +241,6 @@
             <button class='layui-btn' id="check">查询</button>
         </div>
     </div>
-    <table id="tw" ></table>
+    <table class="tablelist" id="tw" lay-filter="demo"></table>
 </body>
 </html>

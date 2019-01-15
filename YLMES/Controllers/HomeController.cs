@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -26,6 +27,7 @@ namespace YlMES.Controllers
         }
         public ActionResult Login()
         {
+            Session["deprat"] = null;
             return View();
         }
         public ActionResult Computer()
@@ -56,9 +58,6 @@ namespace YlMES.Controllers
             ViewData["idw"] = id;
             return View();
         }
-
-
-
         //查询状态
         public void SeTableStatus()
         {
@@ -66,7 +65,6 @@ namespace YlMES.Controllers
             {
                 List<TableStatus> list = ys.TableStatus.ToList();
                 ViewBag.ck = list;
-
             }
         }
         public void SeTableStatud()
@@ -75,15 +73,12 @@ namespace YlMES.Controllers
             {
                 List<TableStatus> list = ys.TableStatus.Where(t => t.Dept.Equals("财务部")).ToList();
                 ViewBag.ck = list;
-
             }
         }
         public ActionResult VarCheckInfoAdd()
         {
-
             return View();
         }
-
         public ActionResult left()
         {
             return View();
@@ -93,7 +88,6 @@ namespace YlMES.Controllers
 
             return View();
         }
-
         public ActionResult HDetailsAdd()
         {
             return View();
@@ -103,8 +97,7 @@ namespace YlMES.Controllers
             return View();
         }
         public ActionResult SalesCreation()
-        {
-          
+        {         
             SeTableStatus();
             return View();
         }
@@ -120,8 +113,6 @@ namespace YlMES.Controllers
             SeTableStatud();
             return View();
         }
-
-
         //合同查询
         public ActionResult PM_Contract_Check()
         {
@@ -145,8 +136,6 @@ namespace YlMES.Controllers
         }
         public ActionResult Contract_Check(string id)
         {
-
-
             ViewData["ContractDetialsCheckId"] = id;
             XianShiContract(id);
             return View();
@@ -157,10 +146,34 @@ namespace YlMES.Controllers
             ViewData["ids"] = id;
             Session["Cid"] = id;
             return View();
-
-
         }
-
+        //显示我的任务选择人
+        public ActionResult MyTaskName(string name)
+           {
+           
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open();
+                using(SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText= "select DepartMent from  [Employee]   where UserName='" + name + "'";
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            string deprat = reader["DepartMent"].ToString();
+                            Session["deprat"] = deprat;
+                            return Content(deprat);                                                       
+                        }
+                        else
+                        {
+                            return Content("123");
+                        }
+                    }
+                }
+            }
+           
+        }
 
         int Did = 0;
         public ActionResult CDetialsd()
@@ -398,10 +411,35 @@ namespace YlMES.Controllers
         #region  分页显示加查询
         public ActionResult Get_Data(string CName, string CNumber, string Status, string strattime, string endtime, string rs, int page, int limit)
         {
-            if (Status.Equals("全部"))
-            {
+           
 
+            if (CName == null)
+            {
+                CName = "";
+            }
+            if (CNumber == null)
+            {
+                CNumber = "";
+            }
+            if (Status==null)
+            {
                 Status = "";
+            }
+            else if(Status.Equals("全部"))
+            {
+                Status = "";
+            }
+            if(strattime==null)
+            {
+                strattime = "";
+            }
+            if(endtime==null)
+            {
+                endtime = "";
+            }
+            if(rs==null)
+            {
+                rs = "";
             }
             Dictionary<string, Object> hasmap;
             using (YLMES_newEntities ys = new YLMES_newEntities())
@@ -428,10 +466,33 @@ namespace YlMES.Controllers
         }
         public ActionResult Get_Datas(string CName, string CNumber, string Status, string strattime, string endtime, string rs, int page, int limit)
         {
-            if (Status.Equals("全部"))
+            if (CName == null)
             {
-
+                CName = "";
+            }
+            if (CNumber == null)
+            {
+                CNumber = "";
+            }
+            if (Status == null)
+            {
                 Status = "";
+            }
+            else if (Status.Equals("全部"))
+            {
+                Status = "";
+            }
+            if (strattime == null)
+            {
+                strattime = "";
+            }
+            if (endtime == null)
+            {
+                endtime = "";
+            }
+            if (rs == null)
+            {
+                rs = "";
             }
             Dictionary<string, Object> hasmap;
             using (YLMES_newEntities ys = new YLMES_newEntities())
@@ -1445,6 +1506,18 @@ namespace YlMES.Controllers
             Dictionary<string, Object> hasmap;
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
+                if (csc == null)
+                {
+                    csc = "";
+                }
+                if(cn==null)
+                {
+                    cn = "";
+                }
+                if(c==null)
+                {
+                    c = "";
+                }
                 SqlParameter[] parms = new SqlParameter[4];
                 parms[0] = new SqlParameter("@CustomerCode",csc);
                 parms[1] = new SqlParameter("@CustomerName",cn);
@@ -1591,8 +1664,7 @@ namespace YlMES.Controllers
         public JsonResult Jurisdiction()
         {
             string name = "";        
-             name = Session["name"].ToString();
-          
+             name = Session["name"].ToString();          
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                 SqlParameter[] parms = new SqlParameter[2];

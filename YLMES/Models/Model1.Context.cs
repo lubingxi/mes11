@@ -48,6 +48,8 @@ namespace YLMES.Models
         public virtual DbSet<PM_FactorySetting> PM_FactorySetting { get; set; }
         public virtual DbSet<PM_Figure> PM_Figure { get; set; }
         public virtual DbSet<PM_Figure_history> PM_Figure_history { get; set; }
+        public virtual DbSet<PM_Forum> PM_Forum { get; set; }
+        public virtual DbSet<PM_Forum_Comments> PM_Forum_Comments { get; set; }
         public virtual DbSet<PM_FunctionList> PM_FunctionList { get; set; }
         public virtual DbSet<PM_Material> PM_Material { get; set; }
         public virtual DbSet<PM_Material_temp> PM_Material_temp { get; set; }
@@ -325,17 +327,13 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("ApplierList_getlist", typeParameter, nameParameter);
         }
     
-        public virtual ObjectResult<ApplierList_getName_Result> ApplierList_getName(string type, string category)
+        public virtual ObjectResult<ApplierList_getName_Result> ApplierList_getName(Nullable<int> categoryID)
         {
-            var typeParameter = type != null ?
-                new ObjectParameter("Type", type) :
-                new ObjectParameter("Type", typeof(string));
+            var categoryIDParameter = categoryID.HasValue ?
+                new ObjectParameter("CategoryID", categoryID) :
+                new ObjectParameter("CategoryID", typeof(int));
     
-            var categoryParameter = category != null ?
-                new ObjectParameter("Category", category) :
-                new ObjectParameter("Category", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ApplierList_getName_Result>("ApplierList_getName", typeParameter, categoryParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ApplierList_getName_Result>("ApplierList_getName", categoryIDParameter);
         }
     
         public virtual ObjectResult<ApplierList_Supplier_Result> ApplierList_Supplier(string type, Nullable<int> applierID, string applierName, string address, string contact, string tel, string mobile, string category, string level, string advantage, string note, string fax, string createdBy, string principal, string representative, string account, string bank, string status)
@@ -1086,6 +1084,81 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Finished_stock_Result>("Finished_stock", customerNameParameter, createdTimeParameter, createdTimeEndParameter, outgoingTimeParameter, outgoingTimeEndParameter);
         }
     
+        public virtual ObjectResult<Forum_Commentlist_Result> Forum_Commentlist(string type, Nullable<int> id, Nullable<int> commentsID, string comments, string commentsPicture, string employee)
+        {
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            var commentsIDParameter = commentsID.HasValue ?
+                new ObjectParameter("CommentsID", commentsID) :
+                new ObjectParameter("CommentsID", typeof(int));
+    
+            var commentsParameter = comments != null ?
+                new ObjectParameter("Comments", comments) :
+                new ObjectParameter("Comments", typeof(string));
+    
+            var commentsPictureParameter = commentsPicture != null ?
+                new ObjectParameter("CommentsPicture", commentsPicture) :
+                new ObjectParameter("CommentsPicture", typeof(string));
+    
+            var employeeParameter = employee != null ?
+                new ObjectParameter("Employee", employee) :
+                new ObjectParameter("Employee", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Forum_Commentlist_Result>("Forum_Commentlist", typeParameter, idParameter, commentsIDParameter, commentsParameter, commentsPictureParameter, employeeParameter);
+        }
+    
+        public virtual ObjectResult<Forum_Newest_Result> Forum_Newest(string type, Nullable<int> id)
+        {
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Forum_Newest_Result>("Forum_Newest", typeParameter, idParameter);
+        }
+    
+        public virtual ObjectResult<Forum_Postings_Result> Forum_Postings(string type, Nullable<int> id, string columns, string title, string substance, string picture, string employee)
+        {
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            var columnsParameter = columns != null ?
+                new ObjectParameter("Columns", columns) :
+                new ObjectParameter("Columns", typeof(string));
+    
+            var titleParameter = title != null ?
+                new ObjectParameter("Title", title) :
+                new ObjectParameter("Title", typeof(string));
+    
+            var substanceParameter = substance != null ?
+                new ObjectParameter("Substance", substance) :
+                new ObjectParameter("Substance", typeof(string));
+    
+            var pictureParameter = picture != null ?
+                new ObjectParameter("Picture", picture) :
+                new ObjectParameter("Picture", typeof(string));
+    
+            var employeeParameter = employee != null ?
+                new ObjectParameter("Employee", employee) :
+                new ObjectParameter("Employee", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Forum_Postings_Result>("Forum_Postings", typeParameter, idParameter, columnsParameter, titleParameter, substanceParameter, pictureParameter, employeeParameter);
+        }
+    
         public virtual int GenerateOrders(Nullable<int> taskID, string iDs, string listType)
         {
             var taskIDParameter = taskID.HasValue ?
@@ -1125,13 +1198,17 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<getPackjobs_Result>("getPackjobs", tYPEParameter, workorderNOParameter);
         }
     
-        public virtual int ImcommingPONotice(string pONO)
+        public virtual int ImcommingPONotice(string type, string pONO)
         {
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
             var pONOParameter = pONO != null ?
                 new ObjectParameter("PONO", pONO) :
                 new ObjectParameter("PONO", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ImcommingPONotice", pONOParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ImcommingPONotice", typeParameter, pONOParameter);
         }
     
         public virtual ObjectResult<Install_check_Result> Install_check(Nullable<int> contractID)
@@ -4658,19 +4735,6 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Statistics_Department", typeParameter, ownerParameter, overdudayParameter, departParameter);
         }
     
-        public virtual ObjectResult<Statistics_Departmentlist_Result> Statistics_Departmentlist(string owner, string depart)
-        {
-            var ownerParameter = owner != null ?
-                new ObjectParameter("owner", owner) :
-                new ObjectParameter("owner", typeof(string));
-    
-            var departParameter = depart != null ?
-                new ObjectParameter("Depart", depart) :
-                new ObjectParameter("Depart", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Statistics_Departmentlist_Result>("Statistics_Departmentlist", ownerParameter, departParameter);
-        }
-    
         public virtual int Statistics_Scroe(string owner, Nullable<System.DateTime> startTime, Nullable<System.DateTime> endTime)
         {
             var ownerParameter = owner != null ?
@@ -4755,6 +4819,19 @@ namespace YLMES.Models
                 new ObjectParameter("department", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Statisticschar_Departmentlist_Result>("Statisticschar_Departmentlist", departmentParameter);
+        }
+    
+        public virtual ObjectResult<StatisticsDepartmentlist_Result> StatisticsDepartmentlist(string owner, string depart)
+        {
+            var ownerParameter = owner != null ?
+                new ObjectParameter("owner", owner) :
+                new ObjectParameter("owner", typeof(string));
+    
+            var departParameter = depart != null ?
+                new ObjectParameter("Depart", depart) :
+                new ObjectParameter("Depart", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<StatisticsDepartmentlist_Result>("StatisticsDepartmentlist", ownerParameter, departParameter);
         }
     
         public virtual ObjectResult<Summary_Result> Summary(string summaryTid, string summaryMid)
@@ -5389,6 +5466,32 @@ namespace YLMES.Models
                 new ObjectParameter("WorkorderNO", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WOdetail_byStation_Result>("WOdetail_byStation", stationTypeParameter, workorderNOParameter);
+        }
+    
+        public virtual int ChangUserPassword(string userName, string passWord)
+        {
+            var userNameParameter = userName != null ?
+                new ObjectParameter("UserName", userName) :
+                new ObjectParameter("UserName", typeof(string));
+    
+            var passWordParameter = passWord != null ?
+                new ObjectParameter("PassWord", passWord) :
+                new ObjectParameter("PassWord", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ChangUserPassword", userNameParameter, passWordParameter);
+        }
+    
+        public virtual ObjectResult<MyPost_Result> MyPost(string userName, string substance)
+        {
+            var userNameParameter = userName != null ?
+                new ObjectParameter("UserName", userName) :
+                new ObjectParameter("UserName", typeof(string));
+    
+            var substanceParameter = substance != null ?
+                new ObjectParameter("Substance", substance) :
+                new ObjectParameter("Substance", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MyPost_Result>("MyPost", userNameParameter, substanceParameter);
         }
     }
 }

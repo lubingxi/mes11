@@ -35,7 +35,7 @@ namespace YLMES.Controllers
                 {
                     return Content("<script>alert('图号不能为空');history.go(-1);</script>");
                 }
-               else  if (files == null)
+                else if (files == null)
                 {
                     return Content("<script>alert('请选择文件');history.go(-1);</script>");
                 }
@@ -44,6 +44,12 @@ namespace YLMES.Controllers
                     var fileName1 = Path.Combine(Request.MapPath("~/Upload"), Path.GetFileName(files.FileName));
                     files.SaveAs(fileName1);
                     string fname = fileName1.Substring(fileName1.LastIndexOf('\\') + 1);
+                    string geshi = fname.Substring(fname.LastIndexOf('.') + 1);
+                    if (geshi == "PDF")
+                    {
+                        fname = fname.Substring(0, fname.IndexOf('.'));
+                        fname = fname + ".pdf";
+                    }
                     using (YLMES_newEntities ys = new YLMES_newEntities())
                     {
                         string name = Session["name"].ToString();
@@ -55,7 +61,8 @@ namespace YLMES.Controllers
                         parms[4] = new SqlParameter("@CreatedBy", name);
                         ys.Database.ExecuteSqlCommand("exec UploadTheDrawings  @Type,@FigureNumber,@FolderName,@FileName,@CreatedBy", parms);
                     }
-                    return Content("<script>alert('上传成功！');window.parent.location.reload();</script>");
+                    return Content("<script>alert('上传成功!');history.back(-1);</script>");
+                    //window.parent.location.reload();
                 }
 
             }
@@ -106,6 +113,10 @@ namespace YLMES.Controllers
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
+                if (FigureNumber == null)
+                {
+                    FigureNumber = "";
+                }
                 SqlParameter[] parms = new SqlParameter[2];
                 parms[0] = new SqlParameter("@Type", "Historical");
                 parms[1] = new SqlParameter("@FigureNumber", FigureNumber);
@@ -121,11 +132,16 @@ namespace YLMES.Controllers
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-                var list = ys.PM_Figure_history.Where(p => p.FigureNumber.Contains(FigureNumber)).Select(s => new { s.FigureNumber}).Distinct().ToList();            
+                var list = ys.PM_Figure_history.Where(p => p.FigureNumber.Contains(FigureNumber)).Select(s => new { s.FigureNumber }).Distinct().ToList();
                 return Json(list, JsonRequestBehavior.AllowGet);
             }
         }
-
+        //查看PDF
+        public ActionResult CheckPdf(string src)
+        {
+            ViewData["pdf"] = src;
+            return View();
+        }
         #endregion
 
 
