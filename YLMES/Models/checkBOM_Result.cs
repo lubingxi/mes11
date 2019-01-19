@@ -22,6 +22,7 @@ namespace YLMES.Models
         public string 部件规格 { get; set; }
         public string 材料 { get; set; }
         public string 备注 { get; set; }
+        public string 类别 { get; set; }
         public string 类型 { get; set; }
     }
 }

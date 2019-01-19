@@ -23,6 +23,33 @@ namespace YlMES.Controllers
         {
             return View();
         }
+        //查询历史合同
+        public ActionResult CheckHtml(string cuid) {
+            List<cuhtml> cuhtmls;
+            using (YLMES_newEntities ys =new YLMES_newEntities()) {
+                cuhtmls = ys.cuhtml.Where(p => p.cuid == cuid).ToList();
+            }
+            return Json(cuhtmls,JsonRequestBehavior.AllowGet);
+        }
+        //历史合同保存
+        [ValidateInput(false)]
+        public string Addhtml(string id,string ids,string html) {
+            string type = "add";
+            if (ids!="0") {
+                type = "up";
+                id = ids;
+            }
+            string html1 = html.Replace("'", "\"");
+            using (YLMES_newEntities ys=new YLMES_newEntities()) {
+                SqlParameter[] parameters = new SqlParameter[3];
+                parameters[0] = new SqlParameter("@cuid",id);
+                parameters[1] = new SqlParameter("@text", html1);
+                parameters[2] = new SqlParameter("@type", type);
+                ys.Database.ExecuteSqlCommand("exec Addhtml @type=@type,@text=@text,@cuid=@cuid",parameters);
+
+            }
+                return "true";
+        }
         //订单明细
         public ActionResult notice(string id, string studs)
         {
@@ -600,6 +627,22 @@ namespace YlMES.Controllers
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
+                if (CName == null)
+                {
+                    CName = "";
+                }
+                if(CNumber==null)
+                {
+                    CNumber = "";
+                }
+                if(strattime==null)
+                {
+                    strattime = "";
+                }
+                if(endtime==null)
+                {
+                    endtime = "";
+                }
                 SqlParameter[] parms = new SqlParameter[6];
                 parms[0] = new SqlParameter("@CreatedTimeStart", strattime);
                 parms[1] = new SqlParameter("@CreatedTimeEnd", endtime);
@@ -618,7 +661,29 @@ namespace YlMES.Controllers
                 return Json(hasmap, JsonRequestBehavior.AllowGet);
             }
         }
-
+        public JsonResult Get_PPds(int page, int limit)
+        {
+            using (YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                
+                SqlParameter[] parms = new SqlParameter[6];
+                parms[0] = new SqlParameter("@CreatedTimeStart", "");
+                parms[1] = new SqlParameter("@CreatedTimeEnd", "");
+                parms[2] = new SqlParameter("@StatusID", "");
+                parms[3] = new SqlParameter("@ProductOrderStatus", "已转生产订单");
+                parms[4] = new SqlParameter("@CustomerName", "");
+                parms[5] = new SqlParameter("@ContractNumber", "");
+                var list = ys.Database.SqlQuery<SP_Contract_checkProductOrder_Result>("exec SP_Contract_checkProductOrder  @CreatedTimeStart,@CreatedTimeEnd,@StatusID,@ProductOrderStatus,@CustomerName,@ContractNumber", parms).ToList();
+                Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
+                PageList<SP_Contract_checkProductOrder_Result> pageList = new PageList<SP_Contract_checkProductOrder_Result>(list, page, limit);
+                int count = list.Count();
+                hasmap.Add("code", 0);
+                hasmap.Add("msg", "");
+                hasmap.Add("count", count);
+                hasmap.Add("data", pageList);
+                return Json(hasmap, JsonRequestBehavior.AllowGet);
+            }
+        }
         #endregion
 
         #region 显示销售订单转生产订单
@@ -938,11 +1003,9 @@ namespace YlMES.Controllers
                 parms[1] = new SqlParameter("@html", html);
                 parms[2] = new SqlParameter("@CuNumber", CuNumber);
                 parms[3] = new SqlParameter("@CuId", CuId);
-                ys.Database.ExecuteSqlCommand("exec SP_PM_ProductLine @Type,'','','','',@html,@CuNumber,@CuId", parms);
-
+                ys.Database.ExecuteSqlCommand("exec SP_PM_ProductLine @TYPE=@Type,@html=@html,@CuNumber=@CuNumber,@cuId=@CuId", parms);
             }
             return "true";
-
         }
         //添加明细
         public string AddDetai(List<string> DetailName, List<string> DetailValue, string id, string ids, int dex)
@@ -954,10 +1017,10 @@ namespace YlMES.Controllers
                 id = ids;
                 Type = "up";
             }
-            SqlParameter[] prams = new SqlParameter[DetailName.Count];
+            SqlParameter[] prams = new SqlParameter[DetailName.Count()];
             Dictionary<string, string> Applier = new Dictionary<string, string>();
 
-            for (int index = 0; index < DetailName.Count; index++)
+            for (int index = 0; index < DetailName.Count(); index++)
             {
 
                 Applier.Add(DetailName[index].ToString(), DetailValue[index].ToString());
@@ -972,7 +1035,7 @@ namespace YlMES.Controllers
                     prams[j] = new SqlParameter("@" + app.Key + "1", app.Value);
 
 
-                    if ((j + 1) == DetailName.Count)
+                    if ((j + 1) == DetailName.Count())
                     {
                         sb.Append("@" + app.Key + "=" + "@" + app.Key + "1");
                     }

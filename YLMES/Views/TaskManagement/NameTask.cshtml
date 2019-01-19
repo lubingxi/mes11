@@ -580,41 +580,58 @@
                     var url = '/TaskManagement/FinishMyDesign?ifDrive=' + '@ViewData["ifDrives"]' + '&name=' + '@ViewData["names"]' + '&ProjectName=' + '@ViewData["CustomerNames"]' + '&taskid=' + taskid;
                     layer_show("完成我的设计", url, 1400, 800);
                 }
-                else {                  
+                else {  
                     $.ajax({
-                        url: "/TaskManagement/CheckBomAll",
+                        url: "/TaskManagement/UpdateIssueCompleted",
                         data: { Taskid: taskid },
                         type: "post",
                         dataType: "text",
                         success: function (data) {
-                            if (data == "true") {                              
+                            if (data == "true") {
                                 window.setTimeout(function () {
-                                    $.ajax({
-                                        url: "/TaskManagement/UpdateIssueCompleted",
-                                        data: { Taskid: taskid },
-                                        type: "post",
-                                        dataType: "text",
-                                        success: function (data) {
-                                            if (data == "true") {
-                                                window.setTimeout(function () {
-                                                    window.history.go(-1);
-                                                }, 500);
-                                            }
-                                            else if (data == "null") {
-                                                alert("任务类型不能为空!");
-                                                return;
-                                            }
-                                        }
-                                    });                                 
+                                    window.history.go(-1);
                                 }, 500);
                             }
-                            else {
-                                alert("还有图纸没有上传呢！");
-                                url = '/TaskManagement/UploadDrawing?id=' + taskid;
-                                layer_show('图纸操作', url, '1300', '800');
+                            else if (data == "null") {
+                                alert("任务类型不能为空!");
+                                return;
                             }
                         }
-                    });               
+                    }); 
+                    //$.ajax({
+                    //    url: "/TaskManagement/CheckBomAll",
+                    //    data: { Taskid: taskid },
+                    //    type: "post",
+                    //    dataType: "text",
+                    //    success: function (data) {
+                    //        if (data == "true") {                              
+                    //            window.setTimeout(function () {
+                    //                $.ajax({
+                    //                    url: "/TaskManagement/UpdateIssueCompleted",
+                    //                    data: { Taskid: taskid },
+                    //                    type: "post",
+                    //                    dataType: "text",
+                    //                    success: function (data) {
+                    //                        if (data == "true") {
+                    //                            window.setTimeout(function () {
+                    //                                window.history.go(-1);
+                    //                            }, 500);
+                    //                        }
+                    //                        else if (data == "null") {
+                    //                            alert("任务类型不能为空!");
+                    //                            return;
+                    //                        }
+                    //                    }
+                    //                });                                 
+                    //            }, 500);
+                    //        }
+                    //        else {
+                    //            alert("还有图纸没有上传呢！");
+                    //            url = '/TaskManagement/UploadDrawing?id=' + taskid;
+                    //            layer_show('图纸操作', url, '1300', '800');
+                    //        }
+                    //    }
+                    //});               
                 }
             }
             if ('@ViewData["ifDrive"]' == "工艺部确认图纸接收") {

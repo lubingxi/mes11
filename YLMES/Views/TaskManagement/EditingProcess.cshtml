@@ -58,7 +58,7 @@
 
                         if (RouteList[i] == Route_stu) {
                             up = false;
-                        
+
                             break;
                         } else {
                             up = true;
@@ -93,7 +93,7 @@
             layui.use(['table', 'layer', 'form'], function () {
                 var table = layui.table, layer = layui.layer, from = layui.form;
                 var RouteName = "0";
-                
+
                 $("#checkRo").click(function () {
                     var StationTypeList = new Array();
                     table.render({
@@ -202,7 +202,7 @@
                             maxmin: true
                         });
                         layer.full(index);
-                        
+
                     }
                 })
                 table.on('tool(demo)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
@@ -354,7 +354,12 @@
                                         var Route = $(".ka:eq(2)").text();
                                         if (ProcessName != "") {
                                             if (up) {
-                                                window.parent.document.getElementById("rightframe").src = "/TaskManagement/AddProcess?PartNumber=" + PartNumber + "&ProductName=" + ProductName + "&ProductSpec=" + ProductSpec + "&Route=" + Route + "&PartId=0" + "&ProcessName=" + ProcessName;
+                                                var url = "/TaskManagement/AddProcess?PartNumber=" + PartNumber + "&ProductName=" + ProductName + "&ProductSpec=" + ProductSpec + "&Route=" + Route + "&PartId=0" + "&ProcessName=" + ProcessName;
+                                                var index = layer.open({
+                                                    type: 2,
+                                                    content: url,
+                                                    area: ['1200px', '700px']
+                                                });
                                                 layer.close(index);
                                             } else {
 
@@ -376,20 +381,29 @@
                         } else {
                             layer.open({
                                 type: 1,
-                               
+
                                 area: ['400px', '400px'],
-                               
+
                                 content: $('#tong')
                                 , btn: ['确定', '取消']
                                 , yes: function (index) {
-                                    var id = Number('@ViewData["PartId"]')
+                                    var id = Number('@ViewData["PartId"]');
                                     var a = $("input[name=aa]").attr("value");
                                     var Route = $(".ka1").text();
                                     var ProcessName = $(".ro:eq(0)").val();
                                     if (ProcessName != null && ProcessName != "") {
                                         if (up) {
-                                            window.parent.document.getElementById("rightframe").src = "/TaskManagement/AddProcess?PartId=" + id + "&ProductName=" + '@ViewData["ProductName"]' + "&ProcessName=" + ProcessName + "&PartNumber=" + PartNumber + "&ProductSpec=" + a + "&Route=" + Route
-                                        layer.close(index)
+                                            layer.close(index);
+                                            var url = "/TaskManagement/AddProcess?PartId=" + id + "&ProductName=" +
+                                                 '@ViewData["ProductName"]' + "&ProcessName=" + ProcessName + "&PartNumber=" + PartNumber + "&ProductSpec=" + a + "&Route=" + Route;
+                                            var index = layer.open({
+                                                type: 2,
+                                                title: '工艺合同',
+                                                content: url,
+                                                area: ['1200px', '700px'],
+                                                maxmin: true
+                                            });
+                                            layer.full(index);
                                         } else {
 
                                             layer.msg("流程名称重复")
@@ -400,14 +414,14 @@
 
                                 }
                             });
-                            
-                                    
-                           
+
+
+
                         }
                     });
                 });
             })
-       
+
 
 
     </script>

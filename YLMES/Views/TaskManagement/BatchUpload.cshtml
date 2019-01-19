@@ -29,9 +29,7 @@
                     , auto: false
                     , bindAction: '#testListAction'
                     , choose: function (obj) {
-                        var filed = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
-                        var arr = Object.toString(filed.name);
-                        zhi = zhi.concat(arr);                    
+                        var file = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列                                       
                         //读取本地文件
                         obj.preview(function (index, file, result) {
                             
@@ -56,10 +54,7 @@
                                 delete files[index]; //删除对应的文件
                                 tr.remove();
                                 uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
-                            });
-
-                         
-
+                            });                         
                             demoListView.append(tr);
                         });
                     }

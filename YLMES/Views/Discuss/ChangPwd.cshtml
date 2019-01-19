@@ -16,11 +16,16 @@
     <blockquote class="layui-elem-quote">用户信息</blockquote>
     <form class="layui-form layui-form-pane" id="userEditForm" lay-filter="form" style="padding-left:100px;">
         <input class="layui-hide" name="id">
-
+        <div class="layui-form-item">
+            <label class="layui-form-label">帐号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="UserName" required lay-verify="required|username" placeholder="请输入或不输入" autocomplete="off" class="layui-input" id="username" value="@Session["zhanhao"]"> 
+            </div>
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">密码</label>
             <div class="layui-input-inline">
-                <input type="text" name="PWD" required lay-verify="required|pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                <input type="text" name="PWD" required lay-verify="required|pass" placeholder="请输入或不输入" autocomplete="off" class="layui-input" id="pwd">
             </div>
         </div>
         <div class="layui-form-item" style="padding-left:20px">
@@ -40,8 +45,9 @@
                 var $ = layui.jquery
                 form.on('submit(formDemo)', function () {
                     layer.confirm('更新将重新登陆确定更新?', { icon: 3, title: '提示' }, function (index) {
-                        var pwd = $('.layui-input').val();          
-                        $.post("/Discuss/Changepwd", { pwd: pwd, type: "up" }, function (data) {
+                        var pwd = $('#pwd').val();   
+                        var name = $('#username').val(); 
+                        $.post("/Discuss/Changepwd", { pwd: pwd,names:name,type:"up" }, function (data) {
                             if (data == "true") {
                                 window.top.location = '/Home/Login';
                             }

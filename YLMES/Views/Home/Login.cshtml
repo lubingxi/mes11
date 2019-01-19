@@ -35,7 +35,7 @@
                         type: "post",
                         dataType: "text",
                         success: function (data) {
-                            if (data == "True") {
+                            if (data == "true") {
                                 window.setTimeout(function () {
                                     window.location.href = "/Home/Menu";
                                 }, 500);
@@ -49,7 +49,7 @@
             });
             $(document).keydown(function (e) {
                 if (e.keyCode == 13) {
-
+                   
                     var login = $('.loginuser').val().trim();
                     var pwd = $('.loginpwd').val().trim();
                     if (login == '') {
@@ -63,7 +63,7 @@
                             type: "post",
                             dataType: "text",
                             success: function (data) {
-                                if (data == "True") {
+                                if (data == "true") {
                                     window.setTimeout(function () {
                                         window.location.href = "/Home/Menu";
                                     }, 500);

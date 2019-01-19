@@ -27,5 +27,6 @@ namespace YLMES.Models
         public System.DateTime UpdatedTime { get; set; }
         public string StatusID { get; set; }
         public Nullable<int> TaskID { get; set; }
+        public string Type { get; set; }
     }
 }

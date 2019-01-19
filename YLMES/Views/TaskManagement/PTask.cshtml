@@ -41,24 +41,16 @@
                     $(".tip").fadeOut(100);
                 });
                 layui.use(['table', 'layer'], function () {
-                    var table = layui.table, layer = layui.layer;
-                    $(".layui-btn").click(function () {
-                        var CuName = $("#CustomerName").val().trim();
-                        var CNumber = $("#ContractNumber").val().trim();
-                        var strattime = $(".strattime").val();
-                        var endtime = $(".endtime").val();
-                        table.render({
-                            elem: '#tw'
-                       , url: '/ProductionPlanning/Get_PPd?CName=' + CuName + '&CNumber=' + CNumber+ '&strattime=' + strattime + '&endtime=' + endtime
+                    var table = layui.table, layer = layui.layer;                                      
+                    var tableIns=table.render({
+                         elem: '#tw'
+                       , url: '/ProductionPlanning/Get_PPd'
                        , page: true
                        , done: function () {
                            $("tr a").hide()
                            $("tr").hover(function () {
-
                                $(this).children().last().children().children().toggle();
                            })
-
-
                        }
                        , limit: 15
                        , cols: [[
@@ -72,9 +64,20 @@
                        ]]
 
                         });
-                    });
-                    table.on('checkbox(demo)', function (obj) {
-                        console.log(obj)
+                    $(".layui-btn").click(function () {
+                        var CuName = $("#CustomerName").val().trim();
+                        var CNumber = $("#ContractNumber").val().trim();
+                        var strattime = $(".strattime").val();
+                        var endtime = $(".endtime").val();
+                        '/ProductionPlanning/Get_PPd?CName=' + CuName + '&CNumber=' + CNumber + '&strattime=' + strattime + '&endtime=' + endtime
+                        tableIns.reload({
+                            where: {
+                                CName: CuName
+                                , CNumber: CNumber
+                                , strattime: strattime
+                                , endtime: endtime
+                            }
+                        });
                     });
 
                     table.on('tool(demo)', function (obj) {

@@ -46,14 +46,7 @@
                      elem: '#tw'
                    , url: '/Home/Get_Data'
                    , page: true
-                   , limit: 15
-                   , done: function () {
-                       $("tr a").hide();
-                       $("tr").hover(function () {
-
-                           $(this).children().last().children().children().toggle();
-                       });
-                   }
+                   , limit: 15                 
                    , cols: [[
                    { field: 'CustomerName', width: 210, title: '客户名称' }
                    , { field: 'ContractNumber', width: 235, title: '合同编号', event: 'xi', sort: true, templet: '#cc' }

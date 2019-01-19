@@ -35,7 +35,8 @@ white-space: normal;
                 window.top.location = '/Home/Login';
             }
             $("#cancle").click(function () {
-                window.parent.document.getElementById("rightframe").src = "/Home/PM_ContractReceivablesMain";
+                window.history.go(-1);
+               //window.parent.document.getElementById("rightframe").src = "/Home/PM_ContractReceivablesMain";
             });
             $("#throung").click(function () {
                 var bianhao = '@ViewData["CNumbers"]';
@@ -142,13 +143,7 @@ white-space: normal;
                         elem: '#tw'
                    , url: '/Home/Get_Datad?id=' + '@ViewData["Receivables"]'
                    , page: false
-                   , limit: 1
-                   , done: function () {
-                       $("tr a").hide()
-                       $("tr").hover(function () {
-                           $(this).children().last().children().children().toggle();
-                       });
-                   }
+                   , limit: 1                
                    , height: 200
                         , cols: [[
                      { field: '', hide: true }

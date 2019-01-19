@@ -8,12 +8,90 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>友力信息管理系统</title>
     <link href="~/css/StyleSheet1.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="~/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="~/layer/layer.js"></script>
+    <script type="text/javascript" src="~/layui/layui.js"></script>
     <script type="text/javascript">
+	layui.config({
+		base: '/layui_exts/',
+	}).extend({
+	    excel: 'excel',
+	});
+    </script>
+    <style>
+        p {
+            margin:10px 10px 10px 10px;
+            padding:10px 10px 10px 10px;
+        }
+        body {
+            font-size:17px
+        }
+    </style>
+    <script type="text/javascript">
+        layui.use(['jquery', 'layer', 'excel'], function () {
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            var excel = layui.excel;
+            $(function () {
+                // 处理读取文件
+               
+                var uploadExcel = function (files) {
+                    try {
+                        excel.importExcel(files, {
+                            // 读取数据的同时梳理数据
+                            fields: {
+                                'id': 'A'
+                                , 'ProductName': 'B'
+                                , 'ProductSpec': 'C'
+                                , 'Count': 'D'
+                                , 'Units': 'E'
+                                 , 'F': 'F'
+                                 , 'G': 'G'
+                                 , 'H': 'H'
+                                 , 'I': 'I'
+                            }
+                        }, function (data) {
+                            $('.ji').empty()
+                           
+                            layui.each(data[0]['key'], function (index, itme) {
+                                if (index > 0) { 
+                                var ProductName = "<td><input name='ProductName' type='text' onkeydown='keydown(this)' value='" + itme.ProductName + "' style='width:300px'/></td>"
+                                var ProductSpec = "<td><input name='ProductSpec' type='text' onkeydown='keydown(this)' value='" + itme.ProductSpec + "' style='width:300px'/></td>"
+                                var Units = "<td ><input name='Units' type='text' onkeydown='keydown(this)'  value='" + itme.Units + "' style='width: 50px'/></td>"
+                                var Count = "<td><input name='Count' type='number' onkeydown='keydown(this)' onkeyup='this.value = this.value.replace(/\D/g, '')' onchange='myFunction(this)' value='" + itme.Count + "' style='width: 50px'/></td>"
+                                var Remarks = "<td><input type='text' onkeydown='keydown(this)'/></td>"
+                                var Money = "<td style='width: 50px'></td>"
+                                var Price = "<td><input name='Price' type='text' onchange='myFunction(this)' onkeydown='keydown(this)' value=0 style='width: 80px'/></td>"
+                                var button = "<td><button style='width:80px'>删除</button></td>"
+                                    
+                                $('.ji:eq('+Number(index-1)+')').after("<tr class='ji'>" + ProductName + ProductSpec + Count + Units + Price + Money + Remarks + button + "</tr>")
+                               }
+                            })
+                        });
+                    } catch (e) {
+                        layer.alert(e.message);
+                    }
+                };
+                // 监听上传文件的事件
+                $('#LAY-excel-import-excel').change(function (e) {
+                    var files = e.target.files;
+                    uploadExcel(files);
+                });
+                // 文件拖拽
+                $('body').ondragover = function (e) {
+                    e.preventDefault();
+                }
+                $('body').ondrop = function (e) {
+                    e.preventDefault();
+                    var files = ev.dataTransfer.files;
+                    uploadExcel(files);
+                }
+            });
+        })
         var mom = 0;
         var ContractDetialsCheckId = '@ViewData["ContractDetialsCheckId"]';
-        var CuId = '@ViewData["id"]';
+        var CuId = '@ViewData["Id"]';
         var readoly = '@ViewData["reado"]';
         var today = new Date();
         var stu = 0;
@@ -21,74 +99,6 @@
         var m = today.getMonth();
         var d = today.getDate();
         var CustomerId = '@ViewData["CustomerId"]';
-        if (CustomerId != 0) {
-            $.ajax({
-                url: "/ProductionPlanning/SelApplier",
-                data: { CustomerId: CustomerId },
-                type: "get",
-                dataType: "json",
-                success: function (data) {
-
-                    if (data != null) {
-                        $("[name=Address]").val(data[0].Address);
-                        $("[name=Tel]").val(data[0].Tel);
-                        $("[name=Fax]").val(data[0].Fax);
-                        $("[name=Representative]").val(data[0].Representative);
-                        $("[name=Mobile]").val(data[0].Mobile);
-                        $("[name=Account]").val(data[0].Account);
-                        $("[name=Bank]").val(data[0].Bank);
-                        $("[name=Contact]").val(data[0].Contact);
-                        $("[name=Principal]").val(data[0].Principal);
-                        if (readoly == "2") {
-                            $("[name=PaymentMethod]").text(data[0].PaymentMethod);
-                            $("[name=DeliveryTime]").text(data[0].DeliveryTime)
-                            $("[name=ConditionsOfbreachOfContract]").text(data[0].ConditionsOfbreachOfContract)
-                        }
-                    }
-                }
-
-            });
-
-        }
-        if (ContractDetialsCheckId != "0") {
-            stu = 1;
-            $.ajax({
-                url: '/Home/checkDetaill',
-                data: { id: ContractDetialsCheckId },
-                type: "get",
-                dataType: "json",
-                success: function (data) {
-                    if (data != null) {
-                        for (var i = 0; i < data.length; i++) {
-                            var pr = 0;
-                            if (data[i].Price != null) {
-                                pr = data[i].Price;
-                            }
-                            var ProductName = "<td><input name='ProductName' type='text' onkeydown='keydown(this)' value='" + data[i].ProductName + "' style='width:300px'/></td>"
-                            var ProductSpec = "<td><input name='ProductSpec' type='text' onkeydown='keydown(this)' value='" + data[i].ProductSpec + "' style='width:300px'/></td>"
-                            var Units = "<td ><input name='Units' type='text' onkeydown='keydown(this)'  value='" + data[i].Units + "' style='width: 50px'/></td>"
-                            var Count = "<td><input name='Count' type='text' onkeydown='keydown(this)' onchange='myFunction(this)' value='" + data[i].Count + "' style='width: 50px'/></td>"
-                            var Remarks = "<td><input type='text' onkeydown='keydown(this)'/></td>"
-                            var Money = "<td style='width: 50px'></td>"
-                            var Price = "<td><input name='Price' type='text' onchange='myFunction(this)' onkeydown='keydown(this)' value='" + pr + "' style='width: 80px'/></td>"
-                            var button = "<td><button style='width:80px'>删除</button></td>"
-
-                            if ($(".ji").attr("class") == "ji") {
-                                $(".ji:eq(" + i + ")").after("<tr class='ji'>" + ProductName + ProductSpec + Count + Units + Price + Money + Remarks + button + "</tr>")
-                            }
-
-                        }
-                        $(".ji:eq(0)").hide()
-                        $(".ji:eq(0)").attr("class", "del")
-                        ButtonClick();
-                    }
-
-
-                }
-
-            });
-
-        }
         function ButtonClick() {
             var ii = 0;
             $("button").each(function (i) {
@@ -134,12 +144,9 @@
             var inn = 0;
             $("p input").each(function (i) {
                 var inq = $("p input:eq(" + i + ")").val()
-
                 $("p input:eq(" + i + ")").text(inq);
             })
             $(":input").each(function (i) {
-
-
                 if ($(":input:eq(" + i + ")").val() == 0) {
                     if ($(":input:eq(" + i + ")").attr("type") == "text") {
                         inp[inn] = $(":input:eq(" + i + ")");
@@ -151,6 +158,7 @@
             layer.confirm('有' + len + '项未填或为零确定保存吗', {
                 btn: ['确定', '取消']
                 , yes: function () {
+                    layer.closeAll()
                     $.ajax({
                         url: "/ProductionPlanning/SeleContractNumber",
                         data: { ContractNumber: CuNumber },
@@ -210,7 +218,10 @@
                     })
 
                     if (cubool) {
-
+                        $(":input").each(function (i) {
+                            $(":input:eq(" + i + ")").attr("value", $(":input:eq(" + i + ")").val());
+                        })
+                        bdhtml = window.document.body.innerHTML;
                         $.ajax({
                             url: "/ProductionPlanning/AddApplierList",
                             type: "post",
@@ -226,9 +237,19 @@
                                         async: false,
                                         success: function (data) {
                                             CuId = data;
+
                                         }
                                     })
+                                    $.ajax({
+                                        url: "/ProductionPlanning/Addhtml",
+                                        data: { id: CuId, ids: ContractDetialsCheckId, html: bdhtml },
+                                        type: "post",
+                                        async: false,
+                                        dataType: "text",
+                                        success: function (data) {
 
+                                        }
+                                    })
                                     $(".ji").each(function (i) {
                                         var DetailName = new Array();
                                         var DetailValue = new Array();
@@ -244,6 +265,7 @@
                                                 appindex++
                                             }
                                         })
+                                        if (DetailName[0] != undefined && DetailName[0] != null) {
                                         $.ajax({
                                             url: "/ProductionPlanning/AddDetai",
                                             type: "post",
@@ -257,12 +279,15 @@
                                                 }
                                             }
                                         })
+                                        }
                                     })
+                                    console.log(document)
                                     layer.msg("保存成功")
                                     stu = 1;
                                 }
                             }
                         })
+
                     }
                 }, btn2: function () {
                     if (len != 0) {
@@ -329,14 +354,96 @@
             var num = mom1 + Number(yu) + Number(an);
             $(".l:eq(2)").text(num.toFixed(2));
             var sui = $(".l:eq(3) input").val();
-            $(".l:eq(4)").text(num - Number(num -sui ));
+            var ss = Number(num - sui)
+            $(".l:eq(4)").text(ss);
             mom = mom1
 
         }
 
         $(function () {
+            if (CustomerId != 0) {
+                $.ajax({
+                    url: "/ProductionPlanning/SelApplier",
+                    data: { CustomerId: CustomerId },
+                    type: "get",
+                    async: false,
+                    dataType: "json",
+                    success: function (data) {
 
+                        if (data != null) {
+                            $("[name=Address]").val(data[0].Address);
+                            $("[name=Tel]").val(data[0].Tel);
+                            $("[name=Fax]").val(data[0].Fax);
+                            $("[name=Representative]").val(data[0].Representative);
+                            $("[name=Mobile]").val(data[0].Mobile);
+                            $("[name=Account]").val(data[0].Account);
+                            $("[name=Bank]").val(data[0].Bank);
+                            $("[name=Contact]").val(data[0].Contact);
+                            $("[name=Principal]").val(data[0].Principal);
+                            if (readoly == "2") {
+                                $("[name=PaymentMethod]").text(data[0].PaymentMethod);
+                                $("[name=DeliveryTime]").text(data[0].DeliveryTime)
+                                $("[name=ConditionsOfbreachOfContract]").text(data[0].ConditionsOfbreachOfContract)
+                            }
+                        }
+                    }
 
+                });
+
+            }
+            if (ContractDetialsCheckId != "0") {
+                stu = 1;
+                $.ajax({
+                    url: '/Home/checkDetaill',
+                    data: { id: ContractDetialsCheckId },
+                    type: "get",
+                    async: false,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != null) {
+                            for (var i = 0; i < data.length; i++) {
+                                var pr = 0;
+                                if (data[i].Price != null) {
+                                    pr = data[i].Price;
+                                }
+                                var ProductName = "<td><input name='ProductName' type='text' onkeydown='keydown(this)' value='" + data[i].ProductName + "' style='width:300px'/></td>"
+                                var ProductSpec = "<td><input name='ProductSpec' type='text' onkeydown='keydown(this)' value='" + data[i].ProductSpec + "' style='width:300px'/></td>"
+                                var Units = "<td ><input name='Units' type='text' onkeydown='keydown(this)'  value='" + data[i].Units + "' style='width: 50px'/></td>"
+                                var Count = "<td><input name='Count' type='number' onkeydown='keydown(this)' onkeyup='this.value = this.value.replace(/\D/g, '')' onchange='myFunction(this)' value='" + data[i].Count + "' style='width: 50px'/></td>"
+                                var Remarks = "<td><input type='text' onkeydown='keydown(this)'/></td>"
+                                var Money = "<td style='width: 50px'></td>"
+                                var Price = "<td><input name='Price' type='text' onchange='myFunction(this)' onkeydown='keydown(this)' value='" + pr + "' style='width: 80px'/></td>"
+                                var button = "<td><button style='width:80px'>删除</button></td>"
+
+                                if ($(".ji").attr("class") == "ji") {
+                                    $(".ji:eq(" + i + ")").after("<tr class='ji'>" + ProductName + ProductSpec + Count + Units + Price + Money + Remarks + button + "</tr>")
+                                }
+
+                            }
+                            $(".ji:eq(0)").hide()
+                            $(".ji:eq(0)").attr("class", "del")
+                            ButtonClick();
+                        }
+                    }
+
+                });
+
+            }
+            $.ajax({
+                url: "/ProductionPlanning/CheckHtml",
+                data: { cuid: CuId },
+                type: "get",
+                async: false,
+                dataType: "json",
+                success: function (data) {
+                    if (data.length > 0) {
+                        var html = data[0].html
+
+                        window.document.body.innerHTML = html
+
+                    }
+                }
+            })
             if (readoly == "2") {
                 $('#sas').hide();
             }
@@ -362,7 +469,7 @@
                     var ProductName = "<td><input name='ProductName' type='text' onkeydown='keydown(this)' style='width:300px'/></td>"
                     var ProductSpec = "<td><input name='ProductSpec' type='text' onkeydown='keydown(this)' style='width:300px'/></td>"
                     var Units = "<td><input name='Units' type='text' onkeydown='keydown(this)' style='width: 50px'/></td>"
-                    var Count = "<td><input name='Count' type='text' onkeydown='keydown(this)' onchange='myFunction(this)' style='width: 50px'/></td>"
+                    var Count = "<td><input name='Count' type='number' onkeydown='keydown(this)' onkeyup='this.value = this.value.replace(/\D/g, '')' onchange='myFunction(this)' style='width: 50px'/></td>"
                     var Remarks = "<td><input type='text' onkeydown='keydown(this)'/></td>"
                     var Money = "<td style='width: 50px'></td>"
                     var Price = "<td><input name='Price' type='text' onchange='myFunction(this)' onkeydown='keydown(this)' style='width:80px'/></td>"
@@ -427,6 +534,29 @@
                     }
                 }
             })
+            $("[name=CustomerName]").change(function () {
+
+                $.ajax({
+                    url: "/ProductionPlanning/SeList1",
+                    data: { name: $(this).val() },
+                    type: "get",
+                    dataType: "json",
+                    success: function (data) {
+                        $("[name=Address]").val(data[0].Address);
+                        $("[name=Tel]").val(data[0].Tel);
+                        $("[name=Fax]").val(data[0].Fax);
+                        $("[name=Representative]").val(data[0].Representative);
+                        $("[name=Mobile]").val(data[0].Mobile);
+                        $("[name=Account]").val(data[0].Account);
+                        $("[name=Bank]").val(data[0].Bank);
+                        $("[name=Contact]").val(data[0].Contact);
+                        $("[name=Principal]").val(data[0].Principal);
+
+                    }
+
+                })
+
+            })
             $(".sele").change(function () {
                 var i = $(".sele option:selected").val();
                 $(".select option:eq(" + i + ")").attr("selected", "selected");
@@ -466,14 +596,18 @@
             })*@
             $("ul :input").change(function () {
                 var len = $(this).val().length * 16;
-                $(this).css("width", len + "px")
+
+                if (len < 80) {
+                    $(this).css("width", "80px")
+                } else {
+                    $(this).css("width", len + "px")
+                }
+
             });
             $(".su").each(function () {
                 $(this).change(function () {
                     myFunction();
                     var shu = $(this).val();
-
-
 
                     shu = parseFloat(shu) / 100;
 
@@ -493,6 +627,43 @@
                         }
                     })
                 })
+
+            })
+            $(document).on('keydown', 'table input', function (e) {
+                //shang38
+                //xia40
+                //zuo37
+                //you39
+                //上
+                var index = $(this).parents("tr").children().index($(this).parent())
+                if (e.keyCode == 38) {
+
+                    $(this).parents("tr").prev().find("input:eq(" + index + ")").focus()
+
+                }
+                //下
+                if (e.keyCode == 40) {
+                    $(this).parents("tr").next().find("input:eq(" + index + ")").focus()
+
+                }
+                //左
+                if (e.keyCode == 37) {
+                    $(this).parent().prev().children().focus()
+
+                }
+                //右
+                if (e.keyCode == 39) {
+                    $(this).parent().next().children().focus()
+
+                }
+            })
+            $(".select2").change(function () {
+                if ($(this).val() == 0) {
+                    $(".zh").text("801101000478910212")
+                } else if ($(this).val() == 1) { $(".zh").text("728968017298") }
+                else if ($(this).val() == 2) { $(".zh").text("44488701040005617") }
+                else if ($(this).val() == 3) { $(".zh").text("44050166734500000066") }
+                else if ($(this).val() == 4) { $(".zh").text("06 2288 0002 5310") }
 
             })
             $("table:nth-child(3) .sss").each(function (i) {
@@ -544,7 +715,7 @@
             })
         })
     </script>
-    <script language=javascript>
+    <script type="text/javascript">
         function printCss() {
 
             $(":input").css("border", "0px");
@@ -622,8 +793,7 @@
                             async: false,
                             dataType: "json",
                             success: function (data) {
-
-                                if (data.length != 0) {
+                                if (data.length > 0) {
                                     HtmlText = data[0].html;
                                 }
                             }
@@ -724,7 +894,7 @@
         </tr>
         <tr>
             <td>
-                <label>电话：</label><input type="text" style="width:420px;" id="txt" name="Tel" placeholder="电话" list="mylist1" onkeyup="search1(this)" />
+                <label>电话：</label><input type="number"  style="width:420px;" id="txt" name="Tel" placeholder="电话" list="mylist1" onkeyup="search1(this)" />
                 <datalist id="mylist1"></datalist>
             </td>
             <td><label>电话：</label>0757-29977100</td>
@@ -749,7 +919,13 @@
     <ul>
         <li style="margin-left:10px"><p>一、货物名称及型号规格、数量、单价、金额：</p></li>
     </ul>
-    <table style="width:90%;">
+    <div class="layui-form-item">
+        <div class="layui-form-label">导入操作</div>
+        <div class="layui-form-block">
+            <input type="file" class="layui-btn layui-btn-primary" id="LAY-excel-import-excel" multiple="multiple" />
+        </div>
+    </div>
+    <table style="width:90%;" class="Product">
         <tr class="ftr">
 
             <th><label>产品名称</label></th>
@@ -765,9 +941,9 @@
         <tr class="ji">
             <td><input name='ProductName' type='text' onkeydown='keydown(this)' style="width:300px" /></td>
             <td><input name='ProductSpec' type='text' onkeydown='keydown(this)' style="width:300px" /></td>
-            <td><input name='Count' type='text' onkeydown='keydown(this)' onchange='myFunction(this)' style="width:50px" /></td>
+            <td><input name='Count' type='number'  onkeydown='keydown(this)' onchange='myFunction(this)' style="width:50px" /></td>
             <td><input name='Units' type='text' onkeydown='keydown(this)' style="width:50px" /></td>
-            <td><input name='Price' type='text' onchange='myFunction(this)' onkeydown='keydown(this)' style="width:80px" /></td>
+            <td><input name='Price' type='number'  onchange='myFunction(this)' onkeydown='keydown(this)' style="width:80px" /></td>
             <td style='width: 50px'></td>
             <td><input type='text' onkeydown='keydown(this)' /></td>
             <td><button style="width:80px">删除</button></td>
@@ -780,12 +956,12 @@
 
         <tr>
             <td colspan="5">运费</td>
-            <td class="l"><input type="text" class="sss" onchange="myFunction(this)" /></td>
+            <td class="l"><input type="number"  class="sss" onchange="myFunction(this)" /></td>
             <td><input type='text' class="sss" /></td>
         </tr>
         <tr>
             <td colspan="5">安装费(派多名工程师安装)</td>
-            <td class="l"><input type="text" class="sss" id="yf" onchange="myFunction(this)" /></td>
+            <td class="l"><input type="number" class="sss"  id="yf" onchange="myFunction(this)" /></td>
             <td><input type="text" class="sss" /></td>
         </tr>
         <tr>
@@ -796,18 +972,18 @@
         </tr>
         <tr>
             <td colspan="5"><input type="checkbox" style="margin-left:-100px" />税额16%</td>
-            <td class="l"><input type="text" onchange='myFunction(this)' style="display:inline-block;width:100px;margin-left:10px" /></td>
-            <td><input type="text" class="sss" /></td>
+            <td class="l"><input type="number" onchange='myFunction(this)' style="display:inline-block;width:100px;margin-left:10px" /></td>
+            <td><input type="number"  class="sss" /></td>
         </tr>
         <tr>
             <td colspan="5"><input type="checkbox" style="margin-left:-80px" />税后价合计:</td>
             <td class="l"></td>
-            <td><input type="text" class="sss" /></td>
+            <td><input type="number"  class="sss" /></td>
         </tr>
         <tr>
             <td colspan="5"><input type="checkbox" style="margin-left:-65px" />优惠后价合计:</td>
             <td class="l"><input type="text" class="sss" /></td>
-            <td><input type="text" class="sss bom" /></td>
+            <td><input type="number"  class="sss bom" /></td>
         </tr>
     </table>
 
@@ -818,16 +994,16 @@
         <li>
             <p>二、付款方式：</p>
         </li>
-        <li name="PaymentMethod">
-            <p>1、合同签定之日起7日内，甲方需向乙方支付定金即合同总价款<input type="text" class="su" />%,即人民币:<span name="DepositAmount"></span>；<span></span>。</p>
-            <p>2、交货期前三天乙方通知甲方支付发货款：合同总价款<input type="text" class="su" />%,即人民币:<span name="DeliveryAmount"></span>；<span></span>。</p>
-            <p>3、自货物到达甲方指定地点，乙方安装人员到厂安装好，设备调试前，甲方向乙方支付安装调试款：合同总价款的<input type="text" class="su" />%,即人民币:<span name="InstallationAmount">；</span>；<span></span>。</p>
-            <p>4、设备安装调试完成并经甲方验收合格之日起3个工作日内，甲方向乙方支付验收款：合同总价款的<input type="text" class="su" />%,即人民币:<span name="AcceptanceAmount"></span>；<span></span>。</p>
-            <p>5、设备保修期满3个工作日内，甲方向乙方支付质保金款：合同总价款金额的<input type="text" class="su" />%,即人民币:<span name="QualityAssuranceAmount"></span>；<span></span>。</p>
+        <li>
+            <p>1、合同签定之日起7日内，甲方需向乙方支付定金即合同总价款<input type="number"  class="su" />%,即人民币:<span name="DepositAmount"></span>；<span></span>。</p>
+            <p>2、交货期前三天乙方通知甲方支付发货款：合同总价款<input type="number"  class="su" />%,即人民币:<span name="DeliveryAmount"></span>；<span></span>。</p>
+            <p>3、自货物到达甲方指定地点，乙方安装人员到厂安装好，设备调试前，甲方向乙方支付安装调试款：合同总价款的<input type="number"  class="su" />%,即人民币:<span name="InstallationAmount">；</span>；<span></span>。</p>
+            <p>4、设备安装调试完成并经甲方验收合格之日起3个工作日内，甲方向乙方支付验收款：合同总价款的<input type="number"  class="su" />%,即人民币:<span name="AcceptanceAmount"></span>；<span></span>。</p>
+            <p>5、设备保修期满3个工作日内，甲方向乙方支付质保金款：合同总价款金额的<input type="number"  class="su" />%,即人民币:<span name="QualityAssuranceAmount"></span>；<span></span>。</p>
         </li>
         <li><p><input type="checkbox" />说明：应甲方要求，需在付款前开具发票的，发票不作为收款依据，以乙方指定银行账户实际到账为准。</p></li>
         <li>
-            <p name="DeliveryTime">三、设备及货物交货时间：<span>自定金到账日起<input type="text" />日内完成出厂前的检验，</span><span>自发货款到账日起<input type="text" />日内（国家法定节假日顺延）货物交付清,</span><span>自安装调试款到账日起<input type="text" />日内完成设备运行调试，</span>如货款拖延则交货期、设备调试期顺延；因设计变更、运输途中各种无法预测的因素或不可抗力的因素可顺延交期。</p>
+            <p>三、设备及货物交货时间：<span>自定金到账日起<input type="number"  />日内完成出厂前的检验，</span><span>自发货款到账日起<input type="number"  />日内（国家法定节假日顺延）货物交付清,</span><span>自安装调试款到账日起<input type="number"  />日内完成设备运行调试，</span>如货款拖延则交货期、设备调试期顺延；因设计变更、运输途中各种无法预测的因素或不可抗力的因素可顺延交期。</p>
         </li>
         <li>
             <p>四、包装、运输、收货地址、装卸和收货</p>
@@ -852,20 +1028,19 @@
 
         </li>
         <li class="jia">
-            <p>1、甲方自行负责安装调试</p>
+            <p> <input type="checkbox" />1、甲方自行负责安装调试</p>
         </li>
         <li>
+            <p> <input type="checkbox" />1、甲方需在乙方货物到达前清理好安装现场，确保安装现场具备安装条件：如场地安全、场地卫生、动力气源、动力电源等；如因甲方安装现场条件不具备，则安装调试期顺延；并提供或协助解决乙方安装人员食宿问题。</p>
 
-            <p><input type="checkbox" name="inst" value="one" />1、甲方需在乙方货物到达前清理好安装现场，确保安装现场具备安装条件：如场地安全、场地卫生、动力气源、动力电源等；如因甲方安装现场条件不具备，则安装调试期顺延；并提供或协助解决乙方安装人员食宿问题。</p>
+            <p>2、乙方负责安装，乙方依据双方确定安装规划布局图进行一次性安装调试。乙方在调试过程中负责对甲方的设备使用人员、设备维修人员进行设备操作、日常维护、保养等问题进行培训。</p>
 
-            <p><input type="checkbox" name="inst" value="two" />2、乙方负责安装，乙方依据双方确定安装规划布局图进行一次性安装调试。乙方在调试过程中负责对甲方的设备使用人员、设备维修人员进行设备操作、日常维护、保养等问题进行培训。</p>
+            <p>3、安装完成后，如甲方提出更改安装的，需要双方协议后重新确定安装规划布局图，甲方需另行支付安装费用给乙方。</p>
 
-            <p><input type="checkbox" name="inst" value="three" />3、安装完成后，如甲方提出更改安装的，需要双方协议后重新确定安装规划布局图，甲方需另行支付安装费用给乙方。</p>
+            <p>4、安装过程中，乙方安装人员客观原因造成工伤事故，相关工伤产生的费用由甲乙双方各承担50%。</p>
+            <p>5、如甲方在设备安装调试完成三天之内无确认设备验收单，又无提出书面异议，视甲方默认合同内产品验收合格；</p>
 
-            <p><input type="checkbox" name="inst" value="four" />4、安装过程中，乙方安装人员客观原因造成工伤事故，相关工伤产生的费用由甲乙双方各承担50%。</p>
-            <p><input type="checkbox" name="inst" value="five" />5、如甲方在设备安装调试完成三天之内无确认设备验收单，又无提出书面异议，视甲方默认合同内产品验收合格；</p>
-
-            <p><input type="checkbox" name="inst" value="six" />6、如因甲方未按期支付货款，导致乙方安装工作人员撤退，需再次安排到现场设备调试工作的，甲方需承担乙方安装调试人员的人工费和差旅费等。</p>
+            <p>6、如因甲方未按期支付货款，导致乙方安装工作人员撤退，需再次安排到现场设备调试工作的，甲方需承担乙方安装调试人员的人工费和差旅费等。</p>
 
         </li>
         <li>
@@ -917,8 +1092,8 @@
 
         </li>
         <li name="ConditionsOfbreachOfContract">
-            <p>1、在合同履行期间，乙方延期交货，除双方协商同意免责外，乙方按每日合同总价款<input type="text" />‰支付违约金给甲方，违约金累计金额不超过合同金额的10%；</p>
-            <p>2、在合同履行期间，甲方延期付款，除双方协商同意免责外，甲方按每日合同总价款<input type="text" class="bom" />‰支付违约金给乙方；</p>
+            <p>1、在合同履行期间，乙方延期交货，除双方协商同意免责外，乙方按每日合同总价款<input type="number"  />‰支付违约金给甲方，违约金累计金额不超过合同金额的10%；</p>
+            <p>2、在合同履行期间，甲方延期付款，除双方协商同意免责外，甲方按每日合同总价款<input type="number"  class="bom" />‰支付违约金给乙方；</p>
             <p>3、如甲方不能按期付款，除承担以上违约责任以外，并且未付款合同内货物权属归乙方所有。</p>
             <p>4、甲方在合同约定时间内未付清货款或定金款的，乙方有权选择解除合同或停止交货。</p>
             <p>5、甲方无正当理由单方解除合同的，由此给乙方造成的全部经济损失应由甲方赔偿给乙方，已支付的定金无权要求返还。</p>
@@ -968,8 +1143,8 @@
         </tr>
         <tr>
             <td>
-                <label>单位名称（章）：</label>
-                <input type="text" style="width:420px;" id="txt" name="CustomerName" value="@ViewData["CuName"]" placeholder="单位名称" list="mylist1" onkeyup="search1(this)" />
+                <label style="width:150px;display:inline-block">单位名称（章）：</label>
+                <input type="text" style="width:400px;display:inline-block" id="txt" name="CustomerName" value="@ViewData["CuName"]" placeholder="单位名称" list="mylist1" onkeyup="search1(this)" />
                 <datalist id="mylist1"></datalist>
 
             </td>
@@ -989,15 +1164,6 @@
 
             </td>
             <td><label>单位地址：</label>广东省佛山市顺德区杏坛镇逢简工业区横二路1号</td>
-        </tr>
-        <tr>
-            <td>
-                <label>法定代表人：</label>
-                <input type="text" style="width:420px;" id="txt" name="Representative" placeholder="法定代表人" list="mylist1" onkeyup="search1(this)" />
-                <datalist id="mylist1"></datalist>
-
-            </td>
-            <td><label>法定代表人：</label><span>杨厚德</span></td>
         </tr>
         <tr>
             <td>
@@ -1051,9 +1217,11 @@
             <td>
                 <label>开户银行：</label>
                 <select class="select2">
-                    <option value="0" selected=selected> 中国银行顺德杏龙支行</option>
-                    <option value="1">中国农业银行</option>
-                    <option value="2">中国工商银行</option>
+                    <option value="0" selected=selected>广东顺德农村商业银行股份有限公司杏坛金海分理处</option>
+                    <option value="1">中国银行顺德杏龙支行</option>
+                    <option value="2">中国农业银行股份有限公司顺德顺宝支行</option>
+                    <option value="3">中国建设银行股份有限公司顺德杏坛支行</option>
+                    <option value="4">佛山顺德农村商业银行勒流支行</option>
                 </select>
             </td>
         </tr>
@@ -1066,11 +1234,10 @@
             <td><label>帐号：</label><span class="zh">728968017298</span></td>
         </tr>
     </table>
-    <!--endprint-->
     <div style="margin:0px auto; text-align:center;font-size:20px;font-weight:bolder;" id="sas">
         <p><a style="color:black;text-decoration:none" href="javascript:;" onclick="doPrint()">打印</a> &nbsp;&nbsp;<a style="color:black;text-decoration:none" href="javascript:;" onclick="Applier()">保存</a></p>
-
     </div>
+    "<!--endprint-->"
     <script>
 
         var schoolList = new Array();
@@ -1080,8 +1247,6 @@
             async: false,
             dataType: "json",
             success: function (data) {
-
-
                 for (var i = 0; i < data.length; i++) {
                     if (JSON.stringify(data[i].CustomerName) != "null" && data[i].CustomerName != "" && data[i].CustomerName != undefined) {
 
@@ -1133,8 +1298,6 @@
                 }
             }
         })
-
-
         function search1(th) {
             $("#mylist1").empty();
             var tea_school = $(th).val();
@@ -1146,27 +1309,8 @@
                 }
 
             }
-
-            $.ajax({
-                url: "/ProductionPlanning/SeList1",
-                data: { name: tea_school },
-                type: "get",
-                dataType: "json",
-                success: function (data) {
-                    $("[name=Address]").val(data[0].Address);
-                    $("[name=Tel]").val(data[0].Tel);
-                    $("[name=Fax]").val(data[0].Fax);
-                    $("[name=Representative]").val(data[0].Representative);
-                    $("[name=Mobile]").val(data[0].Mobile);
-                    $("[name=Account]").val(data[0].Account);
-                    $("[name=Bank]").val(data[0].Bank);
-                    $("[name=Contact]").val(data[0].Contact);
-                    $("[name=Principal]").val(data[0].Principal);
-
-                }
-
-            })
         }
+
 
         function Transform(number) {
             number = new String(parseFloat(number).toFixed(2));

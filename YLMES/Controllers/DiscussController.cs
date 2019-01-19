@@ -278,17 +278,18 @@ namespace YLMES.Controllers
             return View();
         }
        //修改密码
-       public ActionResult Changepwd(string pwd)
+       public ActionResult Changepwd(string pwd,string names)
         {
             try
             {
                 using(YLMES_newEntities ys = new YLMES_newEntities())
                 {
                     string name = Session["name"].ToString();
-                    SqlParameter[] parms = new SqlParameter[2];
+                    SqlParameter[] parms = new SqlParameter[3];
                     parms[0] = new SqlParameter("@UserName", name);
-                    parms[1] = new SqlParameter("@PassWord", pwd);                 
-                    ys.Database.ExecuteSqlCommand("exec ChangUserPassword @UserName,@PassWord", parms);
+                    parms[1] = new SqlParameter("@NewName", names);
+                    parms[2] = new SqlParameter("@PassWord", pwd);                 
+                    ys.Database.ExecuteSqlCommand("exec ChangUserPassword @UserName,@NewName,@PassWord", parms);
                 }
                 return Content("true");
             }
@@ -296,8 +297,7 @@ namespace YLMES.Controllers
             {
                 Console.WriteLine(ex.Message);
                 return Content("false");
-            }
-            
+            }           
         }
         //上传图片
         public ActionResult LayUploadFile(HttpPostedFileBase File)

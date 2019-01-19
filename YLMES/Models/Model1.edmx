@@ -27,7 +27,7 @@
           <Property Name="DateOfSign" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Money" Type="numeric" Precision="18" Scale="2" />
           <Property Name="AmountCollected" Type="numeric" Precision="18" Scale="2" />
-          <Property Name="PaymentMethod" Type="varchar" MaxLength="2000" />
+          <Property Name="PaymentMethod" Type="varchar(max)" />
           <Property Name="IfInstall" Type="varchar" MaxLength="200" />
           <Property Name="IfTransport" Type="varchar" MaxLength="200" />
           <Property Name="IfIncludeTax" Type="varchar" MaxLength="200" />
@@ -39,8 +39,8 @@
           <Property Name="StatusID" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="AuditThrough" Type="varchar" MaxLength="20" />
           <Property Name="IfPayment" Type="varchar" MaxLength="20" />
-          <Property Name="DepositAmount" Type="varchar" MaxLength="20" />
-          <Property Name="DeliveryAmount" Type="varchar" MaxLength="20" />
+          <Property Name="DepositAmount" Type="varchar(max)" />
+          <Property Name="DeliveryAmount" Type="varchar(max)" />
           <Property Name="InstallationAmount" Type="varchar" MaxLength="20" />
           <Property Name="AcceptanceAmount" Type="varchar" MaxLength="20" />
           <Property Name="QualityAssuranceAmount" Type="varchar" MaxLength="20" />
@@ -181,6 +181,14 @@
           </Key>
           <Property Name="id" Type="nchar" MaxLength="10" Nullable="false" />
           <Property Name="type" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="cuhtml">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="html" Type="varchar(max)" Nullable="false" />
+          <Property Name="cuid" Type="nchar" MaxLength="10" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“YLMES_new.dbo.DeletePM_WorkDetailHistory”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -345,6 +353,7 @@
           <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
           <Property Name="StatusID" Type="varchar" MaxLength="20" />
           <Property Name="TaskID" Type="int" />
+          <Property Name="Type" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="PM_BOM_Process">
           <Key>
@@ -674,7 +683,7 @@
             <PropertyRef Name="PartMaterial" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PartLevel" Type="varchar" MaxLength="15" />
+          <Property Name="PartLevel" Type="varchar" MaxLength="30" />
           <Property Name="FigureNumber" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="PartNumber" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="PartSpec" Type="varchar" MaxLength="50" Nullable="false" />
@@ -690,6 +699,7 @@
           <Property Name="StatusID" Type="int" />
           <Property Name="TaskID" Type="int" />
           <Property Name="Note" Type="varchar" MaxLength="50" />
+          <Property Name="type" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="PM_PONO">
           <Key>
@@ -721,10 +731,10 @@
         </EntityType>
         <EntityType Name="PM_Product">
           <Key>
-            <PropertyRef Name="PartID" />
+            <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PartID" Type="int" Nullable="false" />
+          <Property Name="PartID" Type="int" />
           <Property Name="RouteID" Type="int" />
           <Property Name="CreatedBy" Type="varchar" MaxLength="20" />
           <Property Name="CreatedTime" Type="varchar" MaxLength="20" />
@@ -1397,6 +1407,11 @@
           <Parameter Name="ChildPartID" Type="int" Mode="In" />
           <Parameter Name="CreatedBy" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="Addhtml" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="text" Type="varchar(max)" Mode="In" />
+          <Parameter Name="cuid" Type="varchar" Mode="In" />
+          <Parameter Name="type" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="AddLocationType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CreatedBy" Type="varchar" Mode="In" />
         </Function>
@@ -1408,6 +1423,7 @@
           <Parameter Name="PartMaterial" Type="varchar" Mode="In" />
           <Parameter Name="QTY" Type="varchar" Mode="In" />
           <Parameter Name="Note" Type="varchar" Mode="In" />
+          <Parameter Name="Type" Type="varchar" Mode="In" />
           <Parameter Name="ListType" Type="varchar" Mode="In" />
           <Parameter Name="TaskID" Type="int" Mode="In" />
         </Function>
@@ -1479,10 +1495,15 @@
         </Function>
         <Function Name="ChangUserPassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="NewName" Type="varchar" Mode="In" />
           <Parameter Name="PassWord" Type="varchar" Mode="In" />
         </Function>
         <Function Name="checkBOM" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaskID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="checkBOMS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TaskID" Type="int" Mode="In" />
+          <Parameter Name="PartNumber" Type="varchar" Mode="In" />
         </Function>
         <Function Name="CheckCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Type" Type="varchar" Mode="In" />
@@ -1745,6 +1766,10 @@
           <Parameter Name="historyID" Type="int" Mode="In" />
         </Function>
         <Function Name="IwantMoreTask" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="LoginUserName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="Password" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="MyCompletedTaskCheck" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Owner" Type="varchar" Mode="In" />
           <Parameter Name="Status" Type="varchar" Mode="In" />
@@ -2900,6 +2925,7 @@
           <EntitySet Name="Category2" EntityType="Self.Category2" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category3" EntityType="Self.Category3" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ContractType" EntityType="Self.ContractType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cuhtml" EntityType="Self.cuhtml" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee--dele" EntityType="Self.Employee--dele" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="htmltext" EntityType="Self.htmltext" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_ApplierList" EntityType="Self.PM_ApplierList" Schema="dbo" store:Type="Tables" />
@@ -3098,7 +3124,8 @@
     [PM_PartSetting_temp].[UpdatedTime] AS [UpdatedTime], 
     [PM_PartSetting_temp].[StatusID] AS [StatusID], 
     [PM_PartSetting_temp].[TaskID] AS [TaskID], 
-    [PM_PartSetting_temp].[Note] AS [Note]
+    [PM_PartSetting_temp].[Note] AS [Note], 
+    [PM_PartSetting_temp].[type] AS [type]
     FROM [dbo].[PM_PartSetting_temp] AS [PM_PartSetting_temp]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PM_ProblemDiscussion" EntityType="Self.PM_ProblemDiscussion" store:Type="Tables" store:Schema="dbo">
@@ -3458,7 +3485,7 @@
           <Property Name="DateOfSign" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Money" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="AmountCollected" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="PaymentMethod" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="PaymentMethod" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="IfInstall" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="IfTransport" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="IfIncludeTax" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
@@ -3470,8 +3497,8 @@
           <Property Name="StatusID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="AuditThrough" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="IfPayment" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="DepositAmount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="DeliveryAmount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DepositAmount" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DeliveryAmount" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="InstallationAmount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="AcceptanceAmount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="QualityAssuranceAmount" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
@@ -3613,6 +3640,14 @@
           <Property Name="id" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
           <Property Name="type" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
         </EntityType>
+        <EntityType Name="cuhtml">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="html" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="cuid" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
         <EntityType Name="Employee__dele">
           <Key>
             <PropertyRef Name="CCID" />
@@ -3696,6 +3731,7 @@
           <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="StatusID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="TaskID" Type="Int32" />
+          <Property Name="Type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PM_BOM_Process">
           <Key>
@@ -3940,10 +3976,10 @@
         </EntityType>
         <EntityType Name="PM_Product">
           <Key>
-            <PropertyRef Name="PartID" />
+            <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="PartID" Type="Int32" />
           <Property Name="RouteID" Type="Int32" />
           <Property Name="CreatedBy" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="CreatedTime" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
@@ -4396,7 +4432,7 @@
             <PropertyRef Name="PartMaterial" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PartLevel" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="PartLevel" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="FigureNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="PartNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="PartSpec" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
@@ -4412,6 +4448,7 @@
           <Property Name="StatusID" Type="Int32" />
           <Property Name="TaskID" Type="Int32" />
           <Property Name="Note" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PM_ProblemDiscussion">
           <Key>
@@ -4788,6 +4825,7 @@
           <EntitySet Name="Category2" EntityType="Self.Category2" />
           <EntitySet Name="Category3" EntityType="Self.Category3" />
           <EntitySet Name="ContractType" EntityType="Self.ContractType" />
+          <EntitySet Name="cuhtml" EntityType="Self.cuhtml" />
           <EntitySet Name="Employee__dele" EntityType="Self.Employee__dele" />
           <EntitySet Name="htmltext" EntityType="Self.htmltext" />
           <EntitySet Name="PM_ApplierList" EntityType="Self.PM_ApplierList" />
@@ -4866,6 +4904,11 @@
             <Parameter Name="ChildPartID" Mode="In" Type="Int32" />
             <Parameter Name="CreatedBy" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="Addhtml">
+            <Parameter Name="text" Mode="In" Type="String" />
+            <Parameter Name="cuid" Mode="In" Type="String" />
+            <Parameter Name="type" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="AddLocationType">
           <Parameter Name="CreatedBy" Mode="In" Type="String" />
           </FunctionImport>
@@ -4877,6 +4920,7 @@
             <Parameter Name="PartMaterial" Mode="In" Type="String" />
             <Parameter Name="QTY" Mode="In" Type="String" />
             <Parameter Name="Note" Mode="In" Type="String" />
+            <Parameter Name="Type" Mode="In" Type="String" />
             <Parameter Name="ListType" Mode="In" Type="String" />
             <Parameter Name="TaskID" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -4946,8 +4990,17 @@
           <FunctionImport Name="AutoCheckDeposit">
           <Parameter Name="ContractID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="ChangUserPassword">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="NewName" Mode="In" Type="String" />
+            <Parameter Name="PassWord" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="checkBOM" ReturnType="Collection(YLMES_newModel.checkBOM_Result)">
           <Parameter Name="TaskID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="checkBOMS" ReturnType="Collection(YLMES_newModel.checkBOMS_Result)">
+            <Parameter Name="TaskID" Mode="In" Type="Int32" />
+            <Parameter Name="PartNumber" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CheckCategory" ReturnType="Collection(Int32)">
             <Parameter Name="Type" Mode="In" Type="String" />
@@ -5209,6 +5262,10 @@
             <Parameter Name="historyID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="IwantMoreTask" ReturnType="Collection(YLMES_newModel.IwantMoreTask_Result)" />
+          <FunctionImport Name="LoginUserName" ReturnType="Collection(YLMES_newModel.LoginUserName_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="MyCompletedTaskCheck" ReturnType="Collection(YLMES_newModel.MyCompletedTaskCheck_Result)">
             <Parameter Name="Owner" Mode="In" Type="String" />
             <Parameter Name="Status" Mode="In" Type="String" />
@@ -5216,6 +5273,10 @@
             <Parameter Name="EndTime" Mode="In" Type="String" />
             <Parameter Name="ProjectName" Mode="In" Type="String" />
             <Parameter Name="TaskName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="MyPost" ReturnType="Collection(YLMES_newModel.MyPost_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="Substance" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="MyTaskCheck" ReturnType="Collection(YLMES_newModel.MyTaskCheck_Result)">
             <Parameter Name="Owner" Mode="In" Type="String" />
@@ -6339,14 +6400,6 @@
             <Parameter Name="StationType" Mode="In" Type="String" />
             <Parameter Name="WorkorderNO" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="ChangUserPassword">
-            <Parameter Name="UserName" Mode="In" Type="String" />
-            <Parameter Name="PassWord" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="MyPost" ReturnType="Collection(YLMES_newModel.MyPost_Result)">
-            <Parameter Name="UserName" Mode="In" Type="String" />
-            <Parameter Name="Substance" Mode="In" Type="String" />
-          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="ApplierList_getName_Result">
           <Property Type="Int32" Name="序号" Nullable="false" />
@@ -6370,7 +6423,20 @@
         </ComplexType>
         <ComplexType Name="checkBOM_Result">
           <Property Type="Int32" Name="序号" Nullable="false" />
-          <Property Type="String" Name="BOM结构" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="BOM结构" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="任务编号" Nullable="true" />
+          <Property Type="String" Name="图号" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="上传图片" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="部件名称" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="部件规格" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="材料" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="备注" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="类别" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="类型" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="checkBOMS_Result">
+          <Property Type="Int32" Name="序号" Nullable="false" />
+          <Property Type="String" Name="BOM结构" Nullable="true" MaxLength="30" />
           <Property Type="Int32" Name="任务编号" Nullable="true" />
           <Property Type="String" Name="图号" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="上传图片" Nullable="false" MaxLength="4" />
@@ -6460,7 +6526,7 @@
           <Property Type="Decimal" Name="合同金额" Nullable="true" Precision="18" Scale="2" />
           <Property Type="Decimal" Name="收款金额" Nullable="true" Precision="18" Scale="2" />
           <Property Type="String" Name="创建时间" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="收款方式" Nullable="true" MaxLength="2000" />
+          <Property Type="String" Name="收款方式" Nullable="true" />
           <Property Type="String" Name="是否安装" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="是否运输" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="是否含税" Nullable="true" MaxLength="200" />
@@ -6695,6 +6761,12 @@
           <Property Type="Double" Name="发行基准时间" Nullable="true" />
           <Property Type="Double" Name="发行分值" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="LoginUserName_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EmployeeName" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="CCID" Nullable="false" />
+        </ComplexType>
         <ComplexType Name="MyCompletedTaskCheck_Result">
           <Property Type="Int32" Name="任务编号" Nullable="false" />
           <Property Type="String" Name="任务名称" Nullable="true" MaxLength="50" />
@@ -6711,6 +6783,12 @@
           <Property Type="String" Name="审核人" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="图纸发行人" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="任务状态" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="MyPost_Result">
+          <Property Type="String" Name="帖子标题" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="状态" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="发布时间" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="回答人数" Nullable="false" />
         </ComplexType>
         <ComplexType Name="MyTaskCheck_Result">
           <Property Type="Int32" Name="TaskID" Nullable="false" />
@@ -7040,7 +7118,7 @@
           <Property Type="String" Name="合同签订日期" Nullable="true" MaxLength="10" />
           <Property Type="Decimal" Name="合同金额" Nullable="true" Precision="18" Scale="2" />
           <Property Type="Decimal" Name="收款金额" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="String" Name="收款方式" Nullable="true" MaxLength="2000" />
+          <Property Type="String" Name="收款方式" Nullable="true" />
           <Property Type="String" Name="是否安装" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="是否运输" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="是否含税" Nullable="true" MaxLength="200" />
@@ -7173,7 +7251,7 @@
           <Property Type="Decimal" Name="合同金额" Nullable="true" Precision="18" Scale="2" />
           <Property Type="Decimal" Name="收款金额" Nullable="true" Precision="18" Scale="2" />
           <Property Type="String" Name="创建时间" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="收款方式" Nullable="true" MaxLength="2000" />
+          <Property Type="String" Name="收款方式" Nullable="true" />
           <Property Type="String" Name="是否安装" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="是否运输" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="是否含税" Nullable="true" MaxLength="200" />
@@ -7183,8 +7261,8 @@
           <Property Type="String" Name="合同状态" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="是否通过" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="货款情况" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="订单金额" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="发货收款金额" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="订单金额" Nullable="true" />
+          <Property Type="String" Name="发货收款金额" Nullable="true" />
           <Property Type="String" Name="安装前金额" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="验收金额" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="质保金额" Nullable="true" MaxLength="20" />
@@ -7209,7 +7287,7 @@
           <Property Type="String" Name="合同签订日期" Nullable="true" MaxLength="10" />
           <Property Type="Decimal" Name="合同金额" Nullable="true" Precision="18" Scale="2" />
           <Property Type="Decimal" Name="收款金额" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="String" Name="收款方式" Nullable="true" MaxLength="2000" />
+          <Property Type="String" Name="收款方式" Nullable="true" />
           <Property Type="String" Name="是否安装" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="是否运输" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="是否含税" Nullable="true" MaxLength="200" />
@@ -7225,7 +7303,7 @@
           <Property Type="String" Name="合同签订日期" Nullable="true" MaxLength="10" />
           <Property Type="Decimal" Name="合同金额" Nullable="true" Precision="18" Scale="2" />
           <Property Type="Decimal" Name="收款金额" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="String" Name="收款方式" Nullable="true" MaxLength="2000" />
+          <Property Type="String" Name="收款方式" Nullable="true" />
           <Property Type="String" Name="是否安装" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="是否运输" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="是否含税" Nullable="true" MaxLength="200" />
@@ -7508,6 +7586,7 @@
           <Property Type="String" Name="工件编码" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="子件序号" Nullable="false" />
           <Property Type="String" Name="子件编码" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="子件规格" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="子件数量" Nullable="true" />
           <Property Type="Int32" Name="原材料用量" Nullable="true" />
           <Property Type="String" Name="原材料单位" Nullable="true" MaxLength="10" />
@@ -7581,12 +7660,6 @@
           <Property Type="String" Name="工位类型" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="截止日期" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="员工" Nullable="false" MaxLength="50" />
-        </ComplexType>
-        <ComplexType Name="MyPost_Result">
-          <Property Type="String" Name="帖子标题" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="状态" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="发布时间" Nullable="true" MaxLength="30" />
-          <Property Type="Int32" Name="回答人数" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -7762,6 +7835,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="cuhtml">
+            <EntityTypeMapping TypeName="YLMES_newModel.cuhtml">
+              <MappingFragment StoreEntitySet="cuhtml">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="html" ColumnName="html" />
+                <ScalarProperty Name="cuid" ColumnName="cuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Employee__dele">
             <EntityTypeMapping TypeName="YLMES_newModel.Employee__dele">
               <MappingFragment StoreEntitySet="Employee--dele">
@@ -7847,6 +7929,7 @@
                 <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
                 <ScalarProperty Name="StatusID" ColumnName="StatusID" />
                 <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -8590,6 +8673,7 @@
                 <ScalarProperty Name="StatusID" ColumnName="StatusID" />
                 <ScalarProperty Name="TaskID" ColumnName="TaskID" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="type" ColumnName="type" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -8972,6 +9056,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AddchildThing" FunctionName="YLMES_newModel.Store.AddchildThing" />
+          <FunctionImportMapping FunctionImportName="Addhtml" FunctionName="YLMES_newModel.Store.Addhtml" />
           <FunctionImportMapping FunctionImportName="AddLocationType" FunctionName="YLMES_newModel.Store.AddLocationType" />
           <FunctionImportMapping FunctionImportName="AddMerial" FunctionName="YLMES_newModel.Store.AddMerial" />
           <FunctionImportMapping FunctionImportName="AddPM_MaterialList" FunctionName="YLMES_newModel.Store.AddPM_MaterialList" />
@@ -9009,9 +9094,27 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AutoCheckDeposit" FunctionName="YLMES_newModel.Store.AutoCheckDeposit" />
+          <FunctionImportMapping FunctionImportName="ChangUserPassword" FunctionName="YLMES_newModel.Store.ChangUserPassword" />
           <FunctionImportMapping FunctionImportName="checkBOM" FunctionName="YLMES_newModel.Store.checkBOM">
             <ResultMapping>
               <ComplexTypeMapping TypeName="YLMES_newModel.checkBOM_Result">
+                <ScalarProperty Name="序号" ColumnName="序号" />
+                <ScalarProperty Name="BOM结构" ColumnName="BOM结构" />
+                <ScalarProperty Name="任务编号" ColumnName="任务编号" />
+                <ScalarProperty Name="图号" ColumnName="图号" />
+                <ScalarProperty Name="上传图片" ColumnName="上传图片" />
+                <ScalarProperty Name="部件名称" ColumnName="部件名称" />
+                <ScalarProperty Name="部件规格" ColumnName="部件规格" />
+                <ScalarProperty Name="材料" ColumnName="材料" />
+                <ScalarProperty Name="备注" ColumnName="备注" />
+                <ScalarProperty Name="类别" ColumnName="类别" />
+                <ScalarProperty Name="类型" ColumnName="类型" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="checkBOMS" FunctionName="YLMES_newModel.Store.checkBOMS">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="YLMES_newModel.checkBOMS_Result">
                 <ScalarProperty Name="序号" ColumnName="序号" />
                 <ScalarProperty Name="BOM结构" ColumnName="BOM结构" />
                 <ScalarProperty Name="任务编号" ColumnName="任务编号" />
@@ -9483,6 +9586,16 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="LoginUserName" FunctionName="YLMES_newModel.Store.LoginUserName">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="YLMES_newModel.LoginUserName_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="CCID" ColumnName="CCID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="MyCompletedTaskCheck" FunctionName="YLMES_newModel.Store.MyCompletedTaskCheck">
             <ResultMapping>
               <ComplexTypeMapping TypeName="YLMES_newModel.MyCompletedTaskCheck_Result">
@@ -9501,6 +9614,16 @@
                 <ScalarProperty Name="审核人" ColumnName="审核人" />
                 <ScalarProperty Name="图纸发行人" ColumnName="图纸发行人" />
                 <ScalarProperty Name="任务状态" ColumnName="任务状态" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MyPost" FunctionName="YLMES_newModel.Store.MyPost">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="YLMES_newModel.MyPost_Result">
+                <ScalarProperty Name="帖子标题" ColumnName="帖子标题" />
+                <ScalarProperty Name="状态" ColumnName="状态" />
+                <ScalarProperty Name="发布时间" ColumnName="发布时间" />
+                <ScalarProperty Name="回答人数" ColumnName="回答人数" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -10580,6 +10703,7 @@
                 <ScalarProperty Name="工件编码" ColumnName="工件编码" />
                 <ScalarProperty Name="子件序号" ColumnName="子件序号" />
                 <ScalarProperty Name="子件编码" ColumnName="子件编码" />
+                <ScalarProperty Name="子件规格" ColumnName="子件规格" />
                 <ScalarProperty Name="子件数量" ColumnName="子件数量" />
                 <ScalarProperty Name="原材料用量" ColumnName="原材料用量" />
                 <ScalarProperty Name="原材料单位" ColumnName="原材料单位" />
@@ -10702,17 +10826,6 @@
                 <ScalarProperty Name="工位类型" ColumnName="工位类型" />
                 <ScalarProperty Name="截止日期" ColumnName="截止日期" />
                 <ScalarProperty Name="员工" ColumnName="员工" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="ChangUserPassword" FunctionName="YLMES_newModel.Store.ChangUserPassword" />
-          <FunctionImportMapping FunctionImportName="MyPost" FunctionName="YLMES_newModel.Store.MyPost">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="YLMES_newModel.MyPost_Result">
-                <ScalarProperty Name="帖子标题" ColumnName="帖子标题" />
-                <ScalarProperty Name="状态" ColumnName="状态" />
-                <ScalarProperty Name="发布时间" ColumnName="发布时间" />
-                <ScalarProperty Name="回答人数" ColumnName="回答人数" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

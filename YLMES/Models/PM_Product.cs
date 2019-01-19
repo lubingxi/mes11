@@ -15,7 +15,7 @@ namespace YLMES.Models
     public partial class PM_Product
     {
         public int ID { get; set; }
-        public int PartID { get; set; }
+        public Nullable<int> PartID { get; set; }
         public Nullable<int> RouteID { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedTime { get; set; }

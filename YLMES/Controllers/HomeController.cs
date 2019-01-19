@@ -521,38 +521,34 @@ namespace YlMES.Controllers
 
         #region 验证登陆
         public ActionResult VaLogin()
-        {
-            string boold = "false";
-            SqlConnection conn = new SqlConnection(connString);
+        {        
             string uName = Request["username"].ToString();
-            string uPwd = Request["password"].ToString();
-            SqlCommand Mycommand = null;
-            SqlDataReader dr = null;
+            string uPwd = Request["password"].ToString();          
             try
-            {
-                conn.Open();
-                string sqlStr = "select * from  [Employee]   where [username]='" + uName + "' and [PWD] ='" + uPwd + "' ";
-                Mycommand = new SqlCommand(sqlStr, conn);
-                dr = Mycommand.ExecuteReader();
-                if (dr.Read())
+            {             
+                using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    Session["name"] = uName;
-                    Session["CCID"] = dr["CCID"].ToString();
-                    boold = "True";
+                    SqlParameter[] parms = new SqlParameter[2];
+                    parms[0] = new SqlParameter("@UserName", uName);
+                    parms[1] = new SqlParameter("@Password", uPwd);
+                    var list = ys.Database.SqlQuery<LoginUserName_Result>("exec LoginUserName  @UserName,@Password", parms).FirstOrDefault();
+                    if (list != null)
+                    {
+                        Session["zhanhao"] = list.UserName;
+                        Session["name"] = list.EmployeeName;
+                        Session["CCID"] = list.CCID;
+                        return Content("true");
+                    }
+                    else
+                    {
+                        return Content("false");
+                    }
                 }
-
-
-
             }
             catch (Exception ex)
             {
-                boold = "false";
-            }
-            finally
-            {
-                conn.Close();
-            }
-            return Content(boold);
+                return Content("false");
+            }                     
         }
         #endregion
 

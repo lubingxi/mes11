@@ -166,15 +166,27 @@
                                             $("#task").append('<li><cite></cite><a href="#">任务分配</a><i hidden="hidden">/TaskManagement/TaskAllocation</i></li>');
                                             break;
                                         case "我的任务":
-                                            if (result.Manager == "覃炯仁") {
+                                            if (result.Manager == "朱小梅") {
                                                 $("#task").append('<li><cite></cite><a href="#">我的任务</a><i hidden="hidden">/TaskManagement/PTask</i></li>');
+                                            }
+                                            else if (result.Manager == "杨心盛") {
+                                                $("#task").append('<li><cite></cite><a href="#">我的任务</a><i hidden="hidden">/TaskManagement/PM_ContractReceivablesMain</i></li>');
                                             }
                                             else {
                                                 $("#task").append('<li><cite></cite><a href="#">我的任务</a><i hidden="hidden">/TaskManagement/MyTask</i></li>');
                                             }
                                             break;
                                         case "已完成的任务":
-                                            $("#task").append('<li><cite></cite><a href="#">已完成的任务</a><i hidden="hidden">/TaskManagement/CompletedTasks</i></li>');
+                                            if (result.Manager == "杨心盛") {
+                                                $("#task").append('<li><cite></cite><a href="#">已完成的任务</a><i hidden="hidden">/TaskManagement/FinishTask</i></li>');
+                                            }
+                                            else if (result.Manager == "朱小梅")
+                                            {
+                                                $("#task").append('<li><cite></cite><a href="#">已完成的任务</a><i hidden="hidden">/TaskManagement/FinishPTask</i></li>');
+                                            }
+                                            else {
+                                                $("#task").append('<li><cite></cite><a href="#">已完成的任务</a><i hidden="hidden">/TaskManagement/CompletedTasks</i></li>');
+                                            }                                          
                                             break;
                                     }
                                     break;
@@ -194,9 +206,9 @@
                                         case "部门人员工作状况":
                                             $('#stati').append('<li><cite></cite><a href="#">部门人员工作状况</a><i hidden="hidden">/Statistical/Department</i></li>');
                                             break;
-                                        case "生产报表":
-                                            $('#stati').append('<li><cite></cite><a href="#">生产报表</a><i hidden="hidden">/Statistical/sssss</i></li>');
-                                            break;
+                                        //case "生产报表":
+                                        //    $('#stati').append('<li><cite></cite><a href="#">生产报表</a><i hidden="hidden">/Statistical/sssss</i></li>');
+                                        //    break;
                                     }
                                     break;
                                 case "技术部":

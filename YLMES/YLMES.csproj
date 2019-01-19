@@ -108,6 +108,9 @@
       <HintPath>..\packages\Microsoft.WindowsAzure.SDK.2.9.0\lib\Microsoft.WindowsAzure.ServiceRuntime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\..\..\NPOI\NPOI.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -518,6 +521,10 @@
     <Content Include="layui\lay\modules\tree.js" />
     <Content Include="layui\lay\modules\upload.js" />
     <Content Include="layui\lay\modules\util.js" />
+    <Content Include="layui_exts\excel.js" />
+    <Content Include="layui_exts\FileSaver.js" />
+    <Content Include="layui_exts\xlsx.js" />
+    <Content Include="layui_exts\xlsx.old.js" />
     <Content Include="lib\datatables\1.10.0\jquery.dataTables.min.js" />
     <Content Include="lib\DD_belatedPNG_0.0.8a-min.js" />
     <Content Include="lib\echarts\3.4.0\echarts.common.min.js" />
@@ -1418,6 +1425,10 @@
     <Content Include="laydate\theme\default\font\iconfont.eot" />
     <Content Include="laydate\theme\default\font\iconfont.ttf" />
     <Content Include="laydate\theme\default\font\iconfont.woff" />
+    <Content Include="Content\Layui-KnifeZ\font\iconfont.eot" />
+    <Content Include="Content\Layui-KnifeZ\font\iconfont.svg" />
+    <Content Include="Content\Layui-KnifeZ\font\iconfont.ttf" />
+    <Content Include="Content\Layui-KnifeZ\font\iconfont.woff" />
     <EntityDeploy Include="Models\Model1.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model1.Designer.cs</LastGenOutput>
@@ -1425,10 +1436,6 @@
     <Content Include="Models\Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
-    <Content Include="Content\Layui-KnifeZ\font\iconfont.eot" />
-    <Content Include="Content\Layui-KnifeZ\font\iconfont.svg" />
-    <Content Include="Content\Layui-KnifeZ\font\iconfont.ttf" />
-    <Content Include="Content\Layui-KnifeZ\font\iconfont.woff" />
     <None Include="Properties\PublishProfiles\YLMESNew.pubxml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="css\bootstrap-table.css" />
@@ -1710,6 +1717,9 @@
     <Compile Include="Models\Category3.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\checkBOMS_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\checkBOM_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1771,6 +1781,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ContractType.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\cuhtml.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\C_Contract.cs">
@@ -1837,6 +1850,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IwantMoreTask_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LoginUserName_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MaterialCategory.cs">
@@ -2413,6 +2429,9 @@
     <Content Include="Views\Discuss\UserIndex.cshtml" />
     <Content Include="Views\Discuss\ChangPwd.cshtml" />
     <Content Include="Views\TaskManagement\BatchUpload.cshtml" />
+    <Content Include="Views\TaskManagement\PM_ContractReceivablesMain.cshtml" />
+    <Content Include="Views\TaskManagement\FinishTask.cshtml" />
+    <Content Include="Views\TaskManagement\FinishPTask.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

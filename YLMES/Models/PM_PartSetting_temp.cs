@@ -31,5 +31,6 @@ namespace YLMES.Models
         public Nullable<int> StatusID { get; set; }
         public Nullable<int> TaskID { get; set; }
         public string Note { get; set; }
+        public string type { get; set; }
     }
 }

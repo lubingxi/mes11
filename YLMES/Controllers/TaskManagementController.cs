@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
@@ -889,36 +891,90 @@ namespace YlMES.Controllers
         //上传操作
         public ActionResult PerformBatchUpload(string taskid, HttpPostedFileBase file)
         {
-            var fileName1 = Path.Combine(Request.MapPath("~/Upload"), Path.GetFileName(file.FileName));
-            file.SaveAs(fileName1);
-            string fname = fileName1.Substring(fileName1.LastIndexOf('\\') + 1);
-            string fnames = fname.Substring(0, fname.LastIndexOf('.'));
-            using(YLMES_newEntities ys = new YLMES_newEntities())
+            int ins = 0;
+            try
             {
-                int i = int.Parse(taskid);
-                SqlParameter[] parm = new SqlParameter[1];
-                parm[0] = new SqlParameter("@TaskID", i);
-                var list = ys.Database.SqlQuery<checkBOM_Result>("exec checkBOM  @TaskID", parm).ToList();
-                foreach(var l in list)
+                var fileName1 = Path.Combine(Request.MapPath("~/Upload"), Path.GetFileName(file.FileName));
+                file.SaveAs(fileName1);
+                string fname = fileName1.Substring(fileName1.LastIndexOf('\\') + 1);
+                string fnames = fname.Substring(0, fname.LastIndexOf('.'));
+                using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    if (!string.IsNullOrEmpty(l.图号))
+                    int i = int.Parse(taskid);
+                    SqlParameter[] parm = new SqlParameter[2];
+                    parm[0] = new SqlParameter("@TaskID", i);
+                    parm[1] = new SqlParameter("@PartNumber", fnames);
+                    var list = ys.Database.SqlQuery<checkBOMS_Result>("exec checkBOMS  @TaskID,@PartNumber", parm).FirstOrDefault();
+                    if (string.IsNullOrEmpty(list.图号))
+                    {
+                        return Content("<script>alter('该部件没有图号不能上传')</script>");
+                    }
+                    else
                     {
                         string name = Session["name"].ToString();
                         SqlParameter[] parms = new SqlParameter[5];
                         parms[0] = new SqlParameter("@Type", "Uploaddrawings");
-                        parms[1] = new SqlParameter("@FigureNumber", l.图号);
+                        parms[1] = new SqlParameter("@FigureNumber", list.图号);
                         parms[2] = new SqlParameter("@FolderName", "Upload");
                         parms[3] = new SqlParameter("@FileName", fname);
                         parms[4] = new SqlParameter("@CreatedBy", name);
                         ys.Database.ExecuteSqlCommand("exec UploadTheDrawings  @Type,@FigureNumber,@FolderName,@FileName,@CreatedBy", parms);
-                        
-                    }                   
-                }                
+                        ins = 0;
+                    }
+                }
             }
-            Dictionary<string, Object> hasmap = new Dictionary<string, Object>();         
-            hasmap.Add("res",0 );
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                ins = 1;
+                Dictionary<string, Object> hasmaps = new Dictionary<string, Object>();
+                hasmaps.Add("code", ins);
+                return Json(hasmaps, JsonRequestBehavior.AllowGet);
+            }
+            Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
+            hasmap.Add("code", 0);
+            return Json(hasmap, JsonRequestBehavior.AllowGet);
+
+
+
+
+        }
+
+        #endregion
+
+        #region 完成收款财务页面
+
+        public ActionResult FinishTask(string name)
+        {
+            return View();
+        }
+
+        public ActionResult Get_Datasd(int page, int limit)
+        {           
+            Dictionary<string, Object> hasmap;
+            using (YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                SqlParameter[] parms = new SqlParameter[7];
+                parms[0] = new SqlParameter("@type", "checksdd");
+                parms[1] = new SqlParameter("@CustomerName", "");
+                parms[2] = new SqlParameter("@ContractNumber", "");
+                parms[3] = new SqlParameter("@StatusID", "");
+                parms[4] = new SqlParameter("@CreatedTimeStart", "");
+                parms[5] = new SqlParameter("@CreatedTimeEnd", "");
+                parms[6] = new SqlParameter("@ReviewStatus", "");
+                var list = ys.Database.SqlQuery<SP_ContractEdit_Result>("exec SP_ContractEdit @type,'',@CustomerName,@ContractNumber,'',1.00,'','','','','','','','',@StatusID,@CreatedTimeStart,@CreatedTimeEnd,'8.88','',@ReviewStatus", parms).ToList();
+                hasmap = new Dictionary<string, Object>();
+                PageList<SP_ContractEdit_Result> pageList = new PageList<SP_ContractEdit_Result>(list, page, limit);
+                int count = list.Count();
+                hasmap.Add("code", 0);
+                hasmap.Add("msg", "");
+                hasmap.Add("count", count);
+                hasmap.Add("data", pageList);
+
+            }
             return Json(hasmap, JsonRequestBehavior.AllowGet);
         }
+
 
         #endregion
 
@@ -1105,7 +1161,7 @@ namespace YlMES.Controllers
                 }
                 using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    var fileName1 = Path.Combine(Request.MapPath("~/BOM"), Path.GetFileName(files.FileName));
+                    var fileName1 = Path.Combine(Request.MapPath("~/BOM"), Path.GetFileName(files.FileName));                 
                     files.SaveAs(fileName1);
                     string strConn;
                     string did = Session["Delete"].ToString();
@@ -1113,16 +1169,16 @@ namespace YlMES.Controllers
                     SqlParameter[] parms = new SqlParameter[1];
                     parms[0] = new SqlParameter("@TaskID", di);
                     string deleteAll = ys.Database.ExecuteSqlCommand("exec DeleteAll @TaskID", parms).ToString();
-                    strConn = "Provider=Microsoft.Ace.OleDb.12.0;" + "data source=" + fileName1 + ";Extended Properties='Excel 12.0; HDR=Yes; IMEX=1'";
+                    strConn = "Provider=Microsoft.Ace.OleDb.12.0;" + "data source=" + fileName1 + ";Extended Properties='Excel 12.0;HDR=No;IMEX=1'";
                     OleDbConnection conn = new OleDbConnection(strConn);
                     conn.Open();
                     OleDbDataAdapter myCommand = new OleDbDataAdapter("select * from [Sheet1$]", strConn);
                     DataSet ds = new DataSet();
                     myCommand.Fill(ds, "ExcelInfo");
                     DataTable tab = ds.Tables["ExcelInfo"].DefaultView.ToTable();
-                    for (int i = 0; i < tab.Rows.Count; i++)
+                    for (int i = 1; i < tab.Rows.Count; i++)
                     {
-                        SqlParameter[] parm = new SqlParameter[9];
+                        SqlParameter[] parm = new SqlParameter[10];
                         parm[0] = new SqlParameter("@Level", tab.Rows[i][0].ToString());
                         parm[1] = new SqlParameter("@FigureNumber", tab.Rows[i][1].ToString());
                         parm[2] = new SqlParameter("@PartNumber", tab.Rows[i][2].ToString());
@@ -1130,12 +1186,10 @@ namespace YlMES.Controllers
                         parm[4] = new SqlParameter("@PartMaterial", tab.Rows[i][4].ToString());
                         parm[5] = new SqlParameter("@QTY", tab.Rows[i][5].ToString());
                         parm[6] = new SqlParameter("@Note", tab.Rows[i][6].ToString());
-                        parm[7] = new SqlParameter("@ListType", "");
-                        parm[8] = new SqlParameter("@TaskID", di);
-                        ys.Database.ExecuteSqlCommand("exec AddMerial  @Level,@FigureNumber,@PartNumber,@PartSpec,@PartMaterial,@QTY,@Note,@ListType,@TaskID", parm);
-
-
-
+                        parm[7] = new SqlParameter("@Type", tab.Rows[i][7].ToString());
+                        parm[8] = new SqlParameter("@ListType", "");
+                        parm[9] = new SqlParameter("@TaskID", di);
+                        ys.Database.ExecuteSqlCommand("exec AddMerial  @Level,@FigureNumber,@PartNumber,@PartSpec,@PartMaterial,@QTY,@Note,@Type,@ListType,@TaskID", parm);
                     }
                     string name = Session["name"].ToString();
                     SqlParameter[] parmd = new SqlParameter[2];
@@ -1869,6 +1923,11 @@ namespace YlMES.Controllers
             {
                 return Content("false");
             }
+        }
+        //我的任务收款
+        public ActionResult PM_ContractReceivablesMain()
+        {
+            return View();
         }
         //新增流程站点
         [ValidateInput(false)]
@@ -2685,6 +2744,64 @@ namespace YlMES.Controllers
         }
         #endregion
 
+        #region 显示收款信息
 
+        public ActionResult Get_Datas(string CName, string CNumber,string strattime, string endtime, string rs, int page, int limit)
+        {
+            if (CName == null)
+            {
+                CName = "";
+            }
+            if (CNumber == null)
+            {
+                CNumber = "";
+            }           
+            if (strattime == null)
+            {
+                strattime = "";
+            }
+            if (endtime == null)
+            {
+                endtime = "";
+            }
+            if (rs == null)
+            {
+                rs = "";
+            }
+            Dictionary<string, Object> hasmap;
+            using (YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                SqlParameter[] parms = new SqlParameter[7];
+                parms[0] = new SqlParameter("@type", "checksd");
+                parms[1] = new SqlParameter("@CustomerName", CName);
+                parms[2] = new SqlParameter("@ContractNumber", CNumber);
+                parms[3] = new SqlParameter("@StatusID", "");
+                parms[4] = new SqlParameter("@CreatedTimeStart", strattime);
+                parms[5] = new SqlParameter("@CreatedTimeEnd", endtime);
+                parms[6] = new SqlParameter("@ReviewStatus", rs);
+                var list = ys.Database.SqlQuery<SP_ContractEdit_Result>("exec SP_ContractEdit @type,'',@CustomerName,@ContractNumber,'',1.00,'','','','','','','','',@StatusID,@CreatedTimeStart,@CreatedTimeEnd,'8.88','',@ReviewStatus", parms).ToList();
+                hasmap = new Dictionary<string, Object>();
+                PageList<SP_ContractEdit_Result> pageList = new PageList<SP_ContractEdit_Result>(list, page, limit);
+                int count = list.Count();
+                hasmap.Add("code", 0);
+                hasmap.Add("msg", "");
+                hasmap.Add("count", count);
+                hasmap.Add("data", pageList);
+
+            }
+            return Json(hasmap, JsonRequestBehavior.AllowGet);
+        }
+
+
+        #endregion
+
+        #region 显示订单处理中心完成页面
+
+        public ActionResult FinishPTask()
+        {
+            return View();
+        }
+
+        #endregion
     }
 }

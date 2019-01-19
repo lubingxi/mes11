@@ -37,6 +37,7 @@ namespace YLMES.Models
         public virtual DbSet<Category2> Category2 { get; set; }
         public virtual DbSet<Category3> Category3 { get; set; }
         public virtual DbSet<ContractType> ContractType { get; set; }
+        public virtual DbSet<cuhtml> cuhtml { get; set; }
         public virtual DbSet<Employee__dele> Employee__dele { get; set; }
         public virtual DbSet<htmltext> htmltext { get; set; }
         public virtual DbSet<PM_ApplierList> PM_ApplierList { get; set; }
@@ -135,6 +136,23 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddchildThing", partNumberParameter, childPartIDParameter, createdByParameter);
         }
     
+        public virtual int Addhtml(string text, string cuid, string type)
+        {
+            var textParameter = text != null ?
+                new ObjectParameter("text", text) :
+                new ObjectParameter("text", typeof(string));
+    
+            var cuidParameter = cuid != null ?
+                new ObjectParameter("cuid", cuid) :
+                new ObjectParameter("cuid", typeof(string));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Addhtml", textParameter, cuidParameter, typeParameter);
+        }
+    
         public virtual int AddLocationType(string createdBy)
         {
             var createdByParameter = createdBy != null ?
@@ -144,7 +162,7 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddLocationType", createdByParameter);
         }
     
-        public virtual int AddMerial(string level, string figureNumber, string partNumber, string partSpec, string partMaterial, string qTY, string note, string listType, Nullable<int> taskID)
+        public virtual int AddMerial(string level, string figureNumber, string partNumber, string partSpec, string partMaterial, string qTY, string note, string type, string listType, Nullable<int> taskID)
         {
             var levelParameter = level != null ?
                 new ObjectParameter("Level", level) :
@@ -174,6 +192,10 @@ namespace YLMES.Models
                 new ObjectParameter("Note", note) :
                 new ObjectParameter("Note", typeof(string));
     
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
             var listTypeParameter = listType != null ?
                 new ObjectParameter("ListType", listType) :
                 new ObjectParameter("ListType", typeof(string));
@@ -182,7 +204,7 @@ namespace YLMES.Models
                 new ObjectParameter("TaskID", taskID) :
                 new ObjectParameter("TaskID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddMerial", levelParameter, figureNumberParameter, partNumberParameter, partSpecParameter, partMaterialParameter, qTYParameter, noteParameter, listTypeParameter, taskIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddMerial", levelParameter, figureNumberParameter, partNumberParameter, partSpecParameter, partMaterialParameter, qTYParameter, noteParameter, typeParameter, listTypeParameter, taskIDParameter);
         }
     
         public virtual int AddPM_MaterialList(string materialID, string figureNumber, string inQTY, string location, string createdBy)
@@ -422,6 +444,23 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AutoCheckDeposit", contractIDParameter);
         }
     
+        public virtual int ChangUserPassword(string userName, string newName, string passWord)
+        {
+            var userNameParameter = userName != null ?
+                new ObjectParameter("UserName", userName) :
+                new ObjectParameter("UserName", typeof(string));
+    
+            var newNameParameter = newName != null ?
+                new ObjectParameter("NewName", newName) :
+                new ObjectParameter("NewName", typeof(string));
+    
+            var passWordParameter = passWord != null ?
+                new ObjectParameter("PassWord", passWord) :
+                new ObjectParameter("PassWord", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ChangUserPassword", userNameParameter, newNameParameter, passWordParameter);
+        }
+    
         public virtual ObjectResult<checkBOM_Result> checkBOM(Nullable<int> taskID)
         {
             var taskIDParameter = taskID.HasValue ?
@@ -429,6 +468,19 @@ namespace YLMES.Models
                 new ObjectParameter("TaskID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<checkBOM_Result>("checkBOM", taskIDParameter);
+        }
+    
+        public virtual ObjectResult<checkBOMS_Result> checkBOMS(Nullable<int> taskID, string partNumber)
+        {
+            var taskIDParameter = taskID.HasValue ?
+                new ObjectParameter("TaskID", taskID) :
+                new ObjectParameter("TaskID", typeof(int));
+    
+            var partNumberParameter = partNumber != null ?
+                new ObjectParameter("PartNumber", partNumber) :
+                new ObjectParameter("PartNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<checkBOMS_Result>("checkBOMS", taskIDParameter, partNumberParameter);
         }
     
         public virtual ObjectResult<Nullable<int>> CheckCategory(string type, string partNumber, string partSpec)
@@ -1321,6 +1373,19 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<IwantMoreTask_Result>("IwantMoreTask");
         }
     
+        public virtual ObjectResult<LoginUserName_Result> LoginUserName(string userName, string password)
+        {
+            var userNameParameter = userName != null ?
+                new ObjectParameter("UserName", userName) :
+                new ObjectParameter("UserName", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("Password", password) :
+                new ObjectParameter("Password", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<LoginUserName_Result>("LoginUserName", userNameParameter, passwordParameter);
+        }
+    
         public virtual ObjectResult<MyCompletedTaskCheck_Result> MyCompletedTaskCheck(string owner, string status, string startTime, string endTime, string projectName, string taskName)
         {
             var ownerParameter = owner != null ?
@@ -1348,6 +1413,19 @@ namespace YLMES.Models
                 new ObjectParameter("TaskName", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MyCompletedTaskCheck_Result>("MyCompletedTaskCheck", ownerParameter, statusParameter, startTimeParameter, endTimeParameter, projectNameParameter, taskNameParameter);
+        }
+    
+        public virtual ObjectResult<MyPost_Result> MyPost(string userName, string substance)
+        {
+            var userNameParameter = userName != null ?
+                new ObjectParameter("UserName", userName) :
+                new ObjectParameter("UserName", typeof(string));
+    
+            var substanceParameter = substance != null ?
+                new ObjectParameter("Substance", substance) :
+                new ObjectParameter("Substance", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MyPost_Result>("MyPost", userNameParameter, substanceParameter);
         }
     
         public virtual ObjectResult<MyTaskCheck_Result> MyTaskCheck(string owner, string status)
@@ -5466,32 +5544,6 @@ namespace YLMES.Models
                 new ObjectParameter("WorkorderNO", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WOdetail_byStation_Result>("WOdetail_byStation", stationTypeParameter, workorderNOParameter);
-        }
-    
-        public virtual int ChangUserPassword(string userName, string passWord)
-        {
-            var userNameParameter = userName != null ?
-                new ObjectParameter("UserName", userName) :
-                new ObjectParameter("UserName", typeof(string));
-    
-            var passWordParameter = passWord != null ?
-                new ObjectParameter("PassWord", passWord) :
-                new ObjectParameter("PassWord", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ChangUserPassword", userNameParameter, passWordParameter);
-        }
-    
-        public virtual ObjectResult<MyPost_Result> MyPost(string userName, string substance)
-        {
-            var userNameParameter = userName != null ?
-                new ObjectParameter("UserName", userName) :
-                new ObjectParameter("UserName", typeof(string));
-    
-            var substanceParameter = substance != null ?
-                new ObjectParameter("Substance", substance) :
-                new ObjectParameter("Substance", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MyPost_Result>("MyPost", userNameParameter, substanceParameter);
         }
     }
 }

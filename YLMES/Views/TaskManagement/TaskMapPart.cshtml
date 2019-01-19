@@ -32,19 +32,7 @@
          if ('@Session["name"]' == "") {
                 window.top.location = '/Home/Login';
             }
-            var url = "/TaskManagement/CompleteProcessSetting?tastid=" + '@ViewData["taskid"]';
-            $(".click").click(function () {
-                $(".tip").fadeIn(200);
-            });
-            $(".tiptop a").click(function () {
-                $(".tip").fadeOut(200);
-            });
-            $(".sure").click(function () {
-                $(".tip").fadeOut(100);
-            });
-            $(".cancel").click(function () {
-                $(".tip").fadeOut(100);
-            });
+            var url = "/TaskManagement/CompleteProcessSetting?tastid=" + '@ViewData["taskid"]';           
             $("#m1").click(function () {
                 window.parent.document.getElementById("rightframe").src = "/TaskManagement/TaskMapPart?TaskID=" + "@Session["task1"]" + "&ProductName=" + "@Session["ProductName1"]" + "&ProductSpec="+"@Session["ProductSpec2"]";
             });
@@ -106,20 +94,20 @@
                    ]]
 
                     });
-                table.on('checkbox(demo)', function (obj) {
-                    console.log(obj)
-                });
-
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
                     if (obj.event === 'xi') {
                         var zj = data.是否组装件;
+                        var parid = data.子件序号;
                         if (zj == 0) {
                             layer.msg('没有流程!');
                         }
                         else {
                             pn = data.子件编码;
-                            var url = '/TaskManagement/EditingProcess?PartNumber=' + pn;
+                            prn = data.工件编码;
+                            spec = data.子件规格;
+                        
+                            var url = '/TaskManagement/EditingProcess?ProductName=' + prn + '&ProductSpec=' + spec + '&PartNumber=' + pn + '&PartId=' + parid;
                             var index = layer.open({
                                 type: 2,
                                 content: url,
