@@ -1008,7 +1008,7 @@ namespace YlMES.Controllers
             return "true";
         }
         //添加明细
-        public string AddDetai(List<string> DetailName, List<string> DetailValue, string id, string ids, int dex)
+        public string AddDetai(Dictionary<string,string> data, string id, string ids)
         {
             StringBuilder sb = new StringBuilder();
             string Type = "add";
@@ -1017,35 +1017,27 @@ namespace YlMES.Controllers
                 id = ids;
                 Type = "up";
             }
-            SqlParameter[] prams = new SqlParameter[DetailName.Count()];
-            Dictionary<string, string> Applier = new Dictionary<string, string>();
-
-            for (int index = 0; index < DetailName.Count(); index++)
-            {
-
-                Applier.Add(DetailName[index].ToString(), DetailValue[index].ToString());
-
-            }
+            SqlParameter[] prams = new SqlParameter[data.Count()];
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                 int j = 0;
-                sb.Append("exec DetailAdd @id=" + dex + ", @CreatedBy='" + Session["name"] + "', @type='" + Type + "'," + "@ContractID=" + id + ",");
-                foreach (var app in Applier)
+                sb.Append("exec [DetailAdd] @CreatedBy='" + Session["name"] + "', @type='" + Type + "'," + "@ContractID=" + id + ",");
+                foreach (var app in data)
                 {
-                    prams[j] = new SqlParameter("@" + app.Key + "1", app.Value);
+                    prams[j] = new SqlParameter("@" + app.Key,app.Value);
 
-
-                    if ((j + 1) == DetailName.Count())
+                    if ((j + 1) == data.Count())
                     {
-                        sb.Append("@" + app.Key + "=" + "@" + app.Key + "1");
+                        sb.Append("@" + app.Key + "=" + "@" + app.Key);
                     }
                     else
                     {
-
-                        sb.Append("@" + app.Key + "=" + "@" + app.Key + "1" + ",");
+                        sb.Append("@" + app.Key + "=" + "@" + app.Key+ ",");
                         j++;
                     }
                 }
+
+
 
                 ys.Database.ExecuteSqlCommand(sb.ToString(), prams);
             }
@@ -1086,7 +1078,7 @@ namespace YlMES.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
         //添加或修改合同
-        public string AddApplierList(List<string> ApplierName, List<string> ApplierNameValue, string id)
+        public string AddApplierList(List<string> ApplierName, List<string> ApplierNameValue, string id,string ContractNumber)
         {
             StringBuilder sb = new StringBuilder();
             string Type = "add";
@@ -1106,7 +1098,7 @@ namespace YlMES.Controllers
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                 int j = 0;
-                sb.Append("exec SP_ContractEdit @StatusID='销售部新建销售合同', @CreatedBy='" + Session["name"] + "', @type='" + Type + "'," + "@ID=" + id.ToString() + ",");
+                sb.Append("exec SP_ContractEdit @StatusID='销售部新建销售合同', @CreatedBy='" + Session["name"] + "', @type='" + Type + "'," + "@ID=" + id.ToString() + ","+ "@ContractNumber="+ ContractNumber+",");
                 foreach (var app in Applier)
                 {
                     prams[j] = new SqlParameter("@" + app.Key + "1", app.Value);
@@ -1123,7 +1115,6 @@ namespace YlMES.Controllers
                         j++;
                     }
                 }
-
                 ys.Database.ExecuteSqlCommand(sb.ToString(), prams);
             }
 
@@ -1277,7 +1268,6 @@ namespace YlMES.Controllers
                 foreach (var t in list1)
                 {
                     var itemselectLanguage = new SelectListItem { Value = t.UserName, Text = t.UserName };
-
                     its.Add(itemselectLanguage);
                 }
                 ViewData["responsible"] = its;
@@ -1331,8 +1321,7 @@ namespace YlMES.Controllers
             {
                 Console.WriteLine(ex.Message);
                 return Content("false");
-            }
-          
+            }          
         }
         //修改工位信息
         public ActionResult EditStationDetail(string id,string pcs,string res)

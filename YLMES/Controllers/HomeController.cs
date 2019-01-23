@@ -20,6 +20,10 @@ namespace YlMES.Controllers
         {
             return View();
         }
+        //临时抽奖
+        public ActionResult c() {
+            return View();
+        }
         public ActionResult Loading(string src)
         {
             ViewData["src"] = src;

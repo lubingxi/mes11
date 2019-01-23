@@ -34,11 +34,11 @@ table{
      
     }
 
-    table:nth-child(5) input {
+    table:nth-child(7) input {
         width: 350px;
        
     }
-    table:nth-child(3) input {
+    table:nth-child(5) input {
         width: 250px;
         text-align: center;
     }
@@ -51,12 +51,12 @@ li input {
 span {
  display:inline-block;
 }
-table:nth-child(5) {
+table:nth-child(7) {
     width: 1050px;
     
     line-height: 30px;
 }
-    table:nth-child(5) label {
+    table:nth-child(7) label {
         width: 150px;
        
     }
@@ -75,7 +75,7 @@ table:nth-child(1) {
     table:nth-child(3) td:nth-child(2){
         width: 225px;
     }*/
-    table:nth-child(3) {
+    table:nth-child(5) {
         width: 1050px;
         text-align: center;
         line-height: 30px;
