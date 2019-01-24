@@ -19,9 +19,9 @@ namespace YLMES.Models
         public string 客户产品名称 { get; set; }
         public string 产品规格 { get; set; }
         public string 单位 { get; set; }
-        public Nullable<decimal> 合同数量 { get; set; }
+        public string 合同数量 { get; set; }
         public Nullable<int> InWH { get; set; }
-        public Nullable<decimal> 已发货数量 { get; set; }
+        public string 已发货数量 { get; set; }
         public Nullable<int> QTY { get; set; }
         public string ShipNoticeNumber { get; set; }
         public string 创建人 { get; set; }

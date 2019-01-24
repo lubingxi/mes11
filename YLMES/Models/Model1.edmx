@@ -4,7 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="YLMES_newModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="YLMES_newModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--生成过程中发现错误:
+警告 6013: 表/视图“YLMES_new.dbo.a1”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
+        <EntityType Name="a1">
+          <Property Name="projectid" Type="int" />
+          <Property Name="负责人" Type="varchar" MaxLength="50" />
+          <Property Name="是否逾期" Type="varchar" MaxLength="20" />
+        </EntityType>-->
         <!--生成过程中发现错误:
 警告 6002: 表/视图“YLMES_new.dbo.ac”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="ac">
@@ -17,6 +24,30 @@
           <Property Name="是否逾期" Type="varchar" MaxLength="6" Nullable="false" />
           <Property Name="数量" Type="int" />
         </EntityType>
+        <!--生成过程中发现错误:
+警告 6013: 表/视图“YLMES_new.dbo.b”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
+        <EntityType Name="b">
+          <Property Name="开始时间" Type="datetime" />
+          <Property Name="结束时间" Type="datetime" />
+          <Property Name="负责人" Type="varchar" MaxLength="50" />
+          <Property Name="任务个数" Type="int" />
+          <Property Name="分数" Type="float" />
+          <Property Name="奖金" Type="float" />
+        </EntityType>-->
+        <!--生成过程中发现错误:
+警告 6013: 表/视图“YLMES_new.dbo.bb”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
+        <EntityType Name="bb">
+          <Property Name="负责人" Type="varchar" MaxLength="50" />
+          <Property Name="任务个数" Type="int" />
+          <Property Name="分数" Type="float" />
+        </EntityType>-->
+        <!--生成过程中发现错误:
+警告 6013: 表/视图“YLMES_new.dbo.bbbb”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
+        <EntityType Name="bbbb">
+          <Property Name="负责人" Type="varchar" MaxLength="50" />
+          <Property Name="任务个数" Type="int" />
+          <Property Name="分数" Type="float" />
+        </EntityType>-->
         <EntityType Name="C_Contract">
           <Key>
             <PropertyRef Name="ContractNumber" />
@@ -136,13 +167,13 @@
           <Property Name="P_RollerTransferMode" Type="varchar" MaxLength="50" />
           <Property Name="P_MainBeaMaterial" Type="varchar" MaxLength="50" />
           <Property Name="Units" Type="varchar" MaxLength="10" />
-          <Property Name="Count" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="Count" Type="varchar" MaxLength="10" />
           <Property Name="DueDay" Type="date" />
-          <Property Name="DeliveryedCount" Type="numeric" Precision="18" Scale="2" />
-          <Property Name="NewDeliveryedCount" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="DeliveryedCount" Type="varchar" MaxLength="10" />
+          <Property Name="NewDeliveryedCount" Type="varchar" MaxLength="10" />
           <Property Name="DeliveryDate" Type="date" />
-          <Property Name="InstalledQuantity" Type="numeric" Precision="18" Scale="2" />
-          <Property Name="newInstalledQuantity" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="InstalledQuantity" Type="varchar" MaxLength="10" />
+          <Property Name="newInstalledQuantity" Type="varchar" MaxLength="10" />
           <Property Name="CompletionDate" Type="date" />
           <Property Name="Acceptance" Type="varchar" MaxLength="10" />
           <Property Name="AcceptanceDate" Type="date" />
@@ -190,6 +221,13 @@
           <Property Name="html" Type="varchar(max)" Nullable="false" />
           <Property Name="cuid" Type="nchar" MaxLength="10" />
         </EntityType>
+        <!--生成过程中发现错误:
+警告 6013: 表/视图“YLMES_new.dbo.dddd”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
+        <EntityType Name="dddd">
+          <Property Name="负责人" Type="varchar" MaxLength="50" />
+          <Property Name="任务个数" Type="int" />
+          <Property Name="分数" Type="float" />
+        </EntityType>-->
         <!--生成过程中发现错误:
 警告 6002: 表/视图“YLMES_new.dbo.DeletePM_WorkDetailHistory”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="DeletePM_WorkDetailHistory">
@@ -495,7 +533,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Substance" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Substance" Type="varchar(max)" Nullable="false" />
           <Property Name="Avatar" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Picture" Type="varchar" MaxLength="50" />
           <Property Name="Title" Type="varchar" MaxLength="20" Nullable="false" />
@@ -513,7 +551,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Comments" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Comments" Type="varchar(max)" Nullable="false" />
           <Property Name="CommentsPicture" Type="varchar" MaxLength="50" />
           <Property Name="ForunID" Type="int" Nullable="false" />
           <Property Name="CommentsTime" Type="date" Nullable="false" />
@@ -902,6 +940,16 @@
           <Property Name="RouteName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Status" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
+        <EntityType Name="PM_Scanrecord">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="details" Type="varchar" MaxLength="50" />
+          <Property Name="operation" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Employee" Type="varchar" MaxLength="20" />
+          <Property Name="scantrim" Type="datetime" />
+        </EntityType>
         <EntityType Name="PM_ScoreSetting">
           <Key>
             <PropertyRef Name="ID" />
@@ -1189,6 +1237,27 @@
           <Property Name="Ratio" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Status" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
+        <EntityType Name="PM_TemporaryPurchaseMaterialList">
+          <Key>
+            <PropertyRef Name="CreatedTime" />
+          </Key>
+          <Property Name="ID" Type="int" />
+          <Property Name="TaskID" Type="int" />
+          <Property Name="MaterialID" Type="int" />
+          <Property Name="QTYofPCS" Type="int" />
+          <Property Name="ApplyPurchasePCS" Type="int" />
+          <Property Name="ApplyPurchaseQTY" Type="int" />
+          <Property Name="ActPurchasePCS" Type="int" />
+          <Property Name="ActPurchaseQTY" Type="int" />
+          <Property Name="Units" Type="varchar" MaxLength="10" />
+          <Property Name="UnitPrice" Type="float" />
+          <Property Name="TotalPrice" Type="float" />
+          <Property Name="POID" Type="int" />
+          <Property Name="Note" Type="varchar" MaxLength="100" />
+          <Property Name="ListType" Type="varchar" MaxLength="30" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="30" />
+          <Property Name="CreatedTime" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
         <EntityType Name="PM_UserAccessSetup">
           <Key>
             <PropertyRef Name="UserName" />
@@ -1354,6 +1423,22 @@
           <Property Name="Status" Type="varchar" MaxLength="10" />
         </EntityType>
         <!--生成过程中发现错误:
+警告 6013: 表/视图“YLMES_new.dbo.temp”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
+        <EntityType Name="temp">
+          <Property Name="aa" Type="varchar(max)" />
+          <Property Name="bb" Type="varchar(max)" />
+          <Property Name="cc" Type="varchar(max)" />
+          <Property Name="dd" Type="varchar(max)" />
+          <Property Name="ee" Type="varchar(max)" />
+          <Property Name="ff" Type="varchar(max)" />
+          <Property Name="gg" Type="varchar(max)" />
+          <Property Name="hh" Type="varchar(max)" />
+          <Property Name="ii" Type="varchar(max)" />
+          <Property Name="jj" Type="varchar(max)" />
+          <Property Name="kk" Type="varchar(max)" />
+          <Property Name="ll" Type="varchar(max)" />
+        </EntityType>-->
+        <!--生成过程中发现错误:
 警告 6002: 表/视图“YLMES_new.dbo.temp1121”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="temp1121">
           <Key>
@@ -1377,6 +1462,16 @@
           <Property Name="合同状态" Type="varchar" MaxLength="6" Nullable="false" />
         </EntityType>
         <!--生成过程中发现错误:
+警告 6013: 表/视图“YLMES_new.dbo.templast”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
+        <EntityType Name="templast">
+          <Property Name="开始时间" Type="datetime" />
+          <Property Name="结束时间" Type="datetime" />
+          <Property Name="负责人" Type="varchar" MaxLength="50" />
+          <Property Name="任务个数" Type="int" />
+          <Property Name="分数" Type="float" />
+          <Property Name="奖金" Type="float" />
+        </EntityType>-->
+        <!--生成过程中发现错误:
 警告 6002: 表/视图“YLMES_new.dbo.toji”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="toji">
           <Key>
@@ -1395,6 +1490,12 @@
           <Property Name="还剩小时" Type="float" />
           <Property Name="是否逾期" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
+        <!--生成过程中发现错误:
+警告 6013: 表/视图“YLMES_new.dbo.ttt”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
+        <EntityType Name="ttt">
+          <Property Name="ID" Type="int" />
+          <Property Name="aa" Type="nchar" MaxLength="10" />
+        </EntityType>-->
         <EntityType Name="tttb">
           <Key>
             <PropertyRef Name="ID" />
@@ -1702,20 +1803,21 @@
           <Parameter Name="Type" Type="varchar" Mode="In" />
           <Parameter Name="id" Type="int" Mode="In" />
           <Parameter Name="CommentsID" Type="int" Mode="In" />
-          <Parameter Name="Comments" Type="varchar" Mode="In" />
+          <Parameter Name="Comments" Type="varchar(max)" Mode="In" />
           <Parameter Name="CommentsPicture" Type="varchar" Mode="In" />
           <Parameter Name="Employee" Type="varchar" Mode="In" />
         </Function>
         <Function Name="Forum_Newest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Type" Type="varchar" Mode="In" />
           <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="Status" Type="varchar" Mode="In" />
         </Function>
         <Function Name="Forum_Postings" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Type" Type="varchar" Mode="In" />
           <Parameter Name="id" Type="int" Mode="In" />
           <Parameter Name="Columns" Type="varchar" Mode="In" />
           <Parameter Name="Title" Type="varchar" Mode="In" />
-          <Parameter Name="Substance" Type="varchar" Mode="In" />
+          <Parameter Name="Substance" Type="varchar(max)" Mode="In" />
           <Parameter Name="Picture" Type="varchar" Mode="In" />
           <Parameter Name="Employee" Type="varchar" Mode="In" />
         </Function>
@@ -1822,9 +1924,7 @@
         </Function>
         <Function Name="PM_AddPurlist" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaskID" Type="int" Mode="In" />
-          <Parameter Name="Material" Type="varchar" Mode="In" />
-          <Parameter Name="PartSpec" Type="varchar" Mode="In" />
-          <Parameter Name="PartMaterial" Type="varchar" Mode="In" />
+          <Parameter Name="MaterialID" Type="int" Mode="In" />
           <Parameter Name="ApplyPCS" Type="int" Mode="In" />
           <Parameter Name="qtyofPCS" Type="int" Mode="In" />
           <Parameter Name="ListType" Type="varchar" Mode="In" />
@@ -1980,6 +2080,7 @@
         </Function>
         <Function Name="PMCAskPurchase" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaskID" Type="int" Mode="In" />
+          <Parameter Name="MaterialID" Type="int" Mode="In" />
         </Function>
         <Function Name="PMCAssignConfirm" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaskID" Type="int" Mode="In" />
@@ -2725,7 +2826,7 @@
           <Parameter Name="Depart" Type="varchar" Mode="In" />
         </Function>
         <Function Name="StrToTable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="str" Type="varchar" Mode="In" />
+          <Parameter Name="str" Type="varchar(max)" Mode="In" />
           <ReturnType>
             <CollectionType>
               <RowType>
@@ -2836,6 +2937,7 @@
           <Parameter Name="ActPCS" Type="int" Mode="In" />
           <Parameter Name="price" Type="int" Mode="In" />
           <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="ListType" Type="varchar" Mode="In" />
         </Function>
         <Function Name="updateQualifiedCompleted" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaskID" Type="int" Mode="In" />
@@ -2954,8 +3056,10 @@
           <EntitySet Name="PM_ProductStationType" EntityType="Self.PM_ProductStationType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_PurchaseMaterialList_temp" EntityType="Self.PM_PurchaseMaterialList_temp" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_Route" EntityType="Self.PM_Route" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PM_Scanrecord" EntityType="Self.PM_Scanrecord" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_ScoreSetting" EntityType="Self.PM_ScoreSetting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_TaskRoute" EntityType="Self.PM_TaskRoute" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PM_TemporaryPurchaseMaterialList" EntityType="Self.PM_TemporaryPurchaseMaterialList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_UserAccessSetup" EntityType="Self.PM_UserAccessSetup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_WH" EntityType="Self.PM_WH" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_WHArea" EntityType="Self.PM_WHArea" Schema="dbo" store:Type="Tables" />
@@ -3468,7 +3572,8 @@
     FROM [dbo].[toji] AS [toji]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="YLMES_newModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -3594,13 +3699,13 @@
           <Property Name="P_RollerTransferMode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="P_MainBeaMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Units" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Count" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Count" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="DueDay" Type="DateTime" Precision="0" />
-          <Property Name="DeliveryedCount" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="NewDeliveryedCount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="DeliveryedCount" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="NewDeliveryedCount" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="DeliveryDate" Type="DateTime" Precision="0" />
-          <Property Name="InstalledQuantity" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="newInstalledQuantity" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="InstalledQuantity" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="newInstalledQuantity" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="CompletionDate" Type="DateTime" Precision="0" />
           <Property Name="Acceptance" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="AcceptanceDate" Type="DateTime" Precision="0" />
@@ -3805,7 +3910,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Substance" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Substance" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Avatar" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Picture" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Title" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
@@ -3823,7 +3928,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Comments" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CommentsPicture" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ForunID" Type="Int32" Nullable="false" />
           <Property Name="CommentsTime" Type="DateTime" Nullable="false" Precision="0" />
@@ -4081,6 +4186,16 @@
           <Property Name="RouteName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
+        <EntityType Name="PM_Scanrecord">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="details" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="operation" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Employee" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="scantrim" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="PM_ScoreSetting">
           <Key>
             <PropertyRef Name="ID" />
@@ -4107,6 +4222,27 @@
           <Property Name="UpdatedBy" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="UpdatedTime" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PM_TemporaryPurchaseMaterialList">
+          <Key>
+            <PropertyRef Name="CreatedTime" />
+          </Key>
+          <Property Name="ID" Type="Int32" />
+          <Property Name="TaskID" Type="Int32" />
+          <Property Name="MaterialID" Type="Int32" />
+          <Property Name="QTYofPCS" Type="Int32" />
+          <Property Name="ApplyPurchasePCS" Type="Int32" />
+          <Property Name="ApplyPurchaseQTY" Type="Int32" />
+          <Property Name="ActPurchasePCS" Type="Int32" />
+          <Property Name="ActPurchaseQTY" Type="Int32" />
+          <Property Name="Units" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="UnitPrice" Type="Double" />
+          <Property Name="TotalPrice" Type="Double" />
+          <Property Name="POID" Type="Int32" />
+          <Property Name="Note" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ListType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedBy" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedTime" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
         <EntityType Name="PM_UserAccessSetup">
           <Key>
@@ -4854,8 +4990,10 @@
           <EntitySet Name="PM_ProductStationType" EntityType="Self.PM_ProductStationType" />
           <EntitySet Name="PM_PurchaseMaterialList_temp" EntityType="Self.PM_PurchaseMaterialList_temp" />
           <EntitySet Name="PM_Route" EntityType="Self.PM_Route" />
+          <EntitySet Name="PM_Scanrecord" EntityType="Self.PM_Scanrecord" />
           <EntitySet Name="PM_ScoreSetting" EntityType="Self.PM_ScoreSetting" />
           <EntitySet Name="PM_TaskRoute" EntityType="Self.PM_TaskRoute" />
+          <EntitySet Name="PM_TemporaryPurchaseMaterialList" EntityType="Self.PM_TemporaryPurchaseMaterialList" />
           <EntitySet Name="PM_UserAccessSetup" EntityType="Self.PM_UserAccessSetup" />
           <EntitySet Name="PM_WH" EntityType="Self.PM_WH" />
           <EntitySet Name="PM_WHArea" EntityType="Self.PM_WHArea" />
@@ -4897,7 +5035,7 @@
           <EntitySet Name="temp1121" EntityType="Self.temp1121" />
           <EntitySet Name="toji" EntityType="Self.toji" />
           <FunctionImport Name="StrToTable" IsComposable="true" ReturnType="Collection(YLMES_newModel.StrToTable_Result)">
-          <Parameter Name="str" Mode="In" Type="String" />
+            <Parameter Name="str" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AddchildThing">
             <Parameter Name="PartNumber" Mode="In" Type="String" />
@@ -4910,7 +5048,7 @@
             <Parameter Name="type" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AddLocationType">
-          <Parameter Name="CreatedBy" Mode="In" Type="String" />
+            <Parameter Name="CreatedBy" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AddMerial">
             <Parameter Name="Level" Mode="In" Type="String" />
@@ -4965,7 +5103,7 @@
             <Parameter Name="name" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ApplierList_getName" ReturnType="Collection(YLMES_newModel.ApplierList_getName_Result)">
-          <Parameter Name="CategoryID" Mode="In" Type="Int32" />
+            <Parameter Name="CategoryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ApplierList_Supplier" ReturnType="Collection(YLMES_newModel.ApplierList_Supplier_Result)">
             <Parameter Name="Type" Mode="In" Type="String" />
@@ -4988,7 +5126,7 @@
             <Parameter Name="Status" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AutoCheckDeposit">
-          <Parameter Name="ContractID" Mode="In" Type="Int32" />
+            <Parameter Name="ContractID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ChangUserPassword">
             <Parameter Name="UserName" Mode="In" Type="String" />
@@ -4996,7 +5134,7 @@
             <Parameter Name="PassWord" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="checkBOM" ReturnType="Collection(YLMES_newModel.checkBOM_Result)">
-          <Parameter Name="TaskID" Mode="In" Type="Int32" />
+            <Parameter Name="TaskID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="checkBOMS" ReturnType="Collection(YLMES_newModel.checkBOMS_Result)">
             <Parameter Name="TaskID" Mode="In" Type="Int32" />
@@ -5018,7 +5156,7 @@
             <Parameter Name="CreatedTime" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CheckDaTypeChangeXiao" ReturnType="Collection(YLMES_newModel.CheckDaTypeChangeXiao_Result)">
-          <Parameter Name="Da" Mode="In" Type="String" />
+            <Parameter Name="Da" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CheckdCategory" ReturnType="Collection(YLMES_newModel.CheckdCategory_Result)">
             <Parameter Name="Type" Mode="In" Type="String" />
@@ -5064,7 +5202,7 @@
             <Parameter Name="WorkSecond2PerPCS" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CheckRouteName" ReturnType="Collection(YLMES_newModel.CheckRouteName_Result)">
-          <Parameter Name="PartNumber" Mode="In" Type="String" />
+            <Parameter Name="PartNumber" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CheckSales" ReturnType="Collection(YLMES_newModel.CheckSales_Result)">
             <Parameter Name="ID" Mode="In" Type="String" />
@@ -5075,7 +5213,7 @@
             <Parameter Name="StatusID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CheckStationType" ReturnType="Collection(YLMES_newModel.CheckStationType_Result)">
-          <Parameter Name="StationType" Mode="In" Type="String" />
+            <Parameter Name="StationType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CheckStorage" ReturnType="Collection(YLMES_newModel.CheckStorage_Result)">
             <Parameter Name="WHArea" Mode="In" Type="String" />
@@ -5096,10 +5234,10 @@
             <Parameter Name="PartNumber" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CheckTaskProgress" ReturnType="Collection(YLMES_newModel.CheckTaskProgress_Result)">
-          <Parameter Name="Taskid" Mode="In" Type="Int32" />
+            <Parameter Name="Taskid" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="checkUserName" ReturnType="Collection(Int32)">
-          <Parameter Name="user" Mode="In" Type="String" />
+            <Parameter Name="user" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CheckWarehouse" ReturnType="Collection(YLMES_newModel.CheckWarehouse_Result)">
             <Parameter Name="Type" Mode="In" Type="String" />
@@ -5115,7 +5253,7 @@
             <Parameter Name="createdBy" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="DeleteAll">
-          <Parameter Name="TaskID" Mode="In" Type="Int32" />
+            <Parameter Name="TaskID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteBOM">
             <Parameter Name="PartNumber" Mode="In" Type="String" />
@@ -5126,7 +5264,7 @@
             <Parameter Name="StationType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="DeletePM_WorkDetailHistorys">
-          <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteProcess">
             <Parameter Name="ID" Mode="In" Type="Int32" />
@@ -5148,7 +5286,7 @@
             <Parameter Name="MSG" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DesignDistribution" ReturnType="Collection(YLMES_newModel.DesignDistribution_Result)">
-          <Parameter Name="ProjectName" Mode="In" Type="String" />
+            <Parameter Name="ProjectName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="DetailAdd">
             <Parameter Name="type" Mode="In" Type="String" />
@@ -5162,7 +5300,7 @@
             <Parameter Name="id" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="EditAccessSetup" ReturnType="Collection(YLMES_newModel.EditAccessSetup_Result)">
-          <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="EditLocationType">
             <Parameter Name="StationTypeID" Mode="In" Type="Int32" />
@@ -5205,6 +5343,7 @@
           <FunctionImport Name="Forum_Newest" ReturnType="Collection(YLMES_newModel.Forum_Newest_Result)">
             <Parameter Name="Type" Mode="In" Type="String" />
             <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="Status" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Forum_Postings" ReturnType="Collection(YLMES_newModel.Forum_Postings_Result)">
             <Parameter Name="Type" Mode="In" Type="String" />
@@ -5221,7 +5360,7 @@
             <Parameter Name="ListType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GeneratPO">
-          <Parameter Name="IDs" Mode="In" Type="String" />
+            <Parameter Name="IDs" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="getPackjobs" ReturnType="Collection(YLMES_newModel.getPackjobs_Result)">
             <Parameter Name="TYPE" Mode="In" Type="String" />
@@ -5232,7 +5371,7 @@
             <Parameter Name="PONO" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Install_check" ReturnType="Collection(YLMES_newModel.Install_check_Result)">
-          <Parameter Name="ContractID" Mode="In" Type="Int32" />
+            <Parameter Name="ContractID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Install_update">
             <Parameter Name="ContractID" Mode="In" Type="Int32" />
@@ -5318,9 +5457,7 @@
           </FunctionImport>
           <FunctionImport Name="PM_AddPurlist">
             <Parameter Name="TaskID" Mode="In" Type="Int32" />
-            <Parameter Name="Material" Mode="In" Type="String" />
-            <Parameter Name="PartSpec" Mode="In" Type="String" />
-            <Parameter Name="PartMaterial" Mode="In" Type="String" />
+            <Parameter Name="MaterialID" Mode="In" Type="Int32" />
             <Parameter Name="ApplyPCS" Mode="In" Type="Int32" />
             <Parameter Name="qtyofPCS" Mode="In" Type="Int32" />
             <Parameter Name="ListType" Mode="In" Type="String" />
@@ -5475,13 +5612,14 @@
             <Parameter Name="WHGoodsAllocationID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PMCAskPurchase">
-          <Parameter Name="TaskID" Mode="In" Type="Int32" />
+            <Parameter Name="TaskID" Mode="In" Type="Int32" />
+            <Parameter Name="MaterialID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PMCAssignConfirm">
-          <Parameter Name="TaskID" Mode="In" Type="Int32" />
+            <Parameter Name="TaskID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PMCCompleted">
-          <Parameter Name="TaskID" Mode="In" Type="Int32" />
+            <Parameter Name="TaskID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="POcheck" ReturnType="Collection(YLMES_newModel.POcheck_Result)">
             <Parameter Name="type" Mode="In" Type="String" />
@@ -5489,10 +5627,10 @@
             <Parameter Name="Taskid" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PONO" ReturnType="Collection(String)">
-          <Parameter Name="Status" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="PoNoCheck" ReturnType="Collection(YLMES_newModel.PoNoCheck_Result)">
-          <Parameter Name="Taskid" Mode="In" Type="Int32" />
+            <Parameter Name="Taskid" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ProcessBOM" ReturnType="Collection(YLMES_newModel.ProcessBOM_Result)">
             <Parameter Name="PartNumber" Mode="In" Type="String" />
@@ -5546,7 +5684,7 @@
             <Parameter Name="DueData" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ProductStartConfirm">
-          <Parameter Name="TaskID" Mode="In" Type="Int32" />
+            <Parameter Name="TaskID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Purchase_MaterialList" ReturnType="Collection(YLMES_newModel.Purchase_MaterialList_Result)">
             <Parameter Name="Type" Mode="In" Type="String" />
@@ -5565,7 +5703,7 @@
             <Parameter Name="id" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="PurchaseApplyConfirm">
-          <Parameter Name="TaskID" Mode="In" Type="Int32" />
+            <Parameter Name="TaskID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PurchaseCo" ReturnType="Collection(YLMES_newModel.PurchaseCo_Result)">
             <Parameter Name="ContractTypeId" Mode="In" Type="String" />
@@ -5594,7 +5732,7 @@
             <Parameter Name="PONO" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ReceivablesHistorycheck" ReturnType="Collection(YLMES_newModel.ReceivablesHistorycheck_Result)">
-          <Parameter Name="ContractID" Mode="In" Type="Int32" />
+            <Parameter Name="ContractID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SaveRoute" ReturnType="Collection(YLMES_newModel.SaveRoute_Result)">
             <Parameter Name="RouteSaveAS" Mode="In" Type="String" />
@@ -5602,7 +5740,7 @@
             <Parameter Name="ID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Scheduling">
-          <Parameter Name="TaskID" Mode="In" Type="Int32" />
+            <Parameter Name="TaskID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ADD_Package" ReturnType="Collection(String)">
             <Parameter Name="TYPE" Mode="In" Type="String" />
@@ -5728,10 +5866,10 @@
             <Parameter Name="DueDay" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_Contract_ProductDetailNotice_Check" ReturnType="Collection(YLMES_newModel.SP_Contract_ProductDetailNotice_Check_Result)">
-          <Parameter Name="ContractID" Mode="In" Type="String" />
+            <Parameter Name="ContractID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_Contract_ProductDetailNotice_Delete">
-          <Parameter Name="ContractID" Mode="In" Type="String" />
+            <Parameter Name="ContractID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_Contract_ProductDetailNotice_SendNotice" ReturnType="Collection(String)">
             <Parameter Name="ContractID" Mode="In" Type="String" />
@@ -5844,7 +5982,7 @@
             <Parameter Name="ProductOrderStatus" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ContractEdit_checkContractDetail" ReturnType="Collection(YLMES_newModel.SP_ContractEdit_checkContractDetail_Result)">
-          <Parameter Name="ID" Mode="In" Type="String" />
+            <Parameter Name="ID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ContractEdit2" />
           <FunctionImport Name="SP_ContractEdit3" ReturnType="Collection(YLMES_newModel.SP_ContractEdit3_Result)" />
@@ -6182,7 +6320,7 @@
             <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="StationType" ReturnType="Collection(YLMES_newModel.StationType_Result)">
-          <Parameter Name="StationType" Mode="In" Type="String" />
+            <Parameter Name="StationType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Statistics_Department">
             <Parameter Name="type" Mode="In" Type="String" />
@@ -6196,7 +6334,7 @@
             <Parameter Name="EndTime" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="Statistics_Scroechart" ReturnType="Collection(YLMES_newModel.Statistics_Scroechart_Result)">
-          <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Name" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Statistics_Scroelist" ReturnType="Collection(YLMES_newModel.Statistics_Scroelist_Result)">
             <Parameter Name="owner" Mode="In" Type="String" />
@@ -6214,7 +6352,7 @@
             <Parameter Name="Overduday" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Statisticschar_Departmentlist" ReturnType="Collection(YLMES_newModel.Statisticschar_Departmentlist_Result)">
-          <Parameter Name="department" Mode="In" Type="String" />
+            <Parameter Name="department" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="StatisticsDepartmentlist" ReturnType="Collection(YLMES_newModel.StatisticsDepartmentlist_Result)">
             <Parameter Name="owner" Mode="In" Type="String" />
@@ -6231,17 +6369,17 @@
             <Parameter Name="ApplierProductType" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="TaskCheck" ReturnType="Collection(YLMES_newModel.TaskCheck_Result)">
-          <Parameter Name="TaskID" Mode="In" Type="Int32" />
+            <Parameter Name="TaskID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="TaskForChangeQualifiedOwner">
             <Parameter Name="Owner" Mode="In" Type="String" />
             <Parameter Name="TaskID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="TaskMapingPartCheck" ReturnType="Collection(YLMES_newModel.TaskMapingPartCheck_Result)">
-          <Parameter Name="ProjectName" Mode="In" Type="String" />
+            <Parameter Name="ProjectName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="TaskMapingWOCheck" ReturnType="Collection(YLMES_newModel.TaskMapingWOCheck_Result)">
-          <Parameter Name="TaskID" Mode="In" Type="Int32" />
+            <Parameter Name="TaskID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="UpdateBOM">
             <Parameter Name="id" Mode="In" Type="Int32" />
@@ -6249,10 +6387,10 @@
             <Parameter Name="unit" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="UpdateCompletedMachineDesign">
-          <Parameter Name="TaskID" Mode="In" Type="Int32" />
+            <Parameter Name="TaskID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="updateIssueCompleted">
-          <Parameter Name="TaskID" Mode="In" Type="Int32" />
+            <Parameter Name="TaskID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="updatelevel2Task">
             <Parameter Name="TaskID" Mode="In" Type="Int32" />
@@ -6284,7 +6422,7 @@
             <Parameter Name="Type" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="UpdatePEcompletedTask">
-          <Parameter Name="TaskID" Mode="In" Type="Int32" />
+            <Parameter Name="TaskID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="UpdatePmc">
             <Parameter Name="type" Mode="In" Type="String" />
@@ -6298,7 +6436,7 @@
             <Parameter Name="ListType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="UpdatePMCCompleted">
-          <Parameter Name="TaskID" Mode="In" Type="Int32" />
+            <Parameter Name="TaskID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="UpdateProcess">
             <Parameter Name="StationType" Mode="In" Type="String" />
@@ -6322,6 +6460,7 @@
             <Parameter Name="ActPCS" Mode="In" Type="Int32" />
             <Parameter Name="price" Mode="In" Type="Int32" />
             <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="ListType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="updateQualifiedCompleted">
             <Parameter Name="TaskID" Mode="In" Type="Int32" />
@@ -6384,7 +6523,7 @@
             <Parameter Name="CreatedBy" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="WHNameMAX" ReturnType="Collection(YLMES_newModel.WHNameMAX_Result)">
-          <Parameter Name="WHName" Mode="In" Type="String" />
+            <Parameter Name="WHName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="WOCheck" ReturnType="Collection(YLMES_newModel.WOCheck_Result)">
             <Parameter Name="CustomerName" Mode="In" Type="String" />
@@ -6394,7 +6533,7 @@
             <Parameter Name="CreateTimeTo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="WOdetail" ReturnType="Collection(YLMES_newModel.WOdetail_Result)">
-          <Parameter Name="WorkorderNO" Mode="In" Type="String" />
+            <Parameter Name="WorkorderNO" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="WOdetail_byStation" ReturnType="Collection(YLMES_newModel.WOdetail_byStation_Result)">
             <Parameter Name="StationType" Mode="In" Type="String" />
@@ -6642,7 +6781,7 @@
         </ComplexType>
         <ComplexType Name="Forum_Commentlist_Result">
           <Property Type="Int32" Name="id" Nullable="false" />
-          <Property Type="String" Name="Comments" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Comments" Nullable="false" />
           <Property Type="String" Name="CommentsPicture" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="CommentsTime" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="EmployeeName" Nullable="false" MaxLength="50" />
@@ -6650,7 +6789,7 @@
         </ComplexType>
         <ComplexType Name="Forum_Newest_Result">
           <Property Type="Int32" Name="id" Nullable="false" />
-          <Property Type="String" Name="Substance" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Substance" Nullable="false" />
           <Property Type="String" Name="Avatar" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="Picture" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Title" Nullable="false" MaxLength="20" />
@@ -6665,7 +6804,7 @@
         </ComplexType>
         <ComplexType Name="Forum_Postings_Result">
           <Property Type="Int32" Name="id" Nullable="false" />
-          <Property Type="String" Name="Substance" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Substance" Nullable="false" />
           <Property Type="String" Name="Avatar" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="Picture" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Title" Nullable="false" MaxLength="20" />
@@ -6706,9 +6845,9 @@
           <Property Type="String" Name="客户产品名称" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="产品规格" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="单位" Nullable="true" MaxLength="10" />
-          <Property Type="Decimal" Name="合同数量" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="发货数量" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="已安装数量" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="合同数量" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="发货数量" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="已安装数量" Nullable="true" MaxLength="10" />
           <Property Type="Int32" Name="今安装数量" Nullable="false" />
           <Property Type="String" Name="完成时间" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="是否验收" Nullable="true" MaxLength="10" />
@@ -6721,8 +6860,8 @@
           <Property Type="String" Name="客户产品名称" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="产品规格" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="单位" Nullable="true" MaxLength="10" />
-          <Property Type="Decimal" Name="合同数量" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="已发数量" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="合同数量" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="已发数量" Nullable="true" MaxLength="10" />
           <Property Type="Decimal" Name="今安装数量" Nullable="true" Precision="18" Scale="2" />
           <Property Type="String" Name="完成时间" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="是否验收" Nullable="true" MaxLength="50" />
@@ -6785,7 +6924,7 @@
           <Property Type="String" Name="任务状态" Nullable="true" MaxLength="30" />
         </ComplexType>
         <ComplexType Name="MyPost_Result">
-          <Property Type="String" Name="帖子标题" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="帖子标题" Nullable="false" />
           <Property Type="String" Name="状态" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="发布时间" Nullable="true" MaxLength="30" />
           <Property Type="Int32" Name="回答人数" Nullable="false" />
@@ -6906,7 +7045,7 @@
           <Property Type="String" Name="客户产品名称" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="产品规格" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="单位" Nullable="true" MaxLength="10" />
-          <Property Type="Decimal" Name="合同数量" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="合同数量" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="产品类型" Nullable="true" MaxLength="50" />
           <Property Type="DateTime" Name="截止日期" Nullable="true" />
           <Property Type="String" Name="创建人" Nullable="true" MaxLength="20" />
@@ -6938,7 +7077,7 @@
           <Property Type="String" Name="客户产品名称" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="产品规格" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="单位" Nullable="true" MaxLength="10" />
-          <Property Type="Decimal" Name="合同数量" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="合同数量" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="产品类型" Nullable="true" MaxLength="50" />
           <Property Type="DateTime" Name="截止日期" Nullable="true" />
           <Property Type="String" Name="创建人" Nullable="true" MaxLength="20" />
@@ -6974,7 +7113,7 @@
           <Property Type="String" Name="客户产品名称" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="产品规格" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="单位" Nullable="true" MaxLength="10" />
-          <Property Type="Decimal" Name="合同数量" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="合同数量" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="产品类型" Nullable="true" MaxLength="50" />
           <Property Type="DateTime" Name="截止日期" Nullable="true" />
           <Property Type="String" Name="创建人" Nullable="true" MaxLength="20" />
@@ -7141,7 +7280,7 @@
           <Property Type="String" Name="客户产品名称" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="产品规格" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="单位" Nullable="true" MaxLength="10" />
-          <Property Type="Decimal" Name="合同数量" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="合同数量" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="创建人" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="创建时间" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="速度" Nullable="true" MaxLength="50" />
@@ -7168,9 +7307,9 @@
           <Property Type="String" Name="客户产品名称" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="产品规格" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="单位" Nullable="true" MaxLength="10" />
-          <Property Type="Decimal" Name="合同数量" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="合同数量" Nullable="true" MaxLength="10" />
           <Property Type="Int32" Name="InWH" Nullable="true" />
-          <Property Type="Decimal" Name="已发货数量" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="已发货数量" Nullable="true" MaxLength="10" />
           <Property Type="Int32" Name="QTY" Nullable="true" />
           <Property Type="String" Name="ShipNoticeNumber" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="创建人" Nullable="true" MaxLength="20" />
@@ -7187,7 +7326,7 @@
           <Property Type="String" Name="客户产品名称" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="产品规格" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="单位" Nullable="true" MaxLength="10" />
-          <Property Type="Decimal" Name="合同数量" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="合同数量" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="创建人" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="创建时间" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="状态" Nullable="true" MaxLength="50" />
@@ -7214,13 +7353,13 @@
           <Property Type="String" Name="P_RollerTransferMode" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="P_MainBeaMaterial" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Units" Nullable="true" MaxLength="10" />
-          <Property Type="Decimal" Name="Count" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="Count" Nullable="true" MaxLength="10" />
           <Property Type="DateTime" Name="DueDay" Nullable="true" />
-          <Property Type="Decimal" Name="DeliveryedCount" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="NewDeliveryedCount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="DeliveryedCount" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="NewDeliveryedCount" Nullable="true" MaxLength="10" />
           <Property Type="DateTime" Name="DeliveryDate" Nullable="true" />
-          <Property Type="Decimal" Name="InstalledQuantity" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="newInstalledQuantity" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="InstalledQuantity" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="newInstalledQuantity" Nullable="true" MaxLength="10" />
           <Property Type="DateTime" Name="CompletionDate" Nullable="true" />
           <Property Type="String" Name="Acceptance" Nullable="true" MaxLength="10" />
           <Property Type="DateTime" Name="AcceptanceDate" Nullable="true" />
@@ -7273,9 +7412,9 @@
           <Property Type="String" Name="ProductName" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="ProductSpec" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Units" Nullable="true" MaxLength="10" />
-          <Property Type="Decimal" Name="Count" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="DeliveryedCount" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Decimal" Name="InstalledQuantity" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="Count" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DeliveryedCount" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="InstalledQuantity" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="Acceptance" Nullable="true" MaxLength="10" />
           <Property Type="DateTime" Name="验收日期" Nullable="true" />
           <Property Type="String" Name="Price" Nullable="true" MaxLength="20" />
@@ -8295,6 +8434,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PM_Scanrecord">
+            <EntityTypeMapping TypeName="YLMES_newModel.PM_Scanrecord">
+              <MappingFragment StoreEntitySet="PM_Scanrecord">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="details" ColumnName="details" />
+                <ScalarProperty Name="operation" ColumnName="operation" />
+                <ScalarProperty Name="Employee" ColumnName="Employee" />
+                <ScalarProperty Name="scantrim" ColumnName="scantrim" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="PM_ScoreSetting">
             <EntityTypeMapping TypeName="YLMES_newModel.PM_ScoreSetting">
               <MappingFragment StoreEntitySet="PM_ScoreSetting">
@@ -8321,6 +8471,28 @@
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
                 <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PM_TemporaryPurchaseMaterialList">
+            <EntityTypeMapping TypeName="YLMES_newModel.PM_TemporaryPurchaseMaterialList">
+              <MappingFragment StoreEntitySet="PM_TemporaryPurchaseMaterialList">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="MaterialID" ColumnName="MaterialID" />
+                <ScalarProperty Name="QTYofPCS" ColumnName="QTYofPCS" />
+                <ScalarProperty Name="ApplyPurchasePCS" ColumnName="ApplyPurchasePCS" />
+                <ScalarProperty Name="ApplyPurchaseQTY" ColumnName="ApplyPurchaseQTY" />
+                <ScalarProperty Name="ActPurchasePCS" ColumnName="ActPurchasePCS" />
+                <ScalarProperty Name="ActPurchaseQTY" ColumnName="ActPurchaseQTY" />
+                <ScalarProperty Name="Units" ColumnName="Units" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="POID" ColumnName="POID" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="ListType" ColumnName="ListType" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

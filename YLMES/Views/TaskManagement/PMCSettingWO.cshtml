@@ -47,9 +47,11 @@
                     }
                 });
             });
+
             $("#PurchasingApplication").click(function () {
                 window.parent.document.getElementById("rightframe").src = "/TaskManagement/Purchasing?ifDriver="+"@Session["ifB"]"+"&Taskid="+"@ViewData["TaskID2"]";
             });
+
             layui.use(['table', 'layer'], function () {
                 var table = layui.table, layer = layui.layer;
                     table.render({
@@ -62,8 +64,8 @@
                                  $(this).children().last().children().children().toggle();
                              })
                          }
-                        , cols: [[
-                            , { field: '', hide: true }
+                   , cols: [[
+                   , { field: '', hide: true }
                    , { field: '部件', width: 210, title: '部件'}
                    , { field: '订单数量', width: 210, title: '订单数量' }
                    , { field: '每套数量', width: 235, title: '每套数量' }
@@ -78,59 +80,61 @@
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
                     switch (obj.event) {
-                        case 'add':                              
-                            layer.open({
-                                content: '是否有库存“确定”继续。单击“申请”采购申请。'
-                                , btn: ['继续', '申请']
-                                , yes: function (index, layero) {
-                                    id = data.id;
-                            PartNumber = data.部件;
-                            TotalPCS = data.订单数量
-                            TotalQTY = data.工单数量;
-                            QTYofOneSet = data.每套数量;
+                        case 'add':
                             TaskID = data.任务编号;
-                            ji = data.部件级别;
-                            spec = data.部件规格;
-                             $.ajax({
-                                 url: "/TaskManagement/TurnPwo?pcName=" + "@ViewData["pcNamed"]" + "&PartNumber=" + PartNumber + "&TotalPCS=" + TotalPCS + "&TotalQTY=" + TotalQTY + "&QTYofOneSet=" + QTYofOneSet + "&TaskID=" + TaskID + "&ji=" + ji + "&spec=" + spec,
-                                        type: "post",
-                                        dataType: "text",
-                                        success: function (data) {
-                                            if (data == "true") {
-                                                window.setTimeout(function () {
-                                                    layer.msg('转换成功！');
-                                                    var url = "/ProductionPlanning/WorkManagement?taskid=" + TaskID + "&cancle=" + "1";
-                                                    var index = layer.open({
-                                                        type: 2,
-                                                        content: url,
-                                                        title: "工单分配",
-                                                        maxmin: true
-                                                    });
-                                                    layer.full(index);
-                                                }, 500);
-                                            }
-                                            else {
-                                                alert("转换失败！");
-                                                return;
-                                            }
-                                        }
-                                    });
-                                }
-                                , btn2: function (index, layero) {
+                            parid = data.部件编号;
+                            OrderCount = data.订单数量;
+                            $.ajax({
+                            url: "/TaskManagement/CheckInventory?Parid=" + parid + "&OrderCount=" + OrderCount,
+                            type: "post",
+                            dataType: "text",
+                            success: function (data) {
+                                if (data == "true") {
+                                    id = data.id;
+                                    PartNumber = data.部件;
+                                    TotalPCS = data.订单数量
+                                    TotalQTY = data.工单数量;
+                                    QTYofOneSet = data.每套数量;
                                     TaskID = data.任务编号;
-                                    PartID = data.部件编号;
-                                    var url = '/TaskManagement/Purchasing?Taskid=' + TaskID + '&PartID=' + PartID;
-                                    var index = layer.open({
-                                        type: 2,
-                                        title: "采购申请信息",
-                                        content: url,
-                                        maxmin: true
-                                    });
-                                    layer.full(index);
-                                }                             
-                                , cancel: function () {                                    
+                                    ji = data.部件级别;
+                                    spec = data.部件规格;
+                                    $.ajax({
+                                        url: "/TaskManagement/TurnPwo?pcName=" + "@ViewData["pcNamed"]" + "&PartNumber=" + PartNumber + "&TotalPCS=" + TotalPCS + "&TotalQTY=" + TotalQTY + "&QTYofOneSet=" + QTYofOneSet + "&TaskID=" + TaskID + "&ji=" + ji + "&spec=" + spec,
+                                        type: "post",
+                                    dataType: "text",
+                                    success: function (data) {
+                                        if (data == "true") {
+                                            window.setTimeout(function () {
+                                                layer.msg('转换成功！');
+                                                var url = "/ProductionPlanning/WorkManagement?taskid=" + TaskID + "&cancle=" + "1";
+                                                var index = layer.open({
+                                                    type: 2,
+                                                    content: url,
+                                                    title: "工单分配",
+                                                    maxmin: true
+                                                });
+                                                layer.full(index);
+                                            }, 500);
+                                        }
+                                        else {
+                                            alert("转换失败！");
+                                            return;
+                                             }
+                                    }
+                                });
                                 }
-                            });
+                                else if (data = "false") {                                 
+                                        var url = '/TaskManagement/Purchasing?Taskid=' + TaskID + '&PartID=' + parid;
+                                        var index = layer.open({
+                                            type: 2,
+                                            title: "采购申请信息",
+                                            content: url,
+                                            maxmin: true
+                                        });
+                                        layer.full(index);                                                                      
+                                }                              
+                            }
+                    });                         
                             break;
                     };
                 });
@@ -140,7 +144,7 @@
     </script>
     <script type="text/html" id="barDemo">
         {{#  if(d.工单名称 !=null){ }}
-
+            
         {{# }else { }}
         <a class="layui-btn layui-btn-xs" id="add" lay-event="add">转生产工单</a>
         {{#  } }}

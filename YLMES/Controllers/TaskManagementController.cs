@@ -2201,12 +2201,14 @@ namespace YlMES.Controllers
             }
         }
         //采购申请单
-        public ActionResult Purchasing(string Taskid)
+        public ActionResult Purchasing(string Taskid,string PartID)
         {
             Session["purcha"] = Taskid;
             ViewData["purchas"] = Taskid;
             ViewData["purcha"] = Taskid;
             Session["purcha"] = Taskid;
+            ViewData["pid"] = PartID;
+            ViewData["pid2"] = PartID;
             return View();
         }
         //显示申购
@@ -2234,11 +2236,11 @@ namespace YlMES.Controllers
             }
         }
         //修改申购
-        public ActionResult EditPurchase(string taskid, string matrterID, string ApplayPcs, string PcsNumber, string unit, string note)
+        public ActionResult EditPurchase(string taskid, string matrterID, string ApplayPcs, string PcsNumber, string unit, string note,string types)
         {
             try
             {
-                SqlParameter[] parms = new SqlParameter[7];
+                SqlParameter[] parms = new SqlParameter[8];
                 int pcNumber = int.Parse(PcsNumber);
                 int id = int.Parse(taskid);
                 int tct = int.Parse(ApplayPcs);
@@ -2250,9 +2252,10 @@ namespace YlMES.Controllers
                 parms[4] = new SqlParameter("@Units", unit);
                 parms[5] = new SqlParameter("@Note", note);
                 parms[6] = new SqlParameter("@type", "edit");
+                parms[7] = new SqlParameter("@ListType", types);
                 using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    ys.Database.ExecuteSqlCommand("exec UpdatePurchaseQTY  @QTYofPCS,@MaterialID,@ApplyPurchasePCS,@TaskID,@Units,@Note,@type", parms);
+                    ys.Database.ExecuteSqlCommand("exec UpdatePurchaseQTY  @QTYofPCS,@MaterialID,@ApplyPurchasePCS,@TaskID,@Units,@Note,@type,'','','',@ListType", parms);
                 }
                 return Content("true");
             }
@@ -2324,16 +2327,18 @@ namespace YlMES.Controllers
 
         }
         //确认提交采购申请
-        public ActionResult EQProcurement(string taskid)
+        public ActionResult EQProcurement(string taskid,string marterid)
         {
             try
             {
                 int tid = int.Parse(taskid);
-                SqlParameter[] parms = new SqlParameter[1];
+                int mid = int.Parse(marterid);
+                SqlParameter[] parms = new SqlParameter[2];
                 parms[0] = new SqlParameter("@TaskID", tid);
+                parms[1] = new SqlParameter("@MaterialID", mid);
                 using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    ys.Database.ExecuteSqlCommand("exec PMCAskPurchase  @TaskID", parms);
+                    ys.Database.ExecuteSqlCommand("exec PMCAskPurchase  @TaskID,@MaterialID", parms);
                 }
                 return Content("true");
             }
@@ -2418,29 +2423,59 @@ namespace YlMES.Controllers
                 return Json(hasmap, JsonRequestBehavior.AllowGet);
             }
         }
+        //判断是否有采购信息
+        public ActionResult CheckPurlist(string partid, string Taskid)
+        {
+            try
+            {
+                using(YLMES_newEntities ys = new YLMES_newEntities())
+                {
+                    if (partid == "null")
+                    {
+                        partid = "0";
+                    }
+                    int tid = int.Parse(Taskid);
+                    int pid = int.Parse(partid);
+                    var values = ys.PM_TemporaryPurchaseMaterialList.Where(c => c.TaskID == tid && c.MaterialID == pid).FirstOrDefault();
+                    if (values == null)
+                    {
+                        return Content("true");
+                    }
+                }
+                return Content("false");
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Content("false");
+            }
+           
+        }
+
         //新增采购信息
-        public ActionResult AddPurlist(string Material, string PartSpec, string PartMaterial, string ApplyPCS, string qtyofPCS, string type, string Taskid, string unit, string desc)
+        public ActionResult AddPurlist(string partid,string Taskid)
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                 try
                 {
+                    if (partid == "null")
+                    {
+                        partid = "0";
+                    }
                     int tid = int.Parse(Taskid);
-                    int pcs = int.Parse(ApplyPCS);
-                    int qtypcs = int.Parse(qtyofPCS);
+                    int pid = int.Parse(partid);   
                     string name = Session["name"].ToString();
-                    SqlParameter[] parms = new SqlParameter[10];
+                    SqlParameter[] parms = new SqlParameter[8];
                     parms[0] = new SqlParameter("@TaskID", tid);
-                    parms[1] = new SqlParameter("@Material", Material);
-                    parms[2] = new SqlParameter("@PartSpec", PartSpec);
-                    parms[3] = new SqlParameter("@PartMaterial", PartMaterial);
-                    parms[4] = new SqlParameter("@ApplyPCS", pcs);
-                    parms[5] = new SqlParameter("@qtyofPCS", qtypcs);
-                    parms[6] = new SqlParameter("@ListType", type);
-                    parms[7] = new SqlParameter("@Units", unit);
-                    parms[8] = new SqlParameter("@Note", desc);
-                    parms[9] = new SqlParameter("@UserName", name);
-                    ys.Database.ExecuteSqlCommand("exec PM_AddPurlist  @TaskID,@Material,@PartSpec,@PartMaterial,@ApplyPCS,@qtyofPCS,@ListType,@Units,@Note,@UserName", parms);
+                    parms[1] = new SqlParameter("@MaterialID", pid);
+                    parms[2] = new SqlParameter("@ApplyPCS", 1);
+                    parms[3] = new SqlParameter("@qtyofPCS", 10);
+                    parms[4] = new SqlParameter("@ListType", "外购件");
+                    parms[5] = new SqlParameter("@Units", "个");
+                    parms[6] = new SqlParameter("@Note", "无");
+                    parms[7] = new SqlParameter("@UserName", name);
+                    ys.Database.ExecuteSqlCommand("exec PM_AddPurlist  @TaskID,@MaterialID,@ApplyPCS,@qtyofPCS,@ListType,@Units,@Note,@UserName", parms);
                     return Content("true");
                 }
                 catch (Exception ex)
@@ -2801,6 +2836,39 @@ namespace YlMES.Controllers
         {
             return View();
         }
+
+        #endregion
+
+        #region 检测是否有库存
+
+        public ActionResult CheckInventory(string Parid,string OrderCount)
+        {
+            try
+            {
+                using(YLMES_newEntities ys = new YLMES_newEntities())
+                {
+                    if (Parid == "null")
+                    {
+                        Parid = "0";
+                    }
+                    int pid = int.Parse(Parid);
+                    int onumber = int.Parse(OrderCount);
+                    var pm = ys.PM_Material.Where(s => s.ID == pid && s.StockQTY > onumber).FirstOrDefault();
+                    if (pm != null)
+                    {
+                        return Content("true");
+                    }
+                }
+                return Content("false");
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Content("false");
+            }
+            
+        }
+
 
         #endregion
     }

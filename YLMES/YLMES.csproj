@@ -2011,6 +2011,9 @@
     <Compile Include="Models\PM_Route.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PM_Scanrecord.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PM_ScoreSetting.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -2048,6 +2051,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_Task_History_Status.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PM_TemporaryPurchaseMaterialList.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_UserAccessSetup.cs">

@@ -66,8 +66,10 @@ namespace YLMES.Models
         public virtual DbSet<PM_ProductStationType> PM_ProductStationType { get; set; }
         public virtual DbSet<PM_PurchaseMaterialList_temp> PM_PurchaseMaterialList_temp { get; set; }
         public virtual DbSet<PM_Route> PM_Route { get; set; }
+        public virtual DbSet<PM_Scanrecord> PM_Scanrecord { get; set; }
         public virtual DbSet<PM_ScoreSetting> PM_ScoreSetting { get; set; }
         public virtual DbSet<PM_TaskRoute> PM_TaskRoute { get; set; }
+        public virtual DbSet<PM_TemporaryPurchaseMaterialList> PM_TemporaryPurchaseMaterialList { get; set; }
         public virtual DbSet<PM_UserAccessSetup> PM_UserAccessSetup { get; set; }
         public virtual DbSet<PM_WH> PM_WH { get; set; }
         public virtual DbSet<PM_WHArea> PM_WHArea { get; set; }
@@ -1165,7 +1167,7 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Forum_Commentlist_Result>("Forum_Commentlist", typeParameter, idParameter, commentsIDParameter, commentsParameter, commentsPictureParameter, employeeParameter);
         }
     
-        public virtual ObjectResult<Forum_Newest_Result> Forum_Newest(string type, Nullable<int> id)
+        public virtual ObjectResult<Forum_Newest_Result> Forum_Newest(string type, Nullable<int> id, string status)
         {
             var typeParameter = type != null ?
                 new ObjectParameter("Type", type) :
@@ -1175,7 +1177,11 @@ namespace YLMES.Models
                 new ObjectParameter("id", id) :
                 new ObjectParameter("id", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Forum_Newest_Result>("Forum_Newest", typeParameter, idParameter);
+            var statusParameter = status != null ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Forum_Newest_Result>("Forum_Newest", typeParameter, idParameter, statusParameter);
         }
     
         public virtual ObjectResult<Forum_Postings_Result> Forum_Postings(string type, Nullable<int> id, string columns, string title, string substance, string picture, string employee)
@@ -1565,23 +1571,15 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PM_AddPurld", taskIDParameter, materialIDParameter, applyPCSParameter, applyQTYParameter, qtyofPCSParameter);
         }
     
-        public virtual int PM_AddPurlist(Nullable<int> taskID, string material, string partSpec, string partMaterial, Nullable<int> applyPCS, Nullable<int> qtyofPCS, string listType, string units, string note, string userName)
+        public virtual int PM_AddPurlist(Nullable<int> taskID, Nullable<int> materialID, Nullable<int> applyPCS, Nullable<int> qtyofPCS, string listType, string units, string note, string userName)
         {
             var taskIDParameter = taskID.HasValue ?
                 new ObjectParameter("TaskID", taskID) :
                 new ObjectParameter("TaskID", typeof(int));
     
-            var materialParameter = material != null ?
-                new ObjectParameter("Material", material) :
-                new ObjectParameter("Material", typeof(string));
-    
-            var partSpecParameter = partSpec != null ?
-                new ObjectParameter("PartSpec", partSpec) :
-                new ObjectParameter("PartSpec", typeof(string));
-    
-            var partMaterialParameter = partMaterial != null ?
-                new ObjectParameter("PartMaterial", partMaterial) :
-                new ObjectParameter("PartMaterial", typeof(string));
+            var materialIDParameter = materialID.HasValue ?
+                new ObjectParameter("MaterialID", materialID) :
+                new ObjectParameter("MaterialID", typeof(int));
     
             var applyPCSParameter = applyPCS.HasValue ?
                 new ObjectParameter("ApplyPCS", applyPCS) :
@@ -1607,7 +1605,7 @@ namespace YLMES.Models
                 new ObjectParameter("UserName", userName) :
                 new ObjectParameter("UserName", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PM_AddPurlist", taskIDParameter, materialParameter, partSpecParameter, partMaterialParameter, applyPCSParameter, qtyofPCSParameter, listTypeParameter, unitsParameter, noteParameter, userNameParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PM_AddPurlist", taskIDParameter, materialIDParameter, applyPCSParameter, qtyofPCSParameter, listTypeParameter, unitsParameter, noteParameter, userNameParameter);
         }
     
         public virtual ObjectResult<PM_AssignTasksCheck_Result> PM_AssignTasksCheck(string rwapStatusID, string createdTimeStart, string salesOrder, string projectName, string statusID)
@@ -2167,13 +2165,17 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PM_WH_Delete", tYPEParameter, wHIDParameter, wHAreaIDParameter, wHStorageLocationIDParameter, wHGoodsAllocationIDParameter);
         }
     
-        public virtual int PMCAskPurchase(Nullable<int> taskID)
+        public virtual int PMCAskPurchase(Nullable<int> taskID, Nullable<int> materialID)
         {
             var taskIDParameter = taskID.HasValue ?
                 new ObjectParameter("TaskID", taskID) :
                 new ObjectParameter("TaskID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PMCAskPurchase", taskIDParameter);
+            var materialIDParameter = materialID.HasValue ?
+                new ObjectParameter("MaterialID", materialID) :
+                new ObjectParameter("MaterialID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PMCAskPurchase", taskIDParameter, materialIDParameter);
         }
     
         public virtual int PMCAssignConfirm(Nullable<int> taskID)
@@ -5231,7 +5233,7 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateProcess", stationTypeParameter, sortIDParameter, workHoursParameter, workHours2Parameter, requireParameter, iDParameter, createdByParameter, routeNameParameter, indexParameter);
         }
     
-        public virtual int UpdatePurchaseQTY(Nullable<int> qTYofPCS, Nullable<int> materialID, Nullable<int> applyPurchasePCS, Nullable<int> taskID, string units, string note, string type, Nullable<int> actPCS, Nullable<int> price, Nullable<int> id)
+        public virtual int UpdatePurchaseQTY(Nullable<int> qTYofPCS, Nullable<int> materialID, Nullable<int> applyPurchasePCS, Nullable<int> taskID, string units, string note, string type, Nullable<int> actPCS, Nullable<int> price, Nullable<int> id, string listType)
         {
             var qTYofPCSParameter = qTYofPCS.HasValue ?
                 new ObjectParameter("QTYofPCS", qTYofPCS) :
@@ -5273,7 +5275,11 @@ namespace YLMES.Models
                 new ObjectParameter("id", id) :
                 new ObjectParameter("id", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdatePurchaseQTY", qTYofPCSParameter, materialIDParameter, applyPurchasePCSParameter, taskIDParameter, unitsParameter, noteParameter, typeParameter, actPCSParameter, priceParameter, idParameter);
+            var listTypeParameter = listType != null ?
+                new ObjectParameter("ListType", listType) :
+                new ObjectParameter("ListType", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdatePurchaseQTY", qTYofPCSParameter, materialIDParameter, applyPurchasePCSParameter, taskIDParameter, unitsParameter, noteParameter, typeParameter, actPCSParameter, priceParameter, idParameter, listTypeParameter);
         }
     
         public virtual int updateQualifiedCompleted(Nullable<int> taskID, string machineDesignScore, string electricalDesignScore, string suggestedPoints)

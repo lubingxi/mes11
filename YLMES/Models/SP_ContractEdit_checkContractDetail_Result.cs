@@ -17,9 +17,9 @@ namespace YLMES.Models
         public string ProductName { get; set; }
         public string ProductSpec { get; set; }
         public string Units { get; set; }
-        public Nullable<decimal> Count { get; set; }
-        public Nullable<decimal> DeliveryedCount { get; set; }
-        public Nullable<decimal> InstalledQuantity { get; set; }
+        public string Count { get; set; }
+        public string DeliveryedCount { get; set; }
+        public string InstalledQuantity { get; set; }
         public string Acceptance { get; set; }
         public Nullable<System.DateTime> 验收日期 { get; set; }
         public string Price { get; set; }

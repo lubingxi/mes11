@@ -329,19 +329,19 @@
                                     obj['Price'] = Price.substr(0, Price.lastIndexOf(","))
                                     obj['id'] = id.substr(0, id.lastIndexOf(","))
                                     console.log(obj)
-                                    //$.ajax({
-                                    //    url: "/ProductionPlanning/AddDetai",
-                                    //    type: "post",
-                                    //    data: { data:obj, id: CuId, ids: ContractDetialsCheckId },
-                                    //    dataType: "text",
-                                    //    success: function (data) {
-                                    //        if (data == "true") {
-                                    //            layer.closeAll()
-                                    //            layer.msg("保存成功")
-                                    //            stu = 1;
-                                    //        }
-                                    //    }
-                                    //})
+                                    $.ajax({
+                                        url: "/ProductionPlanning/AddDetai",
+                                        type: "post",
+                                        data: { data:obj, id: CuId, ids: ContractDetialsCheckId },
+                                        dataType: "text",
+                                        success: function (data) {
+                                            if (data == "true") {
+                                                layer.closeAll()
+                                                layer.msg("保存成功")
+                                                stu = 1;
+                                            }
+                                        }
+                                    })
                                 }
                             }
                         })

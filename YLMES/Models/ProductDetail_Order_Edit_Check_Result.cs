@@ -22,7 +22,7 @@ namespace YLMES.Models
         public string 客户产品名称 { get; set; }
         public string 产品规格 { get; set; }
         public string 单位 { get; set; }
-        public Nullable<decimal> 合同数量 { get; set; }
+        public string 合同数量 { get; set; }
         public string 产品类型 { get; set; }
         public Nullable<System.DateTime> 截止日期 { get; set; }
         public string 创建人 { get; set; }

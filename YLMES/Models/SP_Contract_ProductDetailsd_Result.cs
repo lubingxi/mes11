@@ -34,13 +34,13 @@ namespace YLMES.Models
         public string P_RollerTransferMode { get; set; }
         public string P_MainBeaMaterial { get; set; }
         public string Units { get; set; }
-        public Nullable<decimal> Count { get; set; }
+        public string Count { get; set; }
         public Nullable<System.DateTime> DueDay { get; set; }
-        public Nullable<decimal> DeliveryedCount { get; set; }
-        public Nullable<decimal> NewDeliveryedCount { get; set; }
+        public string DeliveryedCount { get; set; }
+        public string NewDeliveryedCount { get; set; }
         public Nullable<System.DateTime> DeliveryDate { get; set; }
-        public Nullable<decimal> InstalledQuantity { get; set; }
-        public Nullable<decimal> newInstalledQuantity { get; set; }
+        public string InstalledQuantity { get; set; }
+        public string newInstalledQuantity { get; set; }
         public Nullable<System.DateTime> CompletionDate { get; set; }
         public string Acceptance { get; set; }
         public Nullable<System.DateTime> AcceptanceDate { get; set; }

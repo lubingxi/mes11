@@ -354,13 +354,14 @@
                                         var Route = $(".ka:eq(2)").text();
                                         if (ProcessName != "") {
                                             if (up) {
+                                                layer.close(index);
                                                 var url = "/TaskManagement/AddProcess?PartNumber=" + PartNumber + "&ProductName=" + ProductName + "&ProductSpec=" + ProductSpec + "&Route=" + Route + "&PartId=0" + "&ProcessName=" + ProcessName;
                                                 var index = layer.open({
                                                     type: 2,
                                                     content: url,
                                                     area: ['1200px', '700px']
                                                 });
-                                                layer.close(index);
+                                                layer.full(index);
                                             } else {
 
                                                 layer.msg("流程名称重复")
