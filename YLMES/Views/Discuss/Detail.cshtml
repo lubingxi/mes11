@@ -10,11 +10,11 @@
     <meta charset="utf-8">
     <title>Fly Template v3.0，基于 layui 的极简社区页面模版</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    @*<link href="~/layui/css/layui.css" rel="stylesheet" />*@
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
     <link href="~/css/global.css" rel="stylesheet" />
     <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="~/js/jquery.js"></script>
-    <link href="~/Content/Layui-KnifeZ/css/layui.css" rel="stylesheet" />
+
     <script src="~/Content/Layui-KnifeZ/layui.js"></script>
     <script src="~/Content/ace/ace.js"></script>
     <link rel="stylesheet" type="text/css" href="~/css/rocketTop.css">
@@ -114,10 +114,10 @@
                             $.each(lisst, function (i, res) {
                                 switch (res.Status) {
                                     case "已采纳":
-                                        $('#jieda').append('<li data-id="111" class="jieda-daan"> <div class="detail-about detail-about-reply"> <a class="fly-avatar" href=""> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt=" "> </a> <div class="fly-detail-user"> <a href="" class="fly-link"> <cite>' + res.EmployeeName + '</cite>  </div> <div class="detail-hits"> <span>' + res.CommentsTime + '</span></div> <i class="iconfont icon-caina" title="最佳答案"></i> </div> <div class="detail-body jieda-body photos"> <p>' + res.Comments + '</p> </div> <div class="jieda-reply"> <div class="jieda-admin"> <button style="background-color:#1E9FFF;color:#fff;border:2px sold ##FFB800" type="del"onclick="delss(' + res.id + ')">删除</button> </div> </div></li>');
+                                        $('#jieda').append('<li data-id="111" class="jieda-daan"> <div class="detail-about detail-about-reply"> <a class="fly-avatar" href=""> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt=" "> </a> <div class="fly-detail-user"> <a href="" class="fly-link"> <cite>' + res.EmployeeName + '</cite>  </div> <div class="detail-hits"> <span>' + res.CommentsTime + '</span></div> <i class="iconfont icon-caina" title="最佳答案"></i> </div> <div class="detail-body jieda-body photos"> <p>' + res.Comments + '</p> </div> <div class="jieda-reply"> <div class="jieda-admin"> <span type="del"onclick="delss(' + res.id + ')">删除</span> </div> </div></li>');
                                         break;
                                     case "未采纳":
-                                        $('#jieda').append('<li data-id="111"><div class="detail-about detail-about-reply"><a class="fly-avatar" href=""> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt=" "> </a> <div class="fly-detail-user"> <a href="" class="fly-link"> <cite>' + res.EmployeeName + '</cite> </a> </div> <div class="detail-hits"> <span>' + res.CommentsTime + '</span> </div> </div> <div class="detail-body jieda-body photos"> <p>' + res.Comments + '</p></div> <div class="jieda-reply"><div class="jieda-admin"><button type="del" style="background-color:#1E9FFF;color:#fff;border:2px sold ##FFB800" id="del" onclick="delss(' + res.id + ')">删除</button> <button style="background-color:#1E9FFF;color:#fff;border:2px sold ##FFB800" class="jieda-accept" type="accept" id="accept" onclick="accept(' + res.id + ')">采纳</button></div> </div></li>');
+                                        $('#jieda').append('<li data-id="111"><div class="detail-about detail-about-reply"><a class="fly-avatar" href=""> <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt=" "> </a> <div class="fly-detail-user"> <a href="" class="fly-link"> <cite>' + res.EmployeeName + '</cite> </a> </div> <div class="detail-hits"> <span>' + res.CommentsTime + '</span> </div> </div> <div class="detail-body jieda-body photos"> <p>' + res.Comments + '</p></div> <div class="jieda-reply"><div class="jieda-admin"><span type="del" id="del" onclick="delss(' + res.id + ')">删除</span> <span  class="jieda-accept" type="accept" id="accept" onclick="accept(' + res.id + ')">采纳</button></div> </div></li>');
                                         break;
                                 }
                             });
@@ -163,74 +163,54 @@
             });
             var id = getQueryString().id;
             getlist(id);
-            $('#DetailOK').click(function () {
-                var Comments = $("#layeditDemo").val();
-                alert(Comments);
-                $.ajax({
-                    url: "/Discuss/Commentadd",
-                    type: "post",
-                    data: { id: id, Comments: Comments, CommentsPicture: "" },
-                    dataType: "text",
-                    success: function (data) {
-                        if (data != null) {
-                            if (data == "false") {
-                                alert('评论失败')
-                            } else if (data == "true") {
-                                alert('评论成功');
-                                $('#ss').empty();
-                                $('#jieda').empty();
-                                getlist(id);
+            layui.use(['layedit', 'layer', 'jquery'], function () {
+                var $ = layui.jquery;
+                var layedit = layui.layedit;
+                layedit.set({
+                    //暴露layupload参数设置接口 --详细查看layupload参数说明
+                    uploadImage: {
+                        url: '/Discuss/LayUploadFile',
+                        type: 'post'
+                    }
+                    , tool: [
+                        'strong' //加粗
+                        , 'italic' //斜体
+                        , 'underline' //下划线
+                        , 'del' //删除线
+                        , '|' //分割线
+                        , 'left' //左对齐
+                        , 'center' //居中对齐
+                        , 'right' //右对齐
+                    ]
+
+                    , height: 100
+                });
+                var ieditor = layedit.build('L_content');
+                $('#DetailOK').click(function () {
+                    var Comments =layedit.getContent(ieditor);
+                    $.ajax({
+                        url: "/Discuss/Commentadd",
+                        type: "post",
+                        data: { id: id, Comments: Comments, CommentsPicture: "" },
+                        dataType: "text",
+                        success: function (data) {
+                            if (data != null) {
+                                if (data == "false") {
+                                    alert('评论失败')
+                                } else if (data == "true") {
+                                    location.reload();
+                                }
                             }
                         }
-                    }
+                    });
                 });
-            });
+            })
+        
 
         });
     </script>
     <script>
-        layui.use(['layedit', 'layer', 'jquery'], function () {
-            var $ = layui.jquery;
-            var layedit = layui.layedit;
-            layedit.set({
-                //暴露layupload参数设置接口 --详细查看layupload参数说明
-                uploadImage: {
-                    url: '/Discuss/LayUploadFile',
-                    accept: 'image',
-                    acceptMime: 'image/*',
-                    exts: 'jpg|png|gif|bmp|jpeg',
-                    src: File,
-                    size: '10240'
-                }
-                , uploadVideo: {
-                    url: '/Attachment/LayUploadFile',
-                    accept: 'video',
-                    acceptMime: 'video/*',
-                    exts: 'mp4|flv|avi|rm|rmvb',
-                    size: '20480'
-                }
-                //右键删除图片/视频时的回调参数，post到后台删除服务器文件等操作，
-                //传递参数：
-                //图片： imgpath --图片路径
-                //视频： filepath --视频路径 imgpath --封面路径
-                , calldel: {
-                    url: '/Attachment/DeleteFile'
-                }
-                //开发者模式 --默认为false
-                , devmode: true
-                //插入代码设置
-                , codeConfig: {
-                    hide: true,  //是否显示编码语言选择框
-                    default: 'javascript' //hide为true时的默认语言格式
-                }
-                , tool: [
-                    'html', 'code', 'strong', 'italic', 'underline', 'del', 'addhr', '|', 'fontFomatt', 'colorpicker', 'face'
-                    , '|', 'left', 'center', 'right', '|', 'link', 'unlink', 'image_alt', 'anchors'
-                ]
-                , height: '90%'
-            });
-            var ieditor = layedit.build('layeditDemo');
-        })
+
     </script>
 </head>
 <body style="overflow-y:hidden;background-color:#fff;">
@@ -271,7 +251,7 @@
                             <div class="layui-form-item layui-form-text">
                                 <a name="comment"></a>
                                 <div class="layui-input-block">
-                                    <textarea id="layeditDemo"></textarea>
+                                    <textarea class="layui-textarea" id="L_content" style="display: none"></textarea>
                                     @*<textarea id="L_content" name="content" required lay-verify="required" placeholder="请输入内容" class="layui-textarea fly-editor" style="height: 150px;"></textarea>*@
                                 </div>
                             </div>

@@ -978,7 +978,7 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DesignDistribution_Result>("DesignDistribution", projectNameParameter);
         }
     
-        public virtual int DetailAdd(string type, string productName, string productSpec, string units, string count, string price, string contractID, string createdBy, string id)
+        public virtual int DetailAdd(string type, string productName, string productSpec, string units, string count, string price, string contractID, string createdBy, Nullable<int> id)
         {
             var typeParameter = type != null ?
                 new ObjectParameter("type", type) :
@@ -1012,9 +1012,9 @@ namespace YLMES.Models
                 new ObjectParameter("CreatedBy", createdBy) :
                 new ObjectParameter("CreatedBy", typeof(string));
     
-            var idParameter = id != null ?
+            var idParameter = id.HasValue ?
                 new ObjectParameter("id", id) :
-                new ObjectParameter("id", typeof(string));
+                new ObjectParameter("id", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DetailAdd", typeParameter, productNameParameter, productSpecParameter, unitsParameter, countParameter, priceParameter, contractIDParameter, createdByParameter, idParameter);
         }

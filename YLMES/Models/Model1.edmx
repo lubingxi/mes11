@@ -1655,14 +1655,14 @@
         </Function>
         <Function Name="DetailAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="type" Type="char" Mode="In" />
-          <Parameter Name="ProductName" Type="varchar(max)" Mode="In" />
-          <Parameter Name="ProductSpec" Type="varchar(max)" Mode="In" />
-          <Parameter Name="Units" Type="varchar(max)" Mode="In" />
-          <Parameter Name="Count" Type="varchar(max)" Mode="In" />
-          <Parameter Name="Price" Type="varchar(max)" Mode="In" />
+          <Parameter Name="ProductName" Type="varchar" Mode="In" />
+          <Parameter Name="ProductSpec" Type="varchar" Mode="In" />
+          <Parameter Name="Units" Type="varchar" Mode="In" />
+          <Parameter Name="Count" Type="varchar" Mode="In" />
+          <Parameter Name="Price" Type="varchar" Mode="In" />
           <Parameter Name="ContractID" Type="varchar" Mode="In" />
           <Parameter Name="CreatedBy" Type="varchar" Mode="In" />
-          <Parameter Name="id" Type="varchar(max)" Mode="In" />
+          <Parameter Name="id" Type="int" Mode="In" />
         </Function>
         <Function Name="EditAccessSetup" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserName" Type="varchar" Mode="In" />
@@ -5159,7 +5159,7 @@
             <Parameter Name="Price" Mode="In" Type="String" />
             <Parameter Name="ContractID" Mode="In" Type="String" />
             <Parameter Name="CreatedBy" Mode="In" Type="String" />
-            <Parameter Name="id" Mode="In" Type="String" />
+            <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EditAccessSetup" ReturnType="Collection(YLMES_newModel.EditAccessSetup_Result)">
           <Parameter Name="UserName" Mode="In" Type="String" />

@@ -428,9 +428,8 @@ layui.define(['jquery', 'xlsx', 'FileSaver'], function(exports){
 						// 全为空的去掉
 						if (wb.Sheets.hasOwnProperty(sheet)) {
 							var opt = {
-								header: option.header
+								header: option.header,
 							}
-                         
 							if (!option.range) {
 								opt.range = option.range;
 							}
