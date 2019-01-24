@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using YLMES.Models;
@@ -142,6 +144,7 @@ namespace YLMES.Controllers
             return null;
         }
         //评论
+        [ValidateInput(false)]
         public string Commentadd(string id, string Comments, string CommentsPicture)
         {
             string name = Session["name"].ToString();
@@ -224,29 +227,49 @@ namespace YLMES.Controllers
             return View();
         }
         //发帖子
-        public string Postingup(string columnist, string title, string Substance, string Picture)
+        [ValidateInput(false)]
+        public string Postingup(Dictionary<string,string> data,string value)
         {
-            string name = Session["name"].ToString();
+            StringBuilder builder = new StringBuilder("exec Forum_Postings @Type='新帖子',@Employee="+ Session["name"].ToString()+",");
+
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-                SqlParameter[] parms = new SqlParameter[6];
-                parms[0] = new SqlParameter("@Type", "新帖子");
-                parms[1] = new SqlParameter("@Columns", columnist);
-                parms[2] = new SqlParameter("@Title", title);
-                parms[3] = new SqlParameter("@Substance", Substance);
-                parms[4] = new SqlParameter("@Picture", Picture);
-                parms[5] = new SqlParameter("@Employee", name);
-                int i = ys.Database.ExecuteSqlCommand("exec Forum_Postings @Type,'',@Columns,@Title,@Substance,@Picture,@Employee", parms);
-                if (i <= 0)
+                int j = 0;
+                SqlParameter[] parms = new SqlParameter[data.Count()-1];
+                foreach (var da in data)
                 {
-                    return "false";
+                    if (da.Key == "Substance")
+                    {
+                        parms[j] = new SqlParameter("@" + da.Key, value);
+                    }
+                    else {
+                        if (da.Key != "file") {
+                            parms[j] = new SqlParameter("@" + da.Key, da.Value);
+                            
+                             
+                        }
+                    }
+                    if (da.Key != "file")
+                    {
+                        if (j + 1 == (data.Count() - 1))
+                        {
+                            builder.Append("@" + da.Key + "=@" + da.Key);
+                        }
+                        else
+                        {
+                            builder.Append("@" + da.Key + "=@" + da.Key + ",");
+                        }
+                        j++;
+
+                    }
+
+
                 }
-                else if (i > 0)
-                {
-                    return "true";
-                }
+                ys.Database.ExecuteSqlCommand(builder.ToString(), parms);
+
             }
-            return null;
+            return "true";
+
         }
         //显示我的帖子
         public JsonResult CheckMyPost(string Substance,int page,int limit)
@@ -302,7 +325,15 @@ namespace YLMES.Controllers
         //上传图片
         public ActionResult LayUploadFile(HttpPostedFileBase File)
         {
-            return View();
+            var fileName1 = Path.Combine(Request.MapPath("~/QRCodeImage"), Path.GetFileName(File.FileName));
+             Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
+             Dictionary<string, Object> hasmap2 = new Dictionary<string, Object>();
+            File.SaveAs(fileName1);
+            string fname = fileName1.Substring(fileName1.LastIndexOf('\\') + 1);
+            hasmap.Add("code", 0);
+            hasmap.Add("data", hasmap2);
+            hasmap2.Add("src", "/QRCodeImage/" + fname);
+            return Json(hasmap, JsonRequestBehavior.AllowGet);
         }
     }
 }

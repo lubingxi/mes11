@@ -227,6 +227,11 @@
                         , area: ['80%', '80%']
                         , content: '/Discuss/Posting'
                         , anim: 2
+                        , end: function () {
+                            layer.msg("发帖成功", { icon: 1,time:500 }, function () {
+                                location.reload()
+                            })
+                        }
                     });
                 });
                 $('.fa').click(function () {
@@ -244,6 +249,7 @@
                         , area: ['60%', '40%']
                         , content: '/Discuss/ChangPwd'
                         , anim: 2
+                        
                     });
                 });
             });
