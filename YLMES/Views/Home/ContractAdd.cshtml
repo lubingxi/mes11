@@ -36,11 +36,10 @@
             <label class="layui-form-label">客户名称：</label>
             <div class="layui-input-block">
                 <select name="CuName" id="Category"  lay-search=""><option value=""></option></select>               
-            </div>
-          
+            </div>         
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">订单编号：</label>
+            <label class="layui-form-label">合同编号：</label>
             <div class="layui-input-block">
                 <input type="text" lay-verify="required" name="CuNumber" placeholder="请输入订单编号" autocomplete="off" class="layui-input">
             </div>
@@ -162,7 +161,14 @@
                $("#DepositAmount").val(sd);
             });
             $("#info").click(function () {               
-              window.parent.document.getElementById("rightframe").src = "/Home/WriteCuName";
+                var url = "/Home/WriteCuName";
+                var index = layer.open({
+                    type: 2,
+                    content: url,
+                    title: "新增客户信息",
+                    maxmin: true
+                });
+                layer.full(index);
             });
             layui.use(['table', 'layer', 'form'], function () {
                 var table = layui.table, layer = layui.layer

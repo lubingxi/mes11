@@ -143,5 +143,7 @@ namespace YLMES.Models
         public string InstallifCompleted { get; set; }
         public string InstallCompletedTime { get; set; }
         public string InstallOverDue { get; set; }
+        public string BreakUp { get; set; }
+        public string BracketFoot { get; set; }
     }
 }

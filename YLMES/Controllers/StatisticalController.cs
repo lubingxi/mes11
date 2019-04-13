@@ -34,32 +34,32 @@ namespace YLMES.Controllers
             }
             return Json(list, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult Departmentlist(string Name, string department, int page, int limit)
-        {
-            using (YLMES_newEntities ys = new YLMES_newEntities())
-            {
-                if (Name == null)
-                {
-                    Name = "";
-                }
-                if(department==null)
-                {
-                    department = "";
-                }
-                SqlParameter[] parms = new SqlParameter[2];
-                parms[0] = new SqlParameter("@owner", Name);
-                parms[1] = new SqlParameter("@Depart", department);
-                var list = ys.Database.SqlQuery<StatisticsDepartmentlist_Result>(" exec [StatisticsDepartmentlist]@owner,@Depart", parms).ToList();
-                PageList<StatisticsDepartmentlist_Result> pageList = new PageList<StatisticsDepartmentlist_Result>(list, page, limit);
-                Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
-                int count = list.Count();
-                hasmap.Add("code", 0);
-                hasmap.Add("msg", "");
-                hasmap.Add("count", count);
-                hasmap.Add("data", pageList);
-                return Json(hasmap, JsonRequestBehavior.AllowGet);
-            }
-        }
+        //public JsonResult Departmentlist(string Name, string department, int page, int limit)
+        //{
+        //    using (YLMES_newEntities ys = new YLMES_newEntities())
+        //    {
+        //        if (Name == null)
+        //        {
+        //            Name = "";
+        //        }
+        //        if(department==null)
+        //        {
+        //            department = "";
+        //        }
+        //        SqlParameter[] parms = new SqlParameter[2];
+        //        parms[0] = new SqlParameter("@owner", Name);
+        //        parms[1] = new SqlParameter("@Depart", department);
+        //        var list = ys.Database.SqlQuery<StatisticsDepartmentlist_Result>(" exec [StatisticsDepartmentlist]@owner,@Depart", parms).ToList();
+        //        PageList<StatisticsDepartmentlist_Result> pageList = new PageList<StatisticsDepartmentlist_Result>(list, page, limit);
+        //        Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
+        //        int count = list.Count();
+        //        hasmap.Add("code", 0);
+        //        hasmap.Add("msg", "");
+        //        hasmap.Add("count", count);
+        //        hasmap.Add("data", pageList);
+        //        return Json(hasmap, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
         #endregion
         #region 任务统计报表
         public ActionResult Report()

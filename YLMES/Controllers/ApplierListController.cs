@@ -16,10 +16,10 @@ namespace YLMES.Controllers
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-                var list = ys.PM_ApplierProductType.Where(p => p.Type.Contains("货品品类")).ToList();
+                //var list = ys.PM_ApplierProductType.Where(p => p.Type.Contains("货品品类")).ToList();
                 var Level = ys.PM_ApplierProductType.Where(p => p.Type.Contains("级别")).ToList();
                 var Advantage = ys.PM_ApplierProductType.Where(p => p.Type.Contains("优势分析")).ToList();
-                ViewBag.Category = list;
+                //ViewBag.Category = list;
                 ViewBag.Level = Level;
                 ViewBag.Advantage = Advantage;
                 return View();
@@ -43,14 +43,14 @@ namespace YLMES.Controllers
             }
             return Json(list,JsonRequestBehavior.AllowGet);
         }
-        //物料类别查询
+        //物料类型查询
         public ActionResult checkPurchase()
         {
-            List<PM_ApplierProductType> list = null;
+            List<MaterTypeNames> list = null;
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
 
-                 list = ys.PM_ApplierProductType.Where(p => p.Type.Contains("货品品类")).ToList();
+                 list = ys.MaterTypeNames.ToList();
 
             }
             return Json(list, JsonRequestBehavior.AllowGet);
@@ -69,7 +69,7 @@ namespace YLMES.Controllers
                 parms[0] = new SqlParameter("@name",name);
                 parms[1] = new SqlParameter("@ContractTypeId", ContractTypeId);
                 var list = ys.Database.SqlQuery<checkCoMaterial_Result>("exec checkCoMaterial @name,@ContractTypeId", parms).ToList();
-            hasmap = new Dictionary<string, Object>();
+                hasmap = new Dictionary<string, Object>();
             PageList<checkCoMaterial_Result> pageList = new PageList<checkCoMaterial_Result>(list, page, limit);
             int count = list.Count();
             hasmap.Add("code", 0);
@@ -102,8 +102,7 @@ namespace YLMES.Controllers
             {
                 Console.WriteLine(ex.Message);
                 return Content("false");
-            }
-           
+            }           
         }
         #region 查询
         public JsonResult GetSupplierlist(string Name, string Status, int page, int limit)
@@ -178,7 +177,6 @@ namespace YLMES.Controllers
                 parms[16] = new SqlParameter("@Bank", "");
                 int i = ys.Database.ExecuteSqlCommand("exec ApplierList_Supplier @Type,@ApplierID,@ApplierName,@Address,@Contact,@Tel,@Mobile,@Category,@Level,@Advantage,'','',''," +
                                                       "@Principal,@Representative,@Account,@Bank", parms);
-
                 return "true";
             }
         }
@@ -205,8 +203,7 @@ namespace YLMES.Controllers
         #endregion
         #region 新增供应商信息
         public ActionResult ApplierAdd()
-        {
-            
+        {           
             return View();
         }
         public string ApplierListAdd(List<string> ApplierName, List<string> ApplierNameValue)
@@ -242,10 +239,8 @@ namespace YLMES.Controllers
                         j++;
                     }
                 }
-
                 ys.Database.ExecuteSqlCommand(sb.ToString(), prams);
             }
-
             return "true";
         }
 
@@ -263,7 +258,6 @@ namespace YLMES.Controllers
                 hasmap.Add("Level", Level);
                 hasmap.Add("Advantage", Advantage);
                 return Json(hasmap, JsonRequestBehavior.AllowGet);
-
             }
         }
         #endregion
@@ -312,16 +306,13 @@ namespace YLMES.Controllers
         #region 显示采购清单
         //查询采购清单
         public ActionResult checkPurchaselist(string id) {
-
             List<PurchaseAll_Result> list = null;
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                 if (id == null)
                 {
                     id = "";
-                }
-
-                
+                }               
                 SqlParameter[] parms = new SqlParameter[2];
                 parms[0] = new SqlParameter("@Type","");
                 parms[1] = new SqlParameter("@id", id);
@@ -361,7 +352,8 @@ namespace YLMES.Controllers
             return View();
         }
         //物料信息管理
-        public ActionResult MaterialManagement() {
+        public ActionResult MaterialManagement()
+        {
             return View();
         }
         public JsonResult GetPurchaselist(string PONO, string CreatedTime, string CreatedTimeEnd, int page, int limit)
@@ -496,5 +488,91 @@ namespace YLMES.Controllers
             }
         }
         #endregion
+
+
+        #region 供应商物料信息
+
+      public ActionResult AddMaterInfo(string SupplierId)
+        {
+            ViewData["SupplierId"] = SupplierId;
+            return View();
+        }
+        //新增供应商物料
+        public ActionResult AddMater(string  SupplierId,string id)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                int sid = int.Parse(SupplierId);
+                int i = int.Parse(id);
+                string name = Session["name"].ToString();
+                SqlParameter[] parms = new SqlParameter[3];
+                 parms[0] = new SqlParameter("@SupplierId", sid);
+                 parms[1] = new SqlParameter("@id", i);
+                 parms[2] = new SqlParameter("@name", name);
+                 ys.Database.ExecuteSqlCommand("exec PM_SupplierMaterials @SupplierId,@id,@name",parms);
+                return Content("true");
+            }
+        }
+        public ActionResult CheckMaterTypeNames(int page,int limit)
+        {
+            using (YLMES_newEntities ys = new YLMES_newEntities())
+            {
+
+                var list = ys.MaterTypeNames.ToList();
+                Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
+                PageList<MaterTypeNames> pageList = new PageList<MaterTypeNames>(list, page, limit);
+                int count = list.Count();
+                hasmap.Add("code", 0);
+                hasmap.Add("msg", "");
+                hasmap.Add("count", count);
+                hasmap.Add("data", pageList);
+                return Json(hasmap, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult CheckMaterInfo(string SupplierId)
+        {
+            ViewData["sid"] = SupplierId;
+            return View();
+        }
+        public ActionResult CheckMaterInfos(string sid, int page, int limit)
+        {
+            using (YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                string name = Session["name"].ToString();
+                SqlParameter[] parms = new SqlParameter[1];
+                parms[0] = new SqlParameter("@SupplierId", sid);
+                var list = ys.Database.SqlQuery<PM_CheckSupplierMat_Result>("exec PM_CheckSupplierMat @SupplierId", parms).ToList();
+                Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
+                PageList<PM_CheckSupplierMat_Result> pageList = new PageList<PM_CheckSupplierMat_Result>(list, page, limit);
+                int count = list.Count();
+                hasmap.Add("code", 0);
+                hasmap.Add("msg", "");
+                hasmap.Add("count", count);
+                hasmap.Add("data", pageList);
+                return Json(hasmap, JsonRequestBehavior.AllowGet);
+            }
+        }
+        //删除物料类型
+        public ActionResult DeleteMaterInfo(string id)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                int i = int.Parse(id);
+                SupplierMaterials sm = ys.SupplierMaterials.Where(s => s.Id == i).FirstOrDefault();
+                ys.SupplierMaterials.Remove(sm);
+               int isd=ys.SaveChanges();
+                if (isd > 0)
+                {
+                    return Content("true");
+                }
+                else
+                {
+                    return Content("false");
+                }              
+            }
+          
+        }
+        #endregion
+
     }
 }

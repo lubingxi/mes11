@@ -18,6 +18,11 @@ namespace YLMES.Controllers
         {
             return View();
         }
+        //图纸显示页面
+        public ActionResult FileManagement()
+        {
+            return View();
+        }
 
         #region  技术部
         //图纸页面
@@ -27,21 +32,39 @@ namespace YLMES.Controllers
         }
         //上传图纸
         [HttpPost]
-        public ActionResult UploadDrawings(string hao, HttpPostedFileBase files)
+        public ActionResult UploadDrawings(string hao, string name, string spec, string partMet, HttpPostedFileBase files)
         {
-            try
+            if (hao == "")
             {
-                if (hao == "")
+                return Content("<script>alert('图号不能为空');history.go(-1);</script>");
+            }
+            else if (files == null)
+            {
+                return Content("<script>alert('请选择文件');history.go(-1);</script>");
+            }
+            else
+            {
+                using (YLMES_newEntities yd = new YLMES_newEntities())
                 {
-                    return Content("<script>alert('图号不能为空');history.go(-1);</script>");
+                    var fileName2 = files.FileName;
+                    SqlParameter[] parms = new SqlParameter[1];
+                    parms[0] = new SqlParameter("@FileName", fileName2);
+                    var list = yd.Database.SqlQuery<PM_FiguresCheck_Result>("exec PM_FiguresCheck @FileName", parms).ToList();
+                    string s = "";
+                    if (list.Count != 0)
+                    {
+                        s = "0";
+                    }
+                    if (s == "0")
+                    {
+                        return Content("<script>alert('该文件名字重复不能上传,请重新修改文件名');history.go(-1);</script>");
+                    }
                 }
-                else if (files == null)
+                using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    return Content("<script>alert('请选择文件');history.go(-1);</script>");
-                }
-                else
-                {
-                    var fileName1 = Path.Combine(Request.MapPath("~/Upload"), Path.GetFileName(files.FileName));
+                    string names = Session["name"].ToString();
+                    var fileName1 = Path.Combine(Request.MapPath("~/pdf"), Path.GetFileName(files.FileName));
+                    //files.MoveTo(fileName1, hao + fileName1);
                     files.SaveAs(fileName1);
                     string fname = fileName1.Substring(fileName1.LastIndexOf('\\') + 1);
                     string geshi = fname.Substring(fname.LastIndexOf('.') + 1);
@@ -50,63 +73,24 @@ namespace YLMES.Controllers
                         fname = fname.Substring(0, fname.IndexOf('.'));
                         fname = fname + ".pdf";
                     }
-                    using (YLMES_newEntities ys = new YLMES_newEntities())
-                    {
-                        string name = Session["name"].ToString();
-                        SqlParameter[] parms = new SqlParameter[5];
-                        parms[0] = new SqlParameter("@Type", "Uploaddrawings");
-                        parms[1] = new SqlParameter("@FigureNumber", hao);
-                        parms[2] = new SqlParameter("@FolderName", "Upload");
-                        parms[3] = new SqlParameter("@FileName", fname);
-                        parms[4] = new SqlParameter("@CreatedBy", name);
-                        ys.Database.ExecuteSqlCommand("exec UploadTheDrawings  @Type,@FigureNumber,@FolderName,@FileName,@CreatedBy", parms);
-                    }
-                    return Content("<script>alert('上传成功!');history.back(-1);</script>");
-                    //window.parent.location.reload();
+                    Nullable<int> Materid = 0;
+                    SqlParameter[] parmse = new SqlParameter[3];
+                    parmse[0] = new SqlParameter("@PartNumber", name);
+                    parmse[1] = new SqlParameter("@PartSpec", spec);
+                    parmse[2] = new SqlParameter("@PartMaterial", partMet);
+                    var list = ys.Database.SqlQuery<PM_CheckMaterID_Result>("exec PM_CheckMaterID @PartNumber,@PartSpec,@PartMaterial", parmse).FirstOrDefault();
+                    Materid = list.MatertID;
+                    SqlParameter[] parmd = new SqlParameter[6];
+                    parmd[0] = new SqlParameter("@Type", "Uploaddrawings");
+                    parmd[1] = new SqlParameter("@FigureNumber", hao);
+                    parmd[2] = new SqlParameter("@FolderName", "Upload");
+                    parmd[3] = new SqlParameter("@FileName", files.FileName);
+                    parmd[4] = new SqlParameter("@CreatedBy", name);
+                    parmd[5] = new SqlParameter("@MarterID", Materid);
+                    ys.Database.ExecuteSqlCommand("exec UploadTheDrawings  @Type,@FigureNumber,@FolderName,@FileName,@CreatedBy,@MarterID", parmd);      
                 }
-
+                return Content("<script>alert('上传成功!');history.back(-1);</script>");
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return Content("<script>alert('出现异常');history.go(-1);</script>");
-            }
-
-            //try
-            //{
-            //    if (FilePath == null)
-            //    {
-            //        return "";
-            //    }
-
-            //    if (hao == "")
-            //    {
-            //        return "";
-            //    }
-            //    else
-            //    {
-            //        using (YLMES_newEntities ys = new YLMES_newEntities())
-            //        {
-
-            //            string name = Session["name"].ToString();
-            //            SqlParameter[] parms = new SqlParameter[5];
-            //            parms[0] = new SqlParameter("@Type", "Uploaddrawings");
-            //            parms[1] = new SqlParameter("@FigureNumber", hao);
-            //            parms[2] = new SqlParameter("@FolderName", "Upload");
-            //            parms[3] = new SqlParameter("@FileName", FilePath);
-            //            parms[4] = new SqlParameter("@CreatedBy", name);
-            //            ys.Database.ExecuteSqlCommand("exec UploadTheDrawings @Type, @FigureNumber,@FolderName,@FileName,@CreatedBy", parms);
-            //        }
-            //        return "true";
-            //    }
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine(ex.Message);
-            //    return "err";
-            //}
-
         }
 
         public JsonResult Historical(string FigureNumber)
@@ -140,6 +124,89 @@ namespace YLMES.Controllers
         public ActionResult CheckPdf(string src)
         {
             ViewData["pdf"] = src;
+            return View();
+        }
+        //显示图纸信息
+        public ActionResult CheckFigure(string hao, string PartNumber, string UploadTheName, int page, int limit)
+        {
+            using (YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                if (hao == null)
+                {
+                    hao = "";
+                }
+                if (UploadTheName == null)
+                {
+                    UploadTheName = "";
+                }
+                if (PartNumber == null)
+                {
+                    PartNumber = "";
+                }
+                Dictionary<string, Object> hasmap;
+                SqlParameter[] parms = new SqlParameter[3];
+                parms[0] = new SqlParameter("@FigureNumber", hao);
+                parms[1] = new SqlParameter("@CreatedBy", UploadTheName);
+                parms[2] = new SqlParameter("@PartNumber", PartNumber);
+                var list = ys.Database.SqlQuery<PM_CheckFigure_Result>("exec PM_CheckFigure @FigureNumber,@CreatedBy,@PartNumber", parms).ToList();
+                hasmap = new Dictionary<string, Object>();
+                PageList<PM_CheckFigure_Result> pageList = new PageList<PM_CheckFigure_Result>(list, page, limit);
+                int count = list.Count();
+                hasmap.Add("code", 0);
+                hasmap.Add("msg", "");
+                hasmap.Add("count", count);
+                hasmap.Add("data", pageList);
+                return Json(hasmap, JsonRequestBehavior.AllowGet);
+            }
+        }
+        //修改图纸图号
+        public ContentResult EditFigureNumber(string ID, string FigureNumber)
+        {
+            try
+            {
+                int i = int.Parse(ID);
+                using (YLMES_newEntities ys = new YLMES_newEntities())
+                {
+                    PM_Figure pf = ys.PM_Figure.Where(f => f.ID == i).FirstOrDefault();
+                    pf.FigureNumber = FigureNumber;
+                    ys.SaveChanges();
+                }
+                return Content("true");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Content("false");
+            }
+
+        }
+        //删除图纸
+        public ActionResult DeleteFigureNumber(string ID)
+        {
+            try
+            {
+                int i = int.Parse(ID);
+                using (YLMES_newEntities ys = new YLMES_newEntities())
+                {
+                    PM_Figure pf = ys.PM_Figure.Where(f => f.ID == i).FirstOrDefault();
+                    ys.PM_Figure.Remove(pf);
+                    ys.SaveChanges();
+                }
+                return Content("true");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Content("false");
+            }
+        }
+        //更新图纸页面
+        public ActionResult EditDrawing(string pn, string ps, string pm, string pnu)
+        {
+            ViewData["FigureNumber"] = pnu;
+            ViewData["PartNumber"] = pn;
+            ViewData["PartSpec"] = ps;
+            ViewData["PartMaterial"] = pm;
             return View();
         }
         #endregion

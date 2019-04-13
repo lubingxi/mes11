@@ -53,19 +53,31 @@
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务名称：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["TaskName"]" readonly="readonly" placeholder="" id="TaskName" name="TaskName">
+                    <input type="text" class="input-text" value="@ViewData["TaskName"]" placeholder="" readonly="readonly" id="TaskName" name="TaskName">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>紧急程度：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["PriorityCode"]"  placeholder="" id="PriorityCode" name="PriorityCode">
+                    <input type="text" class="input-text" value="@ViewData["PriorityCode"]" style="border:1px solid #4cff00;" placeholder="" id="PriorityCode" name="PriorityCode">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>产品规格：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["ProductSpec"]" placeholder="" readonly="readonly" id="ProductSpec" name="ProductSpec">
+                    <input type="text" class="input-text" value="@ViewData["ProductSpec"]" placeholder="" style="border:1px solid #4cff00;" id="ProductSpec" name="ProductSpec">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>数量：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["Count"]" placeholder="" style="border:1px solid #4cff00;" id="Count" name="Count">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>单位：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["Units"]" placeholder="" style="border:1px solid #4cff00;" id="Units" name="Units">
                 </div>
             </div>
             <div class="row cl">
@@ -75,96 +87,102 @@
                 </div>
             </div>
             <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>本产品全部支架脚：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@ViewData["BracketFoot"]" placeholder="" style="border:1px solid #4cff00;" id="BracketFoot" name="BracketFoot">
+                </div>
+            </div>
+            <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务备注：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["taskdesc"]" placeholder=""  id="taskdesc" name="taskdesc">
+                    <input type="text" class="input-text" value="@ViewData["taskdesc"]" placeholder="" style="border:1px solid #4cff00;" id="taskdesc" name="taskdesc">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计截至日期：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" onfocus="WdatePicker()" id="JieDate" name="JieDate"  class="input-text Wdate" value="@ViewData["JieDate"]">
+                    <input type="text" onfocus="WdatePicker()" id="JieDate" name="JieDate" style="border:1px solid #4cff00;" class="input-text Wdate" value="@ViewData["JieDate"]">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务附件1：</label>
                 <div class="formControls col-xs-8 col-sm-9">
                     <input type="text" name="fileDownA" id="file1" value="@ViewData["file1"]" readonly="readonly">
-                    <a href="~/TaskManagement/FileADownload?file1=@ViewData["fileDownA"]">下载</a>
+                    <a href="~/TaskManagement/FileADownload?file1=@ViewData["file1"]">下载</a>
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务附件2：</label>
                 <div class="formControls col-xs-8 col-sm-9">
                     <input type="text" name="fileDownB" value="@ViewData["file2"]" id="file2" readonly="readonly">
-                    <a href="~/TaskManagement/FileBDownload?file2=@ViewData["fileDownB"]">下载</a>
+                    <a href="~/TaskManagement/FileBDownload?file2=@ViewData["file2"]">下载</a>
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务附件3：</label>
                 <div class="formControls col-xs-8 col-sm-9">
                     <input type="text" name="fileDownC" id="file3" value="@ViewData["file3"]" readonly="readonly">
-                    <a href="~/TaskManagement/FileCDownload?file3=@ViewData["fileDownC"]">下载</a>
+                    <a href="~/TaskManagement/FileCDownload?file3=@ViewData["file3"]">下载</a>
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计人：</label>
-                <div class="formControls col-xs-8 col-sm-9">
+                <div class="formControls col-xs-8 col-sm-9 peo" style="display:none;">
                     @*<input type="text" class="input-text" value="@ViewData["MachineDesignOwner"]" placeholder="" id="MachineDesignOwner" name="MachineDesignOwner">*@
                     @*<select name="MachineDesignOwner" id="MachineDesignOwner" lay-verify="" lay-filter="MachineDesignOwner" lay-search></select>*@
-                    @Html.DropDownList("selectd", ViewData["selectd"] as SelectList,"请选择", new { name = "MachineDesignOwner", id = "MachineDesignOwner", @lay_search = "", @lay_filter = "selectd" })
-                    <input type="hidden" name="MachineDesignOwner"  value="@ViewData["jixie"]"/>
+                    @Html.DropDownList("selectd", ViewData["selectd"] as SelectList, "请选择", new { name = "MachineDesignOwner", id = "MachineDesignOwner", @lay_search = "", @lay_filter = "selectd" })
+                    <input type="hidden" name="MachineDesignOwner" value="@ViewData["jixie"]" />
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>审核人：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    @Html.DropDownList("selects", ViewData["selects"] as SelectList,"请选择", new { name = "QualifiedOwner", id = "QualifiedOwner", @lay_search = "", @lay_filter = "selects" })
+                    @Html.DropDownList("selects", ViewData["selects"] as SelectList, "请选择", new { name = "QualifiedOwner", id = "QualifiedOwner", @lay_search = "", @lay_filter = "selects" })
                     <input type="hidden" name="QualifiedOwner" value="@ViewData["shenhe"]" />
                     @*<input type="text" class="input-text" value="胡超" placeholder="" id="QualifiedOwner" name="QualifiedOwner">*@
                     @*<select name="QualifiedOwner" id="QualifiedOwner" lay-verify="" lay-filter="QualifiedOwner" lay-search></select>*@
                 </div>
             </div>
             <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图纸发行人：</label>
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图纸审批人：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["IssueOwner"]" placeholder="" id="IssueOwner" name="IssueOwner">
+                    <input type="text" class="input-text" value="胡超" placeholder="" style="border:1px solid #4cff00;" id="IssueOwner" name="IssueOwner">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计分值：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["MachineDesignBaseScore"]" placeholder="" id="MachineDesignBaseScore" name="MachineDesignBaseScore">
+                    <input type="text" class="input-text" value="@ViewData["MachineDesignBaseScore"]" placeholder="" style="border:1px solid #4cff00;" id="MachineDesignBaseScore" name="MachineDesignBaseScore">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计基准时间：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["MachineDesignBaseTime"]" placeholder="" id="MachineDesignBaseTime" name="MachineDesignBaseTime">
+                    <input type="text" class="input-text" value="@ViewData["MachineDesignBaseTime"]" placeholder="" style="border:1px solid #4cff00;" id="MachineDesignBaseTime" name="MachineDesignBaseTime">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>审核分值：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["QualifiedBaseScore"]" placeholder="" id="QualifiedBaseScore" name="QualifiedBaseScore">
+                    <input type="text" class="input-text" value="@ViewData["QualifiedBaseScore"]" placeholder="" style="border:1px solid #4cff00;" id="QualifiedBaseScore" name="QualifiedBaseScore">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>审核基准时间：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["QualifiedBaseTime"]" placeholder="" id="QualifiedBaseTime" name="QualifiedBaseTime">
+                    <input type="text" class="input-text" value="@ViewData["QualifiedBaseTime"]" placeholder="" style="border:1px solid #4cff00;" id="QualifiedBaseTime" name="QualifiedBaseTime">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>发行分值：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["IssueBaseScore"]" placeholder="" id="IssueBaseScore" name="IssueBaseScore">
+                    <input type="text" class="input-text" value="@ViewData["IssueBaseScore"]" placeholder="" style="border:1px solid #4cff00;" id="IssueBaseScore" name="IssueBaseScore">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>发行基准时间：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["IssueBaseTime"]" placeholder="" id="IssueBaseTime" name="IssueBaseTime">
+                    <input type="text" class="input-text" value="@ViewData["IssueBaseTime"]" placeholder="" style="border:1px solid #4cff00;" id="IssueBaseTime" name="IssueBaseTime">
                 </div>
             </div>
             <div class="row cl">
@@ -175,7 +193,7 @@
         </form>
     </article>
 
-  
+
     <script type="text/javascript">
         layui.use(['form'], function () {
             var form = layui.form;
@@ -194,7 +212,7 @@
            );
         function sub() {
             $("#select").removeAttr("disabled");
-            $("#form-article-add").ajaxSubmit({             
+            $("#form-article-add").ajaxSubmit({
                 url: "@Url.Action("EditMachine", "TaskManagement")",
                 type: "post",
                 success: function (data) {
@@ -216,6 +234,12 @@
                 var sd = $("#u").text();
                 window.parent.document.getElementById("rightframe").src = sd;
             });
+            if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }
+           else if ('@Session["name"]' == "胡超") {
+                $('.peo').css("display", "block");
+            }
             //layui.use(['table', 'layer', 'form'], function () {
 
             //    var table = layui.table, layer = layui.layer

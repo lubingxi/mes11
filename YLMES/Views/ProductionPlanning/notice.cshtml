@@ -1,13 +1,10 @@
 ﻿
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>友力信息管理系统</title>
     <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
-    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
     <link href="~/css/style.css" rel="stylesheet" type="text/css" />
     <link href="~/layui/css/layui.css" rel="stylesheet" />
     <script type="text/javascript" src="../../js/jquery.js"></script>
@@ -51,11 +48,8 @@
                , done: function () {
                    $("tr a").hide()
                    $("tr").hover(function () {
-
                        $(this).children().last().children().children().toggle();
                    })
-
-
                }
               , toolbar: 'default'
                , cols: [[
@@ -69,10 +63,6 @@
                 , { field: '转生产订单', title: '生产订单状态', width: 180 }
                 , { field: 'right', title:'生产订单状态操作',width: 250, align: 'center', toolbar: '#barDemo' }
                ]]
-
-                });
-                table.on('checkbox(demo)', function (obj) {
-                    console.log(obj)
                 });
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
@@ -91,27 +81,19 @@
                                 layer_show('转生产订单',url,'1000','700');
                             }
                            // window.parent.document.getElementById("rightframe").src = "/ProductionPlanning/notice?id=" + id;
-                            break;
-
+                            break;                                          
                     };
                 });
-
             });
-
         })
-
-
 
     </script>
     <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-xs" id="update" lay-event="update">操作</a>
+        <a class="layui-btn layui-btn-xs" id="update" lay-event="update">操作</a>           
     </script>
-
 </head>
 
-
 <body>
-
     <div class="place">
         <span>位置：</span>
         <ul class="placeul">

@@ -29,16 +29,14 @@
                         success: function (data) {
                             if (data == "true") {
                                 layer.msg("添加成功", { icon: 6 });
-                                window.parent.document.getElementById("rightframe").src = "/SystemSettings/LocationType"
+                                location.reload();
                             }
                             if (data == "false") {
                                 layer.msg('添加失败!', { icon: 5 });
                                 return false;
                             }
-
                         }
-                    });
-               
+                    });               
             });
             layui.use(['table', 'layer'], function () {
                 var table = layui.table, layer = layui.layer;
@@ -53,21 +51,14 @@
                             $("tr").hover(function () {
                                 $(this).children().last().children().children().toggle();
                             })
-                                            }
+                            }
                         , cols: [[
-                            , {
+                             {
                                 field: '', width: 20, title: '', hide: true
                             }
-                            , { field: '序号', width: 100, title: '序号' }
-                            , { field: '工位编码', width: 150, title: '工位编码', edit: Text }
-                            , { field: '工位类型', width: 210, title: '工位类型', edit: Text }
-                            , { field: '创建人', width: 100, title: '创建人' }
-                            , { field: '创建时间', width: 200, title: '创建时间' }
-                            , { field: '更新人', width: 100, title: '更新人' }
-                            , { field: '更新时间', width: 200, title: '更新时间' }
-                            , {
-                                field: '状态', width: 80, title: '状态'
-                            }
+                            , { field: 'ID', width: 100, title: '序号' }
+                            , { field: 'Station', width: 150, title: '工位名称', edit: Text }
+                            , { field: 'CreatedBY', width: 100, title: '创建人' }
                             , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
                         ]]
                     });             
@@ -76,10 +67,9 @@
                     switch (obj.event) {
                         case 'delete':
                             layer.confirm('真的删除行么', function (index) {
-                                id = data.序号;
-                                type = data.工位类型;
+                                id = data.ID;
                                 layer.close(index);
-                                var url = "/SystemSettings/DeleteLocationType?id=" + id + "&type=" + type;
+                                var url = "/SystemSettings/DeleteLocationType?id=" + id;
                                 $.ajax({
                                     url: url,
                                     type: 'post',
@@ -98,10 +88,9 @@
                             });
                             break;
                         case 'update':
-                            id = data.序号;
-                            bianma = data.工位编码;
-                            type = data.工位类型;
-                            var url = "/SystemSettings/EditLocationType?id=" + id + "&bianhao=" + bianma + "&type=" + type;
+                            id = data.ID;
+                            Station = data.Station;
+                            var url = "/SystemSettings/EditLocationType?id=" + id + "&Station=" + Station;
                             $.ajax({
                                 url: url,
                                 type: 'post',
@@ -115,9 +104,9 @@
                                         layer.msg('修改失败!', { icon: 5 });
                                         return false;
                                     }
+
                                 }
                             });
-
                             break;
                     };
                 });
@@ -137,41 +126,26 @@
 
                          $(this).children().last().children().children().toggle();
                      })
-
-
-                 }
-                   , cols: [[
-                   , {
-                            field: '', width: 20, title: '',hide:true
-                        }
-                   , { field: '序号', width: 100, title: '序号' }
-                   , { field: '工位编码', width: 150, title: '工位编码', edit: Text }
-                   , { field: '工位类型', width: 210, title: '工位类型', edit: Text }
-                   , { field: '创建人', width: 100, title: '创建人' }
-                   , { field: '创建时间', width: 200, title: '创建时间' }
-                   , { field: '更新人', width: 100, title: '更新人' }
-                   , { field: '更新时间', width: 200, title: '更新时间' }
-                   , {
-                       field: '状态', width: 80, title: '状态'
                      }
-                   , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+                   , cols: [[
+                        {
+                            field: '', width: 20, title: '', hide: true
+                        }
+                            , { field: 'ID', width: 100, title: '序号' }
+                            , { field: 'Station', width: 150, title: '工位名称', edit: Text }
+                            , { field: 'CreatedBY', width: 100, title: '创建人' }
+                            , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
                    ]]
-
                     });
                 });
-                table.on('checkbox(demo)', function (obj) {
-                    console.log(obj)
-                });
-
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
                     switch (obj.event) {
                         case 'delete':
                             layer.confirm('真的删除行么', function (index) {
-                                id = data.序号;
-                                type = data.工位类型;
+                                id = data.ID;
                                 layer.close(index);
-                                var url = "/SystemSettings/DeleteLocationType?id=" + id+"&type="+type;
+                                var url = "/SystemSettings/DeleteLocationType?id=" + id;
                                 $.ajax({
                                     url: url,
                                     type: 'post',
@@ -190,10 +164,9 @@
                             });
                             break;
                         case 'update':
-                            id = data.序号;
-                            bianma = data.工位编码;
-                            type = data.工位类型;
-                            var url = "/SystemSettings/EditLocationType?id=" + id + "&bianhao=" + bianma + "&type=" + type;
+                            id = data.ID;
+                            Station = data.Station;
+                            var url = "/SystemSettings/EditLocationType?id=" + id + "&Station=" + Station;
                             $.ajax({
                                 url: url,
                                 type: 'post',
@@ -210,7 +183,6 @@
 
                                 }
                             });
-
                             break;
                     };
                 });

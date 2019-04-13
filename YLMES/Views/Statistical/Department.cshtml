@@ -60,6 +60,9 @@
                 $("#PurchaselistSel").click(function () {
                     var Name = $('#WarehouseName').val();
                     tableIns.reload({
+                        page: {
+                            curr: 1
+                        },
                         where: {
                             Name: Name
                             , department: department

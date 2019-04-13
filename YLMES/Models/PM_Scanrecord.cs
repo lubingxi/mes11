@@ -15,7 +15,15 @@ namespace YLMES.Models
     public partial class PM_Scanrecord
     {
         public int id { get; set; }
-        public string details { get; set; }
+        public string figureNumber { get; set; }
+        public string PartNumber { get; set; }
+        public string PartSpec { get; set; }
+        public string PartMaterial { get; set; }
+        public Nullable<int> IQC_Result { get; set; }
+        public Nullable<int> IQCPassQTY { get; set; }
+        public Nullable<int> PutonPCS { get; set; }
+        public Nullable<int> OutPCS { get; set; }
+        public Nullable<int> StockPCS { get; set; }
         public string operation { get; set; }
         public string Employee { get; set; }
         public Nullable<System.DateTime> scantrim { get; set; }

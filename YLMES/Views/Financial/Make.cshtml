@@ -1,0 +1,576 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/js/vue.js"></script>
+    <script src="~/js/axios.js"></script>
+    <script src="~/js/print.js"></script>
+    <script src="~/js/elemenui.js"></script>
+    <link href="~/css/elemenui.css" rel="stylesheet" />
+    <title>打单页面</title>
+    <script type="text/javascript">
+        "use strict"
+
+        window.onload = function () {
+            var vm = new Vue({
+                el: "#vues",
+                data: {
+                    tableData: [],
+                    dis: true,
+                    pageData: []
+                    , search: ""
+                    , search1: ""
+                    , total: 0
+                    , pageSize: 10
+                    , currentPage1: 1
+                    , total1: 0
+                    , pageSize1: 10
+                    , currentPage11: 1
+                    , value: ""
+                    , value1: ""
+                    , loading: true,
+                    restaurants1: [],
+                    restaurants11: [],
+                    checkedData: [],
+                    dialogTableVisible: false,
+                    dialogTableVisible1: false,
+                    tableData1: [],
+                    pageData1: [],
+                    MakeData: {},
+                    ContractNumber: "0",
+                    inputValue: "",
+                    nextBoo: true
+                },
+                methods: {
+                    get() {
+                        axios("/Financial/CheckMake").then( (res)=> {
+                            var fi = []
+                            vm.MakeData = {}
+                            vm.tableData1 = []
+                            var { Make, Hit } = res.data
+                            vm.tableData = Make
+                            vm.pageData = Make
+                            Hit.forEach((x) => {
+                                try {
+                                    vm.MakeData[x.ContractNumber].push(x)
+                                } catch{
+                                    vm.MakeData[x.ContractNumber] = []
+                                    vm.MakeData[x.ContractNumber].push(x)
+                                }
+                                fi.includes(x.ContractNumber.toUpperCase()) ? "" : !function () {
+                                    fi.push(x.ContractNumber)
+                                    vm.tableData1.push(x)
+
+                                }()
+                            })
+                            vm.pageData1 = vm.tableData1
+                            vm.loading = false
+                            })
+                    },
+                    Transform(number) {
+                        number = new String(parseFloat(number).toFixed(2));
+                        //分离整数与小数
+                        var num;
+                        var dig;
+                        if (number.indexOf(".") == -1) {
+                            num = number;
+                            dig = "";
+                        }
+                        else {
+                            num = number.substr(0, number.indexOf("."));
+                            dig = number.substr(number.indexOf(".") + 1, number.length);
+                        }
+                        //转换整数部分
+                        var i = 1;
+                        var len = num.length;
+                        var dw2 = new Array("", "万", "亿");//大单位
+                        var dw1 = new Array("拾", "佰", "千");//小单位
+                        var dw = new Array("", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖");//整数部分用
+                        var dws = new Array("零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖");//小数部分用
+                        var k1 = 0;//计小单位
+                        var k2 = 0;//计大单位
+                        var str = "零";
+                        for (i = 1; i <= len; i++) {
+                            var n = num.charAt(len - i);
+                            if (n == "0") {
+                                if (k1 != 0)
+                                    str = str.substr(1, str.length - 1);
+
+                                if (str.substr(0, 1) != "零" && str.substr(0, 1) != "万" && str.substr(0, 1) != "亿") {
+                                    str = "零" + str;
+                                }
+                            }
+
+                            str = dw[Number(n)].concat(str);//加数字
+
+                            if (len - i - 1 >= 0)//在数字范围内
+                            {
+                                if (k1 != 3)//加小单位
+                                {
+                                    str = dw1[k1].concat(str);
+                                    k1++;
+                                }
+                                else//不加小单位,加大单位
+                                {
+                                    k1 = 0;
+                                    var temp = str.charAt(0);
+                                    if (temp == "万" || temp == "亿")//若大单位前没有数字则舍去大单位
+                                        str = str.substr(1, str.length - 1);
+                                    str = dw2[k2].concat(str);
+                                }
+                            }
+
+                            if (k1 == 3)//小单位到千则大单位进一
+                            {
+                                k2++;
+                            }
+                        }
+                        if (str.substr(str.length - 1, str.length) == "零") {
+                            str = str.substr(0, str.length - 1);
+                        }
+                        //转换小数部分
+                        var strdig = "";
+                        if (Number(dig) == 0) {
+                            strdig = "整";
+                        }
+                        else {
+                            for (i = 0; i < 2; i++) {
+                                var n = dig.charAt(i);
+                                if (i == 0 && Number(n) == 0) {
+                                    strdig = "零"
+                                }
+                                else {
+                                    strdig += dws[Number(n)] + (i == 0 ? "角" : "分");//加数字
+                                }
+                            }
+                        }
+                        if (str == "") {
+                            str = "零"
+                        }
+                        str += "元" + strdig;
+                        return str;
+                    },
+                    handleSizeChange(siae) {
+                        !this.dialogTableVisible1 ?
+                            this.pageSize = siae : this.pageSize1 = siae
+                    },
+                    handleCurrentChange(curr) {
+                        !this.dialogTableVisible1 ?
+                            this.currentPage1 = curr :
+                            this.currentPage11 = curr
+                    },
+                    digit(t, e) {
+                        var i = "";
+                        t = String(t),
+                            e = e || 2;
+                        for (var a = t.length; a < e; a++)
+                            i += "0";
+                        return t < Math.pow(10, e) ? i + (0 | t) : t
+                    },
+                    toDateString(t, e) {
+                        if (typeof (t) == "string") {
+                            t = Number(t.substring(t.indexOf("(") + 1, t.indexOf(")")))
+                        }
+                        var i = this
+                            , a = new Date(t || new Date)
+                            , n = [i.digit(a.getFullYear(), 4), i.digit(a.getMonth() + 1), i.digit(a.getDate())]
+                            , r = [i.digit(a.getHours()), i.digit(a.getMinutes()), i.digit(a.getSeconds())];
+                        return e = e || "yyyy-MM-dd HH:mm:ss",
+                            e.replace(/yyyy/g, n[0]).replace(/MM/g, n[1]).replace(/dd/g, n[2]).replace(/HH/g, r[0]).replace(/mm/g, r[1]).replace(/ss/g, r[2])
+                    },
+                    date() {
+                        if (!this.dialogTableVisible1) {
+                            this.search = this.value == null ? "" : this.value
+                        } else {
+                            this.search1 = this.value1 == null ? "" : this.value1
+                        }
+                    },
+                    querySearch(queryString, cb) {
+                        var restaurants
+                        !this.dialogTableVisible1 ?
+                            restaurants = this.restaurants1 :
+                            restaurants = this.restaurants11;
+                        var results = new String(queryString) ? restaurants.filter(this.createFilter(new String(queryString))) : restaurants;
+                        cb(results);
+                    },
+                    createFilter(queryString) {
+                        return (restaurant) => {
+                            return (new String(restaurant.value).toLowerCase().indexOf(new String(queryString).toLowerCase()) === 0);
+                        };
+                    },
+                    selectClick() {
+                        if (this.tableData.length > 0) {
+                            axios.post("/Financial/UpMake", { type: "select", id: vm.checkedData.toString() }).then(function () {
+                                vm.get()
+                                vm.$message({
+                                    message: '打单完成',
+                                    type: 'success'
+                                });
+                            })
+                        } else {
+                            vm.$message.error('无需打单');
+                        }
+                    },
+                    allClick() {
+                        if (this.tableData.length > 0) {
+                            axios.post("/Financial/UpMake", { type: "all" }).then(function () {
+                                vm.get()
+                                vm.$message({
+                                    message: '打单完成',
+                                    type: 'success'
+                                });
+                            })
+                        } else {
+                            vm.$message.error('无需打单');
+                        }
+                    },
+                    singleClick(id) {
+                        axios.post("/Financial/UpMake", { type: "select", id: id }).then(function () {
+                            vm.get()
+                            vm.$message({
+                                message: '打单完成',
+                                type: 'success'
+                            });
+                        })
+                    },
+                    selectionChange(a) {
+                        this.checkedData = []
+                        a.forEach(function (va) {
+                            vm.checkedData.push(va.ID)
+                        })
+                    },
+                    getSummaries(param) {
+                        const { columns, data } = param;
+                        const sums = [];
+                        columns.forEach((column, index) => {
+                            if (index === 0) {
+                                sums[0] = '合计';
+                                return;
+                            }
+                            this.$nextTick(function () {
+                                if (this.nextBoo) {
+                                    if (index != 1 && index != columns.length - 1) {
+                                        var a = document.getElementsByClassName("el-table__footer")["0"].getElementsByTagName("td");
+                                        a["0"].parentNode.removeChild(a["2"]);
+                                    }
+                                } if (index == columns.length - 1) {
+                                    this.nextBoo = false
+                                }
+                            })
+                            if (index === columns.length - 1) {
+                                const values = data.map(item => Number(item[column.property]));
+                                if (!values.every(value => isNaN(value))) {
+                                    sums[columns.length - 1] = values.reduce((prev, curr) => {
+                                        const value = Number(curr);
+                                        if (!isNaN(value)) {
+                                            return prev + curr;
+                                        } else {
+                                            return prev;
+                                        }
+                                    }, 0);
+                                    column.colSpan = 3
+                                    columns[1].colSpan = 3
+                                    sums[1] = this.Transform(sums[columns.length - 1]);
+                                    sums[columns.length - 1] += ' 元';
+                                }
+                            }
+                        });
+                        return sums;
+                    },
+                    workerSearch(a, b, g) {
+                        var c = "";
+                        var t = "";
+                        var e = "";
+                        g === 2 ?
+                            !function () { c = "restaurants11", t = "currentPage11", e = "pageData1" }() :
+                            !function () { c = "restaurants1", t = "currentPage1", e = "pageData" }()
+                        this[c] = [];
+                        var worker = new Worker("/js/pageWorker.js")
+                        var d = { vm: a, restaurants: [], search: b }
+                        worker.postMessage(d)
+                        worker.onmessage =  (s)=> {
+                            if (vm[e].toString() != s.data.vm.toString()) {
+                                vm[e] = s.data.vm
+                                vm[t] = 1
+                            }
+                            s.data.restaurants.find( (x)=> {
+                                vm[c].push({ "value": new String(x) })
+                            });
+                            worker.terminate();
+                        };
+                    },
+                    start_print() {
+                        this.dis = false
+                        this.$nextTick(function () {
+                            this.$print(this.$refs.print)
+                            this.dis = true
+                        })
+                    }
+                }
+                , created: function () {
+                    this.get();
+                }
+                , computed: {
+                    page() {
+                        this.total = this.pageData.length
+                        if (this.pageData.length > 0) {
+                            var curr = (this.currentPage1 - 1) * this.pageSize
+                            return this.pageData.slice(curr, curr + this.pageSize);
+                        }
+                    },
+                    page1() {
+                        this.total1 = this.pageData1.length
+                        if (this.pageData1.length > 0) {
+                            var curr = (this.currentPage11 - 1) * this.pageSize1
+                            return this.pageData1.slice(curr, curr + this.pageSize1);
+                        }
+                    },
+                    MakeDatas() {
+                        return this.ContractNumber != "0" ? this.MakeData[this.ContractNumber][0] : ""
+                    }
+                }
+                //watch: {
+                //
+                //}
+            })
+            vm.$watch(function () {
+                if (this.dialogTableVisible1) {
+                    return this.search1
+                } else {
+                    return this.search
+                }
+            }, function (newVal, oldVal) {
+                var boo = true;
+                if (oldVal != null) {
+                    if (newVal.toString() == oldVal.toString()) {
+                        boo = false
+                    };
+                };
+                if (boo)
+                    this.dialogTableVisible1 ?
+                        this.workerSearch(this.tableData1, this.search1, 2)
+                        :
+                        this.workerSearch(this.tableData, this.search, 1)
+            })
+        }
+    </script>
+</head>
+<body>
+    <div id="vues">
+        <template>
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item>首页</el-breadcrumb-item>
+                <el-breadcrumb-item>原材料仓</el-breadcrumb-item>
+                <el-breadcrumb-item>打单</el-breadcrumb-item>
+            </el-breadcrumb>
+            <div class="block" style="margin:10px">
+                <span class="demonstration">创建时间</span>
+                <el-date-picker v-model="value"
+                                type="date"
+                                @@change="date"
+                                value-format="yyyy-MM-dd"
+                                placeholder="选择日期">
+                </el-date-picker>
+                <el-button type="primary" @@click="selectClick">打单选择项</el-button>
+                
+                <el-badge value="推荐" class="item">
+                    <el-button type="success" @@click="allClick" style="margin:5px 20px">全部打单</el-button>
+                </el-badge>
+                <el-button type="primary" plain @@click="dialogTableVisible1=true">已打列表</el-button>
+            </div>
+            <el-table :data="page"
+                      style="margin:0 auto;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)"
+                      height="600"
+                      align="center"
+                      v-loading="loading"
+                      @@selection-change="selectionChange"
+                      element-loading-text="拼命加载中"
+                      element-loading-spinner="el-icon-loading"
+                      element-loading-background="rgba(0, 0, 0, 0.8)">
+                <el-table-column type="selection"
+                                 width="30">
+                </el-table-column>
+                <el-table-column prop="ContractNumber"
+                                 label="采购编号">
+                </el-table-column>
+                <el-table-column label="日期">
+                    <template slot-scope="scope">
+                        <i class="el-icon-time"></i>
+                        <span style="margin-left: 10px">{{ toDateString(scope.row.CreatedTime)}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="物料名称">
+                    <template slot-scope="scope">
+                        <el-popover trigger="hover" placement="top">
+                            <p>规格: {{ scope.row.PartSpec }}</p>
+                            <p>材质: {{ scope.row.PartMaterial }}</p>
+                            <div slot="reference" class="name-wrapper">
+                                <el-tag size="medium">{{ scope.row.PartNumber }}</el-tag>
+                            </div>
+                        </el-popover>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="InQTY"
+                                 label="数量">
+                </el-table-column>
+                <el-table-column prop="CreatedBy"
+                                 label="操作人员">
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button size="mini" @@click="singleClick(scope.row.ID)">打单</el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column>
+                    <template slot="header" slot-scope="scope">
+                        <el-autocomplete popper-class="my-autocomplete"
+                                         v-model="search"
+                                         :fetch-suggestions="querySearch"
+                                         placeholder="输入关键字查找"
+                                         clearable
+                                         prefix-icon="el-icon-search">
+                        </el-autocomplete>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="block">
+                <el-pagination @@size-change="handleSizeChange"
+                               @@current-change="handleCurrentChange"
+                               :current-page="currentPage1"
+                               :page-sizes="[10, 20, 30, 40]"
+                               :page-size="pageSize"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="total">
+                </el-pagination>
+            </div>
+            <el-dialog :visible.sync="dialogTableVisible1"
+                       width="80%">
+                <div class="block" style="margin:10px">
+                    <span class="demonstration">打单时间</span>
+                    <el-date-picker v-model="value1"
+                                    type="date"
+                                    @@change="date"
+                                    value-format="yyyy-MM-dd"
+                                    placeholder="选择日期">
+                    </el-date-picker>
+                </div>
+                <el-table :data="page1"
+                          style="margin:0 auto;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)"
+                          height="600"
+                          align="center">
+                    <el-table-column type="index">
+                    </el-table-column>
+                    <el-table-column prop="ContractNumber"
+                                     label="采购编号">
+                    </el-table-column>
+                    <el-table-column label="打单日期">
+                        <template slot-scope="scope">
+                            <i class="el-icon-time"></i>
+                            <span style="margin-left: 10px">{{ toDateString(scope.row.CreatedTime)}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="供应商名称"
+                                     prop="Name">
+                    </el-table-column>
+                    <el-table-column label="供应商地址"
+                                     prop="Address">
+                    </el-table-column>
+                    <el-table-column prop="MakeCreatedBy"
+                                     label="打单人">
+                    </el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-button type="primary" round @@click="dialogTableVisible=true;ContractNumber=scope.row.ContractNumber">查看详情</el-button>
+                        </template>
+                    </el-table-column>
+                    <el-table-column>
+                        <template slot="header" slot-scope="scope">
+                            <el-autocomplete popper-class="my-autocomplete"
+                                             v-model="search1"
+                                             :fetch-suggestions="querySearch"
+                                             placeholder="输入关键字查找"
+                                             clearable
+                                             prefix-icon="el-icon-search">
+                            </el-autocomplete>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="block">
+                    <el-pagination @@size-change="handleSizeChange"
+                                   @@current-change="handleCurrentChange"
+                                   :current-page="currentPage11"
+                                   :page-sizes="[10, 20, 30, 40]"
+                                   :page-size="pageSize1"
+                                   layout="total, sizes, prev, pager, next, jumper"
+                                   :total="total1">
+                    </el-pagination>
+                </div>
+            </el-dialog>
+            <el-dialog :visible.sync="dialogTableVisible"
+                       width="70%">
+                <div ref="print">
+                    <div style="text-align:center;word-spacing:30px;">
+                        <h2>广 东 友 力 智 能 科 技 有 限 公 司</h2>
+                        <h1>采 购 进 仓 结 算 单</h1>
+                    </div>
+                    <el-row :gutter="10">
+                        <el-col :span="12">
+                            <div class="grid-content bg-purple">
+                                <p>供应商名称：{{MakeDatas.Name}}</p>
+                            </div>
+                        </el-col>
+                        <el-col :span="12"><div class="grid-content bg-purple"></div></el-col>
+                    </el-row>
+                    <el-row :gutter="10">
+                        <el-col :span="12"><div class="grid-content bg-purple">   <p>供应商地址：{{MakeDatas.Address}}</p></div></el-col>
+                        <el-col :span="12">
+                            <div class="grid-content bg-purple">
+                                <p>
+                                    摘要：<span v-show="!dis">{{inputValue}}</span>
+                                    <el-input v-model="inputValue" style="width:90%;" size="mini" v-show="dis"></el-input>
+                                </p>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="10">
+                        <el-col :span="12"><div class="grid-content bg-purple">   <p>采购订单号：{{MakeDatas.ContractNumber}}</p></div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">   <p>单据日期：{{toDateString(MakeDatas.CreatedTime)}}</p></div></el-col>
+                        <el-col :span="6"><div class="grid-content bg-purple">   <p>单据编号：{{MakeDatas.ContractNumber}}</p></div></el-col>
+                    </el-row>
+                    <el-table :data="MakeData[ContractNumber]" show-summary :summary-method="getSummaries">
+                        <el-table-column type="index" width="100" label="序号">
+                        </el-table-column>
+                        <el-table-column prop="PartNumber"
+                                         label="物料名称" align="center">
+                        </el-table-column>
+                        <el-table-column prop="PartSpec"
+                                         label="物料规格">
+                        </el-table-column>
+                        <el-table-column prop="Units"
+                                         label="单位">
+                        </el-table-column>
+                        <el-table-column prop="InMakeQTY"
+                                         label="数量">
+                        </el-table-column>
+                        <el-table-column prop="UnitPrice"
+                                         label="单价">
+                        </el-table-column>
+                        <el-table-column prop="TotalPrice"
+                                         label="金额" align="center">
+                        </el-table-column>
+                    </el-table>
+                </div>
+                <div style="text-align:center;margin-top:10px">
+                    <el-button type="primary" plain icon="el-icon-printer" @@click="start_print">打印</el-button>
+                </div>
+            </el-dialog>
+        </template>
+    </div>
+</body>
+</html>

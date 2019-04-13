@@ -14,114 +14,121 @@
     <link rel="stylesheet" type="text/css" href="~/layui/css/layui.css" />
     <link href="~/layui/css/layui.css" rel="stylesheet" />
     <title></title>
+ 
 </head>
 <body>
     <article class="page-container">
 
-        <form class="form form-horizontal layui-form" id="form-article-add">
+        <form class="layui-form" id="form-article-add" style="margin-top:20px">
             <input type="text" hidden id="ids" value="@ViewData["id"]" name="id">
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>客户名称：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["CuName"]" placeholder="" id="CuName" name="CuName">
+            <div class="layui-form-item">
+                <label class="layui-form-label">客户名称：</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" name="CuName" placeholder="请输入客户名称" value="@ViewData["CuName"]" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">合同编号：</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" name="CuNumber" placeholder="请输入订单编号" value="@ViewData["CuNumber"]" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">合同金额：</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" name="Money" value="@ViewData["Money"]" id="Money" placeholder="请输入合同金额" autocomplete="off" class="layui-input">
+                </div>
+            </div>      
+            <div class="layui-form-item">
+                <label class="layui-form-label">是否安装：</label>
+                <div class="layui-input-block">
+                    <span class="select-box">
+                        <select name="IfInstall" class="select" id="IfInstall">
+                            <option value="是">是</option>
+                            <option value="否">否</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">是否含税：</label>
+                <div class="layui-input-block">
+                    <span class="select-box">
+                        <select name="IfIncludeTax" class="select" id="IfIncludeTax">
+                            <option value="是">是</option>
+                            <option value="否">否</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">签订日期：</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" name="DateOfSign" autocomplete="off" class="layui-input" onfocus="WdatePicker()" value="@ViewData["DateOfSign"]">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">是否运输：</label>
+                <div class="layui-input-block">
+                    <span class="select-box">
+                        <select name="IfTransport" class="select" id="IfTransport">
+                            <option value="是">是</option>
+                            <option value="否">否</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">订金金额：</label>
+                <div class="layui-input-block" disabled>
+                    <input type="text" lay-verify="required" name="DepositAmount" id="DepositAmount" autocomplete="off" class="layui-input" value="@ViewData["DepositAmount"]">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">发货收款金额：</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" name="DeliveryAmount" autocomplete="off" class="layui-input" value="@ViewData["DeliveryAmount"]">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">安装前金额：</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" name="InstallationAmount" autocomplete="off" class="layui-input" value="@ViewData["InstallationAmount"]">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">验收金额：</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" name="AcceptanceAmount" autocomplete="off" class="layui-input" value="@ViewData["AcceptanceAmount"]">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">质保金额：</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" name="QualityAssuranceAmount" autocomplete="off" class="layui-input" value="@ViewData["QualityAssuranceAmount"]">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">交期：</label>
+                <div class="layui-input-block">
+                    <textarea lay-verify="required" name="SendDate" autocomplete="off" class="layui-textarea">@ViewData["SendDate"]</textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">违约条件：</label>
+                <div class="layui-input-block">
+                    <textarea lay-verify="required" name="weiyuetiaojian" autocomplete="off" class="layui-textarea">@ViewData["weiyuetiaojian"]</textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">合同总结：</label>
+                <div class="layui-input-block">
+                    <textarea lay-verify="required" name="CZongJie" autocomplete="off" class="layui-textarea">@ViewData["CZongJie"]</textarea>
                 </div>
             </div>
             <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>订单编号：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["CuNumber"]" placeholder="" id="CuNumber" name="CuNumber"><i></i>
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>合同金额：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["Money"]" placeholder="" id="Money" name="Money">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>是否安装：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["IfInstall"]" placeholder="" id="IfInstall" name="IfInstall">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>是否含税：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["IfIncludeTax"]" placeholder="" id="IfIncludeTax" name="IfIncludeTax">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>签订日期：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" onfocus="WdatePicker()" id="DateOfSign" name="DateOfSign" class="input-text Wdate" value="@ViewData["DateOfSign"]">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2">创建时间：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" onfocus="WdatePicker()" id="CreatedTime" name="CreatedTime" class="input-text Wdate" value="@ViewData["CreatedTime"]">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>收款金额：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" readonly="readonly" id="AmountCollected" name="AmountCollected" class="input-text" value="@ViewData["AmountCollected"]">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>是否运输：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["IfTransport"]" placeholder="" id="IfTransport" name="IfTransport">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>合同状态：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    
-                        @Html.DropDownList("select", ViewData["select"] as SelectList, new { name = "ck", id = "ck" })
-                 
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2">收款方式：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <textarea name="Pay" cols="" rows="" id="Pay" class="textarea" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["Pay"]</textarea>
-                    <p class="textarea-numberbar">@*<em class="textarea-length"></em>/200*@</p>
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2">交期：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <textarea name="SendDate" cols="" rows="" id="SendDate" class="textarea" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["SendDate"]</textarea>
-                    <p class="textarea-numberbar"></p>
-                </div>
-            </div>
-
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2">违约条件：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <textarea name="weiyuetiaojian" cols="" rows="" id="weiyuetiaojian" class="textarea" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["weiyuetiaojian"]</textarea>
-                    <p class="textarea-numberbar"></p>
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2">清单/发货/安装情况：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <table class="tablelist" id="tw" lay-filter="demo"></table>
-                    <p class="textarea-numberbar"></p>
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2">合同总结：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <textarea name="CZongJie" cols="" rows="" id="CZongJie" class="textarea" placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onkeyup="$.Huitextarealength(this,200)">@ViewData["CZongJie"]</textarea>
-                    <p class="textarea-numberbar"></p>
-                </div>
-            </div>
-            <div class="row cl">
-                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2" id="vasd">
                     <button onclick="sub()" class="btn btn-primary radius" type="button"><i class="Hui-iconfont">&#xe632;</i>确定</button>
-                    <button onclick="" class="btn btn-default radius" id="cancle" type="button">&nbsp;&nbsp;返回&nbsp;&nbsp;<i hidden="hidden" id="u">/Home/SalesCreation</i></button>
                 </div>
             </div>
         </form>
@@ -142,7 +149,14 @@
     <script type="text/javascript" src="~/lib/ueditor/1.4.3/ueditor.all.min.js"> </script>
     <script type="text/javascript" src="~/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
     <script src="~/layui/layui.js" type="text/javascript"></script>
+
     <script>
+        $.ready(
+        document.getElementById('IfInstall').value = '@ViewData["IfInstall"]',
+        document.getElementById('IfIncludeTax').value = '@ViewData["IfIncludeTax"]',
+        document.getElementById('IfTransport').value = '@ViewData["IfTransport"]',
+        document.getElementById('IfTransport').value = '@ViewData["IfTransport"]'
+         );
         layui.use(['table', 'layer'], function () {
             var table = layui.table, layer = layui.layer;
             table.render({
@@ -151,16 +165,16 @@
            , cols: [[
 
            , { field: 'ID', width: 210, title: '序号', hide: true }
-           , { field: 'ProductName', width: 190, title: '产品名称' }
+           , { field: 'ProductName', width: 250, title: '产品名称' }
            , { field: 'ProductSpec', width: 210, title: '产品规格', sort: true }
            , {
                field: 'Count', width: 180, title: '合同数量',
            }
            , { field: 'Units', title: '单位', width: 180 }
-           , { field: 'DeliveryedCount', width: 180, title: '发货', sort: true }
-           , { field: 'InstalledQuantity', width: 100, title: '安装', }
-           , { field: 'Acceptance', width: 100, title: '是否验收', sort: true }
-          , { field: 'AcceptanceDate', width: 100, title: '验收日期', sort: true }
+          // , { field: 'DeliveryedCount', width: 180, title: '发货', sort: true }
+          // , { field: 'InstalledQuantity', width: 100, title: '安装', }
+          // , { field: 'Acceptance', width: 100, title: '是否验收', sort: true }
+          //, { field: 'AcceptanceDate', width: 100, title: '验收日期', sort: true }
            ]]
 
             });
@@ -177,9 +191,6 @@
                 if (data == "true") {
                     alert("修改成功！");
                     window.parent.location.reload();
-                }else
-                {
-                    alert("修改失败,合同编号不能重复！");
                 }
             },
             error: function (aa) {
@@ -188,17 +199,16 @@
         });
         }
         $(function () {
-
+            if ('@ViewData["vas"]' == '2') {
+                $("#vasd").css("display", "none");
+            }
             $('.skin-minimal input').iCheck({
                 checkboxClass: 'icheckbox-blue',
                 radioClass: 'iradio-blue',
                 increaseArea: '20%'
             });
         
-            $("#cancle").click(function () {
-                var sd = $("#u").text();
-                window.parent.document.getElementById("rightframe").src = sd;
-            });
+            
 
             $list = $("#fileList"),
             $btn = $("#btn-star"),

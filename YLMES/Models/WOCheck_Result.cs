@@ -14,6 +14,7 @@ namespace YLMES.Models
     public partial class WOCheck_Result
     {
         public int 工单编号 { get; set; }
+        public Nullable<int> 工单部件编号 { get; set; }
         public int 项目编号 { get; set; }
         public string 项目名称 { get; set; }
         public string 产品名称 { get; set; }
@@ -23,5 +24,6 @@ namespace YLMES.Models
         public Nullable<int> 总数量 { get; set; }
         public Nullable<int> 完成数量 { get; set; }
         public string 状态 { get; set; }
+        public string 路径 { get; set; }
     }
 }

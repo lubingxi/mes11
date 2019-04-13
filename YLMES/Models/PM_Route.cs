@@ -17,5 +17,6 @@ namespace YLMES.Models
         public int ID { get; set; }
         public string RouteName { get; set; }
         public string Status { get; set; }
+        public string ProcessDocument { get; set; }
     }
 }

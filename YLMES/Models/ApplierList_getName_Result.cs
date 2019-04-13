@@ -13,7 +13,7 @@ namespace YLMES.Models
     
     public partial class ApplierList_getName_Result
     {
-        public int 序号 { get; set; }
+        public Nullable<int> 序号 { get; set; }
         public string 供应商 { get; set; }
     }
 }

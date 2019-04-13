@@ -77,8 +77,7 @@ namespace YlMES.Controllers
         public ContentResult txt(string txt,string cangku,string kuqu,string kuwei,string huowei)
         {            
             try
-            {
-               
+            {              
                 TempData["cangkuCache"] = cangku;
                 TempData["kuquCache"] = kuqu;
                 TempData["kuweiCache"] = kuwei;
@@ -116,20 +115,18 @@ namespace YlMES.Controllers
         #endregion
 
         #region 插入和显示打印信息
-        public ActionResult JinCang(string ck, string kq, string kw, string hw,string hww,string tuhao, string cailiao, string guige, string named, string shuliang)
+        public ActionResult JinCang(string ck, string kq, string kw, string hw,string hww,string ID, string cailiao, string guige, string named, string shuliang)
         {
             ViewData["canku"] = ck;
             ViewData["kuqu"] = kq;
             ViewData["huoqu"] = kw;
             ViewData["huowei"] = hw;
-            ViewData["tuhao"] = tuhao;
+            ViewData["ID"] = ID;
             ViewData["cailiao"] = cailiao;
             ViewData["guige"] = guige;
             ViewData["mingzi"] = named;
             TempData["ptu"].ToString();
-            int wuliaoId = 0
-                
-                ;
+            int wuliaoId = 0;
             int sl = int.Parse(shuliang);
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
@@ -141,7 +138,7 @@ namespace YlMES.Controllers
                 string name = Session["name"].ToString();
                 SqlParameter[] parms = new SqlParameter[5];
                 parms[0] = new SqlParameter("@MaterialID",wuliaoId);
-                parms[1] = new SqlParameter("@figureNumber",tuhao);
+                parms[1] = new SqlParameter("@figureNumber","");
                 parms[2] = new SqlParameter("@InQTY", sl);
                 parms[3] = new SqlParameter("@Location", hww);
                 parms[4] = new SqlParameter("@createdBy", name);
@@ -194,9 +191,9 @@ namespace YlMES.Controllers
         #endregion
 
         #region 初始库区值
-        public ActionResult Pbc(string figureNumber, string PartNumber, string PartSpec, string PartMaterial)
+        public ActionResult Pbc(string ID, string PartNumber, string PartSpec, string PartMaterial)
         {
-            ViewData["fn"] = figureNumber;
+            ViewData["ID"] = ID;
             ViewData["pn"] = PartNumber;
             ViewData["ps"] = PartSpec;
             ViewData["pm"] = PartMaterial;
@@ -749,7 +746,7 @@ namespace YlMES.Controllers
         {
             return View();
         }
-        public JsonResult GetmaterialsStock(string ProjectName, string PartNumber,string CreatedTimeEnd, string CreatedTime, string CreatedBy)
+        public JsonResult GetmaterialsStock(string ProjectName, string PartNumber,string CreatedTimeEnd, string CreatedTime, string CreatedBy,string ID)
         {
             if (ProjectName == null)
             {
@@ -771,16 +768,21 @@ namespace YlMES.Controllers
             {
                 CreatedBy = "";
             }
+            if (ID == null)
+            {
+                ID = "";
+            }
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-                SqlParameter[] parms = new SqlParameter[6];
+                SqlParameter[] parms = new SqlParameter[7];
                 parms[0] = new SqlParameter("@ProjectName", ProjectName);
                 parms[1] = new SqlParameter("@PartNumber", PartNumber);
                 parms[2] = new SqlParameter("@PartSpec", "");
                 parms[3] = new SqlParameter("@CreatedTimeEnd", CreatedTimeEnd);
                 parms[4] = new SqlParameter("@CreatedTime", CreatedTime);
                 parms[5] = new SqlParameter("@CreatedBy", CreatedBy);
-                var list = ys.Database.SqlQuery<Raw_MaterialStock_Result>("exec Raw_MaterialStock @ProjectName,@PartNumber,@PartSpec,@CreatedTimeEnd,@CreatedTime,@CreatedBy", parms).ToList();
+                parms[6] = new SqlParameter("@ID", ID);
+                var list = ys.Database.SqlQuery<Raw_MaterialStock_Result>("exec Raw_MaterialStock @ProjectName,@PartNumber,@PartSpec,@CreatedTimeEnd,@CreatedTime,@CreatedBy,@ID", parms).ToList();
                 Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
                 hasmap.Add("code", 0);
                 hasmap.Add("msg", "");
@@ -795,7 +797,7 @@ namespace YlMES.Controllers
             {
                 using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    var ss1 = ys.C_Contract.Where(p => p.CustomerName.Contains(CustomerName)).ToList();
+                    var ss1 = ys.C_Contract.Where(p => p.CustomerName.Contains(CustomerName)).Distinct().Select(s=>s.CustomerName).ToList();
                     //var list = ys.Database.SqlQuery<PM_WorkOrder>(" SELECT *  FROM PM_WorkOrder ").ToList();
                     return Json(ss1, JsonRequestBehavior.AllowGet);
                 }
@@ -827,6 +829,19 @@ namespace YlMES.Controllers
                 }
             }
             return null;
+        }
+        //删除物料库位信息
+        public ActionResult DeleteMaterList(string reg)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                int rid = int.Parse(reg);
+                PM_MaterialList pm = ys.PM_MaterialList.Where(s => s.ID == rid).FirstOrDefault();
+                ys.PM_MaterialList.Remove(pm);
+                ys.SaveChanges();
+                return Content("true");
+            }
+            
         }
         #endregion
     }

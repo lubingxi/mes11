@@ -21,6 +21,8 @@ namespace YLMES.Models
         public byte[] Picture { get; set; }
         public string note { get; set; }
         public string CreatedBy { get; set; }
-        public Nullable<System.DateTime> CreatedTime { get; set; }
+        public System.DateTime CreatedTime { get; set; }
+        public Nullable<int> MatertID { get; set; }
+        public string UpdateUser { get; set; }
     }
 }

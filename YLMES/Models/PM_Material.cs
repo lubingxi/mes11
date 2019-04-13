@@ -35,5 +35,13 @@ namespace YLMES.Models
         public string Status { get; set; }
         public string ContractTypeId { get; set; }
         public string ApplierId { get; set; }
+        public string InventoryQuantity { get; set; }
+        public string DesignType { get; set; }
+        public string Note { get; set; }
+        public string materialQTY { get; set; }
+        public string MaterialUnits { get; set; }
+        public Nullable<int> StockQTY2 { get; set; }
+        public string Units2 { get; set; }
+        public string WarehouseType { get; set; }
     }
 }

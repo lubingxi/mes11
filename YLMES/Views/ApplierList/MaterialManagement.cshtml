@@ -15,23 +15,23 @@
     <script src="~/layui/layui.js" type="text/javascript"></script>
     <title>MaterialManagement</title>
     <style>
-        .layui-table-cell {
+        /*.layui-table-cell {
             overflow: inherit;
             height: inherit;
-        }
+        }*/
     </style>
     <script type="text/javascript">
         $(function () { 
-        $(document).ajaxStart(function () {
-            layer.msg('加载中', {
-                icon: 16
-                , shade: 0.01
-                , time: false
-            });
-        })
-        $(document).ajaxStop(function () {
-            layer.closeAll();
-        });
+        //$(document).ajaxStart(function () {
+        //    layer.msg('加载中', {
+        //        icon: 16
+        //        , shade: 0.01
+        //        , time: false
+        //    });
+        //})
+        //$(document).ajaxStop(function () {
+        //    layer.closeAll();
+        //});
       
             
         layui.use(['table', 'layer', 'form'], function () {
@@ -49,12 +49,12 @@
                 , limit: 15
                 , cols: [[
                     { hide: true }
-                    ,{ field: 'ID', title: '序号', width: 70 }
+                    , { field: 'ID', title: '序号', width: 70 }
                     //, { field: 'figureNumber', title: '图号',width:200 }
                     , { field: 'PartNumber', title: '物料名称', width: 200}
                     , { field: 'PartSpec', title: '物料规格', width: 200}
                     , { field: 'PartMaterial', title: '物料材质', width: 200}
-                    , { field: 'ApplierProductTypeID', title: '物料类型', templet: '#Category', width: 250}
+                    , { field: '物料类型序号', title: '物料类型', templet: '#Category', width: 250 }
                     , { field: 'ApplierId', title: '默认供应商', templet: '#Applier', width: 250}
                     , { field: 'ContractTypeId', title: '合同种类', toolbar: '#se', width:280}
                     , { align: 'center', toolbar: '#bsarDemo', width: 200}
@@ -62,9 +62,10 @@
                 , done: function (res) {
                     for (var i = 0; i < res.data.length; i++) {
                         typeid[i] = res.data[i].ContractTypeId;
-                        applierid[i] = res.data[i].ApplierId
-                        MaterialType[i] = res.data[i].ApplierProductTypeID
-                    }                 
+                        applierid[i] = res.data[i].ApplierId;
+                        MaterialType[i] = res.data[i].物料类型序号;
+                    }
+               
                     $.get("/ApplierList/checkContrType", function (data) {
                         if (data != null) {
                             $(".typeid").empty()
@@ -101,9 +102,9 @@
                             for (var j = 0; j < MaterialType.length; j++) {
                                 for (var i = 0; i < data.length; i++) {
                                     if (MaterialType[j] == data[i].ID) {
-                                        $(".CategoryId:eq(" + j + ")").append("<option value='" + data[i].ID+ "' selected >" + data[i].Name+ "</option>")
+                                        $(".CategoryId:eq(" + j + ")").append("<option value='" + data[i].ID + "' selected >" + data[i].MaterTypeName + "</option>")
                                     } else {
-                                        $(".CategoryId:eq(" + j + ")").append("<option value='" + data[i].ID+ "'>" + data[i].Name+ "</option>")
+                                        $(".CategoryId:eq(" + j + ")").append("<option value='" + data[i].ID + "'>" + data[i].MaterTypeName + "</option>")
                                     }
                                 }
                             }
@@ -126,10 +127,9 @@
           
             form.on('select(CategoryId)', function (data) {
                 var areaId = data.value;
-                
                 var oin = data.othis;
                 var index = $("tbody .CategoryId").index(data.elem)
-                table.cache.tw[index].ApplierProductTypeID = data.value
+                table.cache.tw[index].物料类型序号 = data.value
                 // layer.msg(ApplierProductTypeID);
                 $.ajax({
                     type: 'POST',
@@ -160,28 +160,28 @@
                 var index = $("tbody .typeid").index(data.elem)
                 table.cache.tw[index].ContractTypeId = data.value
             });
-            table.on('tool(demo)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
-                var data = obj.data //获得当前行数据
-                    , layEvent = obj.event; //获得 lay-event 对应的值  
-                if (layEvent === 'edit') {
-                    id = data.ID;
-                    apid = data.ApplierProductTypeID;
-                    Applier = data.ApplierId;
-                    type = data.ContractTypeId;
-                    $.ajax({
-                        type: 'POST',
-                        url: '/ApplierList/EditMaterialInformation',
-                        data: { id: id, apid: apid, Applierid: Applier, typeid: type },
-                        dataType: 'json',
-                        success: function (data) {
-                            if (data == "true") {
-                                layer.msg("修改成功！");
-                                $("#check").click();
+            table.on('tool(demo)', function (obj) {//注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                var data = obj.data //获得当前行数据                
+                switch (obj.event) {
+                    case 'edit':            
+                        id = data.ID;
+                        apid = data.物料类型序号;
+                        Applier = data.ApplierId;
+                        type = data.ContractTypeId;
+                        $.ajax({
+                            type: 'POST',
+                            url: '/ApplierList/EditMaterialInformation',
+                            data: { id: id, apid: apid, Applierid: Applier, typeid: type },
+                            dataType: 'text',
+                            success: function (data) {
+                                if (data == "true") {
+                                    layer.msg("修改成功！");
+                                    $("#check").click();
+                                }
                             }
-                        }
-                    });
-                }
-
+                        });
+                        break;
+                    }       
             
             });
 

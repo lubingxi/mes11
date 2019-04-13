@@ -1,0 +1,269 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/js/vue.js"></script>
+    <script src="~/js/axios.js"></script>
+    <script src="~/js/print.js"></script>
+    <script src="~/js/elemenui.js"></script>
+    <link href="~/css/elemenui.css" rel="stylesheet" />
+    <title>记账凭证页面</title>
+    <script type="text/javascript">
+        "use strict"
+
+        window.onload = function () {
+            var vm = new Vue({
+                el: "#vues",
+                data: {
+                    search1: ""
+                    , total1: 0
+                    , pageSize1: 10
+                    , currentPage11: 1
+                    , value1: ""
+                    , loading: true,
+                    restaurants11: [],
+                    dialogTableVisible: false,
+                    tableData1: [],
+                    pageData1: [],
+                    MakeData: {},
+                    ContractNumber: "0"
+                },
+                methods: {
+                    get() {
+                        axios("/Financial/CheckData").then((res) => {
+                            vm.tableData1 = res.data.Pz
+                            vm.MakeData = res.data.PzMake
+                            vm.pageData1 = vm.tableData1
+                            vm.loading = false
+                        })
+                    },
+                    handleSizeChange(siae) {
+                        this.pageSize1 = siae
+                    },
+                    handleCurrentChange(curr) {
+                        this.currentPage11 = curr
+                    },
+                    digit(t, e) {
+                        var i = "";
+                        t = String(t),
+                            e = e || 2;
+                        for (var a = t.length; a < e; a++)
+                            i += "0";
+                        return t < Math.pow(10, e) ? i + (0 | t) : t
+                    },
+                    toDateString(t, e) {
+                        if (typeof (t) == "string") {
+                            t = Number(t.substring(t.indexOf("(") + 1, t.indexOf(")")))
+                        }
+                        var i = this
+                            , a = new Date(t || new Date)
+                            , n = [i.digit(a.getFullYear(), 4), i.digit(a.getMonth() + 1), i.digit(a.getDate())]
+                            , r = [i.digit(a.getHours()), i.digit(a.getMinutes()), i.digit(a.getSeconds())];
+                        return e = e || "yyyy-MM-dd HH:mm:ss",
+                            e.replace(/yyyy/g, n[0]).replace(/MM/g, n[1]).replace(/dd/g, n[2]).replace(/HH/g, r[0]).replace(/mm/g, r[1]).replace(/ss/g, r[2])
+                    },
+                    date() {
+
+                        this.search1 = this.value1 == null ? "" : this.value1
+
+                    },
+                    querySearch(queryString, cb) {
+                        var restaurants = this.restaurants11;
+                        var results = new String(queryString) ? restaurants.filter(this.createFilter(new String(queryString))) : restaurants;
+                        cb(results);
+                    },
+                    createFilter(queryString) {
+                        return (restaurant) => {
+                            return (new String(restaurant.value).toLowerCase().indexOf(new String(queryString).toLowerCase()) === 0);
+                        };
+                    },
+                    getSummaries(param) {
+                        const { columns, data } = param;
+                        const sums = [];
+                        columns.forEach((column, index) => {
+                            if (index === 0) {
+                                sums[index] = '合计';
+                                return;
+                            }
+                            const values = data.map(item => Number(item[column.property]));
+                            if (!values.every(value => isNaN(value))) {
+                                sums[index] = values.reduce((prev, curr) => {
+                                    const value = Number(curr);
+                                    if (!isNaN(value)) {
+                                        return Number(prev + curr).toFixed(2);
+                                    } else {
+                                        return Number(prev).toFixed(2);
+                                    }
+                                }, 0);
+                                sums[index] += "元"
+                            } else {
+                                sums[index] = '';
+                            }
+                        });
+
+                        return sums;
+                    },
+                    Audit(PzID) {
+                        axios.post("/Financial/PzAudit", { PzID: PzID })
+                        this.$message({
+                            message: '已审核',
+                            type: 'success'
+                        });
+                        this.pageData1.find(x => {
+                            x.ID == PzID ? x.Status = '已审核' : ""
+                            return x.ID == PzID
+                        })
+                    }
+                }
+                , created: function () {
+                    this.get();
+                }
+                , computed: {
+                    page1() {
+                        this.total1 = this.pageData1.length
+                        if (this.pageData1.length > 0) {
+                            var curr = (this.currentPage11 - 1) * this.pageSize1
+                            return this.pageData1.slice(curr, curr + this.pageSize1);
+                        }
+                    },
+                    MakeDatas() {
+                        return this.ContractNumber == "0" ? {} : this.MakeData.filter(x => vm.ContractNumber == x.PzID)
+                    }
+                },
+                watch: {
+                    search1(newVal, oldVal) {
+                        var boo = true;
+                        if (oldVal != null) {
+                            if (newVal.toString() == oldVal.toString()) {
+                                boo = false
+                            };
+                        };
+                        if (boo) {
+                            this.restaurants11= [];
+                            var worker = new Worker("/js/pageWorker.js")
+                            var d = { vm: this.tableData1, restaurants: [], search: this.search1 }
+                            worker.postMessage(d)
+                            worker.onmessage = (s) => {
+                                if (vm.pageData1.toString() != s.data.vm.toString()) {
+                                    vm.pageData1 = s.data.vm
+                                    vm.currentPage11 = 1
+                                }
+                                s.data.restaurants.find((x) => {
+                                    vm.restaurants11.push({ "value": new String(x) })
+                                });
+                                worker.terminate();
+                            };
+                        }
+                    }
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+    <div id="vues">
+        <template>
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item>首页</el-breadcrumb-item>
+                <el-breadcrumb-item>财务管理</el-breadcrumb-item>
+                <el-breadcrumb-item>记账凭证</el-breadcrumb-item>
+            </el-breadcrumb>
+            <div class="block" style="margin:10px">
+                <span class="demonstration">创建时间</span>
+                <el-date-picker v-model="value1"
+                                type="date"
+                                @@change="date"
+                                value-format="yyyy-MM-dd"
+                                placeholder="选择日期">
+                </el-date-picker>
+            </div>
+            <el-table :data="page1"
+                      style="margin:0 auto;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)"
+                      height="600"
+                      v-loading="loading"
+                      element-loading-text="拼命加载中"
+                      element-loading-spinner="el-icon-loading"
+                      element-loading-background="rgba(0, 0, 0, 0.8)">
+                <el-table-column type="index">
+                </el-table-column>
+                <el-table-column prop="PzNumber"
+                                 label="凭证单号">
+                </el-table-column>
+                <el-table-column label="打单日期">
+                    <template slot-scope="scope">
+                        <i class="el-icon-time"></i>
+                        <span style="margin-left: 10px">{{ toDateString(scope.row.CreatedTime)}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="制单人"
+                                 prop="CreatedBy">
+                </el-table-column>
+                <el-table-column label="凭证类型"
+                                 prop="Type">
+                </el-table-column>
+                <el-table-column label="审核状态">
+                    <template slot-scope="scope">
+                        <el-tag :type="scope.row.Status=='未审核'?'danger':'success'">{{scope.row.Status}}</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button size="mini" type="primary" round @@click="Audit(scope.row.ID)">审核</el-button>
+                        <el-button size="mini" round @@click="dialogTableVisible=true;ContractNumber=scope.row.ID">查看详情</el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column>
+                    <template slot="header" slot-scope="scope">
+                        <el-autocomplete popper-class="my-autocomplete"
+                                         v-model="search1"
+                                         :fetch-suggestions="querySearch"
+                                         placeholder="输入关键字查找"
+                                         clearable
+                                         prefix-icon="el-icon-search">
+                        </el-autocomplete>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="block">
+                <el-pagination @@size-change="handleSizeChange"
+                               @@current-change="handleCurrentChange"
+                               :current-page="currentPage11"
+                               :page-sizes="[10, 20, 30, 40]"
+                               :page-size="pageSize1"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="total1">
+                </el-pagination>
+            </div>
+            <el-dialog :visible.sync="dialogTableVisible"
+                       width="70%" title="记账凭证" center>
+                <el-table :data="MakeDatas" show-summary :summary-method="getSummaries">
+                    <el-table-column type="index" width="100" label="序号">
+                    </el-table-column>
+                    <el-table-column prop="Make"
+                                     label="摘要">
+                    </el-table-column>
+                    <el-table-column prop="Name"
+                                     label="科目名称">
+                    </el-table-column>
+                    <el-table-column label="借方" prop="Debit" align="center">
+                        <template slot-scope="scope">
+                            <el-tag>{{Number(scope.row.Debit).toFixed(2)}}</el-tag>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="贷方" prop="Credit" align="center">
+                        <template slot-scope="scope">
+                            <el-tag :type="scope.row.Credit==0?'info':'danger'">{{Number(scope.row.Credit).toFixed(2)}}</el-tag>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-dialog>
+        </template>
+    </div>
+</body>
+</html>

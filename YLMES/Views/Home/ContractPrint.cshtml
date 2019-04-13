@@ -16,7 +16,7 @@
         layui.config({
             base: '/layui_exts/',
         }).extend({
-            excel: 'excel',
+            excel: 'excel'
         });
     </script>
     <style>
@@ -29,149 +29,15 @@
             font-size: 17px;
         }
 
-        td:nth-child(2), td:nth-child(3) {
-            word-break: break-all;
-        }
-
-        table:nth-child(5) td {
-            vertical-align: inherit;
-            text-align: center;
-        }
-
         .word {
             white-space: normal;
             word-wrap: break-word;
             word-break: break-all;
+            text-align: center;
         }
+        input,button,select,textarea{ outline:none;}
     </style>
     <script type="text/javascript">
-
-        $.ajaxSetup({
-            cache: false
-        })
-        layui.use(['jquery', 'layer', 'excel'], function () {
-            var $ = layui.jquery;
-            var layer = layui.layer;
-            var excel = layui.excel;
-            $(function () {
-                function myBtn() {
-                    var mom1 = 0;
-                    $(".ji").each(function (i) {
-                        var count = $(".ji:eq(" + i + ") td:eq(3) input").val();
-                        var price = $(".ji:eq(" + i + ") td:eq(5) input").val();
-
-                        var num = Number(count) * Number($.trim(price).toString().replace("￥", ""))
-
-                        $(".ji:eq(" + i + ") td:eq(6)").text(num.toFixed(2));
-                        i++
-                    });
-                    $(".ji td:nth-child(7)").each(function (i) {
-                        var mo = $(".ji td:nth-child(7):eq(" + i + ")").text();
-                        mom1 = Number(mo) + Number(mom1);
-                        i++;
-                    })
-                    $(".Money td:nth-child(2)").text(mom1.toFixed(2));
-                    var yu = $(".l:eq(0) input").val();
-                    var an = $(".l:eq(1) input").val();
-                    var num = mom1 + Number(yu) + Number(an);
-                    $(".l:eq(2)").text(num.toFixed(2));
-                    var sui = $(".l:eq(3) input").val();
-                    var ss = Number(num - sui)
-                    $(".l:eq(4)").text(ss);
-                }
-                function ButtonClick() {
-
-                        if ($("button:eq(1)").text() == "删除") {
-                            $(this).parents("tr").remove()
-                            myBtn()
-                            if (ContractDetialsCheckId != "0") {
-                                $.ajax({
-                                    url: "/ProductionPlanning/Del",
-                                    data: { index: $(".id").text(), cuid: ContractDetialsCheckId },
-                                    type: "post",
-
-                                    datatype: "text",
-                                    success: function () {
-                                        layer.msg("删除成功")
-                                    }
-                                })
-                            }
-                        } else {
-                            layer.msg("只有一行不可删除")
-                        }
-                }
-                function AppDiv() {
-                    var value = $(this).text()
-                    if (value != "") {
-                    $(this).empty()
-                    $(this).append("<input type='text'style='width:300px' value='" + value + "'/>")
-                    $(this).children().focus()
-                    }
-                }
-                $("#myBtn").on('click','div', AppDiv)
-                $("#myBtn").on('click','button',ButtonClick)
-                $("#myBtn").on('change','input',myBtn)
-                var indexs
-                $(document).ajaxStart(function () {
-                    indexs = layer.msg("加载中", { icon: 16, time: false })
-                })
-                $(document).ajaxStop(function () {
-                    layer.close(indexs)
-                })
-                var uploadExcel = function (files) {
-                    try {
-                        excel.importExcel(files, {
-                            // 读取数据的同时梳理数据
-                            fields: {
-                                'id': 'A'
-                                , 'ProductName': 'B'
-                                , 'ProductSpec': 'C'
-                                , 'Count': 'D'
-                                , 'Units': 'E'
-                                 , 'Price': 'F'
-                                 , 'G': 'G'
-                                 , 'H': 'H'
-                                 , 'I': 'I'
-                            }
-                        }, function (data) {
-
-                            layui.each(data[0]['key'], function (index, itme) {
-                                if (index > 0) {
-                                    var id = '<td  style="padding:5px" class="id">' +index+ '</td>'
-                                    var ProductName = "<td><div class='word' name='ProductName' style='width:300px'>" + $.trim(itme.ProductName) + "</div></td>"
-                                    var ProductSpec = "<td><div class='word' name='ProductSpec' style='width:300px'>" + $.trim(itme.ProductSpec) + "</div></td>"
-                                    var Units = "<td><input name='Units' type='text'  value='" + $.trim(itme.Units) + "' style='width: 50px'/></td>"
-                                    var Count = "<td><input name='Count' type='number'  value='" + $.trim(itme.Count) + "' style='width: 50px'/></td>"
-                                    var Remarks = "<td><input type='text'/></td>"
-                                    var Money = "<td style='width: 50px'></td>"
-                                    var Price = "<td><input name='Price' type='text'  value='￥" + $.trim(itme.Price) + "' style='width: 100px'/></td>"
-                                    var button = "<td><button style='width:80px'>删除</button></td>"
-                                    $('.ji:eq('+(index-1)+')').after("<tr class='ji'>" + id + ProductName + ProductSpec + Count + Units + Price + Money + Remarks + button + "</tr>")
-                                }
-                            })
-                            $('.ji:eq(0)').remove()
-                            myBtn()
-                        });
-                    } catch (e) {
-                        layer.alert(e.message);
-                    }
-                };
-                // 监听上传文件的事件
-                $('#LAY-excel-import-excel').change(function (e) {
-                    var files = e.target.files;
-                    uploadExcel(files);
-                });
-                // 文件拖拽
-                $('body').ondragover = function (e) {
-                    e.preventDefault();
-                }
-                $('body').ondrop = function (e) {
-                    e.preventDefault();
-                    var files = ev.dataTransfer.files;
-                    uploadExcel(files);
-                }
-            });
-        })
         var mom = 0;
         var ContractDetialsCheckId = '@ViewData["ContractDetialsCheckId"]';
         var CuId = '@ViewData["Id"]';
@@ -182,52 +48,68 @@
         var m = today.getMonth();
         var d = today.getDate();
         var CustomerId = '@ViewData["CustomerId"]';
-        function Applier() {
-            var CuNumber = $("[name=ContractNumber").val();
-            var ApplierName = new Array();
-            var ApplierNameValue = new Array();
-            var appindex = 0;
-            var appbool = true;
-            var cubool = true;
-            var inp = new Array();
-            var inn = 0;
-            $("p input").each(function (i) {
-                var inq = $("p input:eq(" + i + ")").val()
-                $("p input:eq(" + i + ")").text(inq);
-            })
-            $(":input").each(function (i) {
-                if ($(":input:eq(" + i + ")").val() == 0) {
-                    if ($(":input:eq(" + i + ")").attr("type") == "text") {
-                        inp[inn] = $(":input:eq(" + i + ")");
-                        inn++;
-                    }
-                }
-            })
-            var len = inp.length;
-            layer.confirm('有' + len + '项未填或为零确定保存吗', {
-                btn: ['确定', '取消']
-                , yes: function (index) {
-                    layer.close(index)
-                    $.ajax({
-                        url: "/ProductionPlanning/SeleContractNumber",
-                        data: { ContractNumber: CuNumber },
-                        dataType: "text",
-                        async: false,
-                        success: function (data) {
-                            if (data == "true") {
-                                cubool = true;
-                            }
-                            else {
-                                if (CuNumber == "@ViewData["CuNumber"]" && CuNumber != "") {
+        $.ajaxSetup({
+            cache: false
+        })
+        layui.use(['jquery', 'layer', 'excel', 'upload'], function () {
+            var $ = layui.jquery;
+            var upload = layui.upload;
+            var layer = layui.layer;
+            var excel = layui.excel;
 
-                                    cubool = true;
-                                } else {
-                                    layer.msg("合同编号重复")
-                                    cubool = false
-                                }
+            $(function () {
+                $('#addnewc').click(function () {
+                    location.reload();
+                });
+                $("table:eq(1)").css({ " vertical-align": "inherit", "text-align": "center" })
+                function add(file) {
+
+                    var CuNumber = $("[name=ContractNumber").val();
+                    var ApplierName = new Array();
+                    var ApplierNameValue = new Array();
+
+                    var appindex = 0;
+                    var appbool = true;
+                    var cubool = true;
+                    var inp = new Array();
+                    var inn = 0;
+                    $("p input").each(function (i) {
+                        var inq = $("p input:eq(" + i + ")").val()
+                        $("p input:eq(" + i + ")").text(inq);
+                    })
+                    $(":input").each(function (i) {
+                        if ($(":input:eq(" + i + ")").val() == 0) {
+                            if ($(":input:eq(" + i + ")").attr("type") == "text") {
+                                inp[inn] = $(":input:eq(" + i + ")");
+                                inn++;
                             }
                         }
                     })
+                    var len = inp.length;
+                    layer.confirm('有' + len + '项未填或为零确定保存吗', {
+                        btn: ['确定', '取消']
+                        , yes: function (index) {
+                            layer.close(index)
+                            $.ajax({
+                                url: "/ProductionPlanning/SeleContractNumber",
+                                data: { ContractNumber: CuNumber },
+                                dataType: "text",
+                                async: false,
+                                success: function (data) {
+                                    if (data == "true") {
+                                        cubool = true;
+                                    }
+                                    else {
+                                        if (CuNumber == "@ViewData["CuNumber"]" && CuNumber != "") {
+
+                                            cubool = true;
+                                        } else {
+                                            layer.msg("合同编号重复")
+                                        cubool = false
+                                    }
+                                }
+                            }
+                            })
                     $(".divdiv [name]").each(function (i) {
 
                         appbool = true;
@@ -243,25 +125,29 @@
                                         $(".divdiv [name]:eq(" + i + ") input:eq(" + j + ")").parent().hide();
                                     }
                                 })
-                                ApplierNameValue[appindex] = $(".divdiv [name]:eq(" + i + ")").text();
+                                ApplierNameValue[appindex] = $.trim($(".divdiv [name]:eq(" + i + ")").text());
                             } else {
-                                ApplierNameValue[appindex] = $(".divdiv [name]:eq(" + i + ")").val();
+                                ApplierNameValue[appindex] = $.trim($(".divdiv [name]:eq(" + i + ")").val());
                             }
                             ApplierName[appindex] = $(".divdiv [name]:eq(" + i + ")").attr("name");
                             appindex++;
                         }
                     })
-
+                    ApplierName[ApplierName.length] = "Money"
+                    ApplierNameValue[ApplierNameValue.length] = $.trim($("[name=Money]").val())
                     if (cubool) {
+
                         $(":input").each(function (i) {
 
                             $(":input:eq(" + i + ")").attr("value", $(":input:eq(" + i + ")").val());
                         })
                         bdhtml = window.document.body.innerHTML;
+
+
                         $.ajax({
                             url: "/ProductionPlanning/AddApplierList",
                             type: "post",
-                            data: { ApplierName: ApplierName, ApplierNameValue: ApplierNameValue, id: ContractDetialsCheckId, ContractNumber: CuNumber },
+                            data: { ApplierName: ApplierName, ApplierNameValue: ApplierNameValue, id: ContractDetialsCheckId, ContractNumber: CuNumber, file: file },
                             dataType: "text",
                             success: function (data) {
                                 if (data == "true") {
@@ -293,31 +179,29 @@
                                     var id = ""
                                     $(".ji").each(function (i) {
                                         var value;
-                                        if ($("[name=ProductName]:eq(" + i + ") input").val()!=undefined)
-                                        {
+                                        var aa;
 
-                                            value=$.trim($("[name=ProductName]:eq(" + i + ") input").val())
-                                         }
+                                        if ($("[name=ProductName]:eq(" + i + ") input").val() != undefined) {
+                                            value = $.trim($("[name=ProductName]:eq(" + i + ") input").val())
+                                        }
                                         else {
+                                            value = $.trim($("[name=ProductName]:eq(" + i + ")").text())
 
-                                            value=$.trim($("[name=ProductName]:eq(" + i + ")").text())
+                                        }
+                                        if ($("[name=ProductSpec]:eq(" + i + ") input").val() != undefined) {
+                                            aa = $.trim($("[name=ProductSpec]:eq(" + i + ") input").val())
+                                        }
+                                        else {
+                                                aa = $.trim($("[name=ProductSpec]:eq(" + i + ")").text())
                                         }
 
-                                        if (value!="") {
-                                            if ($.trim($("[name=ProductName]:eq(" + i + ")").text()) == "") {
-                                                ProductName += $.trim($("[name=ProductName]:eq(" + i + ") input").val()).toString() + ","
-                                            } else {
-                                                ProductName += $.trim($("[name=ProductName]:eq(" + i + ")").text()).toString() + ","
-                                            }
-                                            if ($.trim($("[name=ProductSpec]:eq(" + i + ")").text())=="")
-                                            {
-                                                 ProductSpec += $.trim($("[name=ProductSpec]:eq(" + i + ") input").val()).toString() + ","
-                                            } else
-                                            {
-                                            ProductSpec += $.trim($("[name=ProductSpec]:eq(" + i + ")").text()).toString() + ","
-                                            }
+                                        if (value != "") {
+                                            ProductName += value.toString() + ","
+
+                                            ProductSpec += aa.toString() + ","
+
                                             Units += $.trim($("[name=Units]:eq(" + i + ")").val()).toString() + ","
-                                            Count += $.trim($("[name=Count]:eq(" + i+ ")").val()).toString() + ","
+                                            Count += $.trim($("[name=Count]:eq(" + i + ")").val()).toString() + ","
                                             Price += $.trim($("[name=Price]:eq(" + i + ")").val()).toString().replace("￥", "") + ","
                                             id += $.trim($(".id:eq(" + i + ")").text()).toString() + ","
                                         }
@@ -329,11 +213,11 @@
                                     obj['Count'] = Count.substr(0, Count.lastIndexOf(","))
                                     obj['Price'] = Price.substr(0, Price.lastIndexOf(","))
                                     obj['id'] = id.substr(0, id.lastIndexOf(","))
-                                    console.log(obj)
+
                                     $.ajax({
                                         url: "/ProductionPlanning/AddDetai",
                                         type: "post",
-                                        data: { data:obj, id: CuId, ids: ContractDetialsCheckId },
+                                        data: { data: obj, id: CuId, ids: ContractDetialsCheckId },
                                         dataType: "text",
                                         success: function (data) {
                                             if (data == "true") {
@@ -355,9 +239,245 @@
                     }
                 }
             })
-
-
         }
+                function myBtn() {
+                    var mom1 = 0;
+                    $(".ji").each(function (i) {
+                        var count = $(".ji:eq(" + i + ") td:eq(3) input").val();
+                        var price = $(".ji:eq(" + i + ") td:eq(5) input").val();
+
+                        var num = Number(count) * Number($.trim(price).toString().replace("￥", ""))
+
+                        $(".ji:eq(" + i + ") td:eq(6)").text(num.toFixed(2));
+                        i++
+                    });
+                    $(".ji td:nth-child(7)").each(function (i) {
+                        var mo = $(".ji td:nth-child(7):eq(" + i + ")").text();
+                        mom1 = Number(mo) + Number(mom1);
+                        i++;
+                    })
+                    $(".Money td:nth-child(2)").text(mom1.toFixed(2));
+                    var yu = $(".l:eq(0) input").val();
+                    var an = $(".l:eq(1) input").val();
+                    var num = mom1 + Number(yu) + Number(an);
+                    $(".l:eq(2)").text(num.toFixed(2));
+                    var sui = Number($(".l:eq(3) input").val());
+                    var ss = Number(num + sui)
+                    $(".l:eq(4)").text(ss);
+                }
+
+                function ButtonClick() {
+
+                    if ($("button:eq(1)").text() == "删除") {
+                        $(this).parents("tr").remove()
+                        myBtn()
+                        if (ContractDetialsCheckId != "0") {
+                            $.ajax({
+                                url: "/ProductionPlanning/Del",
+                                data: { index: $(".id").text(), cuid: ContractDetialsCheckId },
+                                type: "post",
+                                datatype: "text",
+                                success: function () {
+                                    layer.msg("删除成功")
+                                }
+                            })
+                        }
+                    } else {
+                        layer.msg("只有一行不可删除")
+                    }
+                }
+                function AppDiv() {
+
+                    if ($(this).find("input").val() != undefined) {
+                        $(this).find("input").show()
+                    } else {
+                        var value = $(this).text()
+                        $(this).empty()
+                        $(this).append("<input type='text' class='layui-input layui-table-edit' style='position: relative' value='" + value + "'/>")
+                        $(this).children().focus()
+                    }
+
+                }
+                function DivMofocus() {
+                    if ($(this).val() == "") {
+                        $(this).parent().text("空")
+                    } else {
+                        $(this).parent().text($(this).val())
+                    }
+                    $(this).hide()
+                }
+                function keydown() {
+                    if (event.keyCode == 32) {
+                        var ProductName = "<td><div class='word' name='ProductName' style='width:300px'>空</div></td>"
+                        var ProductSpec = "<td><div class='word' name='ProductSpec' style='width:300px'>空</div></td>"
+                        var Units = "<td><input name='Units' type='text'  value='' style='width: 50px'/></td>"
+                        var Count = "<td><input name='Count' type='text'  value='' style='width: 60px'/></td>"
+                        var Remarks = "<td><input type='text'/></td>"
+                        var Money = "<td style='width: 50px'></td>"
+                        var Price = "<td><input name='Price' type='text'  value='' style='width: 100px'/></td>"
+                        var button = "<td><button style='width:80px'>删除</button></td>"
+                        var ii = 99999;
+                        $(".ji").each(function (i) {
+                            ii = i
+                        })
+                        var id = '<td  style="padding:5px" class="id">' + (Number(ii) + 2) + '</td>'
+                        if (ii == 99999) {
+                            $(".ftr").after("<tr class='ji'>" + id + ProductName + ProductSpec + Count + Units + Price + Money + Remarks + button + "</tr>")
+                        } else {
+                            $(".ji:eq(" + ii + ")").after("<tr class='ji'>" + id + ProductName + ProductSpec + Count + Units + Price + Money + Remarks + button + "</tr>");
+                        }
+                    }
+                }
+                function TabltKeyDown() {
+                    if (event.keyCode == 13) {
+                        if ($(this).parent().next().children().val() != undefined) {
+                            $(this).parent().next().children().click();
+                        } else {
+                            $(this).parents("tr").next().find("input:eq(0)").click();
+                        }
+                    }
+                    var index = $(this).parents("tr").children().index($(this).parents("td"))
+
+                    if (event.keyCode == 38) {
+                        $(this).parents("tr").prev().find("td:eq("+index+")").children().click()
+                        $(this).parents("tr").prev().find("td:eq("+index+")").children().focus()
+                    }
+                    //下
+                    if (event.keyCode == 40) {
+                        $(this).parents("tr").next().find("td:eq("+index+")").children().click()
+                        $(this).parents("tr").next().find("td:eq("+index+")").children().focus()
+                    }
+                    //左
+                    if (event.keyCode == 37) {
+                        $(this).parents("td").prev().children().click()
+                        $(this).parents("td").prev().children().focus()
+                    }
+                    //右
+                    if (event.keyCode == 39) {
+                        $(this).parents("td").next().children().click()
+                        $(this).parents("td").next().children().focus()
+                    }
+                }
+                $("#myBtn").on('keydown', 'input', TabltKeyDown)
+                $("#myBtn").on('click','.word', AppDiv)
+                $("#myBtn").on('blur','div input', DivMofocus)
+                $("#myBtn").on('click','button', ButtonClick)
+                $("#myBtn").on('change', 'input', myBtn)
+                $("#myBtn").on('keydown', keydown)
+                var indexs
+                $(document).ajaxStart(function () {
+                    indexs = layer.msg("加载中", { icon: 16, time: false })
+                })
+                $(document).ajaxStop(function () {
+                    layer.close(indexs);
+                })
+                var uploadExcel = function (files) {
+                    try {
+                        excel.importExcel(files, {
+                            // 读取数据的同时梳理数据
+                            fields: {
+                                'id': 'A'
+                                , 'ProductName': 'B'
+                                , 'ProductSpec': 'C'
+                                , 'Count': 'D'
+                                , 'Units': 'E'
+                                 , 'Price': 'F'
+                                 , 'G': 'G'
+                                 , 'H': 'H'
+                                 , 'I': 'I'
+                            }
+                        }, function (data) {
+                            console.log(data);
+                            if (stu == 1) {
+                                $('.ji').remove()
+                                $(".ftr").after("<tr class='ji'></tr>")
+                            }
+                            layui.each(data[0]['key'], function (index, itme) {
+                                if (index > 0) {
+                                    var id = '<td  style="padding:5px" class="id">' + index + '</td>'
+                                    var ProductName = "<td><div class='word' name='ProductName' style='width:300px'>" + $.trim(itme.ProductName) + "</div></td>"
+                                    var ProductSpec = "<td><div class='word' name='ProductSpec' style='width:300px'>" + $.trim(itme.ProductSpec) + "</div></td>"
+                                    var Units = "<td><input name='Units' type='text'  value='" + $.trim(itme.Units) + "' style='width: 50px'/></td>"
+                                    var Count = "<td><input name='Count' type='text'  value='" + $.trim(itme.Count) + "' style='width: 50px'/></td>"
+                                    var Remarks = "<td><input type='text'/></td>"
+                                    var Money = "<td style='width: 50px'></td>"
+                                    var Price = "<td><input name='Price' type='text'  value='￥" + $.trim(itme.Price) + "' style='width: 100px'/></td>"
+                                    var button = "<td><button style='width:80px'>删除</button></td>"
+                                    $('.ji:eq(' + (index - 1) + ')').after("<tr class='ji'>" + id + ProductName + ProductSpec + Count + Units + Price + Money + Remarks + button + "</tr>")
+                                }
+
+                            })
+                            $('.ji:eq(0)').remove()
+                            myBtn()
+                        });
+                    } catch (e) {
+                    }
+                };
+                // 监听上传文件的事件
+                $('#LAY-excel-import-excel').change(function (e) {
+                    var files = e.target.files;
+                    uploadExcel(files);
+                });
+                // 文件拖拽
+                $('body').ondragover = function (e) {
+                    e.preventDefault();
+                }
+                $('body').ondrop = function (e) {
+                    e.preventDefault();
+                    var files = ev.dataTransfer.files;
+                    uploadExcel(files);
+                }
+                upload.render({
+                    elem: '#test1'
+                    ,auto: false
+   , url: '/ProductionPlanning/upload/'
+   , bindAction: '#testListAction'
+  , done: function (res, index, upload) { //上传后的回调
+      add(res.data.src);
+  }
+                    ,accept: 'file' //允许上传的文件类型
+                    ,size: 0 //最大允许上传的文件大小
+                    //,……
+                })
+                $("#testListAction").click(function () {
+                    if ($(".layui-upload-choose").text() == "") {
+                  //    alert("还没有选择文件")
+                        add("//")
+                    }
+                })
+                if (ContractDetialsCheckId != "0") {
+                    stu = 1;
+                    $.ajax({
+                        url: '/Home/checkDetaill',
+                        data: { id: ContractDetialsCheckId },
+                        type: "get",
+                        dataType: "json",
+                        success: function (data) {
+
+                            if (data.length > 0) {
+                                $('.ji').remove()
+                                $(".ftr").after("<tr class='ji'></tr>")
+                                layui.each(data, function (index, itme) {
+                                    var id = '<td  style="padding:5px" class="id">' + Number(index + 1) + '</td>'
+                                    var ProductName = "<td><div class='word' name='ProductName' style='width:300px'>" + $.trim(itme.ProductName) + "</div></td>"
+                                    var ProductSpec = "<td><div class='word' name='ProductSpec' style='width:300px'>" + $.trim(itme.ProductSpec) + "</div></td>"
+                                    var Units = "<td><input name='Units' type='text'  value='" + $.trim(itme.Units) + "' style='width: 50px'/></td>"
+                                    var Count = "<td><input name='Count' type='text'  value='" + $.trim(itme.Count) + "' style='width: 50px'/></td>"
+                                    var Remarks = "<td><input type='text'/></td>"
+                                    var Money = "<td style='width: 50px'></td>"
+                                    var Price = "<td><input name='Price' type='text'  value='￥" + $.trim(itme.Price) + "' style='width: 100px'/></td>"
+                                    var button = "<td><button style='width:80px'>删除</button></td>"
+                                    $('.ji:eq(' + index + ')').after("<tr class='ji'>" + id + ProductName + ProductSpec + Count + Units + Price + Money + Remarks + button + "</tr>")
+                                })
+                                $('.ji:eq(0)').remove()
+
+                            }
+                            myBtn();
+                        }
+                    });
+                }
+            });
+        })
         //function keydown(en) {
         //    var inputArray = new Array();
         //    $(".ji input").each(function (i) {
@@ -383,7 +503,6 @@
         //}
         $(function () {
 
-
             if (CustomerId != 0) {
                 $.ajax({
                     url: "/ProductionPlanning/SelApplier",
@@ -403,56 +522,14 @@
                             $("[name=Bank]").val(data[0].Bank);
                             $("[name=Contact]").val(data[0].Contact);
                             $("[name=Principal]").val(data[0].Principal);
-                            if (readoly == "2") {
-                                $("[name=PaymentMethod]").text(data[0].PaymentMethod);
-                                $("[name=DeliveryTime]").text(data[0].DeliveryTime)
-                                $("[name=ConditionsOfbreachOfContract]").text(data[0].ConditionsOfbreachOfContract)
-                            }
+
                         }
                     }
 
                 });
 
             }
-            //if (ContractDetialsCheckId != "0") {
-            //    stu = 1;
-            //    $.ajax({
-            //        url: '/Home/checkDetaill',
-            //        data: { id: ContractDetialsCheckId },
-            //        type: "get",
-            //        async: false,
-            //        dataType: "json",
-            //        success: function (data) {
-            //            if (data != null) {
-            //                for (var i = 0; i < data.length; i++) {
-            //                    var pr = 0;
-            //                    if (data[i].Price != null) {
-            //                        pr = data[i].Price;
-            //                    }
-            //                    var id = '<td  style="padding-left:20px">' + (i + 1) + '</td>'
-            //                    var ProductName = "<td><input name='ProductName' type='text' value='" + data[i].ProductName + "' style='width:300px'/></td>"
-            //                    var ProductSpec = "<td><input name='ProductSpec' type='text' value='" + data[i].ProductSpec + "' style='width:300px'/></td>"
-            //                    var Units = "<td ><input name='Units' type='text'  value='" + data[i].Units + "' style='width: 50px'/></td>"
-            //                    var Count = "<td><input name='Count' type='number'   value='" + data[i].Count + "' style='width: 50px'/></td>"
-            //                    var Remarks = "<td><input type='text'/></td>"
-            //                    var Money = "<td style='width: 50px'></td>"
-            //                    var Price = "<td><input name='Price' type='text'  value='" + pr + "' style='width: 80px'/></td>"
-            //                    var button = "<td><button style='width:80px'>删除</button></td>"
 
-            //                    if ($(".ji").attr("class") == "ji") {
-            //                        $(".ji:eq(" + i + ")").after("<tr class='ji'>" + ProductName + ProductSpec + Count + Units + Price + Money + Remarks + button + "</tr>")
-            //                    }
-
-            //                }
-            //                $(".ji:eq(0)").hide()
-            //                $(".ji:eq(0)").attr("class", "del")
-            //                ButtonClick();
-            //            }
-            //        }
-
-            //    });
-
-            //}
             $.ajax({
                 url: "/ProductionPlanning/CheckHtml",
                 data: { cuid: CuId },
@@ -462,14 +539,13 @@
                 success: function (data) {
                     if (data.length > 0) {
                         var html = data[0].html
-
                         window.document.body.innerHTML = html
 
                     }
                 }
             })
             if (readoly == "2") {
-                $('#sas').hide();
+                $('#testListAction').hide();
             }
             if ("@ViewData["CuNumber"]" == "0") {
                 $("[name=ContractNumber]").val("YL" + y + (Number(m) + 1) + d + "00" +@Session["CCID"] +CuId);
@@ -486,34 +562,7 @@
 
             })
 
-            $(document).keydown(function (e) {
 
-                if (e.keyCode == 32)  //按键 ASCII 码值
-                {
-
-                    var ProductName = "<td><input name='ProductName' type='text' style='width:300px'/></td>"
-                    var ProductSpec = "<td><input name='ProductSpec' type='text' style='width:300px'/></td>"
-                    var Units = "<td><input name='Units' type='text' style='width: 50px'/></td>"
-                    var Count = "<td><input name='Count' type='number'   style='width: 50px'/></td>"
-                    var Remarks = "<td><input type='text'/></td>"
-                    var Money = "<td style='width: 50px'></td>"
-                    var Price = "<td><input name='Price' type='text'  style='width:80px'/></td>"
-                    var button = "<td><button style='width:80px'>删除</button></td>"
-                    var ii = 99999;
-                    if ($(".ji").attr("class") == "ji") {
-                        $(".ji").each(function (i) {
-                            ii = i;
-                        })
-                    }
-                    var id = '<td  style="padding-left:20px">' + (Number(ii) + 1) + '</td>'
-                    if (ii == 99999) {
-                        $(".ftr").after("<tr class='ji'>" + id + ProductName + ProductSpec + Count + Units + Price + Money + Remarks + button + "</tr>")
-                    } else {
-                        $(".ji:eq(" + ii + ")").after("<tr class='ji'>" + id + ProductName + ProductSpec + Count + Units + Price + Money + Remarks + button + "</tr>");
-                    }
-
-                }
-            })
 
             //$(":checkbox:eq(2)").click(function () {
             //    if ($(":checkbox:eq(1)").attr("checked") == "checked") {
@@ -622,8 +671,8 @@
                 $(this).css("width", len + "px")
                 }
             })*@
-            $("ul :input").change(function () {
-                var len = $(this).val().length * 16;
+            $("ul :input[type=text]").change(function () {
+                var len = $(this).val().length * 17;
 
                 if (len < 80) {
                     $(this).css("width", "80px")
@@ -644,55 +693,28 @@
 
                 $(this).next().next().text(Transform(nu.toFixed(2)));
             })
-            //获取焦点
-                    $("table").one('keydown','input',function (e) {
-                        if (e.keyCode == 13) {
-                            if ($(this).parent().next().children().val() != undefined) {
-                                $(this).parent().next().children().focus();
-                            } else {
-                                $(this).parents("tr").next().find("input:eq(0)").focus();
-                            }
-                        }
-                    })
-            $(document).one('keydown','table input', function (e) {
 
-                var index = $(this).parents("tr").children().index($(this).parent())
-                if (e.keyCode == 38) {
 
-                    $(this).parents("tr").prev().find("input:eq(" + index + ")").focus()
-
-                }
-                //下
-                if (e.keyCode == 40) {
-                    $(this).parents("tr").next().find("input:eq(" + index + ")").focus()
-
-                }
-                //左
-                if (e.keyCode == 37) {
-                    $(this).parent().prev().children().focus()
-
-                }
-                //右
-                if (e.keyCode == 39) {
-                    $(this).parent().next().children().focus()
-
-                }
-            })
             $(".select2").change(function () {
+
                 if ($(this).val() == 0) {
                     $(".zh").text("801101000478910212")
                 } else if ($(this).val() == 1) { $(".zh").text("728968017298") }
                 else if ($(this).val() == 2) { $(".zh").text("44488701040005617") }
                 else if ($(this).val() == 3) { $(".zh").text("44050166734500000066") }
                 else if ($(this).val() == 4) { $(".zh").text("06 2288 0002 5310") }
-
+                $(this).find("option").removeAttr("selected")
+                $(this).find("option:eq(" + $(this).val() + ")").attr("selected", "selected")
+            })
+            $(".jayi").change(function () {
+                $(this).find("option").removeAttr("selected")
+                $(this).find("option:eq(" + $(this).val() + ")").attr("selected", "selected")
             })
             $("ul [type=text]").keydown(function (e) {
                 if (e.keyCode == 13) {
                     if ($(this).next.val() != undefined) {
                         $(this).next().focus();
-                    } else if ($(this).parents("p").next().find("input:eq(0)").val())
-                    {
+                    } else if ($(this).parents("p").next().find("input:eq(0)").val()) {
                         $(this).parents("p").next().find("input:eq(0)").focus();
                     }
                     else {
@@ -727,7 +749,7 @@
     <script type="text/javascript">
         function printCss() {
 
-            $(":input").css("border", "0px");
+
             $(".layui-form-item").hide()
             $("p input").each(function (i) {
                 if ($("p input:eq(" + i + ")").val() == 0) {
@@ -735,6 +757,9 @@
                 }
             })
             $("button").parent().hide();
+            $(".hide").hide();
+            $("#sas").hide();
+            $("td").css("border","2px solid #000");
             $("th:nth-child(8)").hide();
             $(".l").each(function (i) {
                 if (Number($(".l:eq(" + i + ") input").val()) == 0) {
@@ -811,6 +836,7 @@
                         if (HtmlText == null) {
                             printCss();
                             HtmlText = prnhtml;
+
                             $.ajax({
                                 url: "/ProductionPlanning/SaveUpHtml?Type=adda&CuNumber=" + CuNumber,
                                 type: "post",
@@ -838,6 +864,7 @@
                             }, function () {
                                 printCss();
                                 HtmlText = prnhtml;
+
                                 $.ajax({
                                     url: "/ProductionPlanning/SaveUpHtml?Type=up",
                                     type: "post",
@@ -848,11 +875,11 @@
                                     success: function (data) {
                                         if (data == "true") {
                                             window.document.body.innerHTML = HtmlText;
+
                                             window.print();
                                         } else {
                                             layer.msg("未知错误")
                                         }
-
                                     }
                                 })
                             });
@@ -878,7 +905,7 @@
     <table class="tab" style="width:90%;">
         <tr>
             <td style="border:0px"></td>
-            <td style="border:0px"><div style="margin-left:100px;text-align:right"><label>合同编号：</label><input type="text" style="border:0;width:250px" name="ContractNumber" /></div></td>
+            <td style="border:0px"><div style="margin-left:100px;text-align:right;"><label>合同编号：</label><input type="text" style="border:0;width:250px" name="ContractNumber" /></div></td>
         </tr>
         <tr>
             <td>
@@ -888,7 +915,7 @@
             <td>
                 <label style="width:150px">供方（乙方）：</label>
                 <select class="select">
-                    <option value="0" selected=selected>广东友力智能科技有限公司</option>
+                    <option value="0">广东友力智能科技有限公司</option>
                     <option value="1">佛山市顺德区友力帮机械有限公司</option>
                 </select>
             </td>
@@ -903,7 +930,7 @@
         </tr>
         <tr>
             <td>
-                <label>电话：</label><input type="number" style="width:420px;" id="txt" name="Tel" placeholder="电话" list="mylist1" onkeyup="search1(this)" />
+                <label>电话：</label><input type='text' style="width:420px;" id="txt" name="Tel" placeholder="电话" list="mylist1" onkeyup="search1(this)" />
                 <datalist id="mylist1"></datalist>
             </td>
             <td><label>电话：</label>0757-29977100</td>
@@ -920,7 +947,6 @@
                 <label>联系人：</label>
                 <input type="text" style="width:420px;" id="txt" name="Contact" placeholder="" list="mylist1" onkeyup="search1(this)" />
                 <datalist id="mylist1"></datalist>
-
             </td>
             <td><label>联系人：</label><input type="text" style="width:420px;" class="bom" name="Contact1" /></td>
         </tr>
@@ -929,11 +955,19 @@
         <li style="margin-left:10px"><p>一、货物名称及型号规格、数量、单价、金额：</p></li>
     </ul>
     <div class="layui-form-item">
-        <div class="layui-form-label">导入操作</div>
+        <div class="layui-form-label">导入Excel</div>
         <div class="layui-form-block">
             <input type="file" class="layui-btn layui-btn-primary" id="LAY-excel-import-excel" multiple="multiple" />
         </div>
     </div>
+    <div>
+        <button type="button" class="layui-btn divdiv" id="test1" name="TaskLevel" style="margin-left:10px;">
+            <i class="layui-icon">&#xe67c;</i>上传文件
+        </button>
+    </div>
+    @*<div class="divdiv" style="margin-left:20px;">
+            <input type="file" name="TaskLevel" id="file" />
+        </div>*@
     <table style="width:90%;" class="Product" id="myBtn">
         <tr class="ftr">
             <th><label>序号</label></th>
@@ -944,34 +978,36 @@
             <th><label>单价</label></th>
             <th><label>金额</label></th>
             <th><label>备注</label></th>
-            <th><label>操作</label></th>
+            <th class="hide"><label>操作</label></th>
 
         </tr>
         <tr class="ji">
-            <td style="padding-left:20px">1</td>
-            <td><input name='ProductName' type='text' style="width:300px" /></td>
-            <td><input name='ProductSpec' type='text' style="width:300px" /></td>
-            <td><input name='Count' type='number' style="width:50px" /></td>
-            <td><input name='Units' type='text' style="width:50px" /></td>
-            <td><input name='Price' type='number' style="width:80px" /></td>
+
+            <td style="padding:5px" class="id">1</td>
+            <td><div class='word' name='ProductName' style='width:300px'>空</div></td>
+
+            <td><div class='word' name='ProductSpec' style='width:300px'>空</div></td>
+            <td><input name='Count' type='text' value='' style='width: 50px' /></td>
+            <td><input name='Units' type='text' value='' style='width: 50px' /></td>
+            <td><input name='Price' type='text' value='' style='width: 100px' /></td>
             <td style='width: 50px'></td>
             <td><input type='text' /></td>
-            <td><button style="width:80px">删除</button></td>
+            <td><button style='width:80px'>删除</button></td>
         </tr>
         <tr class="Money">
             <td colspan="6">出厂产品合计金额: </td>
-            <td name="Money">@ViewData["Money"]</td>
+            <td>@ViewData["Money"]</td>
             <td><input type="text" class="sss" /></td>
         </tr>
 
         <tr>
             <td colspan="6">运费</td>
-            <td class="l"><input type="number" class="sss" /></td>
+            <td class="l"><input type='text' class="sss" /></td>
             <td><input type='text' class="sss" /></td>
         </tr>
         <tr>
             <td colspan="6">安装费(派多名工程师安装)</td>
-            <td class="l"><input type="number" class="sss" id="yf" /></td>
+            <td class="l"><input type='text' class="sss" id="yf" /></td>
             <td><input type="text" class="sss" /></td>
         </tr>
         <tr>
@@ -982,18 +1018,18 @@
         </tr>
         <tr>
             <td colspan="6"><input type="checkbox" style="margin-left:-100px" />税额16%</td>
-            <td class="l"><input type="number" style="display:inline-block;width:100px;margin-left:10px" /></td>
-            <td><input type="number" class="sss" /></td>
+            <td class="l"><input type='text' style="display:inline-block;width:100px;margin-left:10px" /></td>
+            <td><input type='text' class="sss" /></td>
         </tr>
         <tr>
             <td colspan="6"><input type="checkbox" style="margin-left:-80px" />税后价合计:</td>
             <td class="l"></td>
-            <td><input type="number" class="sss" /></td>
+            <td><input type='text' class="sss" /></td>
         </tr>
         <tr>
             <td colspan="6"><input type="checkbox" style="margin-left:-65px" />优惠后价合计:</td>
-            <td class="l"><input type="text" class="sss sui" /></td>
-            <td><input type="number" class="sss bom" /></td>
+            <td class="l"><input type="text" class="sss sui" name="Money" /></td>
+            <td><input type='text' class="sss bom" /></td>
         </tr>
     </table>
     <div class="divdiv">
@@ -1005,15 +1041,15 @@
                 <p>二、付款方式：</p>
             </li>
             <li>
-                <p>1、合同签定之日起7日内,甲方需向乙方支付定金即合同总价款<input type="number" class="su" />%,即人民币:<span name="DepositAmount"></span>；<span></span>。</p>
-                <p>2、交货期前三天乙方通知甲方支付发货款：合同总价款<input type="number" class="su" />%,即人民币:<span name="DeliveryAmount"></span>；<span></span>。</p>
-                <p>3、自货物到达甲方指定地点,乙方安装人员到厂安装好,设备调试前,甲方向乙方支付安装调试款：合同总价款的<input type="number" class="su" />%,即人民币:<span name="InstallationAmount">；</span>；<span></span>。</p>
-                <p>4、设备安装调试完成并经甲方验收合格之日起3个工作日内,甲方向乙方支付验收款：合同总价款的<input type="number" class="su" />%,即人民币:<span name="AcceptanceAmount"></span>；<span></span>。</p>
-                <p>5、设备保修期满3个工作日内,甲方向乙方支付质保金款：合同总价款金额的<input type="number" class="su" />%,即人民币:<span name="QualityAssuranceAmount"></span>；<span></span>。</p>
+                <p>1、合同签定之日起7日内,甲方需向乙方支付定金即合同总价款<input type='text' class="su" />%,即人民币:<span name="DepositAmount"></span>；<span></span>。</p>
+                <p>2、交货期前三天乙方通知甲方支付发货款：合同总价款<input type='text' class="su" />%,即人民币:<span name="DeliveryAmount"></span>；<span></span>。</p>
+                <p>3、自货物到达甲方指定地点,乙方安装人员到厂安装好,设备调试前,甲方向乙方支付安装调试款：合同总价款的<input type='text' class="su" />%,即人民币:<span name="InstallationAmount">；</span>；<span></span>。</p>
+                <p>4、设备安装调试完成并经甲方验收合格之日起3个工作日内,甲方向乙方支付验收款：合同总价款的<input type='text' class="su" />%,即人民币:<span name="AcceptanceAmount"></span>；<span></span>。</p>
+                <p>5、设备保修期满3个工作日内,甲方向乙方支付质保金款：合同总价款金额的<input type='text' class="su" />%,即人民币:<span name="QualityAssuranceAmount"></span>；<span></span>。</p>
             </li>
             <li><p><input type="checkbox" />说明：应甲方要求,需在付款前开具发票的,发票不作为收款依据,以乙方指定银行账户实际到账为准。</p></li>
             <li>
-                <p>三、设备及货物交货时间：<span>自定金到账日起<input type="number" />日内完成出厂前的检验,</span><span>自发货款到账日起<input type="number" />日内（国家法定节假日顺延）货物交付清,</span><span>自安装调试款到账日起<input type="number" />日内完成设备运行调试,</span>如货款拖延则交货期、设备调试期顺延；因设计变更、运输途中各种无法预测的因素或不可抗力的因素可顺延交期。</p>
+                <p>三、设备及货物交货时间：<span>自定金到账日起<input type='text' />日内完成出厂前的检验,</span><span>自发货款到账日起<input type='text' />日内（国家法定节假日顺延）货物交付清,</span><span>自安装调试款到账日起<input type='text' />日内完成设备运行调试,</span>如货款拖延则交货期、设备调试期顺延；因设计变更、运输途中各种无法预测的因素或不可抗力的因素可顺延交期。</p>
             </li>
             <li>
                 <p>四、包装、运输、收货地址、装卸和收货</p>
@@ -1022,7 +1058,7 @@
                 <p>1、包装方式：乙方满足设备及货物运输例行简易包装；如甲方对商品包装有特殊要求,双方应在合同中注明,所增加的包装费用,由甲方承担。</p>
             </li>
             <li>
-                <p>2、运输：由  <select><option>甲</option><option>乙</option></select>  方负责运输并承担运输及保险相关费用。</p>
+                <p>2、运输：由  <select class="jayi"><option value="0">甲</option><option value="1">乙</option></select>  方负责运输并承担运输及保险相关费用。</p>
             </li>
             <li>
                 <p style="width:500px"><label>3、收货地址:<input type="text" style="width:400px" /></label></p>
@@ -1102,8 +1138,8 @@
 
             </li>
             <li name="ConditionsOfbreachOfContract">
-                <p>1、在合同履行期间,乙方延期交货,除双方协商同意免责外,乙方按每日合同总价款<input type="number" />‰支付违约金给甲方,违约金累计金额不超过合同金额的10%；</p>
-                <p>2、在合同履行期间,甲方延期付款,除双方协商同意免责外,甲方按每日合同总价款<input type="number" class="bom" />‰支付违约金给乙方；</p>
+                <p>1、在合同履行期间,乙方延期交货,除双方协商同意免责外,乙方按每日合同总价款<input type='text' value="1" />‰支付违约金给甲方,违约金累计金额不超过合同金额的10%；</p>
+                <p>2、在合同履行期间,甲方延期付款,除双方协商同意免责外,甲方按每日合同总价款<input type='text' class="bom" value="1" />‰支付违约金给乙方；</p>
                 <p>3、如甲方不能按期付款,除承担以上违约责任以外,并且未付款合同内货物权属归乙方所有。</p>
                 <p>4、甲方在合同约定时间内未付清货款或定金款的,乙方有权选择解除合同或停止交货。</p>
                 <p>5、甲方无正当理由单方解除合同的,由此给乙方造成的全部经济损失应由甲方赔偿给乙方,已支付的定金无权要求返还。</p>
@@ -1161,7 +1197,7 @@
                 <td>
                     <label style="width:143px">单位名称（章）：</label>
                     <select class="sele">
-                        <option value="0" selected=selected>广东友力智能科技有限公司</option>
+                        <option value="0">广东友力智能科技有限公司</option>
                         <option value="1">佛山市顺德区友力帮机械有限公司</option>
                     </select>
                 </td>
@@ -1227,7 +1263,7 @@
                 <td>
                     <label>开户银行：</label>
                     <select class="select2">
-                        <option value="0" selected=selected>广东顺德农村商业银行股份有限公司杏坛金海分理处</option>
+                        <option value="0">广东顺德农村商业银行股份有限公司杏坛金海分理处</option>
                         <option value="1">中国银行顺德杏龙支行</option>
                         <option value="2">中国农业银行股份有限公司顺德顺宝支行</option>
                         <option value="3">中国建设银行股份有限公司顺德杏坛支行</option>
@@ -1246,7 +1282,10 @@
         </table>
     </div>
     <div style="margin:0px auto; text-align:center;font-size:20px;font-weight:bolder;" id="sas">
-        <p><a style="color:black;text-decoration:none" href="javascript:;" onclick="doPrint()">打印</a> &nbsp;&nbsp;<a style="color:black;text-decoration:none" href="javascript:;" onclick="Applier()">保存</a></p>
+        <p>
+            <a style="color:black;text-decoration:none" href="javascript:;" onclick="doPrint()">打印</a> &nbsp;&nbsp;<a style="color:black;text-decoration:none" href="javascript:;" id="testListAction">保存</a>
+            &nbsp;&nbsp;<a style="color:black;" href="javascript:;" id="addnewc">新增合同</a>
+        </p>
     </div>
     <!--endprint-->
     <script>

@@ -1,26 +1,27 @@
 ﻿@{
     Layout = null;
-
-
 }
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>友力信息管理系统</title>
     <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
-    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
     <link href="~/css/style.css" rel="stylesheet" type="text/css" />
     <link href="~/layui/css/layui.css" rel="stylesheet" />
     <script type="text/javascript" src="../../js/jquery.js"></script>
     <script src="~/layui/layui.js" type="text/javascript"></script>
-
-
+    @*<script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-sm" lay-event="getCheckData">一键转单</button>
+            </div>
+        </script>*@
     <script type="text/javascript">
         $(function () {
-            
+            if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }
             $("#addC").click(function () {
                 var sd = $("#u").text();
                 window.parent.document.getElementById("rightframe").src = sd;
@@ -28,54 +29,93 @@
             $("#edit").click(function () {
                 window.parent.document.getElementById("rightframe").src = "/Home/Eidt";
             });
+            $("#SubmitPurchase").click(function () {
+                layer.confirm("是否提交采购申请？", function () {
+                    var tid = '@ViewData["TaskID3"]';
+                    $.ajax({
+                        url: "/TaskManagement/EQProcurement",
+                        type: "post",
+                        data: { taskid: tid },
+                        dataType: "text",
+                        success: function (data) {
+                            if (data == "true") {
+                                window.setTimeout(function () {
+                                    layer.msg("提交到采购申请！");
+                                    window.parent.document.getElementById("rightframe").src = "/TaskManagement/MyTask";
+                                }, 500);
+                            }
+                            else {
+                                layer.msg("采购申请失败，请重新登录系统!");
+                                return;
+                            }
+                        }
+                    });
+                });
+            });
             $("#Construction").click(function () {
                 $.ajax({
-                    url: "/TaskManagement/CompletionOfWorkOrder",
+                    url: "/TaskManagement/TaskMapings?taskid=" + "@ViewData["quetaskid"]",
                     type: "post",
                     dataType: "text",
                     success: function (data) {
                         if (data == "true") {
-                            window.setTimeout(function () {
-                                alert("确认成功！");
-                                window.history.go(-2);
-                            }, 500);
+                            $.ajax({
+                                url: "/TaskManagement/CompletionOfWorkOrder",
+                                type: "post",
+                                dataType: "text",
+                                success: function (data) {
+                                    if (data == "true") {
+                                        window.setTimeout(function () {
+                                            alert("确认成功！");
+                                            window.parent.document.getElementById("rightframe").src = "/TaskManagement/MyTask";
+                                        }, 500);
+                                    }
+                                    else {
+                                        alert("还有工单没有转完！");
+                                        return;
+                                    }
+                                }
+                            });
                         }
                         else {
-                            alert("确认失败！");
+                            alert("还有工单没有转完！");
                             return;
                         }
                     }
                 });
             });
-
             $("#PurchasingApplication").click(function () {
-                window.parent.document.getElementById("rightframe").src = "/TaskManagement/Purchasing?ifDriver="+"@Session["ifB"]"+"&Taskid="+"@ViewData["TaskID2"]";
+                window.parent.document.getElementById("rightframe").src = "/TaskManagement/Purchasing?ifDriver=" + "@Session["ifB"]" + "&Taskid=" + "@ViewData["TaskID2"]";
             });
 
             layui.use(['table', 'layer'], function () {
                 var table = layui.table, layer = layui.layer;
-                    table.render({
-                        elem: '#tw'
-                   , url: '/TaskManagement/TaskMapingWOCheck?taskid=' + '@ViewData["taskid"]'
-                   , limit: 15
-                   , done: function () {
-                             $("tr a").hide()
-                             $("tr").hover(function () {
-                                 $(this).children().last().children().children().toggle();
-                             })
-                         }
-                   , cols: [[
-                   , { field: '', hide: true }
-                   , { field: '部件', width: 210, title: '部件'}
-                   , { field: '订单数量', width: 210, title: '订单数量' }
-                   , { field: '每套数量', width: 235, title: '每套数量' }
-                   , {
-                       field: '工单数量', width: 180, title: '工单数量',
-                     }
-                   , { field: '工单名称', title: '工单名称', width: 250 }
-                   , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
-                   ]]
-
+                table.render({
+                    elem: '#tw'
+                    //  , toolbar: '#toolbarDemo'
+               , url: '/TaskManagement/TaskMapingWOCheck?taskid=' + '@ViewData["taskid"]'
+               , limit: 15
+               , done: function () {
+                   $("tr a").hide()
+                   $("tr").hover(function () {
+                       $(this).children().last().children().children().toggle();
+                   })
+               }
+               , cols: [[
+                { field: '', hide: true }
+                //{ type: 'checkbox', fixed: 'left' }
+               , { field: 'ind', type:'numbers',width: 80, title: '序号' }
+               , { field: '部件', width: 210, title: '部件', align: 'center' }
+               , { field: '订单数量', width: 210, title: '订单数量', align: 'center' }
+               //, { field: '每套数量', width: 235, title: '每套数量', align: 'center' }
+               , {
+                   field: '工单数量', width: 180, title: '工单数量', align: 'center'
+               }
+               , { field: '工单名称', title: '工单名称', width: 250, align: 'center' }
+               //, { field: '生成工单', title: '是否外购部件', width: 250, align: 'center' }
+               //, { field: '是否申请采购', title: '是否需要采购', width: 200, align: 'center' }
+               , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+               ]]
                 });
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
@@ -83,88 +123,240 @@
                         case 'add':
                             TaskID = data.任务编号;
                             parid = data.部件编号;
-                            OrderCount = data.订单数量;
-                            $.ajax({
-                            url: "/TaskManagement/CheckInventory?Parid=" + parid + "&OrderCount=" + OrderCount,
-                            type: "post",
-                            dataType: "text",
-                            success: function (data) {
-                                if (data == "true") {
-                                    id = data.id;
-                                    PartNumber = data.部件;
-                                    TotalPCS = data.订单数量
-                                    TotalQTY = data.工单数量;
-                                    QTYofOneSet = data.每套数量;
-                                    TaskID = data.任务编号;
-                                    ji = data.部件级别;
-                                    spec = data.部件规格;
-                                    $.ajax({
-                                        url: "/TaskManagement/TurnPwo?pcName=" + "@ViewData["pcNamed"]" + "&PartNumber=" + PartNumber + "&TotalPCS=" + TotalPCS + "&TotalQTY=" + TotalQTY + "&QTYofOneSet=" + QTYofOneSet + "&TaskID=" + TaskID + "&ji=" + ji + "&spec=" + spec,
-                                        type: "post",
+                            ProductName = data.产品名称;
+                            ProductSpec = data.产品规格;
+                            pnumber = data.部件;
+                            pspec = data.部件规格;
+                            ji = data.部件级别;
+                            OrderCount = data.工单数量;
+                            var index = $("tr").index(obj.tr);
+                            if (index == '1') {
+                                $.ajax({
+                                    url: "/TaskManagement/CheckParts?taskid=" + TaskID + "&count=" + OrderCount,
+                                    type: "post",
                                     dataType: "text",
                                     success: function (data) {
                                         if (data == "true") {
-                                            window.setTimeout(function () {
-                                                layer.msg('转换成功！');
-                                                var url = "/ProductionPlanning/WorkManagement?taskid=" + TaskID + "&cancle=" + "1";
-                                                var index = layer.open({
-                                                    type: 2,
-                                                    content: url,
-                                                    title: "工单分配",
-                                                    maxmin: true
-                                                });
-                                                layer.full(index);
-                                            }, 500);
+                                            $.ajax({
+                                                url: "/TaskManagement/TrunWorderOrder?taskid=" + TaskID + "&PartNumber=" + ProductName + "&PartSpec=" + ProductSpec + "&Parent=" + pnumber + "&Spec=" + pspec + "&Ji=" + ji,
+                                                type: "post",
+                                                dataType: "text",
+                                                success: function (data) {
+                                                    if (data == "true") {
+                                                        window.setTimeout(function () {
+                                                            layer.msg('转换成功!');
+                                                            var url = "/ProductionPlanning/WorkManagement2?taskid=" + TaskID;
+                                                            var index = layer.open({
+                                                                type: 2,
+                                                                content: url,
+                                                                title: "工单分配",
+                                                                maxmin: true
+                                                            });
+                                                            layer.full(index);
+                                                        }, 500);
+                                                    }
+                                                    else {
+                                                        alert("请联系软件维修人员！");
+                                                        return;
+                                                    }
+                                                }
+                                            });
                                         }
-                                        else {
-                                            alert("转换失败！");
-                                            return;
-                                             }
+                                        else
+                                        {
+                                            layer.msg('库存部件数量不够!');
+                                        }                                      
                                     }
+                                });                             
+                            } else
+                            {
+                                var url = '/TaskManagement/TransferWork?Parid=' + parid + '&OrderCount=' + OrderCount + '&pnum=' + pnumber + '&taskid=' + TaskID + '&ProductName=' + ProductName + '&ProductSpec=' + ProductSpec;
+                                var index = layer.open({
+                                    type: 2,
+                                    content: url,
+                                    maxmin: true
                                 });
-                                }
-                                else if (data = "false") {                                 
-                                        var url = '/TaskManagement/Purchasing?Taskid=' + TaskID + '&PartID=' + parid;
-                                        var index = layer.open({
-                                            type: 2,
-                                            title: "采购申请信息",
-                                            content: url,
-                                            maxmin: true
-                                        });
-                                        layer.full(index);                                                                      
-                                }                              
+                                layer.full(index);
                             }
-                    });                         
+                              
+                                                     
+                                @*$.ajax({
+                                    url: "/TaskManagement/CheckInventory?Parid=" + parid + "&OrderCount=" + OrderCount + "&taskid=" + TaskID,
+                                    type: "post",
+                                    dataType: "text",
+                                    success: function (data) {
+                                        if (data == "true") {
+                                            id = data.id;
+                                            PartNumber = data.部件;
+                                            TotalPCS = data.订单数量
+                                            TotalQTY = data.工单数量;
+                                            QTYofOneSet = data.每套数量;
+                                            TaskID = data.任务编号;
+                                            ji = data.部件级别;
+                                            spec = data.部件规格;
+                                            $.ajax({
+                                                url: "/TaskManagement/TurnPwo?pcName=" + "@ViewData["pcNamed"]" + "&PartNumber=" + PartNumber + "&TotalPCS=" + TotalPCS + "&TotalQTY=" + TotalQTY + "&QTYofOneSet=" + QTYofOneSet + "&TaskID=" + TaskID + "&ji=" + ji + "&spec=" + spec,
+                                                type: "post",
+                                            dataType: "text",
+                                            success: function (data) {
+                                                if (data == "true") {
+                                                    window.setTimeout(function () {
+                                                        layer.msg('转换成功!');
+                                                        var url = "/ProductionPlanning/WorkManagement?taskid=" + TaskID + "&cancle=" + "1";
+                                                        var index = layer.open({
+                                                            type: 2,
+                                                            content: url,
+                                                            title: "工单分配",
+                                                            maxmin: true
+                                                        });
+                                                        layer.full(index);
+                                                    }, 500);
+                                                }
+                                                else {
+                                                    alert("请联系软件维修人员！");
+                                                    return;
+                                                }
+                                            }
+                                        });
+                                    }
+                                else if (data = "false") {
+                                    alert("库存不够已提交采购申请!");
+                                    table.reload('tw');
+                                    //var url = '/TaskManagement/Purchasing?Taskid=' + TaskID + '&PartID=' + parid;
+                                    //var index = layer.open({
+                                    //    type: 2,
+                                    //    title: "采购申请信息",
+                                    //    content: url,
+                                    //    maxmin: true
+                                    //});
+                                    //layer.full(index);
+                                }
+                            }
+                           });*@
+                            
+                            break;
+                        case 'Outsourcing':
+                            //layer.msg('请联系系统维修人员。');
+                            var mid = data.部件编号;
+                            var TaskID = data.任务编号;
+                            var count = data.工单数量;
+                            var unit = data.产品单位;
+                            $.ajax({
+                                url: "/TaskManagement/CheckPurchaseList?Materid=" + mid + "&Taskid=" + TaskID,
+                                type: "post",
+                                dataType: "text",
+                                success: function (data) {
+                                    if (data == "true") {
+                                        $.ajax({
+                                            url: "/TaskManagement/ApplyPurchasingd?type="+"add"+"&Materid=" + mid + "&PCount=" + count + "&Unit=" + "PCS" + "&Taskid=" + TaskID,
+                                            type: "post",
+                                            dataType: "text",
+                                            success: function (data) {
+                                                alert('提交成功!');
+                                            }
+                                        });
+                                    }
+                                    else
+                                    {
+                                        layer.msg('系统检测到已申请采购数量为:'+data, {
+                                            time: 20000, //20s后自动关闭
+                                            offset:['200px','600px'],
+                                            btn: ['增加', '退出']
+                                            , btn1: function (index, layero) {
+                                                $.ajax({
+                                                    url: "/TaskManagement/ApplyPurchasingd?type=" + "update" + "&Materid=" + mid + "&PCount=" + count + "&Unit=" + "PCS" + "&Taskid=" + TaskID,
+                                                    type: "post",
+                                                    dataType: "text",
+                                                    success: function (data) {
+                                                        layer.msg('修改成功!');
+                                                    }
+                                                });
+                                            }
+                                        });                                    
+                                    }                                  
+                                }
+                            });
+
+                            //if (sq == "申请中") {
+                            //    layer.msg('已经采购申请中。');
+                            //} else {
+                            //$.ajax({
+                            //    url: "/TaskManagement/ApplyPurchasingd?Materid=" + mid + "&PCount=" + count + "&Unit=" + "PCS" + "&Taskid=" + TaskID,
+                            //    type: "post",
+                            //    dataType: "text",
+                            //    success: function (data) {
+                            //        $.ajax({
+                            //            url: "/TaskManagement/UpdateApplyMater",
+                            //            data: { Materid: mid },
+                            //            type: "post",
+                            //            dataType: "text",
+                            //            success: function (data) {
+                            //                alert('提交成功!');
+                            //            }
+                            //        });
+                            //    }
+                            //});
+                            //  }
+                            //$.ajax({
+                            //    url: "/ProductionPlanning/datatest",
+                            //    type: "post",
+                            //    dataType: "text",
+                            //    success: function (data) {
+                            //            var url = '/TechnicalDepartment/CheckPdf?src='+data;
+                            //            var index = layer.open({
+                            //                type: 2,
+                            //                title: "PDF",
+                            //                content: url,
+                            //                area: ['90%', '90%']
+                            //            });
+                            //        }
+                            //});
+                            break;
+                        case 'check':
+                            parid = data.部件编号;
+                            TaskID = data.任务编号;
+                            var index = $("tr").index(obj.tr);
+                            if (index == '1') {
+                                var url = '/TaskManagement/CheckProductInvent?Taskid=' + TaskID;
+                                var index = layer.open({
+                                    type: 2,
+                                    title: "查看库存信息",
+                                    content: url,
+                                    area: ['1200px', '600px']
+                                });
+                            }
+                            else
+                            {
+                                var url = '/TaskManagement/CheckInvent?Parid=' + parid;
+                                var index = layer.open({
+                                    type: 2,
+                                    title: "查看库存信息",
+                                    content: url,
+                                    area: ['1200px', '600px']
+                                });
+                            }                                                    
                             break;
                     };
                 });
-                });
             });
-
+        });
     </script>
     <script type="text/html" id="barDemo">
         {{#  if(d.工单名称 !=null){ }}
-            
+        {{# }else if(d.生成工单=='外购部件'){ }}
+        <a class="layui-btn layui-btn-xs" id="Outsourcing" lay-event="Outsourcing">转外协工单</a>
         {{# }else { }}
+        <a class="layui-btn layui-btn-xs" id="check" lay-event="check">库存信息</a>
         <a class="layui-btn layui-btn-xs" id="add" lay-event="add">转生产工单</a>
         {{#  } }}
-
     </script>
-
-
 </head>
 
 
 <body>
-
-
-
     <div class="rightinfo">
-
         <div class="tools">
-
             <ul class="toolbar">
-
                 <li>
                     项目名称：
                     <input class="pjName" id="pjName" type="text" style="width:180px;" value="@ViewData["pjname"]" />
@@ -175,7 +367,7 @@
                 </li>
                 <li>
                     产品规格：
-                    <input class="ProductSpecification" id="ProductSpecification" type="text" style="width:120px;" value="@ViewData["spec"]" />
+                    <input class="ProductSpecification" id="ProductSpecification" type="text" style="width:140px;" value="@ViewData["spec"]" />
                 </li>
                 <li>
                     任务类型：
@@ -188,6 +380,7 @@
             </ul>
             @*<button class="layui-btn" id="PurchasingApplication" data-type="reload">采购申请</button>*@
             <button class="layui-btn" id="Construction" data-type="reload">确认完成建工单</button>
+            <button class="layui-btn" id="SubmitPurchase" data-type="reload">确认完成提交采购申请</button>
         </div>
         <table class="tablelist" id="tw" lay-filter="demo"></table>
     </div>

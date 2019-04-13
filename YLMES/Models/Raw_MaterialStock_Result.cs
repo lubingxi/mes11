@@ -13,8 +13,9 @@ namespace YLMES.Models
     
     public partial class Raw_MaterialStock_Result
     {
-        public string 项目名称 { get; set; }
+        public int 物料编码 { get; set; }
         public string 图号 { get; set; }
+        public int 注册序号 { get; set; }
         public string 物料名称 { get; set; }
         public string 物料规格 { get; set; }
         public string 材质 { get; set; }

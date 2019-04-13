@@ -13,13 +13,35 @@ namespace YLMES.Models
     
     public partial class checkCoMaterial_Result
     {
+        public int 物料类型序号 { get; set; }
         public int ID { get; set; }
+        public Nullable<int> Category1ID { get; set; }
+        public Nullable<int> Category2ID { get; set; }
+        public Nullable<int> Category3ID { get; set; }
+        public Nullable<int> ApplierProductTypeID { get; set; }
         public string figureNumber { get; set; }
         public string PartNumber { get; set; }
         public string PartSpec { get; set; }
         public string PartMaterial { get; set; }
-        public Nullable<int> ApplierProductTypeID { get; set; }
-        public string ApplierId { get; set; }
+        public Nullable<int> StockPCS { get; set; }
+        public Nullable<int> StockQTY { get; set; }
+        public string Units { get; set; }
+        public string ListType { get; set; }
+        public Nullable<int> IsUnit { get; set; }
+        public string CreatedBy { get; set; }
+        public string CreatedTime { get; set; }
+        public string UpdatedBy { get; set; }
+        public string UpdatedTime { get; set; }
+        public string Status { get; set; }
         public string ContractTypeId { get; set; }
+        public string ApplierId { get; set; }
+        public string InventoryQuantity { get; set; }
+        public string DesignType { get; set; }
+        public string Note { get; set; }
+        public string materialQTY { get; set; }
+        public string MaterialUnits { get; set; }
+        public Nullable<int> StockQTY2 { get; set; }
+        public string Units2 { get; set; }
+        public string WarehouseType { get; set; }
     }
 }

@@ -16,8 +16,8 @@ namespace YLMES.Models
     {
         public int ID { get; set; }
         public Nullable<int> Sort { get; set; }
-        public Nullable<int> WorkorderID { get; set; }
-        public Nullable<int> StationTypeID { get; set; }
+        public string WorkorderID { get; set; }
+        public string StationTypeID { get; set; }
         public Nullable<int> WorkHoursOfOneSet { get; set; }
         public string WorkHoursUnits { get; set; }
         public string StartWorkTime { get; set; }

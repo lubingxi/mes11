@@ -1,0 +1,165 @@
+﻿
+@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        $(function () {
+            $("#btn2").click(function () {
+                $.ajax({
+                    url: "/TaskManagement/ConfirmTheElectDesign",
+                    type: "post",
+                    dataType: "text",
+                    success: function (data) {
+                        if (data == "true") {
+                            window.setTimeout(function () {
+                                alert("确认成功！");
+                                window.parent.document.getElementById("rightframe").src = "/TaskManagement/MyTask"
+                            }, 500);
+                        }
+                        else {
+                           // alert("错误!存在没有上传图纸的图号！");
+                            return;
+                        }
+                    }
+                });
+            });
+        });
+        layui.config({
+            base: '/layui_exts/',
+        }).use(['jquery', 'layer', 'excel', 'table'], function () {
+            var $ = layui.jquery;
+            var table = layui.table;
+            var layer = layui.layer;
+            var excel = layui.excel;          
+            var uploadExcel = function (files) {
+                try {
+                    excel.importExcel(files, {
+                        // 读取数据的同时梳理数据
+                        fields: {
+                            'ID': 'A'
+                            , 'PartNumber': 'B'
+                            , 'PartMaterial': 'C'
+                            , 'PartSpec': 'D'
+                            , 'Units': 'E'
+                            , 'StockQTY': 'F'
+                            , 'Note': 'G'
+                        }
+                    }, function (data) {
+                        var datas = [];                    
+                        console.log(data[0]["key"])
+                        data[0]["key"].forEach(function (value,index) {
+                            if (index > 3) {
+                                if (value.Units != "") {
+                                    datas.push(value);                                  
+                                }                             
+                            }
+                        })
+                     
+                     table.render({
+                            elem: '#tw'
+                            , toolbar: '#toolbarDemo'
+                            , limit: 100
+                            , cols: [[ //标题栏
+                            { type: 'numbers', title: '序号', width: 100 }
+                            , { field: 'PartNumber', title: '名称', width: 250, edit: Text }
+                            , { field: 'PartMaterial', title: '品牌', width: 250, edit: Text }
+                            , { field: 'PartSpec', title: '订货号', width: 250, edit: Text }
+                            , { field: 'Units', title: '单位', width: 100, edit: Text }
+                            , { field: 'StockQTY', title: '数量/台', width: 100, edit: Text }
+                            , { field: 'Note', title: '备注', width: 250, edit: Text }
+                            ]]
+                            , data: datas
+                        });
+                    
+                        table.on('toolbar(tw)', function (obj) {
+                            switch (obj.event) {
+                                case 'getCheckData':                                  
+                                    $.ajax({
+                                        url: "/TaskManagement/UploadElectrical",
+                                        data: { datas: table.cache.tw, taskid: '@ViewData["taskid"]', pnumber: '@ViewData["Pnumber"]',pspec:'@ViewData["PSpec"]' },
+                                        type: "post",
+                                        dataType: "text",
+                                        success: function (data) {
+                                            if (data == "true") {
+                                                layer.msg('上传成功！');
+                                                $('#btn2').show();
+                                            }
+                                        }
+                                    });
+                                    break;
+                            }
+                        });
+                    });
+                } catch (e) {
+                }
+            };
+            
+            // 监听上传文件的事件
+            $('#LAY-excel-import-excel').change(function (e) {
+                var files = e.target.files;
+                uploadExcel(files);
+            });
+
+        });
+    </script>
+
+
+
+</head>
+
+
+<body>
+
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">任务管理</a></li>
+            <li><a href="#">我的任务</a></li>
+            <li><a href="#">完成我的设计</a></li>
+        </ul>
+    </div>
+
+    <div class="rightinfo">
+
+        <div class="tools">
+            <div class="layui-form-item">
+                <button class="layui-btn" id="btn2" data-type="reload" style="margin-left:50px;display:none;" >确定完成我的设计</button>
+            </div>         
+            <div class="layui-form-item">
+                <div class="layui-form-label">导入Excel</div>
+                <div class="layui-form-block">
+                    <input type="file" class="layui-btn layui-btn-primary" id="LAY-excel-import-excel" multiple="multiple" />
+                </div>
+            </div>          
+        </div>
+        <table class="tablelist" id="tw" lay-filter="tw"></table>
+    </div>
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="getCheckData">上传文件</button>           
+        </div>
+    </script>
+</body>
+</html>

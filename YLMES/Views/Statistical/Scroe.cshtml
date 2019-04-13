@@ -19,7 +19,6 @@
     <meta name="viewport" content="width=device-width" />
     <title>友力信息管理系统</title>
     <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
-    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
     <link href="~/css/style.css" rel="stylesheet" type="text/css" />
     <link href="~/layui/css/layui.css" rel="stylesheet" />
     <script type="text/javascript" src="../../js/jquery.js"></script>
@@ -79,6 +78,9 @@
                     var StartTime = $('.CreatedTime').val();
                     var EndTime = $('.TimeEnd').val();
                     tableIns.reload({
+                        page: {
+                            curr: 1
+                        },
                         where: {
                             Name: Name
                            ,StartTime: StartTime

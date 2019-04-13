@@ -80,8 +80,17 @@
                     <input type="text" onfocus="WdatePicker()" value="@ViewData["JieDate"]" id="JieDate" name="JieDate" class="input-text Wdate">
                 </div>
             </div>
-                               
-                    
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>是否拆分：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <span class="select-box">
+                        <select name="breakup" class="select" id="BreakUp">
+                            <option value="拆分">拆分</option>
+                            <option value="不拆分">不拆分</option>
+                        </select>
+                    </span>
+                </div>
+            </div>                                         
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>任务附件1：</label>
                 <div class="formControls col-xs-8 col-sm-9">
@@ -144,7 +153,8 @@
     <script type="text/javascript">
         $.ready(
        document.getElementById('select').value = '@ViewData["select"]',
-        document.getElementById('selectd').value = '@ViewData["selectd"]'
+        document.getElementById('selectd').value = '@ViewData["selectd"]',
+        document.getElementById('BreakUp').value = '@ViewData["BreakUp"]'
        );
     function sub() {
         $("#form-article-add").ajaxSubmit({
@@ -154,9 +164,6 @@
                 if (data == "true") {
                     alert("修改成功！");
                     window.parent.location.reload();
-                }else
-                {
-                    alert("修改失败！");
                 }
             },
             error: function (aa) {
@@ -173,7 +180,7 @@
         $("#cancled").click(function () {
             var sd = $("#u").text();
             window.parent.document.getElementById("rightframe").src = sd;
-        });     
+        });
         //表单验证
         //$("#form-article-add").validate({
         //    rules: {

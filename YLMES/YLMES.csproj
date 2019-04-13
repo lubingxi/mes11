@@ -51,6 +51,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="aliyun-net-sdk-core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\短信接口\net\api_demo\net2.0\aliyun-net-sdk-core.dll</HintPath>
+    </Reference>
+    <Reference Include="aliyun-net-sdk-dysmsapi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\短信接口\net\api_demo\aliyun-net-sdk-dysmsapi.dll</HintPath>
+    </Reference>
     <Reference Include="BarcodeLib">
       <HintPath>..\..\..\ZPL打印条码\PrintLib\BarcodeLib.dll</HintPath>
     </Reference>
@@ -63,6 +71,9 @@
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>C:\Users\Administrator\Desktop\pdf\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="LPT">
       <HintPath>..\..\..\ZPL打印条码\PrintLib\LPT.dll</HintPath>
@@ -111,6 +122,18 @@
     <Reference Include="NPOI">
       <HintPath>..\..\..\NPOI\NPOI.dll</HintPath>
     </Reference>
+    <Reference Include="Spire.Common">
+      <HintPath>C:\Users\Administrator\Desktop\pdf\Spire.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.License">
+      <HintPath>C:\Users\Administrator\Desktop\pdf\Spire.License.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Pdf">
+      <HintPath>C:\Users\Administrator\Desktop\pdf\Spire.Pdf.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.XLS">
+      <HintPath>C:\Users\Administrator\Desktop\pdf\Spire.XLS.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -120,9 +143,9 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
@@ -290,6 +313,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="css\bdmapStyle.css" />
     <Content Include="css\bootstrap.min.css" />
+    <Content Include="css\elemenui.css" />
     <Content Include="css\fresh-bootstrap-table.css" />
     <Content Include="css\global.css" />
     <Content Include="css\lanrenzhijia.css" />
@@ -380,12 +404,15 @@
     <Content Include="img\icon_locate_green.png" />
     <Content Include="img\icon_locate_red.png" />
     <Content Include="jquery.gvChart-1.0.1.js" />
+    <Content Include="js\Accounting.js" />
     <Content Include="js\awesomplete.js" />
     <Content Include="js\awesomplete.min.js" />
+    <Content Include="js\axios.js" />
     <Content Include="js\Contract.js" />
     <Content Include="js\Contracts.js" />
     <Content Include="js\draggable.js" />
     <Content Include="js\echarts.js" />
+    <Content Include="js\elemenui.js" />
     <Content Include="js\EZView.js" />
     <Content Include="js\index.js" />
     <Content Include="js\jquery-1.11.0.min.js" />
@@ -399,8 +426,20 @@
     <Content Include="js\jquery.leanModal.min.js" />
     <Content Include="js\jquery.media.js" />
     <Content Include="js\jquery.min.js" />
+    <Content Include="js\Laiming.js" />
+    <Content Include="js\Laimingqr.js" />
+    <Content Include="js\Laimingsh.js" />
     <Content Include="js\lanrenzhijia.js" />
+    <Content Include="js\pageWorker.js" />
+    <Content Include="js\print.js" />
     <Content Include="js\rocketTop.js" />
+    <Content Include="js\Select.js" />
+    <Content Include="js\SubjectType.js" />
+    <Content Include="js\Voucher.js" />
+    <Content Include="js\Vouchertwo.js" />
+    <Content Include="js\vue.js" />
+    <Content Include="js\workers.js" />
+    <Content Include="js\ZhiFu.js" />
     <Content Include="laydate\laydate.js" />
     <Content Include="laydate\theme\default\font\iconfont.svg" />
     <Content Include="laydate\theme\default\laydate.css" />
@@ -1429,6 +1468,8 @@
     <Content Include="Content\Layui-KnifeZ\font\iconfont.svg" />
     <Content Include="Content\Layui-KnifeZ\font\iconfont.ttf" />
     <Content Include="Content\Layui-KnifeZ\font\iconfont.woff" />
+    <Content Include="css\fonts\element-icons.ttf" />
+    <Content Include="css\fonts\element-icons.woff" />
     <EntityDeploy Include="Models\Model1.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model1.Designer.cs</LastGenOutput>
@@ -1678,6 +1719,8 @@
     <Compile Include="Controllers\ApplierListController.cs" />
     <Compile Include="Controllers\ContractTwoController.cs" />
     <Compile Include="Controllers\DiscussController.cs" />
+    <Compile Include="Controllers\FinancialController.cs" />
+    <Compile Include="Controllers\FinishProductHouseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IncomingController.cs" />
     <Compile Include="Controllers\ProductionPlanningController.cs" />
@@ -1744,13 +1787,37 @@
     <Compile Include="Models\CheckDropWhList_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CheckFinshProcess_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CheckGoods_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CheckInventory_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CheckMake_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CheckMateial_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CheckMater_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CheckParts_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CheckProcess_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CheckProductDetalInfo_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CheckPzMake_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CheckPz_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CheckRouteName_Result.cs">
@@ -1765,19 +1832,28 @@
     <Compile Include="Models\CheckStorage_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CheckTaskAll_Result.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\CheckTaskProgress_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CheckTask_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CheckWarehouseLocation2_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CheckWarehouseLocation_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CheckWarehouse_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CheckWorkStation_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChecSmsInfo.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChecSmsInfos_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ContractType.cs">
@@ -1828,6 +1904,42 @@
     <Compile Include="Models\Finished_stock_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FI_Accounting_pz.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FI_Accounting_Vouchertwo.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FI_Affairs.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FI_AffairsType.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FI_Caption_of_Account.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FI_Claiming_Expenses.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FI_CostSetup.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FI_CostType.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FI_DebitAndCredit_Templet.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FI_Dept.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FI_Subject_category.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FI_Voucher_Flow_Setup.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Forum_Commentlist_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1837,7 +1949,13 @@
     <Compile Include="Models\Forum_Postings_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\f_split_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\getPackjobs_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\HitList_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\htmltext.cs">
@@ -1856,6 +1974,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MaterialCategory.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MaterTypeNames.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Model1.Context.cs">
@@ -1882,7 +2003,13 @@
     <Compile Include="Models\MyTaskCheck_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Orderlist_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PaymentType.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PDA_Scanrecord_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Permission_Result.cs">
@@ -1892,6 +2019,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_ApplierProductType.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PM_ApplyerMaterialType.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_AssemblyPart.cs">
@@ -1910,6 +2040,18 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_Bonusratio.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PM_CheckElectricalInv_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PM_CheckFigure_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PM_CheckMaterID_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PM_CheckSupplierMat_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_Customer.cs">
@@ -1931,6 +2073,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_Figure.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PM_FiguresCheck_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_Figure_history.cs">
@@ -1960,10 +2105,16 @@
     <Compile Include="Models\PM_MaterialList_new.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PM_MaterialTemp.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PM_Material_temp.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_Package.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PM_PartSettingCheck_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_PartSetting_temp.cs">
@@ -2005,7 +2156,7 @@
     <Compile Include="Models\PM_PurchaseMaterialList.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PM_PurchaseMaterialList_temp.cs">
+    <Compile Include="Models\PM_PurchaseMaterialList_Temp.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_Route.cs">
@@ -2092,6 +2243,12 @@
     <Compile Include="Models\ProcessBOM_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProCompletedTaskCheck_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProcurementMoreTask_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ProductDetail_Order_check_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -2125,7 +2282,13 @@
     <Compile Include="Models\ReceivablesHistorycheck_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SaveRoute_Result.cs">
+    <Compile Include="Models\Reimbursement_process2_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Reimbursement_process_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SendSms_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SP_CheckWO_Package_Result.cs">
@@ -2152,9 +2315,6 @@
     <Compile Include="Models\SP_Contract_ProductDetailNotice_Check_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SP_Contract_ProductDetailsd_Result.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\SP_Contract_ProductDetails_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -2170,13 +2330,67 @@
     <Compile Include="Models\sp_helpdiagrams_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SP_PM_AccountingJZH_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_Accuntingse_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SP_PM_ApplierList_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_Captionnall_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_Captionn_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_Caption_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_CheckDanH_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_CheckName_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SP_PM_Figure_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SP_PM_GETLaiminglj_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SP_PM_IncomingMaterialToHW_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_KQXTDept_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_LaimingBXDqr_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_LaimingBXDshTWO_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_LaimingBXDsh_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_LaimingBXD_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_LaimingDanh_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_LaimingZFpz_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_LaimingZF_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_Laiming_new_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_Materials_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SP_PM_Material_Result.cs">
@@ -2191,10 +2405,16 @@
     <Compile Include="Models\SP_PM_ProductStation_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SP_PM_WH_Result.cs">
+    <Compile Include="Models\SP_PM_SeAccuntingpz_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SP_PM_WorkOrderHistory_Result.cs">
+    <Compile Include="Models\SP_PM_SeContract_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_SubjectCategory_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_PM_WH_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SP_Warehousesetup_area_Result.cs">
@@ -2215,9 +2435,6 @@
     <Compile Include="Models\Statisticschar_Departmentlist_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\StatisticsDepartmentlist_Result.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Statistics_Scroechart_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -2231,6 +2448,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Summary_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SupplierMaterials.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Supplier_MaterialBinding_Result.cs">
@@ -2263,10 +2483,16 @@
     <Compile Include="Models\UploadTheDrawings_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\UpMake_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\UserName_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Vague_Material_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WarehouseLocation.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\WHNameMAX_Result.cs">
@@ -2287,6 +2513,8 @@
     <Compile Include="print\Printer.cs" />
     <Compile Include="print\RawPrinterHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sms.cs" />
+    <Compile Include="Tools.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -2438,6 +2666,49 @@
     <Content Include="Views\TaskManagement\PM_ContractReceivablesMain.cshtml" />
     <Content Include="Views\TaskManagement\FinishTask.cshtml" />
     <Content Include="Views\TaskManagement\FinishPTask.cshtml" />
+    <Content Include="Views\ProductionPlanning\AddProcess.cshtml" />
+    <Content Include="Views\TaskManagement\ProcurementTask.cshtml" />
+    <Content Include="Views\TaskManagement\ProcurementMoreTask.cshtml" />
+    <Content Include="Views\ProductionPlanning\Scanrecord.cshtml" />
+    <Content Include="Views\TaskManagement\CompleteTheProcurementTask.cshtml" />
+    <Content Include="Views\TechnicalDepartment\FileManagement.cshtml" />
+    <Content Include="Views\TechnicalDepartment\EditDrawing.cshtml" />
+    <Content Include="Views\TaskManagement\FinishElectricalDesign.cshtml" />
+    <Content Include="Views\TaskManagement\PlannedElectricalList.cshtml" />
+    <Content Include="Views\ApplierList\AddMaterInfo.cshtml" />
+    <Content Include="Views\ApplierList\CheckMaterInfo.cshtml" />
+    <Content Include="Views\TaskManagement\ApplyForPurchasing.cshtml" />
+    <Content Include="Views\TaskManagement\UploadProcess.cshtml" />
+    <Content Include="Views\TaskManagement\AddUploadProcess.cshtml" />
+    <Content Include="Views\TaskManagement\CheckInvent.cshtml" />
+    <Content Include="Views\TaskManagement\ReferProcess.cshtml" />
+    <Content Include="Views\ProductionPlanning\ProductPackaging.cshtml" />
+    <Content Include="Views\ProductionPlanning\PrintLabel.cshtml" />
+    <Content Include="Views\ProductionPlanning\PackingDetail.cshtml" />
+    <Content Include="Views\ProductionPlanning\txt.cshtml" />
+    <Content Include="Views\ProductionPlanning\AddMaterial.cshtml" />
+    <Content Include="Views\TaskManagement\TransferWork.cshtml" />
+    <Content Include="Views\ProductionPlanning\OrderDetail.cshtml" />
+    <Content Include="Views\FinishProductHouse\FinishedProductRegistration.cshtml" />
+    <Content Include="Views\FinishProductHouse\AddFinishLocation.cshtml" />
+    <Content Include="Views\FinishProductHouse\txt.cshtml" />
+    <Content Include="Views\FinishProductHouse\FinishedGoods.cshtml" />
+    <Content Include="Views\ProductionPlanning\AllPacking.cshtml" />
+    <Content Include="Views\ProductionPlanning\WorkManagement2.cshtml" />
+    <Content Include="Views\TaskManagement\CheckProductInvent.cshtml" />
+    <Content Include="Views\FinishProductHouse\AddProjectName.cshtml" />
+    <Content Include="Views\FinishProductHouse\CheckPackagingProducts.cshtml" />
+    <Content Include="Views\Financial\Accounting.cshtml" />
+    <Content Include="Views\Financial\CAccounting.cshtml" />
+    <Content Include="Views\Financial\Dept.cshtml" />
+    <Content Include="Views\Financial\Laiming.cshtml" />
+    <Content Include="Views\Financial\Laimingqr.cshtml" />
+    <Content Include="Views\Financial\Laimingsh.cshtml" />
+    <Content Include="Views\Financial\Make.cshtml" />
+    <Content Include="Views\Financial\SubjectType.cshtml" />
+    <Content Include="Views\Financial\Voucher.cshtml" />
+    <Content Include="Views\Financial\Vouchertwo.cshtml" />
+    <Content Include="Views\Financial\ZhiFu.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2447,10 +2718,47 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="pdf2\" />
+    <Folder Include="pdf\" />
+    <Folder Include="Process\" />
+    <Folder Include="txt\" />
+    <Folder Include="Uploadf\" />
     <Folder Include="Upload\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>4</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>6</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

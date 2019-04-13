@@ -42,19 +42,15 @@
                         , done: function () {
                             $("tr a").hide();
                          $("tr").hover(function () {
-
-                             $(this).children().last().children().children().toggle();
+                         $(this).children().last().children().children().toggle();
                          })
-
-
-                     }
+                         }
                         , cols: [[   
                             { align: 'center', title: '已拥有权限（勾选可删除权限）', colspan: 9 }], [
                             { type: 'checkbox' }                         
                             , { field: '姓名', width: 210, title: '用户名称' }
                             , { field: '功能名称', width: 235, title: '功能名称' }                 
                         ]]
-
                     });
                     table.render({
                         elem: '#te'
@@ -66,12 +62,8 @@
                             { type:'checkbox'}                          
                                 , { field: '姓名' , width: 210, title: '用户名称' }
                                 , { field: '功能名称', width: 235, title: '功能名称' }                        
-                        ]]
-
-                    });
-             
-                  
-       
+                                ]]
+                    });                                      
                 });
                 var FunctionName;
                 var UserName;
@@ -91,14 +83,12 @@
                                 data: { UserName: UserName, FunctionName: FunctionName, Status: Status },
                                 type: "post",
                                 dataType: "text",
-                                success: function (data) {
-                                   
+                                success: function (data) {                                   
                                 }
                             });
                         }
                         $("#NameSearch").click()
                         layer.msg('修改成功');
-
                     }
                 });
                 $("#Status").on('click', function () {
@@ -114,8 +104,7 @@
                                 data: { UserName: UserName, FunctionName: FunctionName, Status: Status },
                                 type: "post",
                                 dataType: "text",
-                                success: function (data) {
-                                    
+                                success: function (data) {                                   
                                 }
                             });
                         }
@@ -126,7 +115,6 @@
                });
 
             });
-
         })
     </script>
 

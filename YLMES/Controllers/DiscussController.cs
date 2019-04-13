@@ -35,20 +35,13 @@ namespace YLMES.Controllers
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-                if (Status.Equals("未结"))
-                {
-                    var lisst = ys.PM_Forum.Where(p => p.Status.Contains("未结")).ToList();
-                    return Json(lisst, JsonRequestBehavior.AllowGet);
-                }
-                else if (Status.Equals("已结"))
-                {
-                    var list = ys.PM_Forum.Where(p => p.Status.Contains("已结")).ToList();
-                    return Json(list, JsonRequestBehavior.AllowGet);
-                }
-            }
-            return null;
+                SqlParameter[] parms = new SqlParameter[2];
+                parms[0] = new SqlParameter("@Type", "是否结帖");
+                parms[1] = new SqlParameter("@Status", Status);
+                var list = ys.Database.SqlQuery<Forum_Newest_Result>("exec Forum_Newest @Type,'',@Status", parms).ToList();
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }          
         }
-
         //最新的帖子
         public JsonResult Newest()
         {

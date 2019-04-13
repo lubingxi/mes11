@@ -1,0 +1,72 @@
+﻿@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {        
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                    table.render({
+                        elem: '#tw'
+                        , url: '/ProductionPlanning/CheckLocationType?Type=' + type
+                        , cols: [[
+                            , {
+                                field: '', width: 20, title: '', hide: true
+                            }
+                            , { field: '序号', width: 100, title: '工单' }
+                            , { field: '工位编码', width: 150, title: '开始时间' }
+                            , { field: '工位类型', width: 150, title: '结束时间' }
+                            , { field: '创建人', width: 80, title: '工单套数' }
+                            , { field: '创建时间', width: 80, title: '收料' }
+                            , { field: '更新人', width: 80, title: '完成' }
+                            , { field: '更新人', width: 80, title: '坏品' }
+                            , { field: '更新人', width: 80, title: '转工序' }
+                            , { field: '更新时间', width: 150, title: '工位类型' }
+                        ]]
+                    });
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;                 
+                });
+            });         
+        })
+    </script>  
+</head>
+
+
+<body>
+
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">生产计划</a></li>
+            <li><a href="#">工单管理</a></li>
+            <li><a href="#">工单详细</a></li>
+        </ul>
+    </div>
+    <div class="rightinfo">       
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+    </div>
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+</body>
+</html>

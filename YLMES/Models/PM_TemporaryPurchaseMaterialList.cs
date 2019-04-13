@@ -14,7 +14,7 @@ namespace YLMES.Models
     
     public partial class PM_TemporaryPurchaseMaterialList
     {
-        public Nullable<int> ID { get; set; }
+        public int ID { get; set; }
         public Nullable<int> TaskID { get; set; }
         public Nullable<int> MaterialID { get; set; }
         public Nullable<int> QTYofPCS { get; set; }
@@ -30,5 +30,6 @@ namespace YLMES.Models
         public string ListType { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedTime { get; set; }
+        public int Parid { get; set; }
     }
 }

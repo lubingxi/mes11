@@ -19,26 +19,12 @@
     <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
     <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
     <script type="text/javascript">  
-        $(function () {
-            $(".click").click(function () {
-                $(".tip").fadeIn(200);
-            });
-
-            $(".tiptop a").click(function () {
-                $(".tip").fadeOut(200);
-            });
-
-            $(".sure").click(function () {
-                $(".tip").fadeOut(100);
-            });
+        $(function () {        
             $(document).keydown(function (e) {
                 if (e.keyCode == 13) {
                     $(".layui-btn").click();
                 }
             });
-            $(".cancel").click(function () {
-                $(".tip").fadeOut(100);
-            }); 
             layui.use(['table', 'layer'], function () {
                 var table = layui.table, layer = layui.layer;              
                     var ProjectName = $("#ProjectName").val().trim();
@@ -102,8 +88,6 @@
                      $("tr").hover(function () {
                          $(this).children().last().children().children().toggle();
                      })
-
-
                  }
                    , cols: [[
                     { field: '序号', width: 210, title: '序号', hide: true }
@@ -183,7 +167,8 @@
                 <li>
                     任务安排状态：
                     <select name="quiz2" id="d">
-                        <option value="" selected="">全部</option>
+                        <option value="全部" selected="">全部</option>
+                        <option value="未安排" selected="">未安排</option>
                     </select>
                 </li>
                 <li>

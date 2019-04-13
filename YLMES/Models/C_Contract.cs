@@ -18,8 +18,8 @@ namespace YLMES.Models
         public string CustomerName { get; set; }
         public string ContractNumber { get; set; }
         public string DateOfSign { get; set; }
-        public Nullable<decimal> Money { get; set; }
-        public Nullable<decimal> AmountCollected { get; set; }
+        public string Money { get; set; }
+        public string AmountCollected { get; set; }
         public string PaymentMethod { get; set; }
         public string IfInstall { get; set; }
         public string IfTransport { get; set; }
@@ -39,5 +39,6 @@ namespace YLMES.Models
         public string QualityAssuranceAmount { get; set; }
         public Nullable<int> CustomerId { get; set; }
         public string IsCustomer { get; set; }
+        public string TaskLevel { get; set; }
     }
 }

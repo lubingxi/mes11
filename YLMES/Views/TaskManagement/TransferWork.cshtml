@@ -1,0 +1,129 @@
+﻿
+@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }
+            var materid;
+            var Count;
+            var Units;
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                var tableIns = table.render({
+                    elem: '#tw'
+                   , url: '/TaskManagement/TurnRepair?pid=' + '@ViewData["partid"]'+'&tid='+'@ViewData["taskid2"]'+'&count='+'@ViewData["count2"]'
+                   , cols: [[
+                      { type: 'checkbox' }
+                   , { field: 'ChildPartID', width: 100, title: '物料编码' }
+                   , { field: 'PartNumber', width: 200, title: '物料名称' }
+                   , { field: 'PartSpec', width: 200, title: '物料规格' }
+                   , {
+                       field: 'PartMaterial', width: 150, title: '材质'
+                   }
+                   , {
+                       field: '所需数量', width: 100, title: '所需物料数量'
+                     }
+                   , { field: 'StockQTY', title: '库存数量', width: 150 }
+                   , { field: 'count', width: 100, title: '采购数量',edit:true }
+                   , { field: 'units', width: 100, title: '采购单位', edit: true }
+                   , { field: 'spec', width: 200, title: '采购规格', edit: true }
+                   ]]
+                });
+                $("#Apply").on('click', function () {
+                    var checkStatus = table.checkStatus("tw")
+                        , data = checkStatus.data
+                    if (data.length >= 1) {
+                        for (var i = 0; i < data.length; i++) {
+                            materid = (checkStatus.data[i].ChildPartID);
+                            Count = (checkStatus.data[i].count);
+                            Units = (checkStatus.data[i].units);
+                            Spec = (checkStatus.data[i].spec);
+                            $.ajax({
+                                url: "/TaskManagement/ApplyPurchasingd",
+                                data: { type:'add',Materid: materid, PCount: Count, Unit: Units,Taskid:@ViewData["taskid"],Spec:Spec },
+                                type: "post",
+                                dataType: "text",
+                                success: function (data) {
+                                }
+                            });
+                        }
+                    }
+                    window.history.go(-1);
+                });
+                $("#Turn").on('click', function () {             
+                    $.ajax({
+                     url: "/TaskManagement/TurnPwo?PartId="+"@ViewData["partid"]"+"&ProductName="+"@ViewData["ProductName"]"+"&ProductSpec="+"@ViewData["ProductSpec"]"+"&Taskid="+"@ViewData["taskid"]"+"&Count="+"@ViewData["count"]" ,
+                    //url:"/TaskManagement/TurnPwo",
+                    type: "post",
+                    dataType: "text",
+                    success: function (data) { 
+                        if (data == "true") {
+                            window.setTimeout(function () {
+                                layer.msg('转换成功!');
+                                var url = "/ProductionPlanning/WorkManagement?taskid=" + "@ViewData["taskid"]" + "&cancle=" + "1";
+                                var index = layer.open({
+                                    type: 2,
+                                    content: url,
+                                    title: "工单分配",
+                                    maxmin: true
+                                });
+                                layer.full(index);
+                            }, 500);
+                        }
+                        else if(data=="cc"){
+                            layer.msg('库存不够不能转工单!');
+                        }
+                        else {
+                            alert("请联系软件维修人员！");
+                            return;
+                        }
+                    }
+                });
+            });
+            });
+           
+        });
+    </script>
+</head>
+
+
+<body onselectstart="return false;">
+    <div class="rightinfo">
+        <div class="tools">
+            <ul class="toolbar">
+                <li>
+                    部件名称：
+                    <input class="pname" id="pname" type="text" value="@ViewData["partname"]" style="width: 180px;" />
+                </li>  
+                <li>
+                    生产数量：
+                    <input class="count" id="count" type="text" value="@ViewData["count"]" style="width: 80px;" />
+                </li>              
+            </ul>
+            <button class="layui-btn" id="Apply" data-type="reload">申请采购</button>
+            <button class="layui-btn" id="Turn" data-type="reload">转工单</button>
+        </div>
+    </div>
+    <table class="tablelist" id="tw" lay-filter="tw" />
+</body>
+
+</html>

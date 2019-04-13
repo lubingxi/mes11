@@ -428,12 +428,12 @@ layui.define(['jquery', 'xlsx', 'FileSaver'], function(exports){
 						// 全为空的去掉
 						if (wb.Sheets.hasOwnProperty(sheet)) {
 							var opt = {
-								header: option.header,
+							    header: option.header,
 							}
 							if (!option.range) {
-								opt.range = option.range;
+							    opt.range = option.range;
 							}
-							excelData['key'] = XLSX.utils.sheet_to_json(sheetObj, opt);
+							excelData['key'] = XLSX.utils.sheet_to_json(sheetObj,opt);
 							// 支持梳理数据
 							if (option.fields) {
 							    excelData['key'] = that.filterExportData(excelData['key'], option.fields);

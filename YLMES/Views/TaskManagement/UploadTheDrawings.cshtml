@@ -63,8 +63,7 @@
         });
     </script>
     <script type="text/javascript">
-        layui.use(['table', 'layer'], function () {
-           
+        layui.use(['table', 'layer'], function () {         
                 var figurenumber = $('#hao').val();
                 var table = layui.table, layer = layui.layer;
                 table.render({
@@ -125,6 +124,18 @@
                         图纸编号:
                         <input type="text" name="hao" id="hao" list="mylist" style="width:200px" value="@ViewData["hao"]" readonly/>
                         <datalist id="mylist"></datalist>
+                    </li>
+                    <li>
+                        产品名称:
+                        <input type="text" name="name" id="name" style="width:200px" value="@Session["names"]" readonly=readonly />                      
+                    </li>
+                    <li>
+                        产品规格:
+                        <input type="text" name="spec" id="spec" style="width:200px" value="@Session["spec"]" readonly=readonly />
+                    </li>
+                    <li>
+                        材料:
+                        <input type="text" name="partMet" id="partMet" style="width:200px" value="@Session["partMet"]" readonly=readonly />
                     </li>
                     <li>
                         上传图纸路径:<input type="file" name="files" id="files" style="width:300px;height:32px" />

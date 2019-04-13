@@ -1,0 +1,87 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script src="~/js/Supplier.js"></script>
+    <script src="~/Scripts/jquery.form.js" type="text/javascript"></script>
+</head>
+<body>
+    <form class="layui-form" id="form-article-add" style="margin-top:20px">
+        <div class="layui-form-item">
+            <label class="layui-form-label">编号:</label>
+            <div class="layui-input-block">
+                <input type="text" lay-verify="required" name="id" value="@ViewData["id"]" autocomplete="off" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择项目编号:</label>
+            <div class="layui-input-block" style="width:400px">
+                <select name="CNumber" id="CNumber" lay-verify="" lay-filter="CNumber" lay-search></select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="btn btn-primary radius" type="button">确认</button>
+            </div>
+        </div>
+
+    </form>
+
+    <script>
+        layui.use(['layer', 'form', 'jquery'], function () {
+            var form = layui.form, layer = layui.layer, $ = layui.jquery;
+            form.render();
+            $.ajax({
+                type: "POST",
+                url: '/FinishProductHouse/getCNumber',
+                dataType: "json",
+                success: function (data) {
+                    if (data != null) {
+                        var list = data["data"];
+                        $.each(list, function (i, result) {
+                            $('#CNumber').append('<option value=' + result.ContractNumber + '>' + result.ContractNumber + '</option>');
+                        });               
+                        form.render();
+                    }
+                }
+            });
+            $(".radius").click(function () {
+                var id = $("[name=id]").val();
+                var CNumber = $("[name=CNumber]").val();
+                $.ajax({
+                    type: "get",
+                    url: '/FinishProductHouse/AddProjectNumber',
+                    data: { id: id, CNumber: CNumber },
+                    dataType: "text",
+                    success: function (data) {
+
+                    }
+                });
+            });
+        });
+    
+        
+      
+      
+       
+
+
+    </script>
+</body>
+
+</html>

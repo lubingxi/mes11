@@ -13,6 +13,7 @@ namespace YLMES.Models
     
     public partial class SP_CheckWO_Package_Result
     {
+        public string 工单 { get; set; }
         public string 项目名称 { get; set; }
         public string 产品名称 { get; set; }
         public Nullable<int> 工单总数量 { get; set; }

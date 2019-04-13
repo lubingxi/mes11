@@ -119,23 +119,8 @@ white-space: normal;
                         });
                     }
                 });
-
             });
-            $(".click").click(function () {
-                $(".tip").fadeIn(200);
-            });
-
-            $(".tiptop a").click(function () {
-                $(".tip").fadeOut(200);
-            });
-
-            $(".sure").click(function () {
-                $(".tip").fadeOut(100);
-            });
-
-            $(".cancel").click(function () {
-                $(".tip").fadeOut(100);
-            });
+           
             layui.use(['table', 'layer'], function () {
                 var table = layui.table, layer = layui.layer, form = layui.form;
   
@@ -191,6 +176,7 @@ white-space: normal;
                             var dor = data.DateOfReceipt;
                             var TicketOpeningAndDate = data.TicketOpeningAndDate;
                             var cAmount = data.合同金额;
+                            var cnum = data.ContractNumber;
                             var yi = data.已收金额;                         
                             if (ts == null) {
                                 ts = data.收款类型;                              
@@ -205,7 +191,7 @@ white-space: normal;
                                             window.setTimeout(function () {
                                                 layer.msg("添加成功", { icon: 6 });
                                                 $.ajax({
-                                                    url: "/Home/Chane?he=" + id,
+                                                    url: "/Home/Chane?he=" + id + "&cnum=" + cnum,
                                                     type: "post",
                                                     dataType: "text",
                                                     success: function (data) {
@@ -308,6 +294,7 @@ white-space: normal;
                             newd= data.NewAmountCollected;
                             dateRec = data.DateOfReceipt;
                             ticket = data.TicketOpeningAndDate;
+
                             $.ajax({
                                 url: "/Home/XiuShouJilu",
                                 type: 'post',
@@ -317,7 +304,7 @@ white-space: normal;
                                     if (data == "true") {
                                         layer.msg("修改成功", { icon: 6 });
                                         $.ajax({
-                                            url: "/Home/Chane?he=" + cid,
+                                            url: "/Home/Chane?he=" + id + "&cnum=" + cnum,
                                             type: "post",
                                             dataType: "text",
                                             success: function (data) {

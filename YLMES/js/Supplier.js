@@ -9,36 +9,35 @@
                 , height: 'full-20'
                 , limit: 15
                 , cols: [[
-                 { field: '序号', width: 80, title: '序号' }
+                  { field: '', hide:true }
+                ,{ field: '序号', width: 80, title: '序号' }
                , { field: '名称', width: 205, title: '名称', edit: Text,style:"color:#009688" }
-                    , { field: '地址', title: '地址', edit: Text, event: 'setSign', style: "color:#009688" }
+                    , { field: '地址', title: '地址', width: 210, edit: Text, event: 'setSign', style: "color:#009688" }
                     , { field: '联系人', width: 90, title: '联系人', edit: Text, style: "color:#009688" }
-                    , { field: '电话', width: 190, title: '电话', edit: Text, style: "color:#009688" }
-                    , { field: '手机', width: 190, title: '手机', edit: Text, style: "color:#009688" }
-                    , { field: '货品品类', width: 150, title: '货品品类', toolbar: "#Category"}
-                    , { field: '级别', width: 150, title: '级别', toolbar: "#Level" }
+                    , { field: '电话', width: 120, title: '电话', edit: Text, style: "color:#009688" }
+                    , { field: '手机', width: 120, title: '手机', edit: Text, style: "color:#009688" }
+                    , { field: '级别', width: 120, title: '级别', toolbar: "#Level" }
                     , { field: '优势分析', width: 200, title: '优势分析  ', toolbar: "#Advantage" }
                , { field: '审核状态', width: 100, title: '审核状态' }
-               , { field: 'right', width: 238, align: 'center', toolbar: '#bsarDemo' }
+               , { field: 'right', width: 300, align: 'center', toolbar: '#bsarDemo' }
                 ]]
             });      
         $("#SupplierSel").click(function () {
             var NameSearch = $("#Name").val().trim();
             var Select = $("#s option:selected").text();
             tableIns.reload({
+                page: {
+                    curr: 1
+                },
                 where: {
                     Name: NameSearch
                     , Status: Select
                 }
             });
         })
-        var Category1 = null;
+  
         var Level1 = null;
         var Advantage1 = null;
-        form.on('select(Category)', function (data) {
-            //得到select原始DOM对象
-            Category1 = data.value;                  
-        });
         form.on('select(Level)', function (data) {
             //得到select原始DOM对象
             Level1 = data.value;            
@@ -62,7 +61,6 @@
             var Contact = data.联系人;
             var Tel = data.电话;
             var Mobile = data.手机;
-            var Category = Category1;
             var Level = Level1;
             var Advantage = Advantage1;
             if (obj.event === 'setSign') {
@@ -85,9 +83,6 @@
                         }
                     });
                 });
-            }
-            if (Category1 == null) {
-                Category = data.货品品类;
             }
             if (Level1 == null) {
                 Level = data.级别;
@@ -114,11 +109,18 @@
                     layer.close(index);
                     //向服务端发送删除指令
                 });
-            } else if (layEvent === 'edit') {
+            }
+            else if (layEvent === 'add') {
+                window.parent.document.getElementById("rightframe").src = '/ApplierList/AddMaterInfo?SupplierId=' + ApplierID;
+            }
+            else if (layEvent === 'check') {
+                window.parent.document.getElementById("rightframe").src = '/ApplierList/CheckMaterInfo?SupplierId=' + ApplierID
+            }
+            else if (layEvent === 'edit') {
                 $.ajax({
                     type: "post",
                     url: "/ApplierList/ApplierListUpdata",
-                    data: { ApplierID: ApplierID, ApplierName: ApplierName, Address: Address, Contact: Contact, Tel: Tel, Mobile: Mobile, Category: Category, Level: Level, Advantage: Advantage },
+                    data: { ApplierID: ApplierID, ApplierName: ApplierName, Address: Address, Contact: Contact, Tel: Tel, Mobile: Mobile,Level: Level, Advantage: Advantage },
                     dataType: "text",
                     success: function (data) {
                         if (data == "true") {
@@ -161,6 +163,7 @@
                  , anim: 2
                 });
             }
+          
         });
     });
 });

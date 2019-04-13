@@ -35,5 +35,10 @@ namespace YLMES.Models
         public string CreatedTime { get; set; }
         public string CreatedBy { get; set; }
         public string figureNumber { get; set; }
+        public string Warehouse { get; set; }
+        public string InMakeQTY { get; set; }
+        public string outMakeQTY { get; set; }
+        public string MakeCreatedBy { get; set; }
+        public string Type { get; set; }
     }
 }

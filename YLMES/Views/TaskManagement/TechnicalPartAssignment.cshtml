@@ -7,7 +7,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>友力信息管理系统</title>
     <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
-    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
     <link href="~/css/style.css" rel="stylesheet" type="text/css" />
     <link href="~/layui/css/layui.css" rel="stylesheet" />
     <script type="text/javascript" src="../../js/jquery.js"></script>
@@ -51,22 +50,19 @@
                , page: false
                , done: function () {
                    $("tr a").hide();
-                 $("tr").hover(function () {
-
-                     $(this).children().last().children().children().toggle();
-                 })
-
-
-             }
-                    , cols: [[
-               { field: '任务编号', width: 235, title: '任务编号' }
+                   $("tr").hover(function () {
+                       $(this).children().last().children().children().toggle();
+                   });
+                                    }
+                , cols: [[
+                 { field: '任务编号', width: 160, title: '任务编号' }
                 ,{ field: '订单产品名称', width: 235, title: '订单产品名称' }
-               , { field: '订单产品规格', width: 235, title: '订单产品规格' }
-               , { field: '机械任务分配', width: 235, title: '机械任务分配' }
+                , { field: '订单产品规格', width: 235, title: '订单产品规格' }
+                , { field: '机械任务分配', width: 235, title: '机械任务分配' }
                 , { field: '电气任务分配', width: 235, title: '电气任务分配' }
+                , { field: '是否拆分', width: 235, title: '是否拆分' }
                 ,{ field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
                ]]
-
                 });     
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
@@ -109,8 +105,70 @@
                                     {                                   
                                     }                                   
                                 }
-
                             });
+                            break;
+
+                            case 'copy':
+                                layer.confirm("真的要复制这条信息吗？", function (index) {
+                                    var id = data.产品编号;
+                                    var ContractID = data.合同编号;
+                                    var ProductName = data.订单产品名称;
+                                    $.ajax({
+                                        type: "POST",
+                                        url: '/TaskManagement/AddPoDetials?id=' + id + '&cid=' + ContractID + '&pname=' + ProductName,
+                                        dataType: "text",
+                                        success: function (data) {
+                                            if (data == 'true') {
+                                                layer.msg('复制成功！');
+                                                table.reload('tw');
+                                            }                                       
+                                        }
+                                    });
+                                });
+                                break;
+                        
+                            case 'delete':
+                                layer.confirm("真的要删除这条信息吗？", function (index) {
+                                    var cid = data.合同编号;
+                                    var pid = data.产品编号;
+                                    $.ajax({
+                                        type: "POST",
+                                        url: '/TaskManagement/DeletePoDetials?id=' + cid + '&pid=' + pid,
+                                        dataType: "text",
+                                        success: function (data) {
+                                            if (data == 'true') {
+                                                layer.msg('删除成功！');
+                                                table.reload('tw');
+                                            }
+                                            else
+                                            {
+                                                layer.msg('需要重新登录！');
+                                            }
+                                        }
+                                    });
+                                });
+                                break;
+
+                        case 'submtd':
+                            var taskid = data.任务编号;
+                            var pnumber = data.订单产品名称;
+                            var pspec = data.订单产品规格;
+                            var num = data.数量;
+                            $.ajax({
+                                type: "POST",
+                                url: '/TaskManagement/SubmitPlans?taskid=' + taskid + '&pnum=' + pnumber + '&pspec=' + pspec + '&num=' + num,
+                                dataType: "text",
+                                success: function (data) {
+                                    if (data == 'true') {
+                                        layer.msg('提交成功！');                                        
+                                    }
+                                    else
+                                    {
+                                        layer.msg('请联系系统维修人员！');
+                                    }
+                                }
+                            });
+
                             break;
                     };
                 });
@@ -135,6 +193,7 @@
                             , { field: '订单产品规格', width: 235, title: '订单产品规格' }
                             , { field: '机械任务分配', width: 235, title: '机械任务分配' }
                             , { field: '电气任务分配', width: 235, title: '电气任务分配' }
+                            , { field: '是否拆分', width: 235, title: '是否拆分' }
                             , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
                         ]]
                     });
@@ -177,8 +236,66 @@
                                         } else {
                                         }
                                     }
-
                                 });
+                                break;
+                            case 'copy':
+                                layer.confirm("真的要复制这条信息吗？", function (index) {
+                                    var id = data.产品编号;
+                                    var ContractID = data.合同编号;
+                                    var ProductName = data.订单产品名称;
+                                    $.ajax({
+                                        type: "POST",
+                                        url: '/TaskManagement/AddPoDetials?id=' + id + '&cid=' + ContractID + '&pname=' + ProductName,
+                                        dataType: "text",
+                                        success: function (data) {
+                                            if (data == 'true') {
+                                                layer.msg('复制成功！');
+                                                table.reload('tw');
+                                            }
+                                        }
+                                    });
+                                });
+                                break;
+
+                             case 'delete':
+                                layer.confirm("真的要删除这条信息吗？", function (index) {
+                                    var cid = data.合同编号;
+                                    var pid = data.产品编号;
+                                    $.ajax({
+                                        type: "POST",
+                                        url: '/TaskManagement/DeletePoDetials?id=' + cid + '&pid=' + pid,
+                                        dataType: "text",
+                                        success: function (data) {
+                                            if (data == 'true') {
+                                                layer.msg('删除成功！');
+                                                table.reload('tw');
+                                            }
+                                            else {
+                                                layer.msg('需要重新登录！');
+                                            }
+                                        }
+                                    });
+                                });
+                                break;
+                            case 'submtd':
+                                var taskid = data.任务编号;
+                                var pnumber = data.订单产品名称;
+                                var pspec = data.订单产品规格;
+                                var num = data.数量;        
+                                $.ajax({
+                                    type: "POST",
+                                    url: '/TaskManagement/SubmitPlans?taskid=' + taskid + '&pnum=' + pnumber + '&pspec=' + pspec + '&num=' + num,
+                                    dataType: "text",
+                                    success: function (data) {
+                                        if (data == 'true') {
+                                            layer.msg('提交成功！');
+                                        }
+                                        else {
+                                            layer.msg('请联系系统维修人员！');
+                                        }
+                                    }
+                                });
+
                                 break;
                         };
                     });
@@ -188,7 +305,19 @@
         })
     </script>
     <script type="text/html" id="barDemo">
+        {{#  if(d.是否拆分 == '拆分'){ }}
         <a class="layui-btn layui-btn-xs" id="detials" lay-event="Detials">操作</a>
+        <a class="layui-btn layui-btn-xs" id="copy" lay-event="copy">复制</a>
+        {{#  } else if(d.是否拆分 == '拆分后'){ }}
+        <a class="layui-btn layui-btn-xs" id="detials" lay-event="Detials">操作</a>
+        <a class="layui-btn layui-btn-xs" id="copy" lay-event="copy">复制</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" id="delete" lay-event="delete">删除</a>
+        {{#  } else if(d.订单产品名称 == '路轨'){ }}
+        <a class="layui-btn layui-btn-xs" id="submt" lay-event="submtd">提交计划部</a>
+        {{#  }else{ }}
+        <a class="layui-btn layui-btn-xs" id="detials" lay-event="Detials">操作</a>
+        {{#  } }}
+     
 
     </script>
 

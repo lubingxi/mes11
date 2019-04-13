@@ -43,12 +43,12 @@
                 var table = layui.table, layer = layui.layer;              
                 var tableIns=table.render({
                         elem: '#tw'
-                        , done: function () {
-                            $("tr a").hide()
-                            $("tr").hover(function () {
-                                $(this).children().last().children().children().toggle();
-                            })
-                        }
+                        //, done: function () {
+                        //    $("tr a").hide()
+                        //    $("tr").hover(function () {
+                        //        $(this).children().last().children().children().toggle();
+                        //    })
+                        //}
                    , url: '/Home/Get_Datas'
                    , page: true
                    , limit: 15
@@ -80,6 +80,9 @@
                     var endtime = $(".endtime").val();
                     var rs = $("#ReviewStatus").val();
                     tableIns.reload({
+                        page: {
+                            curr: 1
+                        },
                         where: {
                             CName: CuName
                             , CNumber: CNumber
@@ -98,7 +101,26 @@
                     var data = obj.data;
                     if (obj.event === 'xi') {
                         id = data.id;
-                        window.parent.document.getElementById("rightframe").src = "/Home/ContractPrint?id=" + id + "&vas=" + "2";
+                        if ($.trim(data.是否客户合同) == "是") {
+                            var url = '/Home/EditContract?id=' + id + '&vas=' + "2";
+                            var index = layer.open({
+                                type: 2,
+                                content: url,
+                                title: "客户合同",
+                                maxmin: true
+                            });
+                            layer.full(index);
+                        }
+                        else {
+                            var url = "/Home/ContractPrint?id=" + id + "&vas=" + "2";
+                            var index = layer.open({
+                                type: 2,
+                                content: url,
+                                title: "公司合同",
+                                maxmin: true
+                            });
+                            layer.full(index);
+                        }
                     }
                     switch (obj.event) {
                         case 'del':

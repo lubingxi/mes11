@@ -26,5 +26,8 @@ namespace YLMES.Models
         public string CreatedBy { get; set; }
         public string StatusID { get; set; }
         public string Note { get; set; }
+        public Nullable<int> MaterialId { get; set; }
+        public Nullable<int> LocationId { get; set; }
+        public string ContractNumber { get; set; }
     }
 }

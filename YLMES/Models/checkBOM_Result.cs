@@ -19,6 +19,7 @@ namespace YLMES.Models
         public string 图号 { get; set; }
         public string 上传图片 { get; set; }
         public string 部件名称 { get; set; }
+        public string 是否上传 { get; set; }
         public string 部件规格 { get; set; }
         public string 材料 { get; set; }
         public string 备注 { get; set; }

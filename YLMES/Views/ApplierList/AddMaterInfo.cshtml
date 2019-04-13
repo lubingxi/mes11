@@ -1,0 +1,97 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+
+</head>
+<body>
+    <script type="text/javascript">
+
+
+        layui.use(['table', 'layer'], function () {
+            if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }
+                var table = layui.table, layer = layui.layer;
+                table.render({
+                    elem: '#tw'
+                      , url: '/ApplierList/CheckMaterTypeNames'
+                      , page: true
+                      , limit: 15
+                      , toolbar: '#toolbarDemo'
+                      //, done: function () {
+                      //    $("tr a").hide();
+                      //    $("tr").hover(function () {
+                      //        $(this).children().last().children().children().toggle();
+                      //    })
+                      //}
+                      , cols: [[
+                          { type: 'checkbox' }
+                          , { field: 'ID', width: 210, title: '序号' }
+                          , { field: 'MaterTypeName', width: 235, title: '物料类型' }
+                          ]]
+                });
+                table.on('toolbar(tw)', function (obj) {
+                    var checkStatus = table.checkStatus("tw"); //获取选中行状态
+                    var data = checkStatus.data;  //获取选中行数据
+                
+                    switch (obj.event) {
+                        case 'getCheckSubmit':
+                            data.find(function (x) {
+                                    $.ajax({
+                                        url: "/ApplierList/AddMater",
+                                        data: { SupplierId: '@ViewData["SupplierId"]', id: x.ID },
+                                        type: "post",
+                                        dataType: "text",
+                                        success: function (data) {
+                                       
+                                        }
+                                    });
+                            })
+                            layer.msg("新增成功！", { icon: 6 });
+                            break;
+                    }
+                });
+            });
+    </script>
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">采购管理</a></li>
+            <li><a href="#">新增供应商物料类型</a></li>
+        </ul>
+    </div>
+    <div class="rightinfo">
+
+        <div class="tools">
+
+            <ul class="toolbar">
+                <li>
+                    供应商序号：
+                    <input name="SupplierId" class="SupplierId" id="SupplierId" type="text" value="@ViewData["SupplierId"]" style="width: 80px;" />
+                </li>            
+          </ul>
+        <table class="tablelist" id="tw" lay-filter="tw" />
+    </div>
+   
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="getCheckSubmit">添加物料类型</button>           
+        </div>
+    </script>
+ 
+</body>
+
+</html>

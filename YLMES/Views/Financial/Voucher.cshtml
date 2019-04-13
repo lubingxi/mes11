@@ -1,0 +1,230 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/My97DatePicker4.7.2/WdatePicker.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript" src="~/js/Voucher.js"></script>
+    <script type="text/javascript">
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="upload">支付附件</a>
+        @*<a class="layui-btn layui-btn-xs" lay-event="detail">记账</a>
+            <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+            <a class="layui-btn layui-btn-xs" lay-event="fs">反审</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>*@
+    </script>
+    <style>
+        #myBtn, #myBtn tr, #myBtn td, #myBtn th {
+            border: solid 1px;
+        }
+        .layui-table-cell {
+            overflow: inherit;
+            height: inherit;
+        }
+    </style>
+</head>
+<body>
+    <img src="" style="display:none;width:100%;height:100%" class="imgg" />
+
+    @*记账*@
+    <div class="layui-form czs" style="display:none" action="" id="for5">
+        <div class="layui-form-item">
+            <div class="layui-inline"><label class="layui-form-label">选择科目：</label><div class="layui-input-inline"><select name="modules" lay-search=lay-search id="gss5" lay-verify="gss" lay-filter='gss'></select></div></div>
+        </div>
+        <div class="layui-form-item layui-form-text"><label class="layui-form-label">摘要：</label><div class="layui-input-block"><textarea class="layui-textarea" name="note5"></textarea></div></div>
+        <div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn" lay-filter="demo1" type="submit" lay-submit="" id="bc5">保存</button><button class="layui-btn" id="qx5">取消</button><input type="text" id="flag5" hidden="hidden" value="False" /></div></div>
+    </div>
+    @*新增报销单*@
+    <div class="layui-form czs" style="display:none" action="" id="for">
+        <div class="layui-form-item">
+            <div class="layui-inline"><label class="layui-form-label">报销部门：</label><div class="layui-input-inline"><select name="modules" lay-search=lay-search id="gss" lay-verify="gss" lay-filter='gss'></select></div></div>
+        </div>
+        <div class="layui-form-item"><label class="layui-form-label">用途：</label><div class="layui-input-block"><input name="ytu" class="layui-input" type="text" placeholder="*必填" autocomplete="off" lay-verify="ytu" /></div></div>
+        <div class="layui-form-item"><label class="layui-form-label">金额：</label><div class="layui-input-block"><input name="money" class="layui-input" type="text" placeholder="*必填" autocomplete="off" lay-verify="money" /></div></div>
+        <div class="layui-form-item">
+            <div class="layui-inline"><label class="layui-form-label">时间：</label><div class="layui-input-inline"><input name="date4" class="layui-input" id="date4" type="text" placeholder="年-月-日" autocomplete="off" lay-verify="date" /></div><div class="layui-form-mid layui-word-aux">*必填</div></div>
+        </div>
+        <div class="layui-form-item"><label class="layui-form-label">领用人：</label><div class="layui-input-block"><input name="manl" class="layui-input" type="text" placeholder="*必填" autocomplete="off" lay-verify="manl" /></div></div>
+        <div class="layui-form-item"><label class="layui-form-label">报销人：</label><div class="layui-input-block"><input name="manb" class="layui-input" type="text" placeholder="*必填" autocomplete="off" lay-verify="manb" /></div></div>
+        <div class="layui-form-item"><label class="layui-form-label">主管复核：</label><div class="layui-input-block"><input readonly=readonly name="manf" class="layui-input" type="text" placeholder="" autocomplete="off" lay-verify="manf" /></div></div>
+        <div class="layui-form-item"><label class="layui-form-label">审批：</label><div class="layui-input-block"><input readonly=readonly name="mans" class="layui-input" type="text" placeholder="" autocomplete="off" lay-verify="mans" /></div></div>
+        <div class="layui-form-item layui-form-text"><label class="layui-form-label">备注：</label><div class="layui-input-block"><textarea class="layui-textarea" name="note"></textarea></div></div>
+        <div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn" lay-filter="demo1" type="submit" lay-submit="" id="bc">保存</button><button class="layui-btn" id="qx">取消</button><input type="text" id="flag" hidden="hidden" value="False" /><input type="text" id="flag5" hidden="hidden" value="False" /></div></div>
+    </div>
+    @*新增上传附件*@
+    <div class="layui-form czs" style="display:none" action="" id="for3">
+        <fieldset class="layui-elem-field layui-field-title " style="margin-top: 20px;color:mediumseagreen;">
+            <legend>报销单原始凭证上传</legend>
+        </fieldset>
+        <div class="layui-form-item">
+            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                原附件预览图：
+                <div class="layui-upload-list" id="demo3"></div>
+            </blockquote>
+
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" id="qx3">取消</button>
+                <input type="text" id="flag4" hidden="hidden" value="False" />
+            </div>
+        </div>
+
+    </div>
+    @*修改报销单*@
+    <div class="layui-form czs" style="display:none" action="" id="fo2r">
+        <div class="layui-form-item">
+            <div class="layui-inline"><label class="layui-form-label">报销部门：</label><div class="layui-input-inline"><select name="modules" lay-search=lay-search id="gss2" lay-verify="gss2" lay-filter='gss2'></select></div></div>
+        </div>
+        <div class="layui-form-item"><label class="layui-form-label">用途：</label><div class="layui-input-block"><input name="ytu2" class="layui-input" type="text" placeholder="*必填" autocomplete="off" lay-verify="ytu" /></div></div>
+        <div class="layui-form-item"><label class="layui-form-label">金额：</label><div class="layui-input-block"><input name="money2" class="layui-input" type="text" placeholder="*必填" autocomplete="off" lay-verify="money" /></div></div>
+        <div class="layui-form-item">
+            <div class="layui-inline"><label class="layui-form-label">时间：</label><div class="layui-input-inline"><input name="date42" class="layui-input" id="date42" type="text" placeholder="年-月-日" autocomplete="off" lay-verify="date" /></div><div class="layui-form-mid layui-word-aux">*必填</div></div>
+        </div>
+        <div class="layui-form-item"><label class="layui-form-label">领用人：</label><div class="layui-input-block"><input name="manl2" class="layui-input" type="text" placeholder="*必填" autocomplete="off" lay-verify="manl" /></div></div>
+        <div class="layui-form-item"><label class="layui-form-label">报销人：</label><div class="layui-input-block"><input name="manb2" class="layui-input" type="text" placeholder="*必填" autocomplete="off" lay-verify="manb" /></div></div>
+        <div class="layui-form-item"><label class="layui-form-label">主管复核：</label><div class="layui-input-block"><input readonly=readonly name="manf2" class="layui-input" type="text" placeholder="" autocomplete="off" lay-verify="" /></div></div>
+        <div class="layui-form-item"><label class="layui-form-label">审批：</label><div class="layui-input-block"><input readonly=readonly name="mans2" class="layui-input" type="text" placeholder="" autocomplete="off" lay-verify="" /></div></div>
+        <div class="layui-form-item layui-form-text"><label class="layui-form-label">备注：</label><div class="layui-input-block"><textarea class="layui-textarea" name="note2"></textarea></div></div>
+        <div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn" lay-filter="demo1" type="submit" lay-submit="" id="b2c">保存</button><button class="layui-btn" id="q2x">取消</button><input type="text" id="fla2g" hidden="hidden" value="False" /></div></div>
+    </div>
+    <div class="place">
+        <select hidden="hidden" name="modules" lay-search=lay-search id="gssname" lay-verify="gssname" lay-filter='gssname'></select>
+        <span>位置：</span><input type="text" id="Sessioname" hidden="hidden" value=@Session["name"] />
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">财务管理</a></li>
+            <li><a href="#">费用报销单</a></li>
+        </ul>
+    </div>
+    <div class="rightinfo">
+
+        <div class="tools">
+            <ul class="toolbar">
+                <li class="click" id="add">
+                    <span>
+                        <img src="../../images/t01.png" />
+                    </span>
+                    <a>新增纸质凭证</a>
+                </li>
+                <li>
+                    时间从：
+                    <input name="dates" class="strattime" id="dates" type="text" onclick="WdatePicker()" style="width: 80px;" />
+                </li>
+                <li>
+                    到：
+                    <input name="datee" class="endtime" id="datee" type="text" onclick="WdatePicker()" style="width: 80px;" />
+                </li>
+                <li>
+                    状态：
+                    <select name="modules" lay-search=lay-search id="gssz" lay-verify="gssz" lay-filter="gssz">
+                        <option value="">请选择</option>
+                        <option value="全部">全部</option>
+                        <option value="已记账">已记账</option>
+                        <option value="未记账">未记账</option>
+                    </select>
+                </li>
+            </ul>
+
+            <div id="divsh">  <button class="layui-btn" id="Search" data-type="reload">搜索</button></div>
+        </div>
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+
+    </div>
+    @*单号查看*@
+    <div class="layui-form czs" style="display:none" action="" id="for6">
+        @*<div class="layui-form-item">
+            <div class="rightinfo">*@
+                @*<div class="tools">
+                    <ul class="toolbar">
+                        <li>
+                            时间从：
+                            <input name="dates" class="strattime" id="dates" type="text" onclick="WdatePicker()" style="width: 80px;" />
+                        </li>
+                        <li>
+                            到：
+                            <input name="datee" class="endtime" id="datee" type="text" onclick="WdatePicker()" style="width: 80px;" />
+                        </li>
+                        <li>
+
+                            <div class="layui-form-item">
+
+                                <select name="modules" lay-search=lay-search id="gssz" lay-verify="gssz" lay-filter="gssz">
+                                    <option value="">请选择</option>
+                                    <option value="">全部</option>
+                                    <option value="已">已审核</option>
+                                    <option value="待">待审核</option>
+                                </select>
+                            </div>
+
+                        </li>
+                        <li class="click" id="add2">
+                            <span>
+                                <img src="../../images/t01.png" />
+                            </span>
+                            <a>新增纸质凭证</a>
+                        </li>
+                    </ul>
+
+                    <div id="divsh"><button class="layui-btn" id="Search" data-type="reload">搜索</button><button class="layui-btn" id="shenhe" data-type="reload">审核</button></div>
+                </div>*@
+                <table class="tablelist" id="tw9" lay-filter="demo"></table>
+            @*</div>
+        </div>*@
+    </div>
+    @*单号查看*@
+    <div class="layui-form czs" style="display:none" action="" id="for7">
+        <div class="layui-form-item">
+            <table style="width:70%;"class="tablelist"  id="myBtn"></table>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-filter="demo1" type="submit" lay-submit="" id="xzy">新增一行</button>
+                    <button class="layui-btn" lay-filter="demo1" type="submit" lay-submit="" id="csy">删除一行</button>
+                    <input type="text" id="fla2g" hidden="hidden" value="False" />
+                </div>
+            </div>
+
+            <div class="layui-form-item"><label class="layui-form-label">摘要：</label><div class="layui-input-block"><input name="ytu2" class="layui-input" type="text" placeholder="*必填" autocomplete="off" lay-verify="ytu" /></div></div>
+            <div class="layui-form-item"><label class="layui-form-label">金额：</label><div class="layui-input-block"><input name="ytu2" class="layui-input" type="text" placeholder="*必填" autocomplete="off" lay-verify="ytu" /></div></div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">收款人：</label><div class="layui-input-inline">
+                    <select name="modules" lay-search=lay-search id="gss5" lay-verify="gss" lay-filter='gss'></select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn" lay-filter="demo1" type="submit" lay-submit="" id="b2c">保存</button><input type="text" id="fla2g" hidden="hidden" value="False" /></div></div>
+
+    </div>
+    <script type="text/html" id="Category">
+        <select name="modules" lay-search=lay-search class="gssz2" lay-verify="gssz" lay-filter="gssz">
+            <option value="">请选择</option>
+     
+        </select>
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            if ('@Session["name"]' == "") {
+                location.href = '/Home/Login'
+            }
+        });
+    </script>
+
+</body>
+</html>

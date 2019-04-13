@@ -9,7 +9,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>友力信息管理系统</title>
     <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
-    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
     <link href="~/css/style.css" rel="stylesheet" type="text/css" />
     <link href="~/layui/css/layui.css" rel="stylesheet" />
     <script type="text/javascript" src="../../js/jquery.js"></script>
@@ -60,8 +59,8 @@
             });
           
             $("#SubmitPurchase").click(function () {
-                layer.confirm("是否提交采购申请？", function () {
-                var taskid =  '@Session["TaskID3"]';
+                layer.confirm("是否提交采购申请？", function(){
+                var taskid = '@Session["TaskID3"]';
                 $.ajax({
                     url: "/TaskManagement/EQProcurement",
                     type: "post",
@@ -89,6 +88,12 @@
                    , url: '/TaskManagement/CheckPurchase?change=' + "全部"
                    , page: true
                    , limit: 15
+                   , done: function () {
+                         $("tr a").hide();
+                         $("tr").hover(function () {
+                             $(this).children().last().children().children().toggle();
+                         })
+                     }
                    , cols: [[
                    , { field: 'ID', width: 210, title: '图号', hide: true }
                    , { field: '部件名称', width: 210, title: '部件名称' }
@@ -96,12 +101,12 @@
                    , {
                        field: '材料', width: 180, title: '材料'
                    }
-                   , { field: '申请采购套数', title: '申请采购套数', width: 120, edit: Text,style:'color:#009688' }
-                       , { field: '每套数量', width: 120, title: '每套数量', edit: Text, style: 'color:#009688' }
-                       , { field: '申请采购数量', width: 120, title: '申请采购数量' }
-                       , { field: '单位', width: 100, title: '单位', edit: Text,style: 'color:#009688' }
-                       , { field: '备注', width: 100, title: '备注', edit: Text,style: 'color:#009688'}
-                    , { field: '类型', width: 100, title: '类型', edit: Text, style: 'color:#009688' }
+                   //, { field: '申请采购套数', title: '申请采购套数', width: 120, edit: Text,style:'color:#009688' }
+                   //    , { field: '每套数量', width: 120, title: '每套数量', edit: Text, style: 'color:#009688' }
+                       , { field: '申请采购数量', width: 120, title: '申请采购数量',edit: Text, style: 'color:#009688' }
+                    //   , { field: '单位', width: 100, title: '单位', edit: Text,style: 'color:#009688' }
+                    //   , { field: '备注', width: 100, title: '备注', edit: Text,style: 'color:#009688'}
+                    //, { field: '类型', width: 100, title: '类型', edit: Text, style: 'color:#009688' }
                     , { field: '任务编号', width: 150, title: '任务编码' }
                    , { field: 'right', width: 178, align: 'center', toolbar: '#barDemo' }
                    ]]
@@ -112,15 +117,11 @@
                         case 'update':
                             tid = data.任务编号;
                             mid = data.部件编号;
-                            AppPcs = data.申请采购套数;
-                            PcsNumber = data.每套数量;
-                            units = data.单位;
-                            note = data.备注;
-                            type = data.类型;
+                            AppQty = data.申请采购数量;                           
                             $.ajax({
                                 url: "/TaskManagement/EditPurchase",
                                 type: "post",
-                                data: { taskid: tid, matrterID: mid, ApplayPcs: AppPcs, PcsNumber: PcsNumber, unit: units, note: note, types: type },
+                                data: { taskid: tid, matrterID: mid, ApplayQty: AppQty },
                                 dataType: "text",
                                 success: function (data) {
                                     if (data == "true") {
@@ -161,7 +162,6 @@
                 });                     
         })
 
-
     </script>
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-xs" id="update" lay-event="update">编辑</a>
@@ -171,9 +171,7 @@
 
 
 <body>   
-
     <div class="rightinfo">
-
         <div class="tools">
             @*<ul class="toolbar">
                 <li>
@@ -185,24 +183,12 @@
                         <option value="焊接件">焊接件</option>
                     </select>
                 </li>
-
             </ul>*@
             @*<button class="layui-btn" id="AddPurchasing" data-type="reload">新增采购申请</button>*@
             <button class="layui-btn" id="SubmitPurchase" data-type="reload">确认提交采购申请</button>
-
         </div>
         <table class="tablelist" id="tw" lay-filter="demo"></table>
-
     </div>
-
-
-
-
-
-
-
-
-
     <script type="text/javascript">
         $('.tablelist tbody tr:odd').addClass('odd');
     </script>

@@ -21,5 +21,9 @@ namespace YLMES.Models
         public Nullable<int> 电气任务编号 { get; set; }
         public string 机械任务分配 { get; set; }
         public string 电气任务分配 { get; set; }
+        public string 是否拆分 { get; set; }
+        public Nullable<int> 合同编号 { get; set; }
+        public Nullable<int> 产品编号 { get; set; }
+        public Nullable<double> 数量 { get; set; }
     }
 }

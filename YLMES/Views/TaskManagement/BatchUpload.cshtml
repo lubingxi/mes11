@@ -11,7 +11,11 @@
     <link href="~/layui/css/layui.css" rel="stylesheet" />
     <script src="~/layui/layui.js" type="text/javascript"></script>
     <script type="text/javascript">
+      
         layui.use('upload', function () {
+            if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }
             var $ = layui.jquery
                 , upload = layui.upload;
             var upload = layui.upload;
@@ -32,9 +36,14 @@
                         var file = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列                                       
                         //读取本地文件
                         obj.preview(function (index, file, result) {
-                            
+                            var today = new Date();
+                            var s = today.getFullYear() + "" + today.getMonth() + "" + today.getDate() + "" + today.getHours() + "" + today.getMinutes() + "" + today.getSeconds();
+                            //a = s;
+                            //if (s == a) {
+                            //    s = s + (++nus);
+                            //}
                             var tr = $(['<tr id="upload-' + index + '">'
-                                , '<td>' + file.name + '</td>'
+                                , '<td>' +s+'_'+file.name + '</td>'
                                 , '<td>' + (file.size / 1014).toFixed(1) + 'kb</td>'
                                 , '<td>等待上传</td>'
                                 , '<td>'
@@ -42,8 +51,9 @@
                                 , '<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
                                 , '</td>'
                                 , '</tr>'].join(''));
-                         
                            
+                            obj.resetFile(index, file, s +'_'+ file.name);
+
                             //单个重传
                             tr.find('.demo-reload').on('click', function () {
                                 obj.upload(index, file);
@@ -51,7 +61,7 @@
 
                             //删除
                             tr.find('.demo-delete').on('click', function () {
-                                delete files[index]; //删除对应的文件
+                                delete file[index]; //删除对应的文件
                                 tr.remove();
                                 uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
                             });                         

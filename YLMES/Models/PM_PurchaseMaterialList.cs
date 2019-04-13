@@ -30,5 +30,6 @@ namespace YLMES.Models
         public string ListType { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedTime { get; set; }
+        public string Spec { get; set; }
     }
 }

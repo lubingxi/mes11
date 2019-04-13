@@ -1,0 +1,54 @@
+﻿
+
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/jquery.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        dayin();
+    });
+    function dayin() {
+        //bdhtml = window.document.body.innerHTML;//获取当前页的html代码
+        //sprnstr = "<!--startprint-->";//设置打印开始区域
+        //eprnstr = "<!--endprint-->";//设置打印结束区域
+        //prnhtml = bdhtml.substring(bdhtml.indexOf(sprnstr) + 18); //从开始代码向后取html
+        //prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));//从结束代码向前取html
+        //window.document.body.innerHTML = prnhtml;
+        window.print();
+    }
+
+</script>
+<style>
+    tr td {
+        text-align: center;
+        border: 2px solid #000;
+        font-family: TechnicBold;
+    }
+</style>
+<body>
+    <table style="font-size:50px;border:3px solid #000;width:700px;height:350px;margin:0 auto">
+
+
+        <tr>
+            <td>成品仓</td>
+            <td colspan="4" style="text-align:center"><img src="@TempData["ptu"]"/></td>
+        </tr>
+        <tr>
+            <td>库区:</td>
+            <td colspan="4" style="text-align:center">@ViewData["Reservoir"]</td>
+        </tr>
+        <tr>
+            <td>货区:</td>
+            <td colspan="4" style="text-align:center;vertical-align: middle;">@ViewData["CargoArea"]</td>
+        </tr>
+        <tr>
+            <td>货位:</td>
+            <td colspan="4" style="text-align:center;vertical-align: middle;">@ViewData["Goods"]</td>
+        </tr>
+        
+    </table>
+</body>
+
+
+
+
+

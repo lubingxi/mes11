@@ -1,0 +1,82 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script src="~/js/Supplier.js"></script>
+    <script src="~/Scripts/jquery.form.js" type="text/javascript"></script>
+</head>
+<body>
+    <form class="layui-form" id="form-article-add" style="margin-top:20px">      
+        <div class="layui-form-item" >
+            <label class="layui-form-label">库区：</label>
+            <div class="layui-input-block" style="width:300px;">
+                <input type="text" lay-verify="required" name="Reservoir" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">货区：</label>
+            <div class="layui-input-block" style="width:300px;">
+                <input type="number" lay-verify="required" name="CargoArea" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">货位：</label>
+            <div class="layui-input-block"style="width:300px;">
+                <input type="number" lay-verify="required" name="Goods" autocomplete="off" class="layui-input">
+            </div>
+        </div>       
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="btn btn-primary radius" onclick="sub()">保存</button>
+            </div>
+        </div>
+
+    </form>
+
+    <script>
+        $(function () {
+            if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }                   
+        });
+        function sub() {
+            $("#form-article-add").ajaxSubmit({
+                url: "@Url.Action("AddFinishProLocation", "FinishProductHouse")",
+                type: "post",
+                success: function (data) {
+                    if (data == "true") {
+                        alert("新增成功");
+                        //layer.closeAll();
+                        window.parent.location.reload();
+                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭                     
+                    }
+                    else
+                    {
+                        alert("已经存在不用新增");
+                    }
+                },
+                error: function (aa) {
+                    alert(aa);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -32,5 +32,8 @@ namespace YLMES.Models
         public Nullable<int> TaskID { get; set; }
         public string Note { get; set; }
         public string type { get; set; }
+        public string DesignType { get; set; }
+        public Nullable<int> MatertID { get; set; }
+        public string WhetherToUpload { get; set; }
     }
 }

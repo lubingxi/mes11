@@ -68,7 +68,6 @@ namespace YLMES.Controllers
                 parms[0] = new SqlParameter("@Type", "delete");
                 parms[1] = new SqlParameter("@StationID", Convert.ToInt32(StationID));
                 int i = ys.Database.ExecuteSqlCommand("exec SP_PM_ProductStation @Type,@StationID", parms);
-
             }
             return "true";
         }
@@ -127,7 +126,7 @@ namespace YLMES.Controllers
 
                 SqlParameter[] parms = new SqlParameter[2];
                 parms[0] = new SqlParameter("@Type", "ADD");
-                parms[1] = new SqlParameter("@CreatedBy", CreatedBy.ToString());
+                parms[1] = new SqlParameter("@CreatedBy", CreatedBy);
                 int i = ys.Database.ExecuteSqlCommand("exec SP_PM_ProductLine @Type,'','','',@CreatedBy", parms);
             }
             return "true";
@@ -158,7 +157,7 @@ namespace YLMES.Controllers
                 parms[1] = new SqlParameter("@line", line);
                 parms[2] = new SqlParameter("@lineID", Int32.Parse(lineID));
                 parms[3] = new SqlParameter("@LineLength", lengsd);
-                parms[4] = new SqlParameter("@CreatedBy", CreatedBy.ToString());
+                parms[4] = new SqlParameter("@CreatedBy", CreatedBy);
                 int i = ys.Database.ExecuteSqlCommand("exec SP_PM_ProductLine @Type,@lineID,@line,@LineLength,@CreatedBy", parms);
             }
             return "true";
@@ -834,9 +833,10 @@ namespace YLMES.Controllers
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-                SqlParameter[] parms = new SqlParameter[1];
+                SqlParameter[] parms = new SqlParameter[2];
                 parms[0] = new SqlParameter("@StationType", Type);
-                var list = ys.Database.SqlQuery<CheckStationType_Result>("exec CheckStationType @StationType", parms).ToList();
+                parms[1] = new SqlParameter("@Type", "check");
+                var list = ys.Database.SqlQuery<CheckStationType_Result>("exec CheckStationType @StationType,@Type", parms).ToList();
                 Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
                 PageList<CheckStationType_Result> pageList = new PageList<CheckStationType_Result>(list, page, limit);
                 int count = list.Count();
@@ -848,17 +848,17 @@ namespace YLMES.Controllers
             }
         }
         //删除工位类型
-        public ActionResult DeleteLocationType(string id,string type)
+        public ActionResult DeleteLocationType(string id)
         {
             try
             {
                 int i = int.Parse(id);
                 SqlParameter[] parms = new SqlParameter[2];
-                parms[0] = new SqlParameter("@StationTypeID", i);
-                parms[1] = new SqlParameter("@StationType", type);
+                parms[0] = new SqlParameter("@Type", "delete");
+                parms[1] = new SqlParameter("@id", i);
                 using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    ys.Database.ExecuteSqlCommand("exec DeleteLocationType  @StationTypeID,@StationType", parms);
+                    ys.Database.ExecuteSqlCommand("exec CheckStationType  '',@Type,@id", parms);
                 }
                 return Content("true");
             }
@@ -869,20 +869,20 @@ namespace YLMES.Controllers
             }
         }
         //修改工位类型
-        public ActionResult EditLocationType(string id, string bianhao, string type)
+        public ActionResult EditLocationType(string id, string Station)
         {
             try
             {
                 int i = int.Parse(id);
                 string name = Session["name"].ToString();
                 SqlParameter[] parms = new SqlParameter[4];
-                parms[0] = new SqlParameter("@StationTypeID", i);
-                parms[1] = new SqlParameter("@StationTypeNumber", bianhao);
-                parms[2] = new SqlParameter("@StationType", type);
+                parms[0] = new SqlParameter("@StationType", Station);
+                parms[1] = new SqlParameter("@Type", "update");
+                parms[2] = new SqlParameter("@id", i);
                 parms[3] = new SqlParameter("@CreatedBy", name);
                 using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    ys.Database.ExecuteSqlCommand("exec EditLocationType  @StationTypeID,@StationTypeNumber,@StationType,@CreatedBy", parms);
+                    ys.Database.ExecuteSqlCommand("exec CheckStationType  @StationType,@Type,@id,@CreatedBy", parms);
                 }
                 return Content("true");
             }
@@ -898,11 +898,14 @@ namespace YLMES.Controllers
             try
             {
                 string name = Session["name"].ToString();
-                SqlParameter[] parms = new SqlParameter[1];
-                parms[0] = new SqlParameter("@CreatedBy", name);
+                SqlParameter[] parms = new SqlParameter[4];
+                parms[0] = new SqlParameter("@StationType", "");
+                parms[1] = new SqlParameter("@Type", "add");
+                parms[2] = new SqlParameter("@id", 666);
+                parms[3] = new SqlParameter("@CreatedBy", name);
                 using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    ys.Database.ExecuteSqlCommand("exec AddLocationType  @CreatedBy", parms);
+                    ys.Database.ExecuteSqlCommand("exec CheckStationType  @StationType,@Type,@id,@CreatedBy", parms);
                 }
                 return Content("true");
             }

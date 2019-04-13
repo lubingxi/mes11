@@ -59,12 +59,10 @@
             display: none;
             z-index: 2;
         }
-
             .dropdown ul li {
                 list-style: none;
                 text-indent: 10px;
             }
-
                 .dropdown ul li a {
                     display: block;
                     color: #282c33;
@@ -73,11 +71,9 @@
                     text-overflow: ellipsis;
                     white-space: nowrap;
                 }
-
                 .dropdown ul li:hover {
                     background-color: #f2f6fa;
                 }
-
                 .dropdown ul li a:active, .dropdown ul li.active a {
                     background-color: #e4e9f2;
                 }
@@ -118,33 +114,13 @@
                 if (event.keyCode == "13") {
                     $('#query').click();
                 }
-            });
-            $(".click").click(function () {
-                $(".tip").fadeIn(200);
-            });
-            $(document).keydown(function (e) {
-                if (e.keyCode == 13) {
-                    $("#query").click();
-                }
-            });
-            $(".tiptop a").click(function () {
-                $(".tip").fadeOut(200);
-            });
-
-            $(".sure").click(function () {
-                $(".tip").fadeOut(100);
-            });
-
-            $(".cancel").click(function () {
-                $(".tip").fadeOut(100);
-            });
+            });       
             layui.use(['table', 'layer'], function () {
                 var table = layui.table, layer = layui.layer;
                 $("#query").click(function () {
                     var WorkorderNO = $("#search-input").val();
                     var QTY = $("#QTY").val();
                     var number = $("#number").val();
-                    // alert(QTY+number);
                     table.render({
                         elem: '#tw'
                    , url: '/ProductionPlanning/Productlist?WorkorderNO=' + WorkorderNO
@@ -159,7 +135,6 @@
                    , { field: '包装时间', width: 180, title: '包装时间' }
                    , { field: '包装人', width: 150, title: '包装人' }
                    ]]
-
                     });
                 });
 
@@ -178,7 +153,6 @@
                         } else {
                             alert("打包失败");
                         }
-
                     }
                 });
             });
@@ -209,16 +183,13 @@
 
                             <input type="text" class="dropdown-selected"
                                    name="WorkorderNO " id="search-input" placeholder="请输入工单" onkeyup="search.searchKeyword();">
-                            <ul id=" WorkorderNOUI"></ul>
+                            <ul id="WorkorderNOUI"></ul>
                         </div>
-
-
                         包装套数：<div class="dropdown" style="width:60px;margin-right:10px">
                             <input id="QTY" type="text" class="dropdown-selected">
                         </div>
                         标签张数：<div class="dropdown" style="width:60px;margin-right:10px">
                             <input id="number" type="text" class="dropdown-selected" value="1">
-
                         </div>
                         <button class="layui-btn" id="query" data-type="reload">查询</button>
                         <button class="layui-btn" id="pack" data-type="reload">打包</button>
@@ -232,7 +203,6 @@
         <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
         <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
         <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
-
 
         <script type="text/javascript">
             $('.tablelist tbody tr:odd').addClass('odd');

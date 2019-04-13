@@ -13,6 +13,7 @@ namespace YLMES.Models
     
     public partial class StrToTable_Result
     {
+        public Nullable<int> id { get; set; }
         public string str2table { get; set; }
     }
 }

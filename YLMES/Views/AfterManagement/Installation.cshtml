@@ -58,6 +58,9 @@
                     var strattime = $(".strattime").val();
                     var endtime = $(".endtime").val();
                     tableIns.reload({
+                        page: {
+                            curr: 1
+                        },
                         where: {
                             CName: CuName
                             , CNumber: CNumber

@@ -57,7 +57,7 @@
         $.ajax({
             url: "/TaskManagement/CheckProcess?type=sel1",
             type: "get",
-            data: { PartNumber: '@ViewData["PartNumber"]', ProductSpec: ProductSpec, ProductName: '@ViewData["ProductName"]', id: '@ViewData["id"]', RouteName:'@ViewData["Route"]' },
+            data: { PartNumber: '@ViewData["PartNumber"]', ProductSpec: '@ViewData["ProductSpec"]', ProductName: '@TempData["ProductName"]', id: '@ViewData["id"]', RouteName: '@ViewData["Route"]' },
             dataType: "json",
             success: function (data) {
                 if (data != null) {
@@ -132,8 +132,10 @@
                             $("tr input[type=text]").hide();
                             $("[name=StationTypeNumber]").hide()
                             $("td").click(function () {
+                                zhi = $(this).text();
                                 $(this).children("input").show();
                                 $(this).children("input").focus()
+                                $(this).children("input").val(zhi);
                             })
                             $("tr input[type=text]").focusout(function () {
                                 $(this).prev().text($(this).val())
@@ -160,12 +162,14 @@
                                 }
                                 form.render();
                             }
-
+                            var zhi;
                             $("span[name=StationTypeNumber]").text(data[0].StationTypeNumber);
                             $("tr input[type=text]").hide();
                             $("td").click(function () {
+                                zhi = $(this).text();
                                 $(this).children("input").show();
                                 $(this).children("input").focus()
+                                $(this).children("input").val(zhi);
                             })
                             $("tr input").focusout(function () {
                                 $(this).prev().text($(this).val())
@@ -205,7 +209,6 @@
                         $("[name=StationTypeNumber]").each(function (i) {
                             ii1 = i;
                         })
-
                         $(".tr_t:eq(" + ii + ")").after("<tr class='tr_t'>" + StationTypeNumber + WorkSecondPerPCS + WorkSecond2PerPCS + require + Count + a + b + c + "</tr>")
                         $.ajax({
                             url: "/TaskManagement/StationTypeNumber",
@@ -221,8 +224,10 @@
                                 $("[name=StationTypeNumber]:eq(" + (ii1+1) + ")").text(data[0].StationTypeNumber);
                                 $("tr input[type=text]").hide();
                                 $("td").click(function () {
+                                    zhi = $(this).text();
                                     $(this).children("input").show();
                                     $(this).children("input").focus()
+                                    $(this).children("input").val(zhi);
                                 })
 
                                 $("tr input").focusout(function () {
@@ -233,7 +238,6 @@
                                 form.render();
                             }
                         })
-
                     }
                 })
                 $(".che").click(function () {
@@ -378,7 +382,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label" style="display:inline-block;width:200px">工艺工程师签名：</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" />
+                    <input type="text" class="layui-input" value="@Session["name"]"/>
                 </div>
             </div>
             <div class="layui-inline">
@@ -416,6 +420,14 @@
 
         img {
             display: inline-block;
+        }
+       .layui-table-cell,td {              
+            overflow:visible;
+            max-width:400px;
+            height:inherit;
+            white-space: normal;
+            word-wrap: break-word;
+            word-break: break-all;
         }
       
     </style>

@@ -13,13 +13,8 @@ namespace YLMES.Models
     
     public partial class CheckStationType_Result
     {
-        public int 序号 { get; set; }
-        public string 工位编码 { get; set; }
-        public string 工位类型 { get; set; }
-        public string 创建人 { get; set; }
-        public string 创建时间 { get; set; }
-        public string 更新人 { get; set; }
-        public string 更新时间 { get; set; }
-        public string 状态 { get; set; }
+        public int ID { get; set; }
+        public string Station { get; set; }
+        public string CreatedBY { get; set; }
     }
 }

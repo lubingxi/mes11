@@ -15,6 +15,7 @@ namespace YLMES.Models
     {
         public int ID { get; set; }
         public int ContractID { get; set; }
+        public string ContractNumber { get; set; }
         public Nullable<decimal> 合同金额 { get; set; }
         public Nullable<decimal> 已收金额 { get; set; }
         public Nullable<decimal> NewAmountCollected { get; set; }

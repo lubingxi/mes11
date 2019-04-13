@@ -12,7 +12,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>友力信息管理系统</title>
     <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
-    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
     <link href="~/css/style.css" rel="stylesheet" type="text/css" />
     <link href="~/layui/css/layui.css" rel="stylesheet" />
     <script type="text/javascript" src="../../js/jquery.js"></script>
@@ -175,7 +174,7 @@
                     success:function(data)
                     {
                         if (data == "true") {
-                            location.href = "/Rms/JinCang?ck=" + ckd + "&kq=" + kqd + "&kw=" + kwd + "&hw=" + hwd + "&hww="+hw+"&tuhao=" + '@ViewData["fn"]' + "&cailiao=" + '@ViewData["pm"]' + "&guige=" + '@ViewData["ps"]' + "&named=" + '@ViewData["pn"]' + "&shuliang=" + shuliang;                            
+                            location.href = "/Rms/JinCang?ck=" + ckd + "&kq=" + kqd + "&kw=" + kwd + "&hw=" + hwd + "&hww="+hw+"&ID=" + '@ViewData["ID"]' + "&cailiao=" + '@ViewData["pm"]' + "&guige=" + '@ViewData["ps"]' + "&named=" + '@ViewData["pn"]' + "&shuliang=" + shuliang;                            
                         }
                         else
                         {
@@ -273,8 +272,8 @@
       <span style="font-size:30px;color:green">物料编码信息:</span>
        <table class="gridtable">         
             <tr>
-                <td>图号:</td>
-                <td>@ViewData["fn"]</td>
+                <td>编号:</td>
+                <td>@ViewData["ID"]</td>
                 <td>名称:</td>
                 <td>@ViewData["pn"]</td>
                 <td>规格:</td>

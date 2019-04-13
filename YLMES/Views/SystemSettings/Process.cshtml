@@ -11,7 +11,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>友力信息管理系统</title>
     <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
-    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
     <link href="~/css/style.css" rel="stylesheet" type="text/css" />
     <link href="~/layui/css/layui.css" rel="stylesheet" />
     <script type="text/javascript" src="../../js/jquery.js"></script>
@@ -115,6 +114,9 @@
                     var PartSpec = $("#PartSpec").val().trim();
                     var Material = $("#Material").text();
                     tableIns.reload({
+                        page: {
+                            curr: 1
+                        },
                         where: {
                             Name: Name
                           , PartSpec: PartSpec
@@ -174,10 +176,27 @@
                         } else {
 
                             if (liucheng == '查看流程') {
-                                window.parent.document.getElementById("rightframe").src = "/TaskManagement/EditingProcess?ProductName=" + data.工件编码 + "&ProductSpec=" + data.工件规格 + "&PartNumber=" + data.子件编码 + "&PartId=" + data.序号+"&ifs="+"1";
+
+                                var url = "/TaskManagement/EditingProcess?ProductName=" + data.工件编码 + "&ProductSpec=" + data.工件规格 + "&PartNumber=" + data.子件编码 + "&PartId=" + data.子件序号 + "&ifs=" + "1";
+                                var index = layer.open({
+                                    type: 2,
+                                    title: '工艺流程',
+                                    content: url,
+                                    area: ['1200px', '700px'],
+                                    maxmin: true
+                                });
+                                layer.full(index);
                             }
                             else {
-                                window.parent.document.getElementById("rightframe").src = "/TaskManagement/EditingProcess?ProductName=" + data.工件编码 + "&ProductSpec=" + data.工件规格 + "&PartNumber=" + data.子件编码 + "&PartId=" + data.序号;
+                                var url = "/TaskManagement/EditingProcess?ProductName=" + data.工件编码 + "&ProductSpec=" + data.工件规格 + "&PartNumber=" + data.子件编码 + "&PartId=" + data.子件序号;
+                                var index = layer.open({
+                                    type: 2,
+                                    title: '工艺流程',
+                                    content: url,
+                                    area: ['1200px', '700px'],
+                                    maxmin: true
+                                });
+                                layer.full(index);
                             }
                           
                         }

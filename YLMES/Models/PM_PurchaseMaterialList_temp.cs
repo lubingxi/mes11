@@ -12,17 +12,23 @@ namespace YLMES.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PM_PurchaseMaterialList_temp
+    public partial class PM_PurchaseMaterialList_Temp
     {
         public int ID { get; set; }
         public Nullable<int> TaskID { get; set; }
-        public string FigureNumber { get; set; }
-        public string PartNumber { get; set; }
-        public string PartSpec { get; set; }
-        public string PartMaterial { get; set; }
-        public Nullable<int> QTY { get; set; }
-        public string PurchaseQTY { get; set; }
+        public Nullable<int> MaterialID { get; set; }
+        public Nullable<int> QTYofPCS { get; set; }
+        public Nullable<int> ApplyPurchasePCS { get; set; }
+        public Nullable<int> ApplyPurchaseQTY { get; set; }
+        public Nullable<int> ActPurchasePCS { get; set; }
+        public Nullable<int> ActPurchaseQTY { get; set; }
+        public string Units { get; set; }
+        public Nullable<double> UnitPrice { get; set; }
+        public Nullable<double> TotalPrice { get; set; }
+        public Nullable<int> POID { get; set; }
         public string Note { get; set; }
-        public string Type { get; set; }
+        public string ListType { get; set; }
+        public string CreatedBy { get; set; }
+        public string CreatedTime { get; set; }
     }
 }

@@ -77,10 +77,7 @@
             })
             $(".layui-input-block span").hide();
 
-
             var PartNumber = '@ViewData["PartNumber"]'
-
-
 
             if (PartNumber != "") {
 
@@ -89,79 +86,18 @@
                 $(".navRoName").text("子流程名称：")
             }
 
-
             layui.use(['table', 'layer', 'form'], function () {
-                var table = layui.table, layer = layui.layer, from = layui.form;
-                var RouteName = "0";
-
-                $("#checkRo").click(function () {
-                    var StationTypeList = new Array();
-                    table.render({
-                        elem: '#tw'
-                        , url: '/TaskManagement/CheckProductRouting?RouteName=' + RouteName + "&code=0"
-                        , done: function (res) {
-                            $("tr a").hide()
-                            $("tr").hover(function () {
-
-                                $(this).children().last().children().children().toggle();
-                            })
-                            if (res.data != null) {
-                                for (var i = 0; i < res.data.length; i++) {
-                                    StationTypeList[i] = res.data[i].工位类型
-                                }
-                            }
-                        }
-                        , height: 'full-20'
-                        , page: true
-                        , cols: [[
-                            , { field: 'ID', hide: true }
-                            , { field: '流程ID', width: 60, title: '流程序号' }
-                            , { field: '流程', width: 200, title: '流程名称', edit: Text }
-                            , { field: '工位类型', width: 200, title: '工位类型', toolbar: '#sele' }
-
-                            , { field: '单套工时', width: 200, title: '单套工时', edit: Text }
-                            , {
-                                field: '辅助工时', width: 200, title: '辅助工时', edit: Text
-                            }
-                            , { field: '工艺要求', title: '工艺要求', width: 200, edit: Text }
-                            , { field: '编码', width: 100, title: '编号' }
-                            , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
-                        ]]
-
-                    });
-                    $.get("/TaskManagement/StationTypeNumber", function (data) {
-                        if (data != null) {
-                            var StationType = 0;
-                            for (var index = 0; index < StationTypeList.length; index++) {
-                                for (var i = 0; i < data.length; i++) {
-                                    if (StationTypeList[index] == data[i].StationType) {
-                                        $(".StationTypeNumber:eq(" + index + ")").append("<option selected>" + data[i].StationType + "</option>")
-                                        StationType = data[i].StationType;
-
-                                    } else {
-                                        $(".StationTypeNumber:eq(" + index + ")").append("<option>" + data[i].StationType + "</option>")
-                                    }
-                                }
-
-                                $("[name=StationTypeid]:eq(" + index + ")").text(StationType)
-
-                            }
-                            from.render()
-                        }
-                    })
-                    from.render()
-                })
-
+                var table = layui.table, layer = layui.layer, from = layui.form;                                               
+                var RouteName = "0";                
                 from.on('select(Rout)', function (data) {
-
                     RouteName = data.value;
-
                 })
-
+                $("#checkRo").click(function () {
+                    window.location.href = "/TaskManagement/DownloadProcess?RouteName=" + RouteName;
+                })
                 from.on('select(se)', function (data) {
                     var ddaystrs = new Array();
                     ddaystrs = data.value.split(" ");
-
                     $(".ka:eq(0)").empty();
                     $(".ka:eq(0)").append("<div class='layui-form-mid layui-word-aux'>" + ddaystrs[0] + "<i class='layui-icon layui-icon-close-fill'></i></div>")
                     $(".layui-input-block span").text(ddaystrs[1])
@@ -189,22 +125,23 @@
                     tr.parents("tr").find("span").text(data.value)
 
                 })
-                $("#detail").click(function () {
+                $("#detail").click(function () {                  
                     if (RouteName == "0") {
                         layer.msg("请选择流程")
                     } else {
-                        var url = "/TaskManagement/AddProcess?Route=" + RouteName + "&id=Partid" + "&PartId=0";
+                        var url = "/TaskManagement/UploadProcess?Route=" + RouteName;
                         var index = layer.open({
                             type: 2,
-                            title:'流程编辑',
+                            title: '流程编辑',
                             content: url,
                             area: ['1200px', '700px'],
                             maxmin: true
                         });
                         layer.full(index);
-
                     }
                 })
+              
+               
                 table.on('tool(demo)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                     var layEvent = obj.event;
                     var data = obj.data
@@ -212,10 +149,7 @@
                     var id = data.编码;
                     var tr = obj.tr;
                     var index = data.ID;
-
                     if (layEvent === 'up') {
-
-
                         var WorkSecondPerPCS = data.单套工时
                         var WorkSecond2PerPCS = data.辅助工时
                         var require = data.工艺要求
@@ -300,9 +234,7 @@
                         type: "get",
                         dataType: "json",
                         success: function (data) {
-
                             if (data != null) {
-
                                 for (var i = 0; i < data.length; i++) {
                                     if (data[i].工艺要求 != null) {
                                         var bo = true
@@ -315,9 +247,7 @@
                                             $("[name=city2]").append("<option>" + data[i].流程 + "</option>")
                                         }
                                     }
-
                                 }
-
                             }
                             from.render();
                         }
@@ -330,79 +260,31 @@
                         success: function (data) {
                             if (data != null) {
                                 for (var i = 0; i < data.length; i++) {
-
                                     $("[name=city]").append("<option>" + data[i].零件名称 + " " + data[i].规格 + "</option>")
                                 }
-
                             }
                             from.render();
                         }
                     })
-                    $("#addC").click(function () {
-                        if ('@ViewData["PartId"]' == 0) {
+                    $("#addC").click(function () {                     
                             layer.open({
                                 type: 1,
-                                area: ['500px', '600px']
-                                , content: $("#ids")
-                                , btn: ['确定', '取消']
-                                , yes: function (index) {
-                                    if ($(".ka:eq(0)").text() != "") {
-                                        var ProductName = $(".ka:eq(0)").text();
-                                        var ProductSpec = $(".layui-input-block span").text();
-                                        var PartNumber = $(".ka:eq(1)").text();
-                                        var ProcessName = $(".ro:eq(1)").val();
-                                        var Route = $(".ka:eq(2)").text();
-                                        if (ProcessName != "") {
-                                            if (up) {
-                                                layer.close(index);
-                                                var url = "/TaskManagement/AddProcess?PartNumber=" + PartNumber + "&ProductName=" + ProductName + "&ProductSpec=" + ProductSpec + "&Route=" + Route + "&PartId=0" + "&ProcessName=" + ProcessName;
-                                                var index = layer.open({
-                                                    type: 2,
-                                                    content: url,
-                                                    area: ['1200px', '700px']
-                                                });
-                                                layer.full(index);
-                                            } else {
-
-                                                layer.msg("流程名称重复")
-                                            }
-                                        } else {
-
-                                            layer.msg("请输入流程名称");
-                                        }
-
-                                    } else {
-
-                                        layer.msg("请选择零件");
-                                    }
-
-                                }
-                            });
-
-                        } else {
-                            layer.open({
-                                type: 1,
-
                                 area: ['400px', '400px'],
-
                                 content: $('#tong')
                                 , btn: ['确定', '取消']
                                 , yes: function (index) {
                                     var id = Number('@ViewData["PartId"]');
-                                    var a = $("input[name=aa]").attr("value");
-                                    var Route = $(".ka1").text();
+                                    var a = $("input[name=aa]").val();
+                                    var Route = $(".ka:eq(2)").text();
                                     var ProcessName = $(".ro:eq(0)").val();
                                     if (ProcessName != null && ProcessName != "") {
                                         if (up) {
                                             layer.close(index);
-                                            var url = "/TaskManagement/AddProcess?PartId=" + id + "&ProductName=" +
-                                                 '@ViewData["ProductName"]' + "&ProcessName=" + ProcessName + "&PartNumber=" + PartNumber + "&ProductSpec=" + a + "&Route=" + Route;
+                                            var url = "/TaskManagement/AddUploadProcess?PartId=" + id + "&ProductName=" +
+                                                 '@ViewData["ProductName"]' + "&ProcessName=" + ProcessName + "&PartNumber=" + PartNumber + "&ProductSpec=" + a +"&ProcessName=" + ProcessName;
                                             var index = layer.open({
                                                 type: 2,
-                                                title: '工艺合同',
-                                                content: url,
-                                                area: ['1200px', '700px'],
-                                                maxmin: true
+                                                content: url
                                             });
                                             layer.full(index);
                                         } else {
@@ -412,13 +294,8 @@
                                     } else {
                                         layer.msg("请输入流程名称");
                                     }
-
                                 }
-                            });
-
-
-
-                        }
+                            });                        
                     });
                 });
             })
@@ -445,12 +322,12 @@
                 <input type="text" class="layui-input" readonly value="@ViewData["PartNumber"]"/>
             </div>
         </div>
-        <div class="layui-form-item">
+        @*<div class="layui-form-item">
             <label class="layui-form-label">流程引用</label>
             <div class="layui-input-block">
                 <select name="city2" lay-filter='se21' lay-search=lay-search></select>
             </div>
-        </div>
+        </div>*@
         <div class="layui-form-item">
             <label class="layui-form-label">流程名称</label>
             <div class="layui-input-block">
@@ -476,12 +353,12 @@
                 <select name="city1" lay-filter='se1' lay-search=lay-search></select>
             </div>
         </div>
-        <div class="layui-form-item">
+        @*<div class="layui-form-item">
             <label class="layui-form-label">流程引用</label>
             <div class="layui-input-block">
                 <select name="city2" lay-filter='se2' lay-search=lay-search></select>
             </div>
-        </div>
+        </div>*@
         <div class="layui-form-item">
             <label class="layui-form-label">流程名称</label>
             <div class="layui-input-block">
@@ -517,13 +394,13 @@
                 </div>
             </div>
             <div class="layui-inline">
-                <div class="layui-input-inline" style="width: 100px;">
-                    <button class="layui-btn" id="checkRo" data-type="checkRo">搜索</button>
+                <div class="layui-input-inline" style="width: 100px;">     
+                    <button class="layui-btn" id="checkRo" data-type="checkRo">工艺下载</button>
                 </div>
             </div>
             <div class="layui-inline">
-                <div class="layui-input-inline" style="width: 100px;">
-                    <button class="layui-btn" id="detail" data-type="detail">查看详情</button>
+                <div class="layui-input-inline" style="width: 100px;">                
+                    <button class="layui-btn" id="detail" data-type="detail">更新</button>
                 </div>
             </div>
         </div>

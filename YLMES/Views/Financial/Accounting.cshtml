@@ -1,0 +1,150 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript" src="~/js/Accounting.js"></script>
+    <script type="text/javascript">
+    </script>
+    <script type="text/html" id="barDemo">
+
+        <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+</head>
+<body>
+    @*新增科目表单*@
+    <div class="layui-form czs" style="display:none" action="" id="for">
+        <div class="layui-form-item"><label class="layui-form-label">科目代码：</label><div class="layui-input-block"><input name="SubjectCode" class="layui-input" type="text" placeholder="*必填" autocomplete="off" lay-verify="SubjectCode" /></div></div>
+        <div class="layui-form-item"><label class="layui-form-label">科目名称：</label><div class="layui-input-block"><input name="SubjectTypeName" class="layui-input" type="text" placeholder="*必填" autocomplete="off" lay-verify="SubjectTypeName" /></div></div>
+        <div class="layui-form-item"><label class="layui-form-label">助记码：</label><div class="layui-input-block"><input name="code2" class="layui-input" type="text" placeholder="" autocomplete="off" lay-verify="" /></div></div>
+        <div class="layui-form-item">
+            <div class="layui-inline"><label class="layui-form-label">科目类别：</label><div class="layui-input-inline"><select name="modules" lay-search=lay-search id="gss" lay-verify="gss" lay-filter='gss'></select></div></div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">余额方向：</label>
+                <div class="layui-input-block">
+                    <input name="sexa" title="借" type="radio" lay-filter="a" checked id="rid3" value="借" />
+                    <input name="sexa" title="贷" type="radio" lay-filter="a" id="rid4" value="贷" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item"><label class="layui-form-label">全名：</label><div class="layui-input-block"><input name="AllName" class="layui-input" type="text" placeholder="" autocomplete="off" lay-verify="AllName" /></div></div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">现金科目：</label>
+                <div class="layui-input-block">
+                    <input name="sexb" title="是" type="radio" lay-filter="b" checked id="ridb" value="是" />
+                    <input name="sexb" title="否" type="radio" lay-filter="b" id="ridb" value="否" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">银行科目：</label>
+                <div class="layui-input-block">
+                    <input name="sexd" title="是" type="radio" lay-filter="d" checked id="ridd" value="是" />
+                    <input name="sexd" title="否" type="radio" lay-filter="d" id="ridd" value="否" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item"><label class="layui-form-label">辅助核算：</label><div class="layui-input-block"><input name="fu" class="layui-input" type="text" placeholder="" autocomplete="off" lay-verify="" /></div></div>
+        <div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn" lay-filter="demo1" lay-submit="" id="bc">保存</button><button class="layui-btn" id="qx">取消</button><input type="text" id="flag" hidden="hidden" value="False" /></div></div>
+    </div>
+    @*修改科目代码表单*@
+    <div class="layui-form czs" style="display:none" action="" id="for2">
+        <div class="layui-form-item"><label class="layui-form-label">科目代码：</label><div class="layui-input-block"><input name="SubjectCode2" class="layui-input" type="text" placeholder="*必填" autocomplete="off" lay-verify="SubjectCode2" /></div></div>
+        <div class="layui-form-item"><label class="layui-form-label">科目名称：</label><div class="layui-input-block"><input name="SubjectTypeName2" class="layui-input" type="text" placeholder="*必填" autocomplete="off" lay-verify="SubjectTypeName2" /></div></div>
+        <div class="layui-form-item"><label class="layui-form-label">助记码：</label><div class="layui-input-block"><input name="code3" class="layui-input" type="text" placeholder="" autocomplete="off" lay-verify="" /></div></div>
+        <div class="layui-form-item">
+            <div class="layui-inline"><label class="layui-form-label">科目类别：</label><div class="layui-input-inline"><select name="modules" lay-search=lay-search id="gss2" lay-verify="gss2" lay-filter='gss2'></select></div></div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">余额方向：</label>
+                <div class="layui-input-block">
+                    <input name="sexa2" title="借" type="radio" lay-filter="a2" checked id="rid32" value="借" />
+                    <input name="sexa2" title="贷" type="radio" lay-filter="a2" id="rid42" value="贷" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item"><label class="layui-form-label">全名：</label><div class="layui-input-block"><input name="AllName2" class="layui-input" type="text" placeholder="" autocomplete="off" lay-verify="AllName2" /></div></div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">现金科目：</label>
+                <div class="layui-input-block">
+                    <input name="sexb2" title="是" type="radio" lay-filter="b2" checked id="ridb2" value="是" />
+                    <input name="sexb2" title="否" type="radio" lay-filter="b2" id="ridb2" value="否" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">银行科目：</label>
+                <div class="layui-input-block">
+                    <input name="sexd2" title="是" type="radio" lay-filter="d2" checked id="ridd2" value="是" />
+                    <input name="sexd2" title="否" type="radio" lay-filter="d2" id="ridd2" value="否" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item"><label class="layui-form-label">辅助核算：</label><div class="layui-input-block"><input name="fu2" class="layui-input" type="text" placeholder="" autocomplete="off" lay-verify="" /></div></div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">状态：</label>
+                <div class="layui-input-block">
+                    <input name="sexe" title="有效" type="radio" lay-filter="e" checked id="ride" value="有效" />
+                    <input name="sexe" title="无效" type="radio" lay-filter="e" id="ride" value="无效" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn" lay-filter="demo1" lay-submit="" id="bc2">保存</button><button class="layui-btn" id="qx2">取消</button><input type="text" id="flag2" hidden="hidden" value="False" /><input type="text" id="flag3" hidden="hidden" value="False" /></div></div>
+    </div>
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">财务管理</a></li>
+            <li><a href="#">科目</a></li>
+        </ul>
+    </div>
+    <div class="rightinfo">
+        <div class="tools">
+            <ul class="toolbar">
+                <li class="click" id="add">
+                    <span>
+                        <img src="../../images/t01.png" />
+                    </span>
+                    <a>新增科目</a>
+                </li>
+                <li>
+                    科目查询：
+                    <input class="CustomerName" id="Name" type="text" style="width: 180px;" />
+                </li>
+            </ul>
+            <button class="layui-btn" id="Search" data-type="reload">搜索</button>
+        </div>
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            if ('@Session["name"]' == "") {
+                location.href = '/Home/Login'
+            }
+        });
+    </script>
+</body>
+</html>

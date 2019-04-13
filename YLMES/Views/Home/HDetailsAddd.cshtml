@@ -16,130 +16,35 @@
 <body>
 
     <article class="page-container">
-        <form class="form form-horizontal" id="form-article-add">
+        <form class="form form-horizontal" id="form-article-add">                 
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>项目编号：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="@Session["Cid"]" placeholder="" readonly="readonly"  id="id" name="id">
+                </div>
+            </div>          
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>产品名称：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="" placeholder="" id="ProductName" name="ProductName">
+                </div>
+            </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>产品规格：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="tex2" name="tex2"><i></i>
+                    <input type="text" class="input-text" value="" placeholder="" id="ProductSpec" name="ProductSpec"><i></i>
                 </div>
-            </div>
+            </div>               
             <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>要求速度：</label>
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>单位：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="tex3" name="tex3">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>电气要求：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="tex4" name="tex4">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>工件主要材质：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="tex5" name="tex5">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>工件重量：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="tex6" name="tex6">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>滚筒直径：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="tex7" name="tex7">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>滚筒表面处理形式：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="tex8" name="tex8">
+                    <input type="text" class="input-text" value="" placeholder="" id="Units" name="Units">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>数量：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="tex9" name="tex9">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>是否动力：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <span class="select-box">
-                        <select name="select" class="select" id="select">
-                            <option value="0">动力</option>
-                            <option value="1">无动力</option>
-                        </select>
-                    </span>
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>产品名称：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="tex10" name="tex10">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>主梁材料：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="tex11" name="tex11">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>满负荷载重：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="tex12" name="tex12">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>工作场所：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="tex13" name="tex13">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>工件最小和最大外形尺寸：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="tex14" name="tex14">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>工件来料输送方式：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="tex15" name="tex15">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>滚筒材质：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="tex16" name="tex16">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>滚筒输送形式：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="tex17" name="tex17">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>单位：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="" placeholder="" id="tex18" name="tex18">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>工件重量：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" id="tex19" name="tex19" class="input-text">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计截止日期：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" onfocus="WdatePicker()" id="tex20" name="tex20" class="input-text Wdate">
+                    <input type="text" class="input-text" value="" placeholder="" id="Count" name="Count">
                 </div>
             </div>
             <div class="row cl">
@@ -175,16 +80,16 @@
             //表单验证
             $("#form-article-add").validate({
                 rules: {
-                    tex2: {
+                    ProductName: {
                         required: true,
                     },
-                    tex9: {
+                    ProductSpec: {
                         required: true,
                     },
-                    tex10: {
+                    Units: {
                         required: true,
                     },
-                    tex18: {
+                    Count: {
                         required: true,
                     },
                     author: {
@@ -208,49 +113,22 @@
                 focusCleanup: true,
                 success: "valid",
                 submitHandler: function (form) {
-                    var ProductSpec = $("#tex2").val().trim();
-                    var P_Speed = $("#tex3").val().trim();
-                    var P_ElectricalRequirements = $("#tex4").val().trim();
-                    var P_Main_materialofworkpiece = $("#tex5").val().trim();
-                    var P_ChildPartWeight = $("#tex6").val().trim();
-                    var P_RollerDiameter = $("#tex7").val().trim();
-                    var P_RollerSurface = $("#tex8").val().trim();
-                    var Count = $("#tex9").val().trim();
-                    var Select = $(".select option:selected").text();
-                    var ProductName = $("#tex10").val().trim();
-                    var P_MainBeaMaterial = $("#tex11").val().trim();
-                    var P_CarryingCapacity = $("#tex12").val().trim();
-                    var P_EquipmentWorkplace = $("#tex13").val().trim();
-                    var P_ChildPartSpecRange = $("#tex14").val().trim();
-                    var P_WorkpieceFeedingMode = $("#tex15").val().trim();
-                    var P_RollerMaterial = $("#tex16").val().trim();
-                    var P_RollerTransferMode = $("#tex17").val().trim();
-                    var Units = $("#tex18").val().trim();
-                    var P_ChildPartWeight = $("#tex19").val().trim();
-                    var DueDay = $("#tex20").val().trim();
+                    var id = $("#id").val().trim();
+                    var ProductName = $("#ProductName").val().trim();
+                    var ProductSpec = $("#ProductSpec").val().trim();
+                    var Units = $("#Units").val().trim();
+                    var Count = $("#Count").val().trim();
                     $.ajax({
-                        url: "/Home/HDAdd",
-                        data: {
-                            ProductSpec: ProductSpec, P_Speed: P_Speed, P_ElectricalRequirements: P_ElectricalRequirements, P_Main_materialofworkpiece: P_Main_materialofworkpiece, P_ChildPartWeight: P_ChildPartWeight,
-                            P_RollerDiameter: P_RollerDiameter, P_RollerSurface: P_RollerSurface, Count: Count, Select: Select, ProductName: ProductName, P_MainBeaMaterial: P_MainBeaMaterial, P_CarryingCapacity: P_CarryingCapacity,
-                            P_EquipmentWorkplace: P_EquipmentWorkplace, P_ChildPartSpecRange: P_ChildPartSpecRange, P_WorkpieceFeedingMode: P_WorkpieceFeedingMode, P_RollerMaterial: P_RollerMaterial, P_RollerTransferMode: P_RollerTransferMode,
-                            Units: Units, P_ChildPartWeight: P_ChildPartWeight, DueDay: DueDay
-                        },
+                        url: "/Home/HDAdd",                       
                         type: "post",
                         dataType: "text",
+                        data:{
+                            id :id,ProductName:ProductName,ProductSpec:ProductSpec,Units:Units,Count:Count
+                        },
                         success: function (data) {
-                            if (data == "true") {
-                                window.setTimeout(function () {
-                                    window.parent.location.reload();
-                                }, 500);
-                            }
-                            else if (data == "riqi") {
-                                layer.msg('日期格式不对！');
-                            }
-                            else {
-                                alert("添加失败,已存在第一条数据!");
-                                return;
-                            }
+                            if (data == "true") {                             
+                                parent.location.reload();                              
+                            }                            
                         }
                     });
 

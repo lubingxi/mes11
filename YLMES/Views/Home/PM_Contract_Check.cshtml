@@ -10,7 +10,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>友力信息管理系统</title>
     <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
-    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
     <link href="~/css/style.css" rel="stylesheet" type="text/css" />
     <link href="~/layui/css/layui.css" rel="stylesheet" />
     <script type="text/javascript" src="../../js/jquery.js"></script>
@@ -73,6 +72,9 @@
                     var endtime = $(".endtime").val();
                     var rs = $("#ReviewStatus").val();
                     tableIns.reload({
+                        page: {
+                            curr: 1
+                        },
                         where: {
                             CName: CuName
                             , CNumber: CNumber
@@ -91,7 +93,26 @@
                     var data = obj.data;
                     if (obj.event === 'xi') {
                         id = data.id;
-                        window.parent.document.getElementById("rightframe").src = "/Home/ContractPrint?id=" + id + "&vas=" + "2";
+                        if ($.trim(data.是否客户合同) == "是") {
+                            var url = '/Home/EditContract?id=' + id + '&vas=' + "2";
+                            var index = layer.open({
+                                type: 2,
+                                content: url,
+                                title: "客户合同",
+                                maxmin: true
+                            });
+                            layer.full(index);
+                        }
+                        else {
+                            var url = "/Home/ContractPrint?id=" + id + "&vas=" + "2";
+                            var index = layer.open({
+                                type: 2,
+                                content: url,
+                                title: "公司合同",
+                                maxmin: true
+                            });
+                            layer.full(index);
+                        }                     
                     }
                 });
 

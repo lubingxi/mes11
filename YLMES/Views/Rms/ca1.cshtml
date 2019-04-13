@@ -20,7 +20,8 @@
                     })
                 }
            , cols: [[
-            { field: 'PartNumber', width: 210, title: '物料名称' }
+             { field: 'ID', width: 210, title: '物料编码' }
+           , { field: 'PartNumber', width: 210, title: '物料名称' }
            , { field: 'PartSpec', width: 235, title: '规格' }
            , { field: 'figureNumber', width: 235, title: '图号' }
             , { field: 'PartMaterial', width: 235, title: '材料' }
@@ -31,11 +32,11 @@
                 var data = obj.data;
                 switch (obj.event) {
                     case 'add':
-                        figureNumber = data.figureNumber;
+                        ID = data.ID;
                         PartNumber = data.PartNumber;
                         PartSpec = data.PartSpec;
                         PartMaterial = data.PartMaterial;              
-                        layer_show('打印', '/Rms/Pbc?figureNumber=' + figureNumber + '&PartNumber=' + PartNumber + '&PartSpec=' + PartSpec + '&PartMaterial=' + PartMaterial, '1600', '800');
+                        layer_show('打印', '/Rms/Pbc?ID=' + ID + '&PartNumber=' + PartNumber + '&PartSpec=' + PartSpec + '&PartMaterial=' + PartMaterial, '1600', '800');
                         break;
                     case 'update':
                         PartNumber = data.PartNumber;
@@ -83,7 +84,8 @@
                         })
                     }
                , cols: [[
-                 { field: 'PartNumber', width: 210, title: '物料名称' }
+                 { field: 'ID', width: 210, title: '物料编码' }
+               , { field: 'PartNumber', width: 210, title: '物料名称' }
                , { field: 'PartSpec', width: 235, title: '规格' }
                , { field: 'figureNumber', width: 235, title: '图号' }
                , { field: 'PartMaterial', width: 235, title: '材料' }
@@ -94,11 +96,11 @@
                     var data = obj.data;
                     switch (obj.event) {
                         case 'add':
-                            figureNumber = data.figureNumber;
+                            ID = data.ID;
                             PartNumber = data.PartNumber;
                             PartSpec = data.PartSpec;
                             PartMaterial = data.PartMaterial;
-                            layer_show('打印', '/Rms/Pbc?figureNumber=' + figureNumber + '&PartNumber=' + PartNumber + '&PartSpec=' + PartSpec + '&PartMaterial=' + PartMaterial, '1600', '800');
+                            layer_show('打印', '/Rms/Pbc?ID=' + ID + '&PartNumber=' + PartNumber + '&PartSpec=' + PartSpec + '&PartMaterial=' + PartMaterial, '1600', '800');
                             break;
                         case 'update':
                             PartNumber = data.PartNumber;
@@ -151,7 +153,8 @@
                , page: true
                , limit: 15
                , cols: [[
-                 { field: 'PartNumber', width: 210, title: '物料名称' }
+                { field: 'ID', width: 210, title: '物料编码' }
+               , { field: 'PartNumber', width: 210, title: '物料名称' }
                , { field: 'PartSpec', width: 235, title: '规格' }
                , { field: 'figureNumber', width: 235, title: '图号' }
                , { field: 'PartMaterial', width: 235, title: '材料' }
@@ -162,11 +165,11 @@
                     var data = obj.data;
                     switch (obj.event) {
                         case 'add':
-                            figureNumber = data.figureNumber;
+                            ID = data.ID;
                             PartNumber = data.PartNumber;
                             PartSpec = data.PartSpec;
                             PartMaterial = data.PartMaterial;
-                            layer_show('打印', '/Rms/Pbc?figureNumber=' + figureNumber + '&PartNumber=' + PartNumber + '&PartSpec=' + PartSpec + '&PartMaterial=' + PartMaterial, '1600', '800');
+                            layer_show('打印', '/Rms/Pbc?ID=' + ID + '&PartNumber=' + PartNumber + '&PartSpec=' + PartSpec + '&PartMaterial=' + PartMaterial, '1600', '800');
                             break;
                         case 'update':
                             PartNumber = data.PartNumber;

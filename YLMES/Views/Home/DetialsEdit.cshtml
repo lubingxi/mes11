@@ -24,123 +24,27 @@
                 </div>
             </div>
             <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>产品规格：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["ProductSpec"]" placeholder="" id="tex2" name="ProductSpec"><i></i>
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>要求速度：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["P_Speed"]" placeholder="" id="tex3" name="P_Speed">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>电气要求：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["P_ElectricalRequirements"]" placeholder="" id="tex4" name="P_ElectricalRequirements">
-                </div>
-            </div>
-            <div class="row cl">                
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>工件主要材质：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["p_main_materialofworkpiece"]" placeholder="" id="tex5" name="p_main_materialofworkpiece">
-                </div>
-            </div>      
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>滚筒直径：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["P_RollerDiameter"]" placeholder="" id="tex7" name="P_RollerDiameter">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>滚筒表面处理形式：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["P_RollerSurface"]" placeholder="" id="tex8" name="P_RollerSurface">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>数量：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["Count"]" placeholder="" id="tex9" name="Count">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>是否动力：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <span class="select-box">
-                        <select name="ifDrive" class="select" id="select">
-                            <option value="0">请选择</option>
-                            <option value="1">动力</option>
-                            <option value="2">无动力</option>
-                        </select>
-                    </span>
-                </div>
-            </div>
-            <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>产品名称：</label>
                 <div class="formControls col-xs-8 col-sm-9">
                     <input type="text" class="input-text" value="@ViewData["ProductName"]" placeholder="" id="tex10" name="ProductName">
                 </div>
             </div>
             <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>主梁材料：</label>
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>产品规格：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["P_MainBeaMaterial"]" placeholder="" id="tex11" name="P_MainBeaMaterial">
+                    <input type="text" class="input-text" value="@ViewData["ProductSpec"]" placeholder="" id="tex2" name="ProductSpec"><i></i>
                 </div>
-            </div>
+            </div>                       
             <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>满负荷载重：</label>
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>数量：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["P_CarryingCapacity"]" placeholder="" id="tex12" name="P_CarryingCapacity">
+                    <input type="text" class="input-text" value="@ViewData["Count"]" placeholder="" id="tex9" name="Count">
                 </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>工作场所：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["P_EquipmentWorkplace"]" placeholder="" id="tex13" name="P_EquipmentWorkplace">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>工件最小和最大外形尺寸：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["P_ChildPartSpecRange"]" placeholder="" id="tex14" name="P_ChildPartSpecRange">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>工件来料输送方式：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["P_WorkpieceFeedingMode"]" placeholder="" id="tex15" name="P_WorkpieceFeedingMode">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>滚筒材质：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["P_RollerMaterial"]" placeholder="" id="tex16" name="P_RollerMaterial">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>滚筒输送形式：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" value="@ViewData["P_RollerTransferMode"]" placeholder="" id="tex17" name="P_RollerTransferMode">
-                </div>
-            </div>
+            </div>       
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>单位：</label>
                 <div class="formControls col-xs-8 col-sm-9">
                     <input type="text" class="input-text" value="@ViewData["Units"]" placeholder="" id="tex18" name="Units">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>工件重量：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" id="tex19" name="P_ChildPartWeight" class="input-text" value="@ViewData["P_ChildPartWeight"]">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>设计截止日期：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" onfocus="WdatePicker()" id="tex20" name="DueDay" class="input-text Wdate" value="@ViewData["DueDay"]">
                 </div>
             </div>
             <div class="row cl">

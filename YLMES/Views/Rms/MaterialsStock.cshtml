@@ -83,8 +83,8 @@
     <script src="~/js/awesomplete.min.js"></script>
     <script type="text/javascript">
         $(function () {
-            if ('@Session["name"]' == "") {
-                location.href = '/Home/Login'
+             if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
             }
         $(".awesomplete").bind("input propertychange", function () {
             var w = $("#CustomerName").val();
@@ -110,26 +110,26 @@
         $("#CustomerName").blur(function () {
             $("#mylist>*").remove();
         });
-        $("#search-input").bind("input propertychange", function () {
-            var s = $("#search-input").val();
-            if (s!= null&&s.length>2) {
-                $.ajax({
-                    type: "GET",
-                    url: '/Rms/VagueMaterialName',
-                    data: { MaterialName: $("#search-input").val() },
-                    dataType: "json",
-                    success: function (data) {
-                        if (data != null) {
-                            $("#Parlist>* ").remove();
-                            $.each(data, function (i, result) {
-                                $('#Parlist').append('<option>' + result.PartNumber + '</option>');
-                            });
-                            s = null;
-                        }
-                    }
-                });
-            }
-        });
+        //$("#search-input").bind("input propertychange", function () {
+        //    var s = $("#search-input").val();
+        //    if (s!= null&&s.length>2) {
+        //        $.ajax({
+        //            type: "GET",
+        //            url: '/Rms/VagueMaterialName',
+        //            data: { MaterialName: $("#search-input").val() },
+        //            dataType: "json",
+        //            success: function (data) {
+        //                if (data != null) {
+        //                    $("#Parlist>* ").remove();
+        //                    $.each(data, function (i, result) {
+        //                        $('#Parlist').append('<option>' + result.PartNumber + '</option>');
+        //                    });
+        //                    s = null;
+        //                }
+        //            }
+        //        });
+        //    }
+        //});
         $("#Name").bind("input propertychange", function () {
             var name = $("#Name").val();
             if (name != null) {
@@ -159,52 +159,67 @@
                 $(".layui-btn").click();
             }
         });
-        $(".tiptop a").click(function () {
-            $(".tip").fadeOut(200);
-        });
-
-        $(".sure").click(function () {
-            $(".tip").fadeOut(100);
-        });
-
-        $(".cancel").click(function () {
-            $(".tip").fadeOut(100);
-        });
         layui.use(['table', 'layer'], function () {
-            var table = layui.table, layer = layui.layer;                
+            var table = layui.table, layer = layui.layer;
                 var tableIns=table.render({
                    elem: '#tw'
                  , url: '/Rms/GetmaterialsStock'
-                 , page: true
-                 , limit: 15
+                 , toolbar: '#toolbarDemo'
                  , cols: [[
-                 { field: '项目名称', width: 210, title: '项目名称' }
-                 , { field: '图号', width: 180, title: '图号' }
-                 , { field: '物料名称', width: 230, title: '物料名称' }
+                 //{ field: '项目名称', width: 210, title: '项目名称' }
+                 //, { field: '图号', width: 180, title: '图号' },
+                 { field: '物料编码', width: 230, title: '物料编码' }
+                 ,{ field: '物料名称', width: 230, title: '物料名称' }
                  , { field: '物料规格', width: 200, title: '物料规格' }
                  , { field: '材质', width: 100, title: '材质' }
-                 , { field: '库存套数', width: 100, title: '库存套数' }
+                 //, { field: '库存套数', width: 100, title: '库存套数' }
                  , { field: '库存数量', width: 100, title: '库存数量' }
                  , { field: '仓库位置', width: 160, title: '仓库位置' }
-                 , { field: '入库时间', width: 160, title: '入库时间' }
-                 , { field: '操作员', width: 100, title: '操作员' }
+                // , { field: '入库时间', width: 160, title: '入库时间' }
+                 //, { field: '操作员', width: 100, title: '操作员' }
+                 , { field: 'right', width: 100, align: 'center', toolbar: '#barDemo' }
                  ]]
-                });          
+                });
+
             $(".layui-btn").click(function () {
-                var ProjectName = $("#CustomerName").val();
+              //  var ProjectName = $("#CustomerName").val();
                 var PartNumber = $("#search-input").val();
                 var CreatedTime = $(".dee").val();
                 var CreatedTimeEnd = $("#test2").val();
                 var CreatedBy = $("#Name").val();
+                var ID = $("#ID").val();
                 tableIns.reload({
                     where: {
-                        ProjectName: ProjectName
-                      , PartNumber: PartNumber                      
+                      //  ProjectName: ProjectName
+                       PartNumber: PartNumber
                       , CreatedTimeEnd: CreatedTimeEnd
                       , CreatedTime: CreatedTime
                       , CreatedBy: CreatedBy
+                      , ID: ID
                     }
                 });
+            });
+            table.on('tool(demo)', function (obj) {
+                var data = obj.data;
+                switch (obj.event) {
+                    case 'del':
+                        var regid = data.注册序号;
+                        layer.confirm("真的要删除吗？", function (index) {
+                            $.ajax({
+                                type: "post",
+                                url: '/Rms/DeleteMaterList',
+                                data: { reg: regid },
+                                dataType: "text",
+                                success: function (data) {
+                                    if (data == "true") {
+                                        alert('删除成功！');
+                                        $(".layui-btn").click();
+                                    }
+                                }
+                            });
+                        });
+                        break;
+                }
             });
         });
     })
@@ -219,19 +234,23 @@
         <span>位置：</span>
         <ul class="placeul">
             <li><a href="#">首页</a></li>
-            <li><a href="#">成品仓</a></li>
+            <li><a href="#">原材料仓</a></li>
             <li><a href="#">库存查询</a></li>
         </ul>
     </div>
     <div class="rightinfo">
         <div class="tools">
             <ul class="toolbar">
-                <li>
+                @*<li>
                     项目名称:
                     <div class="dropdown" id="search">
                         <input type="text" class="awesomplete" id="CustomerName" list="mylist" placeholder="请输入项目" style="width:130px">
                         <datalist id="mylist"></datalist>
                     </div>
+                </li>*@
+                <li>
+                    物料编码：
+                    <input class="ID" id="ID" type="text"  style="width: 100px;" />
                 </li>
                 <li>
                     入库日期：
@@ -240,7 +259,7 @@
                 </li>
                 <li>
                     到：
-                    <input class=" storageendtime" id="test2" type="text" onclick="WdatePicker()" style="width: 80px;" />
+                    <input class="storageendtime" id="test2" type="text" onclick="WdatePicker()" style="width: 80px;" />
                 </li>
 
                 <li>
@@ -265,6 +284,9 @@
 
 
     </div>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" id="del">删除</a>
+    </script>
     <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
     <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>

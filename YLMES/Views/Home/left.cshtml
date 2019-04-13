@@ -33,7 +33,6 @@
                                         $('#systemsti').after('<ul class="menuson" id="systemsetup"></ul>');
                                     }
                                     switch (result.FuncationName) {
-
                                         case "权限设置":
                                             $('#systemsetup').append(' <li><cite></cite><a href="#">权限设置</a><i hidden="hidden">/SystemSettings/Permissions</i></li>');
                                             break;
@@ -41,10 +40,10 @@
                                             $('#systemsetup').append('<li><cite></cite><a href="#">生产线</a><i hidden="hidden">/SystemSettings/ProductLine</i></li>');
                                             break;
                                         case "生产工位类型":
-                                            $('#systemsetup').append('<li><cite></cite><a href="#">生产工位类型</a><i hidden="hidden">/SystemSettings/LocationType</i></li>');
+                                            $('#systemsetup').append('<li><cite></cite><a href="#">生产工位类型</a><i hidden="hidden">/SystemSettings/ProductStation</i></li>');
                                             break;
                                         case "生产工位":
-                                            $('#systemsetup').append('<li><cite></cite><a href="#">生产工位</a><i hidden="hidden">/SystemSettings/ProductStation</i></li>');
+                                            $('#systemsetup').append('<li><cite></cite><a href="#">生产工位</a><i hidden="hidden">/SystemSettings/LocationType</i></li>');
                                             break;
                                         case "工件库":
                                             $('#systemsetup').append('<li><cite></cite><a href="#">工件库</a><i hidden="hidden">/SystemSettings/Process</i></li>');
@@ -101,6 +100,9 @@
                                         case "采购清单":
                                             $('#Purchase').append('<li><cite></cite><a href="#">采购清单</a><i hidden=hidden>/ApplierList/Purchaselist</i></li>');
                                             break;
+                                        case "外协合同":
+                                            $('#Purchase').append('<li><cite></cite><a href="#">外协合同</a><i hidden=hidden>/PurchasingManage/O_Contract</i></li>');
+                                            break;
                                         case "物料信息管理":
                                             $('#Purchase').append('<li><cite></cite><a href="#">物料信息管理</a><i hidden=hidden>/ApplierList/MaterialManagement</i></li>');
                                             break;
@@ -123,14 +125,20 @@
                                             break;
                                     }
                                     break;
-                                    //case "成品仓":
-                                    //    $('.leftmenu').append('<dd>  <div class="title">  <span><img src="../../images/leftico01.png" /></span>成品仓 </div> </dd>');
-                                    //    $('.leftmenu').append(' <ul class="menuson"></ul>');
-                                    //    switch (result.FuncationName) {
-                                    //        case "":
-                                    //            break;
-                                    //    }
-                                    //    break;
+                                case "成品仓":
+                                    if ($('#Finishd').attr("id") == undefined) {
+                                        $('.leftmenu').append('<dd><div class="title" id="Finishd">  <span><img src="../../images/leftico01.png" /></span>成品仓</div> </dd>');
+                                        $('#Finishd').after('<ul class="menuson" id="Finish"></ul>');
+                                    }
+                                    switch (result.FuncationName) {
+                                        case "成品注册":
+                                            $('#Finish').append('<li><cite></cite><a href="#">成品货位注册</a><i hidden=hidden>/FinishProductHouse/FinishedProductRegistration</i></li>')
+                                            break;
+                                        case "成品库存查询":
+                                            $('#Finish').append('<li><cite></cite><a href="#">成品库存查询</a><i hidden=hidden>/FinishProductHouse/FinishedGoods</i></li>')
+                                            break;
+                                    }
+                                    break;
                                 case "原材料仓":
                                     if ($('#Rawmaterialtitle').attr("id") == undefined) {
                                         $('.leftmenu').append('<dd><div class="title" id="Rawmaterialtitle">  <span><img src="../../images/leftico01.png" /></span>原材料仓 </div> </dd>');
@@ -143,6 +151,9 @@
                                         case "库存查询":
                                             $('#Rawmaterial').append('<li><cite></cite><a href="#">原材料库存查询</a><i hidden=hidden>/Rms/MaterialsStock</i></li>')
                                             break;
+                                        case "入库打单":
+                                            $('#Rawmaterial').append('<li><cite></cite><a href="#">入库打单</a><i hidden=hidden>/Financial/Make</i></li>')
+                                            break;
                                     }
                                     break;
                                 case "车间生产管理":
@@ -151,8 +162,14 @@
                                         $('#Workshoptitle').after('<ul class="menuson" id="Workshop"></ul>');
                                     }
                                     switch (result.FuncationName) {
-                                        case "包装":
-                                            $('#Workshop').append('<li><cite></cite><a href="#">包装</a><i hidden=hidden>/ProductionPlanning/Pack</i></li>')
+                                        case "工单包装":
+                                            $('#Workshop').append('<li><cite></cite><a href="#">工单包装</a><i hidden=hidden>/ProductionPlanning/Pack</i></li>')
+                                            break;
+                                        case "PDA扫描记录":
+                                            $('#Workshop').append('<li><cite></cite><a href="#">PDA扫描记录</a><i hidden=hidden>/ProductionPlanning/Scanrecord</i></li>')
+                                            break;
+                                        case "产品包装":
+                                            $('#Workshop').append('<li><cite></cite><a href="#">产品包装</a><i hidden=hidden>/ProductionPlanning/ProductPackaging</i></li>')
                                             break;
                                     }
                                     break;
@@ -166,23 +183,29 @@
                                             $("#task").append('<li><cite></cite><a href="#">任务分配</a><i hidden="hidden">/TaskManagement/TaskAllocation</i></li>');
                                             break;
                                         case "我的任务":
-                                            if (result.Manager == "朱小梅") {
+                                            if (result.EmployeeName == "朱小梅" || result.EmployeeName == "肖建") {
                                                 $("#task").append('<li><cite></cite><a href="#">我的任务</a><i hidden="hidden">/TaskManagement/PTask</i></li>');
                                             }
-                                            else if (result.Manager == "杨心盛") {
+                                            else if (result.DepartMent == "财务部") {
                                                 $("#task").append('<li><cite></cite><a href="#">我的任务</a><i hidden="hidden">/TaskManagement/PM_ContractReceivablesMain</i></li>');
+                                            }
+                                            else if (result.DepartMent == "采购部") {
+                                                $("#task").append('<li><cite></cite><a href="#">我的任务</a><i hidden="hidden">/TaskManagement/ProcurementTask</i></li>');
                                             }
                                             else {
                                                 $("#task").append('<li><cite></cite><a href="#">我的任务</a><i hidden="hidden">/TaskManagement/MyTask</i></li>');
                                             }
                                             break;
                                         case "已完成的任务":
-                                            if (result.Manager == "杨心盛") {
+                                            if (result.DepartMent == "财务部") {
                                                 $("#task").append('<li><cite></cite><a href="#">已完成的任务</a><i hidden="hidden">/TaskManagement/FinishTask</i></li>');
                                             }
-                                            else if (result.Manager == "朱小梅")
+                                            else if (result.EmployeeName == "朱小梅")
                                             {
                                                 $("#task").append('<li><cite></cite><a href="#">已完成的任务</a><i hidden="hidden">/TaskManagement/FinishPTask</i></li>');
+                                            }
+                                            else if (result.DepartMent == "采购部") {
+                                                $("#task").append('<li><cite></cite><a href="#">已完成的任务</a><i hidden="hidden">/TaskManagement/CompleteTheProcurementTask</i></li>');
                                             }
                                             else {
                                                 $("#task").append('<li><cite></cite><a href="#">已完成的任务</a><i hidden="hidden">/TaskManagement/CompletedTasks</i></li>');
@@ -196,7 +219,6 @@
                                         $('#statisticaltitle').after('<ul class="menuson" id="stati"></ul>');
                                     }
                                     switch (result.FuncationName) {
-
                                         case "任务统计报表":
                                             $('#stati').append('<li><cite></cite><a href="#">任务统计报表</a><i hidden="hidden">/Statistical/Report</i></li>');
                                             break;
@@ -218,8 +240,9 @@
                                     }
                                     switch (result.FuncationName) {
                                         case "上传图纸":
-                                            $('#technology').append('<li><cite></cite><a href="#">上传图纸</a><i hidden=hidden>/TechnicalDepartment/UploadTheDrawings</i></li>');
+                                            $('#technology').append('<li><cite></cite><a href="#">上传图纸</a><i hidden=hidden>/TechnicalDepartment/FileManagement</i></li>');
                                             break;
+                                            //UploadTheDrawings
                                     }
                                     break;
                                 case "售后":
@@ -244,9 +267,36 @@
                                             break;
                                     }
                                     break;
+                                case "财务管理":
+                                    if ($('#caiwutitle').attr("id") == undefined) {
+                                        $('.leftmenu').append('<dd><div class="title" id="caiwutitle">  <span><img src="../../images/leftico01.png" /></span>财务管理 </div> </dd>');
+                                        $('#caiwutitle').after('<ul class="menuson" id="caiwu"></ul>');
+                                    }
+                                    switch (result.FuncationName) {
+                                        case "科目类别":
+                                            $('#caiwu').append('<li><cite></cite><a href="#">科目类别</a><i hidden=hidden>/Financial/SubjectType</i></li>');
+                                            break;
+                                        case "科目代码":
+                                            $('#caiwu').append('<li><cite></cite><a href="#">科目</a><i hidden=hidden>/Financial/Accounting</i></li>');
+                                            break;
+                                        //case "费用部门":
+                                        //    $('#caiwu').append('<li><cite></cite><a href="#">费用部门</a><i hidden=hidden>/Financial/Dept</i></li>');
+                                        //    break;
+                                        case "费用报销单":
+                                            $('#caiwu').append('<li><cite></cite><a href="#">费用报销单</a><i hidden=hidden>/Financial/Laiming</i></li>');
+                                            break;
+                                        case "凭证录入":
+                                            $('#caiwu').append('<li><cite></cite><a href="#">凭证录入</a><i hidden=hidden>/Financial/Laimingqr</i></li>');
+                                            break;
+                                        case "费用报销单审核":
+                                            $('#caiwu').append('<li><cite></cite><a href="#">费用报销单审核</a><i hidden=hidden>/Financial/Laimingsh</i></li>');
+                                            break;
+                                        case "采购入库账单": 
+                                            $('#caiwu').append('<li><cite></cite><a href="#">采购入库账单</a><i hidden=hidden>/Financial/CAccounting</i></li>');
+                                            break;
+                                    }
+                                    break;
                             }
-
-
                         });
                     }
                 }
@@ -270,7 +320,6 @@
             }
         })
     </script>
-
 
 </head>
 

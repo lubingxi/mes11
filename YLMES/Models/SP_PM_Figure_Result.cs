@@ -17,6 +17,6 @@ namespace YLMES.Models
         public string 文件夹 { get; set; }
         public string 文件名 { get; set; }
         public string 建立人 { get; set; }
-        public Nullable<System.DateTime> 建立时间 { get; set; }
+        public System.DateTime 建立时间 { get; set; }
     }
 }

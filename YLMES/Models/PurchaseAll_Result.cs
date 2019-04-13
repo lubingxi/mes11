@@ -29,6 +29,7 @@ namespace YLMES.Models
         public string ListType { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedTime { get; set; }
+        public string Spec { get; set; }
         public string TaskName { get; set; }
         public string PartNumber { get; set; }
         public string PartSpec { get; set; }

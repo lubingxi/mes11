@@ -47,5 +47,6 @@ namespace YLMES.Models
         public string 状态 { get; set; }
         public string 是否动力 { get; set; }
         public string 订单状态 { get; set; }
+        public string 拆分 { get; set; }
     }
 }

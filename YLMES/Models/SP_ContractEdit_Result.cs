@@ -17,7 +17,7 @@ namespace YLMES.Models
         public string CustomerName { get; set; }
         public string ContractNumber { get; set; }
         public string 合同签订日期 { get; set; }
-        public Nullable<decimal> 合同金额 { get; set; }
+        public string 合同金额 { get; set; }
         public Nullable<decimal> 收款金额 { get; set; }
         public string 创建时间 { get; set; }
         public string 收款方式 { get; set; }
@@ -36,5 +36,6 @@ namespace YLMES.Models
         public string 验收金额 { get; set; }
         public string 质保金额 { get; set; }
         public Nullable<int> 客户id { get; set; }
+        public string 是否客户合同 { get; set; }
     }
 }

@@ -1,0 +1,84 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>文件上传</title>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/base64ToImage_files/layout.css" rel="stylesheet" />
+    <link href="~/base64ToImage_files/tools.css" rel="stylesheet" />
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="applicable-device" content="pc" />
+    <meta name="viewport" content="width=1200, maximum-scale=1.0, user-scalable=1" />
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script language="javascript" src="~/js/jquery-1.4.4.min.js"></script>
+    @*<script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>*@
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script language="javascript" src="~/js/jquery.jqprint-0.3.js"></script>
+    <script src="~/Scripts/jquery.form.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }
+        });
+    </script>
+</head>
+<body onselectstart="return false;">
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">技术部</a></li>
+            <li><a href="#">上传工艺文件</a></li>
+        </ul>
+    </div>
+    <div class="rightinfo">
+        @using (Html.BeginForm("UploadProcesd", "TaskManagement", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="tools">
+                <ul class="toolbar">
+                    <li>
+                        部件序号:
+                        <input type="text" name="PartId" id="rn" style="width:50px" value="@ViewData["PartId"]" readonly />
+                    </li>
+                    <li>
+                        部件名称:
+                        <input type="text" name="PartNumber" id="rn" style="width:100px" value="@ViewData["PartNumber"]" readonly />
+                    </li>
+                    <li>
+                        产品名称:
+                        <input type="text" name="ProductName" id="rn" style="width:200px" value="@ViewData["ProductName"]" readonly />
+                    </li>
+                    <li>
+                        产品规格:
+                        <input type="text" name="ProductSpec" id="rn" style="width:200px" value="@ViewData["ProductSpec"]" readonly />
+                    </li>
+                    @*<li>
+                        流程引用:
+                        <input type="text" name="Route" id="rn" style="width:100px" value="@ViewData["Route"]" readonly />
+                    </li>*@
+                    <li>
+                        流程名称:
+                        <input type="text" name="ProcessName" id="ProcessName" style="width:150px" value="@ViewData["ProcessName"]" readonly />
+                    </li>
+                    <li>
+                        上传工艺文件路径:<input type="file" name="files" id="files" style="width:300px;height:32px" />
+                    </li>
+                </ul>
+                <button type="submit" class="layui-btn">上传工艺文件</button>
+            </div>
+        }
+    </div>
+
+</body>
+
+</html></script>

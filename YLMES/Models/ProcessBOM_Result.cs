@@ -17,6 +17,7 @@ namespace YLMES.Models
         public string 工件编码 { get; set; }
         public string 工件规格 { get; set; }
         public string 工件材料 { get; set; }
+        public int 子件序号 { get; set; }
         public string 子件编码 { get; set; }
         public string 子件规格 { get; set; }
         public string 子件材料 { get; set; }

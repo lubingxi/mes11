@@ -96,5 +96,8 @@ namespace YLMES.Models
         public string 售后基准时间 { get; set; }
         public string 售后确认时间 { get; set; }
         public string 售后完成时间 { get; set; }
+        public Nullable<double> 数量 { get; set; }
+        public string 单位 { get; set; }
+        public string 共用支架脚 { get; set; }
     }
 }

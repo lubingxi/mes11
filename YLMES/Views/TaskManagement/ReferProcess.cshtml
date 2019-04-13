@@ -1,0 +1,79 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+    <div class="layui-form" id="form-article-add" style="margin-top:20px; margin-left: 300px">
+        <div class="layui-form-item">
+            <label class="layui-form-label">物料编号</label>
+            <div class="layui-input-block" style="width:450px">
+                <input type="text" required name="Materid" id="Materid" value="@ViewData["Partid"]" autocomplete="off" class="layui-input" style="width:400px;display:inline-block" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">流程名称</label>
+            <div class="layui-input-block" style="width:400px">
+                <select name="Category" id="Category" lay-verify="" lay-filter="Category" lay-search></select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn sub1_1" style="margin-left:100px" lay-filter="demo1" lay-submit="">立即提交</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use(['layer', 'form', 'jquery'], function () {
+            if ('@Session["name"]' == "") {
+                window.top.location = '/Home/Login';
+            }
+                var form = layui.form, layer = layui.layer, $ = layui.jquery;
+                form.render();
+                $.ajax({
+                    type: "POST",
+                    url: '/TaskManagement/getRoute',
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != null) {
+                            var list = data["data"];
+                            $.each(list, function (i, result) {
+                                $('#Category').append('<option value=' + result.RouteName + '>' + result.RouteName + '</option>');
+                            });                         
+                            form.render();
+                        }
+                    }
+                });
+                $(".sub1_1").click(function () {
+                    var Materid = $("#Materid").val();
+                    var route = $("#Category").val();
+                    $.ajax({
+                        url: "/TaskManagement/ReferProcessAdd",
+                        type: "post",
+                        data: { mid: Materid, rt: route },
+                        traditional: true,
+                        dataType: "text",
+                        success: function (data) {
+                            if (data == "true") {                                
+                                    layer.msg("添加成功");
+                                    window.history.go(-1);                                
+                            }
+                        }
+                    });
+                })
+            });
+    </script>
+</body>
+
+</html>

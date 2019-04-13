@@ -43,14 +43,14 @@
             layui.use(['table', 'layer'], function () {
                 var table = layui.table, layer = layui.layer;
                 var tableIns=table.render({
-                        elem: '#tw'
-                        , done: function () {
-                            $("tr a").hide()
-                            $("tr").hover(function () {
-                                $(this).children().last().children().children().toggle();
-                            })
-                        }
-                    , url:'/TaskManagement/Get_Datas'
+                   elem: '#tw'
+                        //, done: function () {
+                        //    $("tr a").hide()
+                        //    $("tr").hover(function () {
+                        //        $(this).children().last().children().children().toggle();
+                        //    })
+                        //}
+                   , url:'/TaskManagement/Get_Datas'
                    , page: true
                    , limit: 15
                    , cols: [[
@@ -80,6 +80,9 @@
                     var endtime = $(".endtime").val();
                     var rs = $("#ReviewStatus").val();
                     tableIns.reload({
+                        page: {
+                            curr: 1
+                        },
                         where: {
                             CName: CuName
                             , CNumber: CNumber

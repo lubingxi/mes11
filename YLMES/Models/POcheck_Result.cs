@@ -16,5 +16,7 @@ namespace YLMES.Models
         public string FuncationName { get; set; }
         public string Catelog { get; set; }
         public string Manager { get; set; }
+        public string DepartMent { get; set; }
+        public string EmployeeName { get; set; }
     }
 }

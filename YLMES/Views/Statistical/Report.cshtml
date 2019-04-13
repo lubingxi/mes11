@@ -71,6 +71,9 @@
             });
             $("#PurchaselistSel").click(function () {              
                 tableIns.reload({
+                    page: {
+                        curr: 1
+                    },
                     where: {
                         ProjectName: ProjectName
                         , Name: Name

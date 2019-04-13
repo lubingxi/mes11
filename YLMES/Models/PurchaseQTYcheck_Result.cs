@@ -13,7 +13,7 @@ namespace YLMES.Models
     
     public partial class PurchaseQTYcheck_Result
     {
-        public Nullable<int> ID { get; set; }
+        public int ID { get; set; }
         public Nullable<int> 任务编号 { get; set; }
         public string 图号 { get; set; }
         public Nullable<int> 部件编号 { get; set; }

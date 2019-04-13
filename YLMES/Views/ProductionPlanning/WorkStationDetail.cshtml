@@ -11,7 +11,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>友力信息管理系统</title>
     <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
-    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
     <link href="~/css/style.css" rel="stylesheet" type="text/css" />
     <link href="~/layui/css/layui.css" rel="stylesheet" />
     <script type="text/javascript" src="../../js/jquery.js"></script>
@@ -21,6 +20,16 @@
             $("#addC").click(function () {
                 var url = '/ProductionPlanning/StationDetails';
                 layer_show('新增工位类型信息', url,'800', '600');
+            });
+            $('#station').click(function () {
+                var url = '/SystemSettings/LocationType';
+                var index = layer.open({
+                    type: 2,
+                    title: "生产线信息",
+                    content: url,
+                    maxmin: true
+                });
+                layer.full(index);
             });
             layui.use(['table', 'layer'], function () {
                 var table = layui.table, layer = layui.layer;                  
@@ -127,7 +136,11 @@
                         <img src="../../images/t01.png" />
                     </span><a target="rightFrame">新增工位信息</a><i hidden=hidden id="u"></i>
                 </li>  
-                
+                <li id="station">
+                    <span>
+                        <img src="../../images/t01.png" />
+                    </span><a target="rightFrame">工位查询</a><i hidden=hidden id="u"></i>
+                </li>  
             </ul>
         </div>
         <table class="tablelist" id="tw" lay-filter="demo"></table>

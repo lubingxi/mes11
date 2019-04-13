@@ -71,6 +71,9 @@
                         var endtime = $(".endtime").val();
                         '/ProductionPlanning/Get_PPd?CName=' + CuName + '&CNumber=' + CNumber + '&strattime=' + strattime + '&endtime=' + endtime
                         tableIns.reload({
+                            page: {
+                                curr: 1
+                            },
                             where: {
                                 CName: CuName
                                 , CNumber: CNumber
