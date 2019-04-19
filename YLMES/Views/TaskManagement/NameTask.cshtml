@@ -513,6 +513,7 @@
         }
         $("#OK").click(function () {
             var taskid = '@ViewData["TaskID"]';
+            var cnumber = '@ViewData["ContractNumber"]';
             if ('@ViewData["ifDrive"]' == "设计部确认机械设计分配") {
                 $.ajax({
                     url: "/TaskManagement/UpdateMachineDesignConfirm",
@@ -616,7 +617,7 @@
                 else {
                     $.ajax({
                         url: "/TaskManagement/UpdateIssueCompleted",
-                        data: { Taskid: taskid },
+                        data: { Taskid: taskid, cnumber: cnumber },
                         type: "post",
                         dataType: "text",
                         success: function (data) {

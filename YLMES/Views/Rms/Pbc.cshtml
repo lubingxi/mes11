@@ -209,7 +209,7 @@
                 <li class="ads" id="addD">
                     <span>
                         <img src="../../images/t01.png" />
-                    </span><a target="rightFrame" href="javascript:;" onclick="admin_add1('新增仓库名', '/Rms/CkAdd', '400', '200')">新增仓库名</a>
+                    </span><a target="rightFrame" href="javascript:;" onclick="admin_add1('新增仓库信息', '/Warehouse/Warehousesetup', '1200', '600')">新增仓库信息</a>
                 </li>
                 <li>
                     仓库名： @Html.DropDownList("Ck", new SelectList(ViewBag.ck, "ID", "Name"), "请选择", new { @class = "ck",@ID = "ck" })
@@ -219,11 +219,11 @@
                         <img src="../../images/t03.png" />
                     </span><a target="rightFrame" href="javascript:;" onclick="Delete1()">仓库删除</a>
                 </li> 
-                <li class="ads" id="addD">
+                @*<li class="ads" id="addD">
                     <span>
                         <img src="../../images/t01.png" />
                     </span><a target="rightFrame" href="javascript:;" onclick="admin_add2('新增库区名', '/Rms/KqAdd', '400', '200')">新增库区名</a>
-                </li>  
+                </li>*@  
                 <li>
                     <div id="kq">
                         @Html.Partial("kqd")                        
@@ -234,11 +234,11 @@
                         <img src="../../images/t03.png" />
                     </span><a target="rightFrame" href="javascript:;" onclick="Delete2()">库区删除</a>
                 </li>
-                <li class="ads" id="addD">
+                @*<li class="ads" id="addD">
                     <span>
                         <img src="../../images/t01.png" />
                     </span><a target="rightFrame" href="javascript:;" onclick="admin_add3('新增货区名', '/Rms/KwAdd', '400', '200')">新增货区名</a>
-                </li>
+                </li>*@
                 <li>
                     <div id="kw">
                         @Html.Partial("kwd")
@@ -249,11 +249,11 @@
                         <img src="../../images/t03.png" />
                     </span><a target="rightFrame" href="javascript:;" onclick="Delete3()">货区删除</a>
                 </li>
-                <li class="ads" id="addD">
+                @*<li class="ads" id="addD">
                     <span>
                         <img src="../../images/t01.png" />
                     </span><a target="rightFrame" href="javascript:;" onclick="admin_add4('新增货位名', '/Rms/HwAdd', '400', '200')">新增货位名</a>
-                </li>
+                </li>*@
                 <li>
                     <div id="hw">
                         @Html.Partial("hwd")
@@ -306,9 +306,18 @@
         <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
         <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
         <script type="text/javascript">
-            function admin_add1(title, url, w, h) {
-                layer_show(title, url, w, h);
-            }
+            $(function () {
+                $('#addD').click(function () {
+                    var url = '/Warehouse/Warehousesetup';
+                    var index = layer.open({
+                        type: 2,
+                        content: url,
+                        title: "新增库位信息",
+                        maxmin: true
+                    });
+                    layer.full(index);
+                });               
+            });
             function admin_add2(title, url, w, h) {
                 layer_show(title, url, w, h);
             }

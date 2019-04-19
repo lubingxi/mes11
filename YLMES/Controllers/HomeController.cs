@@ -238,16 +238,15 @@ namespace YlMES.Controllers
                     con.StatusID = "销售部提交合同至财务";
                     con.AuditThrough = "";
                     ys.SaveChanges();
-                    //int s = Sms.InsertSmsInfos("财务部", cnum,name);
-                    //if (s > 0)
-                    //{
-                    //    return Content("true");
-                    //}
-                    //else
-                    //{
-                    //    return Content("false");
-                    //}
-                    return Content("true");
+                    int s = Sms.CheckSms("财务部", cnum);
+                    if (s > 0)
+                    {
+                        return Content("true");
+                    }
+                    else
+                    {
+                        return Content("false");
+                    }                  
                 }              
             }
             catch (Exception ex)
@@ -1187,16 +1186,15 @@ namespace YlMES.Controllers
                     var list = ys.C_Contract.Where(c => c.ID == i).FirstOrDefault();
                     if (list.StatusID == "财务部合同审核通过")
                     {
-                        //int s = Sms.CheckSms("订单中心", cnum);
-                        //if (s > 0)
-                        //{
-                        //    return Content("true");
-                        //}
-                        //else
-                        //{
-                        //    return Content("false");
-                        //}
-                        return Content("true");
+                        int s = Sms.CheckSms("订单中心", cnum);
+                        if (s > 0)
+                        {
+                            return Content("true");
+                        }
+                        else
+                        {
+                            return Content("false");
+                        }                      
                     }
                     else
                     {
@@ -1625,7 +1623,7 @@ namespace YlMES.Controllers
                 var list = ys.Database.SqlQuery<ChecSmsInfos_Result>("exec ChecSmsInfos").ToList();
                 foreach (var csi in list)
                 {
-                    Sms.CheckSms(csi.Dept, csi.Number);
+                    Sms.CheckSms2(csi.SendName,csi.Number,csi.Tel,csi.SendTime);
                 }
                 return Content("true");
             }

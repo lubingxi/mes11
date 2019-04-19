@@ -1,0 +1,261 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>友力信息管理系统</title>
+    <script src="~/js/vue.js"></script>
+    <script src="~/js/axios.js"></script>
+    <script src="~/js/elemenui.js"></script>
+    <link href="~/css/elemenui.css" rel="stylesheet" />
+    <script type="text/javascript">
+        "use script"
+
+        window.onload = function () {
+            var vm = new Vue({
+                el: '#vues',
+                data: {
+                    tableData: []
+                    , restaurants: []
+                    , options: []
+                    , loading: true
+                    , search: ''
+                    , options2: []
+                    , selectvalue: []
+                    , seData: []
+                    , color: localStorage.color
+                    , sty: {
+                        color: localStorage.color,
+                        border: localStorage.color
+                    }
+                },
+                methods: {
+                    get() {
+                        axios("/TaskManagement/CheckInventorys").then((res) => {
+                            var { Location } = res.data
+                            vm.tableData = Location
+                            vm.seData = Location
+                            Location.filter(x => { this.restaurants.push({ "value": x.Reservoir, "address": x.CargoArea }) })
+                            vm.loading = false
+
+                        });
+                    }
+                    , option() {
+                        axios("/TaskManagement/LinkageShows").then((res) => {
+                            var { Reservoir } = res.data
+                            this.options = Reservoir.map(x => {
+                                return {
+                                    "value": x.Reservoir,
+                                    "label": x.Reservoir,
+                                    children:
+                                        [{
+                                            "value": x.CargoArea,
+                                            "label": x.CargoArea,
+                                            children:
+                                                [{
+                                                    "value": x.id, "label": x.Goods
+                                                }]
+                                        }]
+                                }
+                            })
+                            this.options = this.arr(this.options)
+                        });
+                    },
+                    colorChange(a) {
+                        localStorage.color = a;
+                        var c = document.querySelectorAll(".el-input__inner");
+                        var d = document.querySelectorAll(".el-button");
+                        c.forEach(function (m) {
+                            m.style.cssText = "color:" + a
+                            m.addEventListener("focus", function () {
+                                m.style.border = "1px solid " + a
+                            })
+                            m.addEventListener("blur", function () {
+                                m.style.border = ""
+                            })
+                        })
+                        d.forEach(function (s) {
+                            s.style.background = a
+                        })
+                        this.sty.color = a
+                    },
+                    arr(a) {
+                        var d = a[0];
+                        const ccc = [];
+                        a.forEach((x, index) => {
+                            if (x.children != undefined) {
+                                if (index > 0) {
+                                    if (String(x.value) == String(d.value)) {
+                                        d.children = d.children.concat(x.children)
+                                        d.children = vm.arr(d.children)
+                                        if (a.length - 1 == index) {
+                                            ccc.push(d)
+                                        }
+                                    } else {
+                                        ccc.push(d)
+                                        d = x
+                                        if (a.length - 1 == index) {
+                                            ccc.push(d)
+                                        }
+                                    }
+                                }
+                            } else {
+                                ccc.push(x)
+                            }
+                        })
+                        return ccc
+                    }
+                    , querySearch(queryString, cb) {
+                        axios.post("/TaskManagement/CheckInventorys", { Reservoir: queryString }).then(function (res) {
+                            var { Location } = res.data
+                            vm.tableData = Location
+                        });
+                        var restaurants = this.restaurants;
+                        console.log(restaurants);
+                        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+                        // 调用 cb 返回建议列表的数据
+                        cb(results);
+                    }
+                    , Search() {
+                        this.selectvalue[2] == undefined ?
+                            this.tableData = this.seData
+                            :
+                            this.tableData = this.seData.filter(x => x.id == this.selectvalue[2])
+                    }
+                    , createFilter(queryString) {
+                        return (restaurant) => {
+                            return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+                        };
+                    }                    
+                    //, rowclick(row) {
+                    //    alert(row.id);
+                    //}
+                    , handleClick(row) {                       
+                        vm.$message({
+                            message: '修改成功！',
+                            type: 'success',
+                            icon: true
+                        });
+                    }
+                }, created: function () {
+                    this.get();
+                    this.option();
+                },
+                updated: function () {
+                    this.colorChange(localStorage.color)
+                }
+
+            })
+
+
+        }
+
+
+
+    </script>
+    <style>
+        .demo-table-expand {
+            font-size: 0;
+        }
+
+            .demo-table-expand label {
+                width: 90px;
+                color: #99a9bf;
+            }
+
+            .demo-table-expand .el-form-item {
+                margin-right: 0;
+                margin-bottom: 0;
+                width: 50%;
+            }
+    </style>
+</head>
+<body>
+    <div id="vues" >
+        <template>
+            <el-breadcrumb separator-class="el-icon-arrow-right" :style=sty>
+                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item>成品仓</el-breadcrumb-item>
+                <el-breadcrumb-item>成品库存信息</el-breadcrumb-item>
+            </el-breadcrumb>
+            <div id="cascarder" :style=sty>
+                联动查询:<el-cascader :options="options"
+                                  style="margin:15px;"
+                                  v-model="selectvalue"
+                                  :show-all-levels="true"
+                                  clearable></el-cascader>
+                <el-button type="success"
+                           @@click="Search">查询</el-button>               
+            </div>
+            <el-color-picker v-model="color" @@change="colorChange"></el-color-picker>
+            <el-table style="margin:0 auto;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)"
+                      v-loading="loading"
+                      element-loading-spinner="el-icon-loading"
+                      element-loading-background="rgba(0, 0, 0, 0.8)"
+                      :data="tableData"
+                      @@row-click="rowclick">
+                <el-table-column type="expand">
+                    <template slot-scope="props">
+                        <el-form label-position="left" inline class="demo-table-expand">
+                            <el-form-item label="编号">
+                                <span>{{ props.row.id }}</span>
+                            </el-form-item>
+                            <el-form-item label="库区">
+                                <span>{{ props.row.Reservoir }}</span>
+                            </el-form-item>
+                            <el-form-item label="货区">
+                                <span>{{ props.row.CargoArea }}</span>
+                            </el-form-item>
+                            <el-form-item label="货位">
+                                <span>{{ props.row.Goods }}</span>
+                            </el-form-item>
+                            <el-form-item label="项目编号">
+                                <span>{{ props.row.ContractNumber }}</span>
+                            </el-form-item>
+
+                        </el-form>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="Reservoir" align="center"
+                                 label="库区">
+                    <template slot-scope="scope">
+                        <el-input v-model="scope.row.Reservoir" style="vertical-align:middle;text-align:center;" />
+                    </template>
+                </el-table-column>
+                <el-table-column prop="CargoArea" align="center"
+                                 label="货区">
+                </el-table-column>
+                <el-table-column prop="Goods" align="center"
+                                 label="货位">
+                </el-table-column>
+                <el-table-column prop="ContractNumber" align="center"
+                                 label="项目编号">
+                </el-table-column>
+                @*<el-table-column width="200" align="center" label="操作">
+                    <template slot-scope="scope">
+                        <el-button @@click="handleClick(scope.row)" type="primary">修改</el-button>
+                        
+                    </template>
+                </el-table-column>*@
+                <el-table-column>
+                    <template slot="header" slot-scope="scope">
+                        <el-autocomplete popper-class="my-autocomplete"
+                                         v-model="search"
+                                         :fetch-suggestions="querySearch"
+                                         placeholder="输入项目编号"
+                                         clearable
+                                         prefix-icon="el-icon-search">
+                        </el-autocomplete>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+        </template>
+    </div>
+</body>
+</html>

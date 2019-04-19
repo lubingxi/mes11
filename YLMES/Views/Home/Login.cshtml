@@ -16,6 +16,8 @@
 
     <script language="javascript">
         $(function () {
+            $('.loginuser').val(localStorage.sitename);
+            $('.loginpwd').val(localStorage.sitepwd);
             $('.loginbox').css({ 'position': 'absolute', 'left': ($(window).width() - 692) / 2 });
             $(window).resize(function () {
                 $('.loginbox').css({ 'position': 'absolute', 'left': ($(window).width() - 692) / 2 });
@@ -29,6 +31,8 @@
                 } else if (pwd == '') {
                     ErroAlert('请输入密码');
                 } else {
+                    localStorage.sitename = login;
+                    localStorage.sitepwd = pwd;
                     $.ajax({
                         url: "/Home/VaLogin",
                         data: { username: login, password: pwd },
@@ -48,8 +52,7 @@
                 }
             });
             $(document).keydown(function (e) {
-                if (e.keyCode == 13) {
-                   
+                if (e.keyCode == 13) {                   
                     var login = $('.loginuser').val().trim();
                     var pwd = $('.loginpwd').val().trim();
                     if (login == '') {
@@ -57,6 +60,8 @@
                     } else if (pwd == '') {
                         ErroAlert('请输入密码');
                     } else {
+                        localStorage.sitename = login;
+                        localStorage.sitepwd = pwd;
                         $.ajax({
                             url: "/Home/VaLogin",
                             data: { username: login, password: pwd },
@@ -106,9 +111,9 @@
         <div class="loginbox">
 
             <ul>
-                <li><input name="" type="text" class="loginuser" value="" placeholder="帐号" /></li>
+                <li><input name="" type="text" class="loginuser"  value="" placeholder="帐号" /></li>
                 <li><input name="" type="password" class="loginpwd" value="" placeholder="密码" /></li>
-                <li><input name="" type="button" class="loginbtn" value="登录" /><label><input name="" type="checkbox" value="" checked="checked" />记住密码</label><label><a href="#">忘记密码？</a></label></li>
+                <li><input name="" type="button" class="loginbtn" value="登录" /></li>
             </ul>
 
         </div>

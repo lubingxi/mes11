@@ -34,27 +34,27 @@
         <span>位置：</span>
         <ul class="placeul">
             <li><a href="#">首页</a></li>
-            <li><a href="#">采购管理</a></li>
-            <li><a href="#">新增供应商信息</a></li>
+            <li><a href="#">仓库管理</a></li>
+            <li><a href="#">新增仓库信息</a></li>
         </ul>
     </div>
     <form class="layui-form" id="form-article-add" style="margin-top:20px">
         <div class="layui-form-item">
             <label class="layui-form-label">库区名称</label>
             <div class="layui-input-block" style="width:200px">
-                <input type="text" lay-verify="required" name="WHArea" placeholder="请输入供应商名称" autocomplete="off" class="layui-input">
+                <input type="text" lay-verify="required" name="WHArea" placeholder="请输入库区名称" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">库区描述</label>
             <div class="layui-input-block" style="width:200px">
-                <input type="text" lay-verify="required" name="Description" placeholder="请输入供应商地址" autocomplete="off" class="layui-input">
+                <input type="text" lay-verify="required" name="Description" placeholder="请输入库区描述" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">仓库名</label>
             <div class="layui-input-block" style="width:200px">
-                <input type="text" lay-verify="required" name="WHName" readonly="readonly" id="name" autocomplete="off" class="layui-input">
+                <input type="text" lay-verify="required" name="WHName" readonly="readonly" id="name" autocomplete="off" class="layui-input" value="@ViewData["name"]">
             </div>
         </div>
 
@@ -65,9 +65,6 @@
         </div>
     </form>
     <script>
-        $(function () {
-            $('#name').val(getQueryString().Name);
-        });
         function sub() {
            
             $("#form-article-add").ajaxSubmit({

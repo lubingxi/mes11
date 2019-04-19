@@ -312,44 +312,8 @@ namespace YlMES.Controllers
             }
 
         }
-        public ActionResult kqwAdd()
-        {
-            try
-            {
-                string kq = Request["kq"].ToString();
-                PM_WHArea c1 = new PM_WHArea();
-                c1.WHArea = kq;
-                YLMES_newEntities ys = new YLMES_newEntities();
-                ys.PM_WHArea.Add(c1);
-                ys.SaveChanges();
-                return Content("true");
-            }
-            catch (Exception ex)
-            {
-                return Content("false");
-            }
-        }
-        public ActionResult KqAdd()
-        {
-            return View();
-        }
-        public ActionResult kwwAdd()
-        {
-            try
-            {
-                string kw = Request["kw"].ToString();
-                PM_WHStorageLocation c1 = new PM_WHStorageLocation();
-                c1.Name = kw;
-                YLMES_newEntities ys = new YLMES_newEntities();
-                ys.PM_WHStorageLocation.Add(c1);
-                ys.SaveChanges();
-                return Content("true");
-            }
-            catch (Exception ex)
-            {
-                return Content("false");
-            }
-        }
+  
+    
         public ActionResult KwAdd()
         {
             return View();
@@ -746,7 +710,7 @@ namespace YlMES.Controllers
         {
             return View();
         }
-        public JsonResult GetmaterialsStock(string ProjectName, string PartNumber,string CreatedTimeEnd, string CreatedTime, string CreatedBy,string ID)
+        public JsonResult GetmaterialsStock(string ProjectName, string PartNumber,string CreatedTimeEnd, string CreatedTime, string CreatedBy,string ID,string cang)
         {
             if (ProjectName == null)
             {
@@ -772,9 +736,13 @@ namespace YlMES.Controllers
             {
                 ID = "";
             }
+            if (cang == null)
+            {
+                cang = "";
+            }
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-                SqlParameter[] parms = new SqlParameter[7];
+                SqlParameter[] parms = new SqlParameter[8];
                 parms[0] = new SqlParameter("@ProjectName", ProjectName);
                 parms[1] = new SqlParameter("@PartNumber", PartNumber);
                 parms[2] = new SqlParameter("@PartSpec", "");
@@ -782,7 +750,8 @@ namespace YlMES.Controllers
                 parms[4] = new SqlParameter("@CreatedTime", CreatedTime);
                 parms[5] = new SqlParameter("@CreatedBy", CreatedBy);
                 parms[6] = new SqlParameter("@ID", ID);
-                var list = ys.Database.SqlQuery<Raw_MaterialStock_Result>("exec Raw_MaterialStock @ProjectName,@PartNumber,@PartSpec,@CreatedTimeEnd,@CreatedTime,@CreatedBy,@ID", parms).ToList();
+                parms[7] = new SqlParameter("@cang", cang);
+                var list = ys.Database.SqlQuery<Raw_MaterialStock_Result>("exec Raw_MaterialStock @ProjectName,@PartNumber,@PartSpec,@CreatedTimeEnd,@CreatedTime,@CreatedBy,@ID,@cang", parms).ToList();
                 Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
                 hasmap.Add("code", 0);
                 hasmap.Add("msg", "");

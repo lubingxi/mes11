@@ -12,15 +12,15 @@ namespace YLMES
 {
     public  class Sms
     {
-        public static int InsertSmsInfos(string Dept,string Number,string CreateBy)
+        public static int InsertSmsInfos(string name,string Number,string CreateBy)
         {
             using(YLMES_newEntities ys = new YLMES_newEntities())
             {
                 SqlParameter[] parms = new SqlParameter[3];
-                parms[0] = new SqlParameter("@Dept", Dept);
+                parms[0] = new SqlParameter("@Name", name);
                 parms[1] = new SqlParameter("@Number", Number);
-                parms[2] = new SqlParameter("@CreatedBy", CreateBy);        
-                ys.Database.ExecuteSqlCommand("exec InsertSmsInfos  @Dept,@Number,@CreatedBy", parms);
+                parms[2] = new SqlParameter("@CreatedBy", CreateBy);
+                ys.Database.ExecuteSqlCommand("exec InsertSmsInfos  @Name,@Number,@CreatedBy", parms);
                 return 1;
             }         
         }
@@ -34,9 +34,9 @@ namespace YLMES
                 int i = SendSms(list.UserName, number, list.Tel);
                 if (i > 0)
                 {
-                    SqlParameter[] parmd = new SqlParameter[1];
-                    parmd[0] = new SqlParameter("@Dept", Dept);
-                    ys.Database.ExecuteSqlCommand("exec UpdateSmsInfo @Dept");
+                    //SqlParameter[] parmd = new SqlParameter[1];
+                    //parmd[0] = new SqlParameter("@Dept", Dept);
+                    //ys.Database.ExecuteSqlCommand("exec UpdateSmsInfo @Dept");
                     return 1;
                 }
                 else
@@ -44,6 +44,25 @@ namespace YLMES
                     return 0;
                 }
             }            
+        }
+        public static int CheckSms2(string name, string number,string tel,DateTime? times)
+        {
+            using (YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                int i = SendSms(name, number, tel);
+                if (i > 0)
+                {
+                    SqlParameter[] parmd = new SqlParameter[2];
+                    parmd[0] = new SqlParameter("@Name", name);
+                    parmd[1] = new SqlParameter("@time", times);
+                    ys.Database.ExecuteSqlCommand("exec UpdateSmsInfo @Name,@time",parmd);
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
         }
         public static int SendSms(string name,string number,string phone)
         {

@@ -15,8 +15,9 @@ namespace YLMES.Models
     public partial class PM_WorkStationDetailHistory
     {
         public int ID { get; set; }
-        public Nullable<int> StationID { get; set; }
+        public Nullable<int> StationTypeID { get; set; }
         public Nullable<int> WorkOrderID { get; set; }
+        public Nullable<int> MachineID { get; set; }
         public Nullable<int> RecievedPCS { get; set; }
         public Nullable<int> CompletedPCS { get; set; }
         public Nullable<int> FailedPCS { get; set; }

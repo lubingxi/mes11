@@ -36,7 +36,14 @@
                         PartNumber = data.PartNumber;
                         PartSpec = data.PartSpec;
                         PartMaterial = data.PartMaterial;              
-                        layer_show('打印', '/Rms/Pbc?ID=' + ID + '&PartNumber=' + PartNumber + '&PartSpec=' + PartSpec + '&PartMaterial=' + PartMaterial, '1600', '800');
+                        var url = '/Rms/Pbc?ID=' + ID + '&PartNumber=' + PartNumber + '&PartSpec=' + PartSpec + '&PartMaterial=' + PartMaterial;
+                        var index = layer.open({
+                            type: 2,
+                            content: url,
+                            title: "打印",
+                            maxmin: true
+                        });
+                        layer.full(index);
                         break;
                     case 'update':
                         PartNumber = data.PartNumber;

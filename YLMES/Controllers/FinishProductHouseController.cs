@@ -50,7 +50,6 @@ namespace YLMES.Controllers
                 hasmap.Add("count", count);
                 hasmap.Add("data", pageList);
                 return Json(hasmap, JsonRequestBehavior.AllowGet);
-
             }
         }
         //新增成品仓位置信息页面
@@ -109,7 +108,18 @@ namespace YLMES.Controllers
             ViewData["id"] = id;
             return View();
         }
-        //修改成品仓货
+        //修改成品仓货位系列
+        public ActionResult UpdateFinishProLocation(string id,string type)
+        {
+            using (YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                int i = int.Parse(id);
+                var wl = ys.WarehouseLocation.Where(c => c.id == i).First();
+                wl.Type = type;
+                ys.SaveChanges();
+                return Content("true");
+            }          
+        }
      public ActionResult CheckFinishedProductWarehouse(string id)
         {
             using(YLMES_newEntities ys = new YLMES_newEntities())

@@ -143,8 +143,9 @@ namespace YLMES.Controllers
                 }
             }
         }
-        public ActionResult WarehouseArea()
+        public ActionResult WarehouseArea(string Name)
         {
+            ViewData["name"] = Name;
             return View();
         }
         public string AreaAdd(string WHArea, string Description, string WHName)
@@ -233,8 +234,9 @@ namespace YLMES.Controllers
 
             }
         }
-        public ActionResult Storage()
+        public ActionResult Storage(string WHArea)
         {
+            ViewData["name"] = WHArea;
             return View();
         }
         public string StorageAdd(string Name, string Description, string WHArea)
@@ -258,6 +260,13 @@ namespace YLMES.Controllers
                     return "false";
                 }
             }
+        }
+        #endregion
+        #region 增加货位信息页面
+
+        public ActionResult GoodsAll(string name)
+        {
+            return View();
         }
         #endregion
         #region 根据仓库跟库区名查货区
@@ -323,8 +332,9 @@ namespace YLMES.Controllers
                 }
             }
         }
-        public ActionResult WHGoodsAlAdd()
+        public ActionResult WHGoodsAlAdd(string Name)
         {
+            ViewData["name"] = Name;
             return View();
         }
         public string GoodsAlAdd(string StorageName, string Name, string Description)

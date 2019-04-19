@@ -1847,9 +1847,6 @@
     <Compile Include="Models\CheckWarehouse_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CheckWorkStation_Result.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\ChecSmsInfo.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1872,6 +1869,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\C_ContractProductDetail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C_ContractProductDetail2.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\C_Contract_Receivables.cs">
@@ -2091,6 +2091,12 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_FunctionList.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PM_Machine.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PM_MachineMatchStationType.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_Material.cs">
@@ -2709,6 +2715,10 @@
     <Content Include="Views\Financial\Voucher.cshtml" />
     <Content Include="Views\Financial\Vouchertwo.cshtml" />
     <Content Include="Views\Financial\ZhiFu.cshtml" />
+    <Content Include="Views\TaskManagement\CheckSpecialSymbols.cshtml" />
+    <Content Include="Views\ProductionPlanning\GoodsInventory.cshtml" />
+    <Content Include="Views\TaskManagement\GoodsInventory.cshtml" />
+    <Content Include="Views\ProductionPlanning\RepairOrderDrawing.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

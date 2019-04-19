@@ -78,10 +78,11 @@ namespace YlMES.Controllers
             return "true";
         }
         //订单明细
-        public ActionResult notice(string id, string studs)
+        public ActionResult notice(string id, string studs,string cnumber)
         {
             TempData["notice"] = id;
             ViewData["stu"] = studs;
+            ViewData["cnumber"] = cnumber;
             TempData["not"] = id;
             Session["TdId"] = id;
             Session["ZdId"] = id;
@@ -111,7 +112,7 @@ namespace YlMES.Controllers
                 return Json(hasmap, JsonRequestBehavior.AllowGet);
             }
         }
-        public ActionResult Queren(string id)
+        public ActionResult Queren(string id,string pnumber)
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
@@ -137,6 +138,7 @@ namespace YlMES.Controllers
                 }
                 else
                 {
+                    YLMES.Sms.CheckSms("设计部",pnumber);
                     con.StatusID = "计划部订单处理中心确认完成生产订单转换";
                     ys.SaveChanges();
                 }
@@ -1524,14 +1526,14 @@ namespace YlMES.Controllers
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-                SqlParameter[] parms = new SqlParameter[2];
-                parms[0] = new SqlParameter("@line", line);
-                parms[1] = new SqlParameter("@WorkorderNO", dan);
-                var list = ys.Database.SqlQuery<CheckWorkStation_Result>("exec CheckWorkStation  @line,@WorkorderNO", parms).ToList();
+                //SqlParameter[] parms = new SqlParameter[2];
+                //parms[0] = new SqlParameter("@line", line);
+                //parms[1] = new SqlParameter("@WorkorderNO", dan);
+                //var list = ys.Database.SqlQuery<CheckWorkStation_Result>("exec CheckWorkStation  @line,@WorkorderNO", parms).ToList();
                 Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
-                hasmap.Add("code", 0);
-                hasmap.Add("msg", "");
-                hasmap.Add("data", list);
+                //hasmap.Add("code", 0);
+                //hasmap.Add("msg", "");
+                //hasmap.Add("data", list);
                 return Json(hasmap, JsonRequestBehavior.AllowGet);
             }
 
@@ -1744,7 +1746,11 @@ namespace YlMES.Controllers
             ImageUrl = "../../QRCodeImage/" + fileName;
             TempData["ptu"] = ImageUrl;
         }
-
+        //显示成品仓库存信息
+        public ActionResult GoodsInventory()
+        {
+            return View();
+        }
 
 
 
@@ -1817,6 +1823,11 @@ namespace YlMES.Controllers
             }
         }
         #endregion
+        //扫描工单显示图纸
+        public ActionResult RepairOrderDrawing()
+        {
+            return View();
+        }
         public void MergePdfFilesWithBookMark(string q, string a, string c)
         {
             //创建一个Wordbook类对象，并加载需要转换的Excel文档

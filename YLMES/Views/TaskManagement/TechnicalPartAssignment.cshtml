@@ -151,16 +151,14 @@
 
                         case 'submtd':
                             var taskid = data.任务编号;
-                            var pnumber = data.订单产品名称;
-                            var pspec = data.订单产品规格;
-                            var num = data.数量;
                             $.ajax({
                                 type: "POST",
-                                url: '/TaskManagement/SubmitPlans?taskid=' + taskid + '&pnum=' + pnumber + '&pspec=' + pspec + '&num=' + num,
+                                url: '/TaskManagement/SubmitPlans?taskid=' + taskid,
                                 dataType: "text",
                                 success: function (data) {
                                     if (data == 'true') {
-                                        layer.msg('提交成功！');                                        
+                                        layer.msg('提交成功！');
+                                        table.reload('tw');
                                     }
                                     else
                                     {
@@ -289,6 +287,7 @@
                                     success: function (data) {
                                         if (data == 'true') {
                                             layer.msg('提交成功！');
+                                            table.reload('tw');
                                         }
                                         else {
                                             layer.msg('请联系系统维修人员！');
@@ -312,7 +311,7 @@
         <a class="layui-btn layui-btn-xs" id="detials" lay-event="Detials">操作</a>
         <a class="layui-btn layui-btn-xs" id="copy" lay-event="copy">复制</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" id="delete" lay-event="delete">删除</a>
-        {{#  } else if(d.订单产品名称 == '路轨'){ }}
+        {{#  } else if(d.订单产品名称 == '路轨' || d.订单产品名称 == '路轨螺丝'){ }}
         <a class="layui-btn layui-btn-xs" id="submt" lay-event="submtd">提交计划部</a>
         {{#  }else{ }}
         <a class="layui-btn layui-btn-xs" id="detials" lay-event="Detials">操作</a>

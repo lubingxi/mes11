@@ -32,6 +32,7 @@
             if ('@Session["name"]' == '刘扬珍') {
                 $("#ReviewStatus").attr("value","申请修改");
             }
+            $('.CustomerName').val(localStorage.Customername);
             layui.use(['table', 'layer'], function () {
                 var table = layui.table, layer = layui.layer;
                 var tableIns =table.render({
@@ -66,6 +67,9 @@
                     var strattime = $(".strattime").val();
                     var endtime = $(".endtime").val();
                     var rs = $("#ReviewStatus").val();
+                    if (CuName != null || CuName != "") {
+                        localStorage.Customername = CuName;
+                    }
                     tableIns.reload({
                         page :{
                         curr:1
@@ -434,7 +438,7 @@
                 </li>
                 <li>
                     客户名称：
-                    <input class="CustomerName" id="CustomerName" type="text" style="width: 120px;" />
+                    <input class="CustomerName" id="CustomerName" type="text" style="width: 200px;" />
                 </li>
                 <li>
                     合同编号：

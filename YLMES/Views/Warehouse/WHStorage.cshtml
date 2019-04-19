@@ -15,8 +15,8 @@
     <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
     <script type="text/html" id="bsarDemo">
         <a class="layui-btn layui-btn-xs" lay-event="sel">查看货位</a>
-        <a class="layui-btn layui-btn-xs" lay-event="add">添加货位</a>
-        <a class="layui-btn layui-btn-xs" lay-event="updata">更新货区</a>
+        <a class="layui-btn layui-btn-xs" lay-event="WHStorageadd">添加货区</a>
+        @*<a class="layui-btn layui-btn-xs" lay-event="updata">更新货区</a>*@
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除货区</a>
     </script>
     <script>
@@ -30,7 +30,8 @@
     }
     $(function () {
         var WHID = getQueryString().WHID;
-        var WHAreaID = getQueryString().WHAreaID
+        var WHAreaID = getQueryString().WHAreaID;
+        var Names = getQueryString().Name;
         layui.use(['table', 'layer'], function () {
             var table = layui.table, layer = layui.layer;
             table.render({
@@ -46,11 +47,11 @@
              , limit: 15
              , cols: [[
                { field: '序号', width: 80, title: '序号', edit: 'text' }
-             , { field: '货区', width: 180, title: '货区', edit: 'text' }
+             , { field: '货区', width: 150, title: '货区', edit: 'text' }
              , { field: '描述', width: 180, title: '描述', edit: 'text' }
              , { field: '建货区时间', width: 235, title: '建货区时间' }
-             , { field: '建货区人', width: 180, title: '建货区人', edit: 'text' }
-             , { field: '状态', width: 100, title: '状态', edit: 'text' }
+             , { field: '建货区人', width: 100, title: '建货区人', edit: 'text' }
+             //, { field: '状态', width: 100, title: '状态', edit: 'text' }
             , { field: 'right', width: 380, align: 'center', toolbar: '#bsarDemo' }
              ]]
             });
@@ -62,6 +63,7 @@
                 var Description = data.描述;
                 var CreatedBy = data.建货区人;
                 var StatusID = data.状态;
+                var Names = data.序号;
                 switch (layEvent) {
                     case 'del':
                         layer.confirm('真的删除行么', function (index) {
@@ -86,8 +88,8 @@
                     case 'sel':
                         layer.open({
                             type: 2
-                            , area: ['70%', '600px']
-                            , content: '/Warehouse/WHGoodsAl?StorageLocationID='+StorageLocationID //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                            , area: ['100%', '100%']
+                            , content: '/Warehouse/WHGoodsAl?StorageLocationID=' + StorageLocationID + '&name=' + Names
                             , anim: 2
                         });
                         break
@@ -115,6 +117,15 @@
                             }
                         });
                         break
+
+                    case 'WHStorageadd':
+                        layer.open({
+                            type: 2
+                         , area: ['600px', '600px']
+                         , content: '/Warehouse/Storage?WHArea=' + Names
+                         , anim: 2
+                        });
+                        break;
                 }
             });
         });
@@ -126,8 +137,8 @@
         <span>位置：</span>
         <ul class="placeul">
             <li><a href="#">首页</a></li>
-            <li><a href="#">采购管理</a></li>
-            <li><a href="#">采购清单</a></li>
+            <li><a href="#">仓库管理</a></li>
+            <li><a href="#">查看货区信息</a></li>
         </ul>
     </div>
     <div class="rightinfo">

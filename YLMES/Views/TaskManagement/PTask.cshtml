@@ -88,7 +88,8 @@
                         switch (obj.event) {
                             case 'PPDetials':
                                 id = data.ID;
-                                window.parent.document.getElementById("rightframe").src = "/ProductionPlanning/notice?id=" + id+"&studs="+"1";
+                                pnumber = data.ContractNumber;
+                                window.parent.document.getElementById("rightframe").src = "/ProductionPlanning/notice?id=" + id + "&studs=" + "1" + "&cnumber=" + pnumber;
                                 break;
                             case 'check':
                                 id = data.ID;

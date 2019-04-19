@@ -43,14 +43,14 @@
                 if ('@Session["name"]' == "") {
                     window.top.location = '/Home/Login';
                 }
-                //$.ajax({
-                //    url: "/Home/ChecSmsInfo",
-                //    type: "post",
-                //    dataType: "text",
-                //    success: function (data) {
+                $.ajax({
+                    url: "/Home/ChecSmsInfo",
+                    type: "post",
+                    dataType: "text",
+                    success: function (data) {
 
-                //    }
-                //});
+                    }
+                });
             },60000);
         }
     </script>

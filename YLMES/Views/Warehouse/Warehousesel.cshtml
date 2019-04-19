@@ -17,7 +17,7 @@
     <script type="text/html" id="bsarDemo">
         <a class="layui-btn layui-btn-xs" lay-event="sel">查看货区</a>
         @*<a class="layui-btn layui-btn-xs" lay-event="add">添加库区</a>*@
-        <a class="layui-btn layui-btn-xs" lay-event="WHStorageadd">添加货区</a>
+        <a class="layui-btn layui-btn-xs" lay-event="addWH">增加库区</a>
         <a class="layui-btn layui-btn-xs" lay-event="updata">更新库区</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除库区</a>
     </script>
@@ -49,10 +49,10 @@
              , cols: [[
                { field: '序号', width: 80, title: '序号', edit: 'text' }
              , { field: '库区', width: 120, title: '库区', edit: 'text' }
-             , { field: '描述', width: 210, title: '描述', edit: 'text' }
+             , { field: '描述', width: 150, title: '描述', edit: 'text' }
              , { field: '建库区时间', width: 235, title: '建库区时间' }
-             , { field: '建库区人', width: 180, title: '建库区人', edit: 'text' }
-             , { field: '状态', width: 100, title: '状态', edit: 'text' }
+             , { field: '建库区人', width: 100, title: '建库区人', edit: 'text' }
+             //, { field: '状态', width: 100, title: '状态', edit: 'text' }
             , { field: 'right', width: 380, align: 'center', toolbar: '#bsarDemo' }
              ]]
             });
@@ -88,10 +88,11 @@
                     case 'sel':
                         layer.open({
                             type: 2
-                            , area: ['80%', '600px']
-                            , content: '/Warehouse/WHStorage?WHID=' + WHID + '&WHAreaID='+WHAreaID
+                            , area: ['100%', '100%']
+                            , content: '/Warehouse/WHStorage?WHID=' + WHID + '&WHAreaID=' + WHAreaID + '&Name=' + WHArea
                             , anim: 2
                         });
+
                         break
                     //case 'add':
                     //    layer.open({
@@ -117,12 +118,12 @@
                             }
                         });
                         break
-                    case 'WHStorageadd':
+                    case 'addWH':
                         layer.open({
                             type: 2
-                         , area: ['600px', '600px']
-                         , content: '/Warehouse/Storage?WHArea=' + WHArea
-                         , anim: 2
+                     , content: '/Warehouse/WarehouseArea?Name=' + Name
+                      , area: ['500px', '400px']
+                     , anim: 2
                         });
                         break;
                 }
@@ -138,8 +139,8 @@
         <span>位置：</span>
         <ul class="placeul">
             <li><a href="#">首页</a></li>
-            <li><a href="#">采购管理</a></li>
-            <li><a href="#">采购清单</a></li>
+            <li><a href="#">仓库管理</a></li>
+            <li><a href="#">显示库区信息</a></li>
         </ul>
     </div>
     <div class="rightinfo">

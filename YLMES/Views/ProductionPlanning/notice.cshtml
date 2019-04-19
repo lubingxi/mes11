@@ -23,7 +23,7 @@
             $("#addC").click(function () {
                 $.ajax({
                     type: "POST",
-                    url: '/ProductionPlanning/Queren?id='+'@TempData["not"]',
+                    url: '/ProductionPlanning/Queren?id='+'@TempData["not"]'+'&pnumber='+'@ViewData["cnumber"]',
                     dataType: "text",
                     success: function (data) {
                         if (data == 'true') {

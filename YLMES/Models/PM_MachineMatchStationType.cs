@@ -12,15 +12,11 @@ namespace YLMES.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class WarehouseLocation
+    public partial class PM_MachineMatchStationType
     {
-        public int id { get; set; }
-        public string Reservoir { get; set; }
-        public Nullable<int> CargoArea { get; set; }
-        public Nullable<int> Goods { get; set; }
-        public Nullable<int> ProductId { get; set; }
+        public int ID { get; set; }
+        public Nullable<int> MachineID { get; set; }
+        public Nullable<int> StationTypeID { get; set; }
         public string Status { get; set; }
-        public string ContractNumber { get; set; }
-        public string Type { get; set; }
     }
 }

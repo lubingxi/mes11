@@ -56,18 +56,31 @@
                             materid = (checkStatus.data[i].ChildPartID);
                             Count = (checkStatus.data[i].count);
                             Units = (checkStatus.data[i].units);
-                            Spec = (checkStatus.data[i].spec);
+                            Spec = (checkStatus.data[i].spec);                       
                             $.ajax({
                                 url: "/TaskManagement/ApplyPurchasingd",
                                 data: { type:'add',Materid: materid, PCount: Count, Unit: Units,Taskid:@ViewData["taskid"],Spec:Spec },
                                 type: "post",
                                 dataType: "text",
                                 success: function (data) {
+                                    if(data=="true"){
+                                        window.history.go(-1);
+                                    }
                                 }
                             });
                         }
                     }
-                    window.history.go(-1);
+                  
+                });
+                $("#SpecialSymbols").on('click', function () {
+                    var url = '/TaskManagement/CheckSpecialSymbols';
+                    var index = layer.open({
+                        type: 2,
+                        title: "查看特殊符号",
+                        content: url,
+                        area: ['400px', '400px']
+                    });
+
                 });
                 $("#Turn").on('click', function () {             
                     $.ajax({
@@ -121,6 +134,7 @@
             </ul>
             <button class="layui-btn" id="Apply" data-type="reload">申请采购</button>
             <button class="layui-btn" id="Turn" data-type="reload">转工单</button>
+            <button class="layui-btn" id="SpecialSymbols" data-type="reload">查询特殊符号</button>
         </div>
     </div>
     <table class="tablelist" id="tw" lay-filter="tw" />

@@ -87,7 +87,15 @@
             $("#PurchasingApplication").click(function () {
                 window.parent.document.getElementById("rightframe").src = "/TaskManagement/Purchasing?ifDriver=" + "@Session["ifB"]" + "&Taskid=" + "@ViewData["TaskID2"]";
             });
-
+            $("#GoodsStorage").click(function () {
+                var url = "/TaskManagement/GoodsInventory";
+                var index = layer.open({
+                    type: 2,
+                    content: url,
+                    title: "成品库存",
+                    maxmin: true
+                });
+            });
             layui.use(['table', 'layer'], function () {
                 var table = layui.table, layer = layui.layer;
                 table.render({
@@ -381,6 +389,7 @@
             @*<button class="layui-btn" id="PurchasingApplication" data-type="reload">采购申请</button>*@
             <button class="layui-btn" id="Construction" data-type="reload">确认完成建工单</button>
             <button class="layui-btn" id="SubmitPurchase" data-type="reload">确认完成提交采购申请</button>
+            <button class="layui-btn" id="GoodsStorage" data-type="reload">成品仓库存</button>
         </div>
         <table class="tablelist" id="tw" lay-filter="demo"></table>
     </div>

@@ -174,7 +174,7 @@
                  , { field: '材质', width: 100, title: '材质' }
                  //, { field: '库存套数', width: 100, title: '库存套数' }
                  , { field: '库存数量', width: 100, title: '库存数量' }
-                 , { field: '仓库位置', width: 160, title: '仓库位置' }
+                 , { field: '仓库位置', width: 250, title: '仓库位置' }
                 // , { field: '入库时间', width: 160, title: '入库时间' }
                  //, { field: '操作员', width: 100, title: '操作员' }
                  , { field: 'right', width: 100, align: 'center', toolbar: '#barDemo' }
@@ -188,6 +188,7 @@
                 var CreatedTimeEnd = $("#test2").val();
                 var CreatedBy = $("#Name").val();
                 var ID = $("#ID").val();
+                var select = $("#d").val();
                 tableIns.reload({
                     where: {
                       //  ProjectName: ProjectName
@@ -196,6 +197,7 @@
                       , CreatedTime: CreatedTime
                       , CreatedBy: CreatedBy
                       , ID: ID
+                      , cang: select
                     }
                 });
             });
@@ -241,13 +243,14 @@
     <div class="rightinfo">
         <div class="tools">
             <ul class="toolbar">
-                @*<li>
-                    项目名称:
-                    <div class="dropdown" id="search">
-                        <input type="text" class="awesomplete" id="CustomerName" list="mylist" placeholder="请输入项目" style="width:130px">
-                        <datalist id="mylist"></datalist>
-                    </div>
-                </li>*@
+                <li>
+                    仓库：
+                    <select name="quiz2" id="d">
+                        <option value="0" selected="selected">全部</option>
+                        <option value="1">原材料仓</option> 
+                        <option value="2">五金仓</option>                  
+                    </select>
+                </li>
                 <li>
                     物料编码：
                     <input class="ID" id="ID" type="text"  style="width: 100px;" />

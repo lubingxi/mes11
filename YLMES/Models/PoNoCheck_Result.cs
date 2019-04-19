@@ -25,6 +25,7 @@ namespace YLMES.Models
         public Nullable<int> 实际采购套数 { get; set; }
         public Nullable<int> 实际采购数量 { get; set; }
         public string 单位 { get; set; }
+        public string 规格 { get; set; }
         public Nullable<double> 单价 { get; set; }
         public Nullable<double> 总价 { get; set; }
         public string 供应商 { get; set; }

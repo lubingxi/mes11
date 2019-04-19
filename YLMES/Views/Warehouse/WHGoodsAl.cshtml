@@ -15,8 +15,7 @@
     <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
     <script type="text/html" id="bsarDemo">
-
-        @*<a class="layui-btn layui-btn-xs" lay-event="add">添加货位</a>*@
+        <a class="layui-btn layui-btn-xs" lay-event="add">添加货位</a>
         <a class="layui-btn layui-btn-xs" lay-event="updata">更新货位</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除货位</a>
     </script>
@@ -32,6 +31,7 @@
     $(function () {
 
         var StorageLocationID = getQueryString().StorageLocationID;
+        var names = getQueryString().name;
         layui.use(['table', 'layer'], function () {
             var table = layui.table, layer = layui.layer;
             table.render({
@@ -51,7 +51,7 @@
              , { field: '描述', width: 210, title: '描述', edit: 'text' }
              , { field: '建货位时间', width: 235, title: '建货位时间' }
              , { field: '建货位人', width: 180, title: '建货位人', edit: 'text' }
-             , { field: '状态', width: 100, title: '状态', edit: 'text' }
+             //, { field: '状态', width: 100, title: '状态', edit: 'text' }
             , { field: 'right', width: 210, align: 'center', toolbar: '#bsarDemo' }
              ]]
             });
@@ -92,13 +92,14 @@
                     //        , anim: 2
                     //    });
                     //    break
-                    //case 'add':
-                    //    layer.open({
-                    //        type: 2
-                    //       , content: 'http://sentsin.com' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-                    //       , anim: 2
-                    //    });
-                    //    break
+                    case 'add':
+                        layer.open({
+                            type: 2
+                            , area: ['600px', '600px']
+                           , content: '/Warehouse/WHGoodsAlAdd?Name=' + names
+                           , anim: 2
+                        });
+                        break
                     case 'updata':
                         $.ajax({
                             url: "/Warehouse/WHGoodsAlupdata",
@@ -125,8 +126,8 @@
         <span>位置：</span>
         <ul class="placeul">
             <li><a href="#">首页</a></li>
-            <li><a href="#">采购管理</a></li>
-            <li><a href="#">采购清单</a></li>
+            <li><a href="#">仓库管理</a></li>
+            <li><a href="#">查看货位信息</a></li>
         </ul>
     </div>
     <div class="rightinfo">

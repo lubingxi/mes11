@@ -183,6 +183,50 @@
           <Property Name="Status" Type="varchar" MaxLength="50" />
           <Property Name="Price" Type="varchar" MaxLength="20" />
         </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“YLMES_new.dbo.C_ContractProductDetail2”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="C_ContractProductDetail2">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="ContractID" />
+            <PropertyRef Name="ProductName" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ContractID" Type="int" Nullable="false" />
+          <Property Name="ProductName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Customer_ProductName" Type="varchar" MaxLength="50" />
+          <Property Name="ProductTypeID" Type="int" />
+          <Property Name="ifDrive" Type="varchar" MaxLength="20" />
+          <Property Name="ProductSpec" Type="varchar" MaxLength="50" />
+          <Property Name="P_Speed" Type="varchar" MaxLength="50" />
+          <Property Name="P_CarryingCapacity" Type="varchar" MaxLength="50" />
+          <Property Name="P_ElectricalRequirements" Type="varchar" MaxLength="50" />
+          <Property Name="P_EquipmentWorkplace" Type="varchar" MaxLength="50" />
+          <Property Name="P_Main_materialofworkpiece" Type="varchar" MaxLength="50" />
+          <Property Name="P_ChildPartSpecRange" Type="varchar" MaxLength="50" />
+          <Property Name="P_ChildPartWeight" Type="varchar" MaxLength="50" />
+          <Property Name="P_WorkpieceFeedingMode" Type="varchar" MaxLength="50" />
+          <Property Name="P_RollerDiameter" Type="varchar" MaxLength="50" />
+          <Property Name="P_RollerMaterial" Type="varchar" MaxLength="50" />
+          <Property Name="P_RollerSurface" Type="varchar" MaxLength="50" />
+          <Property Name="P_RollerTransferMode" Type="varchar" MaxLength="50" />
+          <Property Name="P_MainBeaMaterial" Type="varchar" MaxLength="50" />
+          <Property Name="Units" Type="varchar" MaxLength="10" />
+          <Property Name="Count" Type="varchar" MaxLength="10" />
+          <Property Name="DueDay" Type="date" />
+          <Property Name="DeliveryedCount" Type="varchar" MaxLength="10" />
+          <Property Name="NewDeliveryedCount" Type="varchar" MaxLength="10" />
+          <Property Name="DeliveryDate" Type="date" />
+          <Property Name="InstalledQuantity" Type="varchar" MaxLength="10" />
+          <Property Name="newInstalledQuantity" Type="varchar" MaxLength="10" />
+          <Property Name="CompletionDate" Type="date" />
+          <Property Name="Acceptance" Type="varchar" MaxLength="10" />
+          <Property Name="AcceptanceDate" Type="date" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="20" />
+          <Property Name="CreatedTime" Type="varchar" MaxLength="20" />
+          <Property Name="Status" Type="varchar" MaxLength="50" />
+          <Property Name="Price" Type="varchar" MaxLength="20" />
+        </EntityType>
         <EntityType Name="Category1">
           <Key>
             <PropertyRef Name="id" />
@@ -793,6 +837,27 @@
           <Property Name="SortID" Type="int" />
           <Property Name="StatusID" Type="int" />
         </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“YLMES_new.dbo.PM_Machine”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="PM_Machine">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MachineName" Type="varchar" MaxLength="50" />
+          <Property Name="Status" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“YLMES_new.dbo.PM_MachineMatchStationType”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="PM_MachineMatchStationType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MachineID" Type="int" />
+          <Property Name="StationTypeID" Type="int" />
+          <Property Name="Status" Type="varchar" MaxLength="10" />
+        </EntityType>
         <EntityType Name="PM_Material">
           <Key>
             <PropertyRef Name="ID" />
@@ -981,6 +1046,7 @@
           <Property Name="MaterialId" Type="int" />
           <Property Name="LocationId" Type="int" />
           <Property Name="ContractNumber" Type="varchar" MaxLength="50" />
+          <Property Name="Status" Type="varchar" MaxLength="20" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“YLMES_new.dbo.PM_PartSetting_temp”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -1666,8 +1732,9 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="StationID" Type="int" />
+          <Property Name="StationtypeID" Type="int" />
           <Property Name="WorkOrderID" Type="int" />
+          <Property Name="MachineID" Type="int" />
           <Property Name="RecievedPCS" Type="int" />
           <Property Name="CompletedPCS" Type="int" />
           <Property Name="FailedPCS" Type="int" />
@@ -1685,8 +1752,9 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="StationID" Type="int" />
+          <Property Name="StationTypeID" Type="int" />
           <Property Name="WorkOrderID" Type="int" />
+          <Property Name="MachineID" Type="int" />
           <Property Name="RecievedPCS" Type="int" />
           <Property Name="CompletedPCS" Type="int" />
           <Property Name="FailedPCS" Type="int" />
@@ -1815,8 +1883,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="aa" Type="nchar" MaxLength="10" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“YLMES_new.dbo.WarehouseLocation”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="WarehouseLocation">
           <Key>
             <PropertyRef Name="id" />
@@ -1828,6 +1894,7 @@
           <Property Name="ProductId" Type="int" />
           <Property Name="Status" Type="varchar" MaxLength="30" />
           <Property Name="ContractNumber" Type="varchar" MaxLength="100" />
+          <Property Name="Type" Type="varchar" MaxLength="50" />
         </EntityType>
         <Function Name="AddchildThing" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PartNumber" Type="varchar" Mode="In" />
@@ -1869,6 +1936,9 @@
           <Parameter Name="LAY_TABLE_INDEX" Type="varchar" Mode="In" />
           <Parameter Name="ListType" Type="varchar" Mode="In" />
           <Parameter Name="TaskID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AddPlanMater" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TaskID" Type="int" Mode="In" />
         </Function>
         <Function Name="AddPM_MaterialList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="MaterialID" Type="varchar" Mode="In" />
@@ -2234,7 +2304,7 @@
           <Parameter Name="PONO" Type="varchar" Mode="In" />
         </Function>
         <Function Name="InsertSmsInfos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Dept" Type="varchar" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
           <Parameter Name="Number" Type="varchar" Mode="In" />
           <Parameter Name="CreateBy" Type="varchar" Mode="In" />
         </Function>
@@ -2702,6 +2772,7 @@
           <Parameter Name="CreatedTime" Type="varchar" Mode="In" />
           <Parameter Name="CreatedBy" Type="varchar" Mode="In" />
           <Parameter Name="ID" Type="varchar" Mode="In" />
+          <Parameter Name="cang" Type="varchar" Mode="In" />
         </Function>
         <Function Name="RawWHIQCList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PONOID" Type="varchar" Mode="In" />
@@ -3783,7 +3854,8 @@
           <Parameter Name="SuggestedPoints" Type="varchar" Mode="In" />
         </Function>
         <Function Name="UpdateSmsInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Dept" Type="varchar" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="time" Type="datetime" Mode="In" />
         </Function>
         <Function Name="UpdateTaskForChangeIssueOwner" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Owner" Type="varchar" Mode="In" />
@@ -3939,6 +4011,7 @@
           <EntitySet Name="SupplierMaterials" EntityType="Self.SupplierMaterials" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tttb" EntityType="Self.tttb" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WarehouseLocation" EntityType="Self.WarehouseLocation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ac" EntityType="Self.ac" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [ac].[项目名称] AS [项目名称], 
@@ -3946,6 +4019,45 @@
     [ac].[是否逾期] AS [是否逾期], 
     [ac].[数量] AS [数量]
     FROM [dbo].[ac] AS [ac]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="C_ContractProductDetail2" EntityType="Self.C_ContractProductDetail2" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [C_ContractProductDetail2].[ID] AS [ID], 
+    [C_ContractProductDetail2].[ContractID] AS [ContractID], 
+    [C_ContractProductDetail2].[ProductName] AS [ProductName], 
+    [C_ContractProductDetail2].[Customer_ProductName] AS [Customer_ProductName], 
+    [C_ContractProductDetail2].[ProductTypeID] AS [ProductTypeID], 
+    [C_ContractProductDetail2].[ifDrive] AS [ifDrive], 
+    [C_ContractProductDetail2].[ProductSpec] AS [ProductSpec], 
+    [C_ContractProductDetail2].[P_Speed] AS [P_Speed], 
+    [C_ContractProductDetail2].[P_CarryingCapacity] AS [P_CarryingCapacity], 
+    [C_ContractProductDetail2].[P_ElectricalRequirements] AS [P_ElectricalRequirements], 
+    [C_ContractProductDetail2].[P_EquipmentWorkplace] AS [P_EquipmentWorkplace], 
+    [C_ContractProductDetail2].[P_Main_materialofworkpiece] AS [P_Main_materialofworkpiece], 
+    [C_ContractProductDetail2].[P_ChildPartSpecRange] AS [P_ChildPartSpecRange], 
+    [C_ContractProductDetail2].[P_ChildPartWeight] AS [P_ChildPartWeight], 
+    [C_ContractProductDetail2].[P_WorkpieceFeedingMode] AS [P_WorkpieceFeedingMode], 
+    [C_ContractProductDetail2].[P_RollerDiameter] AS [P_RollerDiameter], 
+    [C_ContractProductDetail2].[P_RollerMaterial] AS [P_RollerMaterial], 
+    [C_ContractProductDetail2].[P_RollerSurface] AS [P_RollerSurface], 
+    [C_ContractProductDetail2].[P_RollerTransferMode] AS [P_RollerTransferMode], 
+    [C_ContractProductDetail2].[P_MainBeaMaterial] AS [P_MainBeaMaterial], 
+    [C_ContractProductDetail2].[Units] AS [Units], 
+    [C_ContractProductDetail2].[Count] AS [Count], 
+    [C_ContractProductDetail2].[DueDay] AS [DueDay], 
+    [C_ContractProductDetail2].[DeliveryedCount] AS [DeliveryedCount], 
+    [C_ContractProductDetail2].[NewDeliveryedCount] AS [NewDeliveryedCount], 
+    [C_ContractProductDetail2].[DeliveryDate] AS [DeliveryDate], 
+    [C_ContractProductDetail2].[InstalledQuantity] AS [InstalledQuantity], 
+    [C_ContractProductDetail2].[newInstalledQuantity] AS [newInstalledQuantity], 
+    [C_ContractProductDetail2].[CompletionDate] AS [CompletionDate], 
+    [C_ContractProductDetail2].[Acceptance] AS [Acceptance], 
+    [C_ContractProductDetail2].[AcceptanceDate] AS [AcceptanceDate], 
+    [C_ContractProductDetail2].[CreatedBy] AS [CreatedBy], 
+    [C_ContractProductDetail2].[CreatedTime] AS [CreatedTime], 
+    [C_ContractProductDetail2].[Status] AS [Status], 
+    [C_ContractProductDetail2].[Price] AS [Price]
+    FROM [dbo].[C_ContractProductDetail2] AS [C_ContractProductDetail2]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="ChecSmsInfo" EntityType="Self.ChecSmsInfo" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -4074,6 +4186,21 @@
     [PM_FinshGoodsLocation].[StatusID] AS [StatusID]
     FROM [dbo].[PM_FinshGoodsLocation] AS [PM_FinshGoodsLocation]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="PM_Machine" EntityType="Self.PM_Machine" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PM_Machine].[ID] AS [ID], 
+    [PM_Machine].[MachineName] AS [MachineName], 
+    [PM_Machine].[Status] AS [Status]
+    FROM [dbo].[PM_Machine] AS [PM_Machine]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PM_MachineMatchStationType" EntityType="Self.PM_MachineMatchStationType" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PM_MachineMatchStationType].[ID] AS [ID], 
+    [PM_MachineMatchStationType].[MachineID] AS [MachineID], 
+    [PM_MachineMatchStationType].[StationTypeID] AS [StationTypeID], 
+    [PM_MachineMatchStationType].[Status] AS [Status]
+    FROM [dbo].[PM_MachineMatchStationType] AS [PM_MachineMatchStationType]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="PM_Package" EntityType="Self.PM_Package" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [PM_Package].[ID] AS [ID], 
@@ -4090,7 +4217,8 @@
     [PM_Package].[Note] AS [Note], 
     [PM_Package].[MaterialId] AS [MaterialId], 
     [PM_Package].[LocationId] AS [LocationId], 
-    [PM_Package].[ContractNumber] AS [ContractNumber]
+    [PM_Package].[ContractNumber] AS [ContractNumber], 
+    [PM_Package].[Status] AS [Status]
     FROM [dbo].[PM_Package] AS [PM_Package]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PM_PartSetting_temp" EntityType="Self.PM_PartSetting_temp" store:Type="Tables" store:Schema="dbo">
@@ -4479,17 +4607,6 @@
     [toji].[还剩小时] AS [还剩小时], 
     [toji].[是否逾期] AS [是否逾期]
     FROM [dbo].[toji] AS [toji]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="WarehouseLocation" EntityType="Self.WarehouseLocation" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [WarehouseLocation].[id] AS [id], 
-    [WarehouseLocation].[Reservoir] AS [Reservoir], 
-    [WarehouseLocation].[CargoArea] AS [CargoArea], 
-    [WarehouseLocation].[Goods] AS [Goods], 
-    [WarehouseLocation].[ProductId] AS [ProductId], 
-    [WarehouseLocation].[Status] AS [Status], 
-    [WarehouseLocation].[ContractNumber] AS [ContractNumber]
-    FROM [dbo].[WarehouseLocation] AS [WarehouseLocation]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
       </Schema>
@@ -5529,8 +5646,9 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StationID" Type="Int32" />
+          <Property Name="StationtypeID" Type="Int32" />
           <Property Name="WorkOrderID" Type="Int32" />
+          <Property Name="MachineID" Type="Int32" />
           <Property Name="RecievedPCS" Type="Int32" />
           <Property Name="CompletedPCS" Type="Int32" />
           <Property Name="FailedPCS" Type="Int32" />
@@ -5548,8 +5666,9 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StationID" Type="Int32" />
+          <Property Name="StationTypeID" Type="Int32" />
           <Property Name="WorkOrderID" Type="Int32" />
+          <Property Name="MachineID" Type="Int32" />
           <Property Name="RecievedPCS" Type="Int32" />
           <Property Name="CompletedPCS" Type="Int32" />
           <Property Name="FailedPCS" Type="Int32" />
@@ -5586,6 +5705,19 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="aa" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
         </EntityType>
+        <EntityType Name="WarehouseLocation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Reservoir" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CargoArea" Type="Int32" />
+          <Property Name="Goods" Type="Int32" />
+          <Property Name="ProductId" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ContractNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="ac">
           <Key>
             <PropertyRef Name="项目名称" />
@@ -5595,6 +5727,48 @@
           <Property Name="负责人" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="是否逾期" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="数量" Type="Int32" />
+        </EntityType>
+        <EntityType Name="C_ContractProductDetail2">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="ContractID" />
+            <PropertyRef Name="ProductName" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ContractID" Type="Int32" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Customer_ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProductTypeID" Type="Int32" />
+          <Property Name="ifDrive" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ProductSpec" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_Speed" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_CarryingCapacity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_ElectricalRequirements" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_EquipmentWorkplace" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_Main_materialofworkpiece" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_ChildPartSpecRange" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_ChildPartWeight" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_WorkpieceFeedingMode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_RollerDiameter" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_RollerMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_RollerSurface" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_RollerTransferMode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_MainBeaMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Units" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Count" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DueDay" Type="DateTime" Precision="0" />
+          <Property Name="DeliveryedCount" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="NewDeliveryedCount" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DeliveryDate" Type="DateTime" Precision="0" />
+          <Property Name="InstalledQuantity" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="newInstalledQuantity" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CompletionDate" Type="DateTime" Precision="0" />
+          <Property Name="Acceptance" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="AcceptanceDate" Type="DateTime" Precision="0" />
+          <Property Name="CreatedBy" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedTime" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Price" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ChecSmsInfo">
           <Key>
@@ -5737,6 +5911,23 @@
           <Property Name="CreatedTime" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="StatusID" Type="Int32" />
         </EntityType>
+        <EntityType Name="PM_Machine">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MachineName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PM_MachineMatchStationType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MachineID" Type="Int32" />
+          <Property Name="StationTypeID" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="PM_Package">
           <Key>
             <PropertyRef Name="ID" />
@@ -5757,6 +5948,7 @@
           <Property Name="MaterialId" Type="Int32" />
           <Property Name="LocationId" Type="Int32" />
           <Property Name="ContractNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PM_PartSetting_temp">
           <Key>
@@ -6176,18 +6368,6 @@
           <Property Name="还剩小时" Type="Double" />
           <Property Name="是否逾期" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
-        <EntityType Name="WarehouseLocation">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Reservoir" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="CargoArea" Type="Int32" />
-          <Property Name="Goods" Type="Int32" />
-          <Property Name="ProductId" Type="Int32" />
-          <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="ContractNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityContainer Name="YLMES_newEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="C_Contract" EntityType="Self.C_Contract" />
           <EntitySet Name="C_Contract_Receivables" EntityType="Self.C_Contract_Receivables" />
@@ -6258,7 +6438,9 @@
           <EntitySet Name="SupplierMaterials" EntityType="Self.SupplierMaterials" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="tttb" EntityType="Self.tttb" />
+          <EntitySet Name="WarehouseLocation" EntityType="Self.WarehouseLocation" />
           <EntitySet Name="ac" EntityType="Self.ac" />
+          <EntitySet Name="C_ContractProductDetail2" EntityType="Self.C_ContractProductDetail2" />
           <EntitySet Name="ChecSmsInfo" EntityType="Self.ChecSmsInfo" />
           <EntitySet Name="DeletePM_WorkDetailHistory" EntityType="Self.DeletePM_WorkDetailHistory" />
           <EntitySet Name="EmployeeWorkReport" EntityType="Self.EmployeeWorkReport" />
@@ -6270,6 +6452,8 @@
           <EntitySet Name="PM_DepartmentSubsector" EntityType="Self.PM_DepartmentSubsector" />
           <EntitySet Name="PM_DepartRouting" EntityType="Self.PM_DepartRouting" />
           <EntitySet Name="PM_FinshGoodsLocation" EntityType="Self.PM_FinshGoodsLocation" />
+          <EntitySet Name="PM_Machine" EntityType="Self.PM_Machine" />
+          <EntitySet Name="PM_MachineMatchStationType" EntityType="Self.PM_MachineMatchStationType" />
           <EntitySet Name="PM_Package" EntityType="Self.PM_Package" />
           <EntitySet Name="PM_PartSetting_temp" EntityType="Self.PM_PartSetting_temp" />
           <EntitySet Name="PM_ProblemDiscussion" EntityType="Self.PM_ProblemDiscussion" />
@@ -6289,7 +6473,6 @@
           <EntitySet Name="TableStatus" EntityType="Self.TableStatus" />
           <EntitySet Name="temp1121" EntityType="Self.temp1121" />
           <EntitySet Name="toji" EntityType="Self.toji" />
-          <EntitySet Name="WarehouseLocation" EntityType="Self.WarehouseLocation" />
           <FunctionImport Name="f_split" IsComposable="true" ReturnType="Collection(YLMES_newModel.f_split_Result)">
             <Parameter Name="c" Mode="In" Type="String" />
             <Parameter Name="split" Mode="In" Type="String" />
@@ -6338,6 +6521,9 @@
             <Parameter Name="LAY_TABLE_INDEX" Mode="In" Type="String" />
             <Parameter Name="ListType" Mode="In" Type="String" />
             <Parameter Name="TaskID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddPlanMater">
+            <Parameter Name="TaskID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AddPM_MaterialList">
             <Parameter Name="MaterialID" Mode="In" Type="String" />
@@ -6557,7 +6743,7 @@
           <FunctionImport Name="CheckWarehouseLocation2" ReturnType="Collection(YLMES_newModel.CheckWarehouseLocation2_Result)">
             <Parameter Name="id" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="CheckWorkStation" ReturnType="Collection(YLMES_newModel.CheckWorkStation_Result)">
+          <FunctionImport Name="CheckWorkStation">
             <Parameter Name="line" Mode="In" Type="String" />
             <Parameter Name="WorkorderNO" Mode="In" Type="String" />
           </FunctionImport>
@@ -6690,7 +6876,7 @@
             <Parameter Name="PONO" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="InsertSmsInfos">
-            <Parameter Name="Dept" Mode="In" Type="String" />
+            <Parameter Name="Name" Mode="In" Type="String" />
             <Parameter Name="Number" Mode="In" Type="String" />
             <Parameter Name="CreateBy" Mode="In" Type="String" />
           </FunctionImport>
@@ -7158,6 +7344,7 @@
             <Parameter Name="CreatedTime" Mode="In" Type="String" />
             <Parameter Name="CreatedBy" Mode="In" Type="String" />
             <Parameter Name="ID" Mode="In" Type="String" />
+            <Parameter Name="cang" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="RawWHIQCList" ReturnType="Collection(YLMES_newModel.RawWHIQCList_Result)">
             <Parameter Name="PONOID" Mode="In" Type="String" />
@@ -8228,7 +8415,8 @@
             <Parameter Name="SuggestedPoints" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="UpdateSmsInfo">
-            <Parameter Name="Dept" Mode="In" Type="String" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="time" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="UpdateTaskForChangeIssueOwner">
             <Parameter Name="Owner" Mode="In" Type="String" />
@@ -8597,17 +8785,6 @@
           <Property Type="Int32" Name="QTY" Nullable="true" />
           <Property Type="String" Name="PackageName" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="ContractNumber" Nullable="true" MaxLength="50" />
-        </ComplexType>
-        <ComplexType Name="CheckWorkStation_Result">
-          <Property Type="Int32" Name="序号" Nullable="false" />
-          <Property Type="String" Name="工单名称" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="工位名称" Nullable="true" MaxLength="30" />
-          <Property Type="Int32" Name="总套数" Nullable="true" />
-          <Property Type="Int32" Name="完成套数" Nullable="true" />
-          <Property Type="Int32" Name="坏品套数" Nullable="true" />
-          <Property Type="String" Name="开始时间" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="结束时间" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="负责人" Nullable="true" MaxLength="50" />
         </ComplexType>
         <ComplexType Name="ChecSmsInfos_Result">
           <Property Type="String" Name="SendName" Nullable="true" MaxLength="30" />
@@ -8991,6 +9168,7 @@
           <Property Type="Int32" Name="实际采购套数" Nullable="true" />
           <Property Type="Int32" Name="实际采购数量" Nullable="true" />
           <Property Type="String" Name="单位" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="规格" Nullable="true" MaxLength="50" />
           <Property Type="Double" Name="单价" Nullable="true" />
           <Property Type="Double" Name="总价" Nullable="true" />
           <Property Type="String" Name="供应商" Nullable="true" MaxLength="50" />
@@ -11336,8 +11514,9 @@
             <EntityTypeMapping TypeName="YLMES_newModel.PM_WorkStationDetail">
               <MappingFragment StoreEntitySet="PM_WorkStationDetail">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="StationID" ColumnName="StationID" />
+                <ScalarProperty Name="StationtypeID" ColumnName="StationtypeID" />
                 <ScalarProperty Name="WorkOrderID" ColumnName="WorkOrderID" />
+                <ScalarProperty Name="MachineID" ColumnName="MachineID" />
                 <ScalarProperty Name="RecievedPCS" ColumnName="RecievedPCS" />
                 <ScalarProperty Name="CompletedPCS" ColumnName="CompletedPCS" />
                 <ScalarProperty Name="FailedPCS" ColumnName="FailedPCS" />
@@ -11356,8 +11535,9 @@
             <EntityTypeMapping TypeName="YLMES_newModel.PM_WorkStationDetailHistory">
               <MappingFragment StoreEntitySet="PM_WorkStationDetailHistory">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="StationID" ColumnName="StationID" />
+                <ScalarProperty Name="StationTypeID" ColumnName="StationTypeID" />
                 <ScalarProperty Name="WorkOrderID" ColumnName="WorkOrderID" />
+                <ScalarProperty Name="MachineID" ColumnName="MachineID" />
                 <ScalarProperty Name="RecievedPCS" ColumnName="RecievedPCS" />
                 <ScalarProperty Name="CompletedPCS" ColumnName="CompletedPCS" />
                 <ScalarProperty Name="FailedPCS" ColumnName="FailedPCS" />
@@ -11399,6 +11579,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="WarehouseLocation">
+            <EntityTypeMapping TypeName="YLMES_newModel.WarehouseLocation">
+              <MappingFragment StoreEntitySet="WarehouseLocation">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Reservoir" ColumnName="Reservoir" />
+                <ScalarProperty Name="CargoArea" ColumnName="CargoArea" />
+                <ScalarProperty Name="Goods" ColumnName="Goods" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ContractNumber" ColumnName="ContractNumber" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ac">
             <EntityTypeMapping TypeName="YLMES_newModel.ac">
               <MappingFragment StoreEntitySet="ac">
@@ -11406,6 +11600,47 @@
                 <ScalarProperty Name="负责人" ColumnName="负责人" />
                 <ScalarProperty Name="是否逾期" ColumnName="是否逾期" />
                 <ScalarProperty Name="数量" ColumnName="数量" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C_ContractProductDetail2">
+            <EntityTypeMapping TypeName="YLMES_newModel.C_ContractProductDetail2">
+              <MappingFragment StoreEntitySet="C_ContractProductDetail2">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ContractID" ColumnName="ContractID" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="Customer_ProductName" ColumnName="Customer_ProductName" />
+                <ScalarProperty Name="ProductTypeID" ColumnName="ProductTypeID" />
+                <ScalarProperty Name="ifDrive" ColumnName="ifDrive" />
+                <ScalarProperty Name="ProductSpec" ColumnName="ProductSpec" />
+                <ScalarProperty Name="P_Speed" ColumnName="P_Speed" />
+                <ScalarProperty Name="P_CarryingCapacity" ColumnName="P_CarryingCapacity" />
+                <ScalarProperty Name="P_ElectricalRequirements" ColumnName="P_ElectricalRequirements" />
+                <ScalarProperty Name="P_EquipmentWorkplace" ColumnName="P_EquipmentWorkplace" />
+                <ScalarProperty Name="P_Main_materialofworkpiece" ColumnName="P_Main_materialofworkpiece" />
+                <ScalarProperty Name="P_ChildPartSpecRange" ColumnName="P_ChildPartSpecRange" />
+                <ScalarProperty Name="P_ChildPartWeight" ColumnName="P_ChildPartWeight" />
+                <ScalarProperty Name="P_WorkpieceFeedingMode" ColumnName="P_WorkpieceFeedingMode" />
+                <ScalarProperty Name="P_RollerDiameter" ColumnName="P_RollerDiameter" />
+                <ScalarProperty Name="P_RollerMaterial" ColumnName="P_RollerMaterial" />
+                <ScalarProperty Name="P_RollerSurface" ColumnName="P_RollerSurface" />
+                <ScalarProperty Name="P_RollerTransferMode" ColumnName="P_RollerTransferMode" />
+                <ScalarProperty Name="P_MainBeaMaterial" ColumnName="P_MainBeaMaterial" />
+                <ScalarProperty Name="Units" ColumnName="Units" />
+                <ScalarProperty Name="Count" ColumnName="Count" />
+                <ScalarProperty Name="DueDay" ColumnName="DueDay" />
+                <ScalarProperty Name="DeliveryedCount" ColumnName="DeliveryedCount" />
+                <ScalarProperty Name="NewDeliveryedCount" ColumnName="NewDeliveryedCount" />
+                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+                <ScalarProperty Name="InstalledQuantity" ColumnName="InstalledQuantity" />
+                <ScalarProperty Name="newInstalledQuantity" ColumnName="newInstalledQuantity" />
+                <ScalarProperty Name="CompletionDate" ColumnName="CompletionDate" />
+                <ScalarProperty Name="Acceptance" ColumnName="Acceptance" />
+                <ScalarProperty Name="AcceptanceDate" ColumnName="AcceptanceDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -11558,6 +11793,25 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PM_Machine">
+            <EntityTypeMapping TypeName="YLMES_newModel.PM_Machine">
+              <MappingFragment StoreEntitySet="PM_Machine">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PM_MachineMatchStationType">
+            <EntityTypeMapping TypeName="YLMES_newModel.PM_MachineMatchStationType">
+              <MappingFragment StoreEntitySet="PM_MachineMatchStationType">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="MachineID" ColumnName="MachineID" />
+                <ScalarProperty Name="StationTypeID" ColumnName="StationTypeID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="PM_Package">
             <EntityTypeMapping TypeName="YLMES_newModel.PM_Package">
               <MappingFragment StoreEntitySet="PM_Package">
@@ -11576,6 +11830,7 @@
                 <ScalarProperty Name="MaterialId" ColumnName="MaterialId" />
                 <ScalarProperty Name="LocationId" ColumnName="LocationId" />
                 <ScalarProperty Name="ContractNumber" ColumnName="ContractNumber" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -12002,19 +12257,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="WarehouseLocation">
-            <EntityTypeMapping TypeName="YLMES_newModel.WarehouseLocation">
-              <MappingFragment StoreEntitySet="WarehouseLocation">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="Reservoir" ColumnName="Reservoir" />
-                <ScalarProperty Name="CargoArea" ColumnName="CargoArea" />
-                <ScalarProperty Name="Goods" ColumnName="Goods" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ContractNumber" ColumnName="ContractNumber" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionName="YLMES_newModel.Store.f_split" FunctionImportName="f_split">
             <ResultMapping>
               <ComplexTypeMapping TypeName="YLMES_newModel.f_split_Result">
@@ -12035,6 +12277,7 @@
           <FunctionImportMapping FunctionImportName="Addhtml" FunctionName="YLMES_newModel.Store.Addhtml" />
           <FunctionImportMapping FunctionImportName="AddLocationType" FunctionName="YLMES_newModel.Store.AddLocationType" />
           <FunctionImportMapping FunctionImportName="AddMerial" FunctionName="YLMES_newModel.Store.AddMerial" />
+          <FunctionImportMapping FunctionImportName="AddPlanMater" FunctionName="YLMES_newModel.Store.AddPlanMater" />
           <FunctionImportMapping FunctionImportName="AddPM_MaterialList" FunctionName="YLMES_newModel.Store.AddPM_MaterialList" />
           <FunctionImportMapping FunctionImportName="AddPoDetials" FunctionName="YLMES_newModel.Store.AddPoDetials" />
           <FunctionImportMapping FunctionImportName="AddProcessBOM" FunctionName="YLMES_newModel.Store.AddProcessBOM" />
@@ -12454,21 +12697,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="CheckWorkStation" FunctionName="YLMES_newModel.Store.CheckWorkStation">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="YLMES_newModel.CheckWorkStation_Result">
-                <ScalarProperty Name="序号" ColumnName="序号" />
-                <ScalarProperty Name="工单名称" ColumnName="工单名称" />
-                <ScalarProperty Name="工位名称" ColumnName="工位名称" />
-                <ScalarProperty Name="总套数" ColumnName="总套数" />
-                <ScalarProperty Name="完成套数" ColumnName="完成套数" />
-                <ScalarProperty Name="坏品套数" ColumnName="坏品套数" />
-                <ScalarProperty Name="开始时间" ColumnName="开始时间" />
-                <ScalarProperty Name="结束时间" ColumnName="结束时间" />
-                <ScalarProperty Name="负责人" ColumnName="负责人" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CheckWorkStation" FunctionName="YLMES_newModel.Store.CheckWorkStation" />
           <FunctionImportMapping FunctionImportName="ChecSmsInfos" FunctionName="YLMES_newModel.Store.ChecSmsInfos">
             <ResultMapping>
               <ComplexTypeMapping TypeName="YLMES_newModel.ChecSmsInfos_Result">
@@ -13025,6 +13254,7 @@
                 <ScalarProperty Name="实际采购套数" ColumnName="实际采购套数" />
                 <ScalarProperty Name="实际采购数量" ColumnName="实际采购数量" />
                 <ScalarProperty Name="单位" ColumnName="单位" />
+                <ScalarProperty Name="规格" ColumnName="规格" />
                 <ScalarProperty Name="单价" ColumnName="单价" />
                 <ScalarProperty Name="总价" ColumnName="总价" />
                 <ScalarProperty Name="供应商" ColumnName="供应商" />
