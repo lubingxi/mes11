@@ -328,19 +328,22 @@ namespace YLMES.Controllers
             }
         }
         //修改BOM
-        public ActionResult EditProcessBOM(string id, string pc, string ph)
+        public ActionResult EditProcessBOM(string id, string pc, string ph,string mqty,string spec,string unit)
         {
             try
             {
                 int tid = int.Parse(id);
-                SqlParameter[] parms = new SqlParameter[4];
+                SqlParameter[] parms = new SqlParameter[7];
                 parms[0] = new SqlParameter("@ID", tid);
                 parms[1] = new SqlParameter("@PartNumber", "");
                 parms[2] = new SqlParameter("@ChildPartQTY", pc);
                 parms[3] = new SqlParameter("@ChildPartNumber", ph);
+                parms[4] = new SqlParameter("@MQty", mqty);
+                parms[5] = new SqlParameter("@Unit", unit);
+                parms[6] = new SqlParameter("@Spec", spec);
                 using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    ys.Database.ExecuteSqlCommand("exec  EditProcessBOM  @ID,@PartNumber,@ChildPartQTY,@ChildPartNumber", parms);
+                    ys.Database.ExecuteSqlCommand("exec  EditProcessBOM  @ID,@PartNumber,@ChildPartQTY,@ChildPartNumber,@MQty,@Unit,@Spec", parms);
                 }
                 return Content("true");
             }

@@ -183,13 +183,10 @@
           <Property Name="Status" Type="varchar" MaxLength="50" />
           <Property Name="Price" Type="varchar" MaxLength="20" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“YLMES_new.dbo.C_ContractProductDetail2”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="C_ContractProductDetail2">
           <Key>
             <PropertyRef Name="ID" />
             <PropertyRef Name="ContractID" />
-            <PropertyRef Name="ProductName" />
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="ContractID" Type="int" Nullable="false" />
@@ -367,6 +364,7 @@
           <Property Name="部门ID" Type="int" />
           <Property Name="AppID" Type="int" />
           <Property Name="PzID" Type="int" />
+          <Property Name="CID" Type="int" />
         </EntityType>
         <EntityType Name="FI_Affairs">
           <Key>
@@ -500,6 +498,15 @@
           <Property Name="主管" Type="varchar" MaxLength="10" />
           <Property Name="经理" Type="varchar" MaxLength="10" />
           <Property Name="状态" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="FI_Salary">
+          <Key>
+            <PropertyRef Name="CCID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CCID" Type="int" Nullable="false" />
+          <Property Name="Salary" Type="varbinary" MaxLength="100" />
+          <Property Name="Status" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="FI_Subject_category">
           <Key>
@@ -659,6 +666,7 @@
           <Property Name="StatusID" Type="varchar" MaxLength="20" />
           <Property Name="TaskID" Type="int" />
           <Property Name="Type" Type="varchar" MaxLength="20" />
+          <Property Name="MaterialSpec" Type="varchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="PM_BOM_Process">
           <Key>
@@ -837,14 +845,16 @@
           <Property Name="SortID" Type="int" />
           <Property Name="StatusID" Type="int" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“YLMES_new.dbo.PM_Machine”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="PM_Machine">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="MachineName" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="MachineName" Type="varchar" MaxLength="50" />
+          <Property Name="MachineName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PurchasePrice" Type="float" />
+          <Property Name="PurchaseDate" Type="varchar" MaxLength="50" />
+          <Property Name="PeriodOfDepreciation" Type="float" />
+          <Property Name="ifDepreciation" Type="int" />
           <Property Name="Status" Type="varchar" MaxLength="20" />
         </EntityType>
         <!--生成过程中发现错误:
@@ -860,7 +870,10 @@
         </EntityType>
         <EntityType Name="PM_Material">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="figureNumber" />
+            <PropertyRef Name="PartNumber" />
+            <PropertyRef Name="PartSpec" />
+            <PropertyRef Name="PartMaterial" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Category1ID" Type="int" />
@@ -886,7 +899,8 @@
           <Property Name="InventoryQuantity" Type="varchar" MaxLength="30" />
           <Property Name="DesignType" Type="varchar" MaxLength="20" />
           <Property Name="Note" Type="varchar" MaxLength="50" />
-          <Property Name="materialQTY" Type="varchar" MaxLength="50" />
+          <Property Name="RawMaterialID" Type="int" />
+          <Property Name="MaterialQTY" Type="varchar" MaxLength="50" />
           <Property Name="MaterialUnits" Type="varchar" MaxLength="50" />
           <Property Name="StockQTY2" Type="int" />
           <Property Name="Units2" Type="varchar" MaxLength="50" />
@@ -989,6 +1003,16 @@
           <Property Name="Status" Type="varchar" MaxLength="20" />
           <Property Name="CreatedTime" Type="varchar" MaxLength="20" />
           <Property Name="CreatedBy" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="PM_MaterialMatchRawMaterial">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MaterialID" Type="int" />
+          <Property Name="RawMaterialID" Type="int" />
+          <Property Name="QTY" Type="int" />
+          <Property Name="Unit" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="PM_MaterialTemp">
           <Key>
@@ -1692,6 +1716,7 @@
           <Property Name="TotalPCS" Type="int" />
           <Property Name="QTYofOneSet" Type="int" />
           <Property Name="TotalQTY" Type="int" />
+          <Property Name="FailedPCS" Type="int" />
           <Property Name="RecievedQTY" Type="int" />
           <Property Name="CompletedQTY" Type="int" />
           <Property Name="PackageQTY" Type="int" />
@@ -1937,6 +1962,16 @@
           <Parameter Name="ListType" Type="varchar" Mode="In" />
           <Parameter Name="TaskID" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="AddOfUpMachine" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="type" Type="varchar" Mode="In" />
+          <Parameter Name="MachineName" Type="varchar" Mode="In" />
+          <Parameter Name="PeriodOfDepreciation" Type="varchar" Mode="In" />
+          <Parameter Name="PurchaseDate" Type="varchar" Mode="In" />
+          <Parameter Name="PurchasePrice" Type="varchar" Mode="In" />
+          <Parameter Name="Status" Type="varchar" Mode="In" />
+          <Parameter Name="ifDepreciation" Type="varchar" Mode="In" />
+          <Parameter Name="ID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="AddPlanMater" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaskID" Type="int" Mode="In" />
         </Function>
@@ -1962,6 +1997,17 @@
           <Parameter Name="ProcessName" Type="varchar" Mode="In" />
           <Parameter Name="File" Type="varchar" Mode="In" />
           <Parameter Name="CreateBy" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AddPz" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="jzh" Type="varchar" Mode="In" />
+          <Parameter Name="CrName" Type="varchar" Mode="In" />
+          <Parameter Name="Cnumber" Type="varchar" Mode="In" />
+          <Parameter Name="Pnumber" Type="varchar" Mode="In" />
+          <Parameter Name="Dept" Type="varchar" Mode="In" />
+          <Parameter Name="zy" Type="varchar" Mode="In" />
+          <Parameter Name="km" Type="varchar" Mode="In" />
+          <Parameter Name="j" Type="varchar" Mode="In" />
+          <Parameter Name="d" Type="varchar" Mode="In" />
         </Function>
         <Function Name="AddRoute" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Route" Type="int" Mode="In" />
@@ -2020,6 +2066,10 @@
           <Parameter Name="NewName" Type="varchar" Mode="In" />
           <Parameter Name="PassWord" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="CheckAllWarehouse" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PartNumber" Type="varchar" Mode="In" />
+          <Parameter Name="PartSpec" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="checkBOM" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaskID" Type="int" Mode="In" />
         </Function>
@@ -2050,6 +2100,9 @@
           <Parameter Name="PartNumber" Type="varchar" Mode="In" />
           <Parameter Name="PartSpec" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="CheckDrawingSrc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
         <Function Name="CheckDropAreaList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="WHID" Type="varchar" Mode="In" />
           <Parameter Name="WHAreaID" Type="varchar" Mode="In" />
@@ -2064,6 +2117,11 @@
           <Parameter Name="WHID" Type="varchar" Mode="In" />
           <Parameter Name="WHAreaID" Type="varchar" Mode="In" />
           <Parameter Name="WHStorageLocationID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="CheckFinishedGoods" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Reservoir" Type="varchar" Mode="In" />
+          <Parameter Name="CargoArea" Type="varchar" Mode="In" />
+          <Parameter Name="Goods" Type="varchar" Mode="In" />
         </Function>
         <Function Name="CheckFinshProcess" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Takid" Type="int" Mode="In" />
@@ -2086,6 +2144,9 @@
         </Function>
         <Function Name="CheckMater" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Partid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="CheckPakeCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pakeage" Type="varchar" Mode="In" />
         </Function>
         <Function Name="CheckParts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaskID" Type="int" Mode="In" />
@@ -2232,6 +2293,9 @@
           <Parameter Name="PartNumber" Type="varchar" Mode="In" />
           <Parameter Name="ChildPartQTY" Type="varchar" Mode="In" />
           <Parameter Name="ChildPartNumber" Type="varchar" Mode="In" />
+          <Parameter Name="MQty" Type="varchar" Mode="In" />
+          <Parameter Name="Unit" Type="varchar" Mode="In" />
+          <Parameter Name="Spec" Type="varchar" Mode="In" />
         </Function>
         <Function Name="EditWH" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TYPE" Type="varchar" Mode="In" />
@@ -2428,6 +2492,11 @@
         </Function>
         <Function Name="PM_AddWorkDetial" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="WorkorderNO" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PM_AllUnbundling" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="PartNumber" Type="varchar" Mode="In" />
+          <Parameter Name="PartSpec" Type="varchar" Mode="In" />
         </Function>
         <Function Name="PM_AssignTasksCheck" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RwapStatusID" Type="varchar" Mode="In" />
@@ -3083,6 +3152,12 @@
           <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
           <Parameter Name="owner_id" Type="int" Mode="In" />
         </Function>
+        <Function Name="SP_Edit_Salary" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PWD" Type="varchar" Mode="In" />
+          <Parameter Name="Type" Type="varchar" Mode="In" />
+          <Parameter Name="CCID" Type="int" Mode="In" />
+          <Parameter Name="Salary" Type="float" Mode="In" />
+        </Function>
         <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
           <Parameter Name="owner_id" Type="int" Mode="In" />
@@ -3420,6 +3495,9 @@
           <Parameter Name="PackageName" Type="varchar" Mode="In" />
           <Parameter Name="CCID" Type="int" Mode="In" />
           <Parameter Name="PID" Type="int" Mode="In" />
+          <Parameter Name="IDone" Type="int" Mode="In" />
+          <Parameter Name="IDtwo" Type="int" Mode="In" />
+          <Parameter Name="IDthree" Type="int" Mode="In" />
         </Function>
         <Function Name="SP_PM_Materials" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PartNumber" Type="varchar" Mode="In" />
@@ -3948,6 +4026,7 @@
           <EntitySet Name="C_ContractDeliveryHistory" EntityType="Self.C_ContractDeliveryHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="C_ContractInstallationHistory" EntityType="Self.C_ContractInstallationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="C_ContractProductDetail" EntityType="Self.C_ContractProductDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="C_ContractProductDetail2" EntityType="Self.C_ContractProductDetail2" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category1" EntityType="Self.Category1" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category2" EntityType="Self.Category2" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category3" EntityType="Self.Category3" Schema="dbo" store:Type="Tables" />
@@ -3964,6 +4043,7 @@
           <EntitySet Name="FI_CostType" EntityType="Self.FI_CostType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FI_DebitAndCredit_Templet" EntityType="Self.FI_DebitAndCredit_Templet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FI_Dept" EntityType="Self.FI_Dept" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FI_Salary" EntityType="Self.FI_Salary" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FI_Subject_category" EntityType="Self.FI_Subject_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FI_Voucher_Flow_Setup" EntityType="Self.FI_Voucher_Flow_Setup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="htmltext" EntityType="Self.htmltext" Schema="dbo" store:Type="Tables" />
@@ -3981,11 +4061,13 @@
           <EntitySet Name="PM_Forum" EntityType="Self.PM_Forum" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_Forum_Comments" EntityType="Self.PM_Forum_Comments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_FunctionList" EntityType="Self.PM_FunctionList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PM_Machine" EntityType="Self.PM_Machine" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_Material" EntityType="Self.PM_Material" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_Material_temp" EntityType="Self.PM_Material_temp" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_MaterialList" EntityType="Self.PM_MaterialList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_MaterialList_new" EntityType="Self.PM_MaterialList_new" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_MaterialListByProject" EntityType="Self.PM_MaterialListByProject" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PM_MaterialMatchRawMaterial" EntityType="Self.PM_MaterialMatchRawMaterial" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_MaterialTemp" EntityType="Self.PM_MaterialTemp" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_PONO" EntityType="Self.PM_PONO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_Product" EntityType="Self.PM_Product" Schema="dbo" store:Type="Tables" />
@@ -4019,45 +4101,6 @@
     [ac].[是否逾期] AS [是否逾期], 
     [ac].[数量] AS [数量]
     FROM [dbo].[ac] AS [ac]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="C_ContractProductDetail2" EntityType="Self.C_ContractProductDetail2" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [C_ContractProductDetail2].[ID] AS [ID], 
-    [C_ContractProductDetail2].[ContractID] AS [ContractID], 
-    [C_ContractProductDetail2].[ProductName] AS [ProductName], 
-    [C_ContractProductDetail2].[Customer_ProductName] AS [Customer_ProductName], 
-    [C_ContractProductDetail2].[ProductTypeID] AS [ProductTypeID], 
-    [C_ContractProductDetail2].[ifDrive] AS [ifDrive], 
-    [C_ContractProductDetail2].[ProductSpec] AS [ProductSpec], 
-    [C_ContractProductDetail2].[P_Speed] AS [P_Speed], 
-    [C_ContractProductDetail2].[P_CarryingCapacity] AS [P_CarryingCapacity], 
-    [C_ContractProductDetail2].[P_ElectricalRequirements] AS [P_ElectricalRequirements], 
-    [C_ContractProductDetail2].[P_EquipmentWorkplace] AS [P_EquipmentWorkplace], 
-    [C_ContractProductDetail2].[P_Main_materialofworkpiece] AS [P_Main_materialofworkpiece], 
-    [C_ContractProductDetail2].[P_ChildPartSpecRange] AS [P_ChildPartSpecRange], 
-    [C_ContractProductDetail2].[P_ChildPartWeight] AS [P_ChildPartWeight], 
-    [C_ContractProductDetail2].[P_WorkpieceFeedingMode] AS [P_WorkpieceFeedingMode], 
-    [C_ContractProductDetail2].[P_RollerDiameter] AS [P_RollerDiameter], 
-    [C_ContractProductDetail2].[P_RollerMaterial] AS [P_RollerMaterial], 
-    [C_ContractProductDetail2].[P_RollerSurface] AS [P_RollerSurface], 
-    [C_ContractProductDetail2].[P_RollerTransferMode] AS [P_RollerTransferMode], 
-    [C_ContractProductDetail2].[P_MainBeaMaterial] AS [P_MainBeaMaterial], 
-    [C_ContractProductDetail2].[Units] AS [Units], 
-    [C_ContractProductDetail2].[Count] AS [Count], 
-    [C_ContractProductDetail2].[DueDay] AS [DueDay], 
-    [C_ContractProductDetail2].[DeliveryedCount] AS [DeliveryedCount], 
-    [C_ContractProductDetail2].[NewDeliveryedCount] AS [NewDeliveryedCount], 
-    [C_ContractProductDetail2].[DeliveryDate] AS [DeliveryDate], 
-    [C_ContractProductDetail2].[InstalledQuantity] AS [InstalledQuantity], 
-    [C_ContractProductDetail2].[newInstalledQuantity] AS [newInstalledQuantity], 
-    [C_ContractProductDetail2].[CompletionDate] AS [CompletionDate], 
-    [C_ContractProductDetail2].[Acceptance] AS [Acceptance], 
-    [C_ContractProductDetail2].[AcceptanceDate] AS [AcceptanceDate], 
-    [C_ContractProductDetail2].[CreatedBy] AS [CreatedBy], 
-    [C_ContractProductDetail2].[CreatedTime] AS [CreatedTime], 
-    [C_ContractProductDetail2].[Status] AS [Status], 
-    [C_ContractProductDetail2].[Price] AS [Price]
-    FROM [dbo].[C_ContractProductDetail2] AS [C_ContractProductDetail2]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="ChecSmsInfo" EntityType="Self.ChecSmsInfo" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -4185,13 +4228,6 @@
     [PM_FinshGoodsLocation].[CreatedTime] AS [CreatedTime], 
     [PM_FinshGoodsLocation].[StatusID] AS [StatusID]
     FROM [dbo].[PM_FinshGoodsLocation] AS [PM_FinshGoodsLocation]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="PM_Machine" EntityType="Self.PM_Machine" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [PM_Machine].[ID] AS [ID], 
-    [PM_Machine].[MachineName] AS [MachineName], 
-    [PM_Machine].[Status] AS [Status]
-    FROM [dbo].[PM_Machine] AS [PM_Machine]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PM_MachineMatchStationType" EntityType="Self.PM_MachineMatchStationType" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -4756,6 +4792,47 @@
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Price" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="C_ContractProductDetail2">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="ContractID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ContractID" Type="Int32" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Customer_ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProductTypeID" Type="Int32" />
+          <Property Name="ifDrive" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ProductSpec" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_Speed" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_CarryingCapacity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_ElectricalRequirements" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_EquipmentWorkplace" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_Main_materialofworkpiece" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_ChildPartSpecRange" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_ChildPartWeight" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_WorkpieceFeedingMode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_RollerDiameter" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_RollerMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_RollerSurface" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_RollerTransferMode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="P_MainBeaMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Units" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Count" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DueDay" Type="DateTime" Precision="0" />
+          <Property Name="DeliveryedCount" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="NewDeliveryedCount" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DeliveryDate" Type="DateTime" Precision="0" />
+          <Property Name="InstalledQuantity" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="newInstalledQuantity" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CompletionDate" Type="DateTime" Precision="0" />
+          <Property Name="Acceptance" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="AcceptanceDate" Type="DateTime" Precision="0" />
+          <Property Name="CreatedBy" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedTime" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Price" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="Category1">
           <Key>
             <PropertyRef Name="id" />
@@ -4837,6 +4914,7 @@
           <Property Name="部门ID" Type="Int32" />
           <Property Name="AppID" Type="Int32" />
           <Property Name="PzID" Type="Int32" />
+          <Property Name="CID" Type="Int32" />
         </EntityType>
         <EntityType Name="FI_Affairs">
           <Key>
@@ -4971,6 +5049,15 @@
           <Property Name="经理" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="状态" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="FI_Salary">
+          <Key>
+            <PropertyRef Name="CCID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CCID" Type="Int32" Nullable="false" />
+          <Property Name="Salary" Type="Binary" MaxLength="100" FixedLength="false" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="FI_Subject_category">
           <Key>
             <PropertyRef Name="编号" />
@@ -5086,6 +5173,7 @@
           <Property Name="StatusID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="TaskID" Type="Int32" />
           <Property Name="Type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MaterialSpec" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PM_BOM_Process">
           <Key>
@@ -5196,9 +5284,24 @@
           <Property Name="SortID" Type="Int32" />
           <Property Name="StatusID" Type="Int32" />
         </EntityType>
+        <EntityType Name="PM_Machine">
+          <Key>
+            <PropertyRef Name="MachineName" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MachineName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PurchasePrice" Type="Double" />
+          <Property Name="PurchaseDate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PeriodOfDepreciation" Type="Double" />
+          <Property Name="ifDepreciation" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="PM_Material">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="figureNumber" />
+            <PropertyRef Name="PartNumber" />
+            <PropertyRef Name="PartSpec" />
+            <PropertyRef Name="PartMaterial" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Category1ID" Type="Int32" />
@@ -5224,7 +5327,8 @@
           <Property Name="InventoryQuantity" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="DesignType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Note" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="materialQTY" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RawMaterialID" Type="Int32" />
+          <Property Name="MaterialQTY" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="MaterialUnits" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="StockQTY2" Type="Int32" />
           <Property Name="Units2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -5327,6 +5431,16 @@
           <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="CreatedTime" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="CreatedBy" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PM_MaterialMatchRawMaterial">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaterialID" Type="Int32" />
+          <Property Name="RawMaterialID" Type="Int32" />
+          <Property Name="QTY" Type="Int32" />
+          <Property Name="Unit" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PM_MaterialTemp">
           <Key>
@@ -5606,6 +5720,7 @@
           <Property Name="TotalPCS" Type="Int32" />
           <Property Name="QTYofOneSet" Type="Int32" />
           <Property Name="TotalQTY" Type="Int32" />
+          <Property Name="FailedPCS" Type="Int32" />
           <Property Name="RecievedQTY" Type="Int32" />
           <Property Name="CompletedQTY" Type="Int32" />
           <Property Name="PackageQTY" Type="Int32" />
@@ -5727,48 +5842,6 @@
           <Property Name="负责人" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="是否逾期" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="数量" Type="Int32" />
-        </EntityType>
-        <EntityType Name="C_ContractProductDetail2">
-          <Key>
-            <PropertyRef Name="ID" />
-            <PropertyRef Name="ContractID" />
-            <PropertyRef Name="ProductName" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="ContractID" Type="Int32" Nullable="false" />
-          <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Customer_ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ProductTypeID" Type="Int32" />
-          <Property Name="ifDrive" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="ProductSpec" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="P_Speed" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="P_CarryingCapacity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="P_ElectricalRequirements" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="P_EquipmentWorkplace" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="P_Main_materialofworkpiece" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="P_ChildPartSpecRange" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="P_ChildPartWeight" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="P_WorkpieceFeedingMode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="P_RollerDiameter" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="P_RollerMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="P_RollerSurface" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="P_RollerTransferMode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="P_MainBeaMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Units" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Count" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="DueDay" Type="DateTime" Precision="0" />
-          <Property Name="DeliveryedCount" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="NewDeliveryedCount" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="DeliveryDate" Type="DateTime" Precision="0" />
-          <Property Name="InstalledQuantity" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="newInstalledQuantity" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="CompletionDate" Type="DateTime" Precision="0" />
-          <Property Name="Acceptance" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="AcceptanceDate" Type="DateTime" Precision="0" />
-          <Property Name="CreatedBy" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="CreatedTime" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Price" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ChecSmsInfo">
           <Key>
@@ -5910,14 +5983,6 @@
           <Property Name="PackageID" Type="Int32" />
           <Property Name="CreatedTime" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="StatusID" Type="Int32" />
-        </EntityType>
-        <EntityType Name="PM_Machine">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MachineName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PM_MachineMatchStationType">
           <Key>
@@ -6375,6 +6440,7 @@
           <EntitySet Name="C_ContractDeliveryHistory" EntityType="Self.C_ContractDeliveryHistory" />
           <EntitySet Name="C_ContractInstallationHistory" EntityType="Self.C_ContractInstallationHistory" />
           <EntitySet Name="C_ContractProductDetail" EntityType="Self.C_ContractProductDetail" />
+          <EntitySet Name="C_ContractProductDetail2" EntityType="Self.C_ContractProductDetail2" />
           <EntitySet Name="Category1" EntityType="Self.Category1" />
           <EntitySet Name="Category2" EntityType="Self.Category2" />
           <EntitySet Name="Category3" EntityType="Self.Category3" />
@@ -6391,6 +6457,7 @@
           <EntitySet Name="FI_CostType" EntityType="Self.FI_CostType" />
           <EntitySet Name="FI_DebitAndCredit_Templet" EntityType="Self.FI_DebitAndCredit_Templet" />
           <EntitySet Name="FI_Dept" EntityType="Self.FI_Dept" />
+          <EntitySet Name="FI_Salary" EntityType="Self.FI_Salary" />
           <EntitySet Name="FI_Subject_category" EntityType="Self.FI_Subject_category" />
           <EntitySet Name="FI_Voucher_Flow_Setup" EntityType="Self.FI_Voucher_Flow_Setup" />
           <EntitySet Name="htmltext" EntityType="Self.htmltext" />
@@ -6408,11 +6475,13 @@
           <EntitySet Name="PM_Forum" EntityType="Self.PM_Forum" />
           <EntitySet Name="PM_Forum_Comments" EntityType="Self.PM_Forum_Comments" />
           <EntitySet Name="PM_FunctionList" EntityType="Self.PM_FunctionList" />
+          <EntitySet Name="PM_Machine" EntityType="Self.PM_Machine" />
           <EntitySet Name="PM_Material" EntityType="Self.PM_Material" />
           <EntitySet Name="PM_Material_temp" EntityType="Self.PM_Material_temp" />
           <EntitySet Name="PM_MaterialList" EntityType="Self.PM_MaterialList" />
           <EntitySet Name="PM_MaterialList_new" EntityType="Self.PM_MaterialList_new" />
           <EntitySet Name="PM_MaterialListByProject" EntityType="Self.PM_MaterialListByProject" />
+          <EntitySet Name="PM_MaterialMatchRawMaterial" EntityType="Self.PM_MaterialMatchRawMaterial" />
           <EntitySet Name="PM_MaterialTemp" EntityType="Self.PM_MaterialTemp" />
           <EntitySet Name="PM_PONO" EntityType="Self.PM_PONO" />
           <EntitySet Name="PM_Product" EntityType="Self.PM_Product" />
@@ -6440,7 +6509,6 @@
           <EntitySet Name="tttb" EntityType="Self.tttb" />
           <EntitySet Name="WarehouseLocation" EntityType="Self.WarehouseLocation" />
           <EntitySet Name="ac" EntityType="Self.ac" />
-          <EntitySet Name="C_ContractProductDetail2" EntityType="Self.C_ContractProductDetail2" />
           <EntitySet Name="ChecSmsInfo" EntityType="Self.ChecSmsInfo" />
           <EntitySet Name="DeletePM_WorkDetailHistory" EntityType="Self.DeletePM_WorkDetailHistory" />
           <EntitySet Name="EmployeeWorkReport" EntityType="Self.EmployeeWorkReport" />
@@ -6452,7 +6520,6 @@
           <EntitySet Name="PM_DepartmentSubsector" EntityType="Self.PM_DepartmentSubsector" />
           <EntitySet Name="PM_DepartRouting" EntityType="Self.PM_DepartRouting" />
           <EntitySet Name="PM_FinshGoodsLocation" EntityType="Self.PM_FinshGoodsLocation" />
-          <EntitySet Name="PM_Machine" EntityType="Self.PM_Machine" />
           <EntitySet Name="PM_MachineMatchStationType" EntityType="Self.PM_MachineMatchStationType" />
           <EntitySet Name="PM_Package" EntityType="Self.PM_Package" />
           <EntitySet Name="PM_PartSetting_temp" EntityType="Self.PM_PartSetting_temp" />
@@ -6522,6 +6589,16 @@
             <Parameter Name="ListType" Mode="In" Type="String" />
             <Parameter Name="TaskID" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="AddOfUpMachine">
+            <Parameter Name="type" Mode="In" Type="String" />
+            <Parameter Name="MachineName" Mode="In" Type="String" />
+            <Parameter Name="PeriodOfDepreciation" Mode="In" Type="String" />
+            <Parameter Name="PurchaseDate" Mode="In" Type="String" />
+            <Parameter Name="PurchasePrice" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+            <Parameter Name="ifDepreciation" Mode="In" Type="String" />
+            <Parameter Name="ID" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="AddPlanMater">
             <Parameter Name="TaskID" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -6547,6 +6624,17 @@
             <Parameter Name="ProcessName" Mode="In" Type="String" />
             <Parameter Name="File" Mode="In" Type="String" />
             <Parameter Name="CreateBy" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddPz">
+            <Parameter Name="jzh" Mode="In" Type="String" />
+            <Parameter Name="CrName" Mode="In" Type="String" />
+            <Parameter Name="Cnumber" Mode="In" Type="String" />
+            <Parameter Name="Pnumber" Mode="In" Type="String" />
+            <Parameter Name="Dept" Mode="In" Type="String" />
+            <Parameter Name="zy" Mode="In" Type="String" />
+            <Parameter Name="km" Mode="In" Type="String" />
+            <Parameter Name="j" Mode="In" Type="String" />
+            <Parameter Name="d" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AddRoute">
             <Parameter Name="Route" Mode="In" Type="Int32" />
@@ -6605,6 +6693,10 @@
             <Parameter Name="NewName" Mode="In" Type="String" />
             <Parameter Name="PassWord" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="CheckAllWarehouse" ReturnType="Collection(YLMES_newModel.CheckAllWarehouse_Result)">
+            <Parameter Name="PartNumber" Mode="In" Type="String" />
+            <Parameter Name="PartSpec" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="checkBOM" ReturnType="Collection(YLMES_newModel.checkBOM_Result)">
             <Parameter Name="TaskID" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -6635,6 +6727,9 @@
             <Parameter Name="PartNumber" Mode="In" Type="String" />
             <Parameter Name="PartSpec" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="CheckDrawingSrc" ReturnType="Collection(YLMES_newModel.CheckDrawingSrc_Result)">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
           <FunctionImport Name="CheckDropAreaList" ReturnType="Collection(YLMES_newModel.CheckDropAreaList_Result)">
             <Parameter Name="WHID" Mode="In" Type="String" />
             <Parameter Name="WHAreaID" Mode="In" Type="String" />
@@ -6649,6 +6744,11 @@
             <Parameter Name="WHID" Mode="In" Type="String" />
             <Parameter Name="WHAreaID" Mode="In" Type="String" />
             <Parameter Name="WHStorageLocationID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CheckFinishedGoods" ReturnType="Collection(YLMES_newModel.CheckFinishedGoods_Result)">
+            <Parameter Name="Reservoir" Mode="In" Type="String" />
+            <Parameter Name="CargoArea" Mode="In" Type="String" />
+            <Parameter Name="Goods" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CheckFinshProcess" ReturnType="Collection(YLMES_newModel.CheckFinshProcess_Result)">
             <Parameter Name="Takid" Mode="In" Type="Int32" />
@@ -6671,6 +6771,9 @@
           </FunctionImport>
           <FunctionImport Name="CheckMater" ReturnType="Collection(YLMES_newModel.CheckMater_Result)">
             <Parameter Name="Partid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="CheckPakeCount" ReturnType="Collection(YLMES_newModel.CheckPakeCount_Result)">
+            <Parameter Name="pakeage" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CheckParts" ReturnType="Collection(YLMES_newModel.CheckParts_Result)">
             <Parameter Name="TaskID" Mode="In" Type="Int32" />
@@ -6817,6 +6920,9 @@
             <Parameter Name="PartNumber" Mode="In" Type="String" />
             <Parameter Name="ChildPartQTY" Mode="In" Type="String" />
             <Parameter Name="ChildPartNumber" Mode="In" Type="String" />
+            <Parameter Name="MQty" Mode="In" Type="String" />
+            <Parameter Name="Unit" Mode="In" Type="String" />
+            <Parameter Name="Spec" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="EditWH">
             <Parameter Name="TYPE" Mode="In" Type="String" />
@@ -7000,6 +7106,11 @@
           </FunctionImport>
           <FunctionImport Name="PM_AddWorkDetial">
             <Parameter Name="WorkorderNO" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PM_AllUnbundling">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="PartNumber" Mode="In" Type="String" />
+            <Parameter Name="PartSpec" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="PM_AssignTasksCheck" ReturnType="Collection(YLMES_newModel.PM_AssignTasksCheck_Result)">
             <Parameter Name="RwapStatusID" Mode="In" Type="String" />
@@ -7655,6 +7766,12 @@
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="SP_Edit_Salary" ReturnType="Collection(YLMES_newModel.SP_Edit_Salary_Result)">
+            <Parameter Name="PWD" Mode="In" Type="String" />
+            <Parameter Name="Type" Mode="In" Type="String" />
+            <Parameter Name="CCID" Mode="In" Type="Int32" />
+            <Parameter Name="Salary" Mode="In" Type="Double" />
+          </FunctionImport>
           <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(YLMES_newModel.sp_helpdiagramdefinition_Result)">
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
@@ -7992,6 +8109,9 @@
             <Parameter Name="PackageName" Mode="In" Type="String" />
             <Parameter Name="CCID" Mode="In" Type="Int32" />
             <Parameter Name="PID" Mode="In" Type="Int32" />
+            <Parameter Name="IDone" Mode="In" Type="Int32" />
+            <Parameter Name="IDtwo" Mode="In" Type="Int32" />
+            <Parameter Name="IDthree" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_PM_Materials" ReturnType="Collection(YLMES_newModel.SP_PM_Materials_Result)">
             <Parameter Name="PartNumber" Mode="In" Type="String" />
@@ -8454,7 +8574,7 @@
             <Parameter Name="PartSpec" Mode="In" Type="String" />
             <Parameter Name="PartMaterial" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="UpMake" ReturnType="Collection(YLMES_newModel.UpMake_Result)">
+          <FunctionImport Name="UpMake">
             <Parameter Name="type" Mode="In" Type="String" />
             <Parameter Name="id" Mode="In" Type="String" />
             <Parameter Name="MakeCreatedBy" Mode="In" Type="String" />
@@ -8523,6 +8643,11 @@
           <Property Type="String" Name="委托代理人" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="开户银行" Nullable="true" MaxLength="20" />
         </ComplexType>
+        <ComplexType Name="CheckAllWarehouse_Result">
+          <Property Type="String" Name="PartNumber" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="PartSpec" Nullable="true" MaxLength="300" />
+          <Property Type="Int32" Name="数量" Nullable="true" />
+        </ComplexType>
         <ComplexType Name="checkBOM_Result">
           <Property Type="Int32" Name="序号" Nullable="false" />
           <Property Type="String" Name="BOM结构" Nullable="true" MaxLength="30" />
@@ -8575,7 +8700,8 @@
           <Property Type="String" Name="InventoryQuantity" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="DesignType" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="Note" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="materialQTY" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="RawMaterialID" Nullable="true" />
+          <Property Type="String" Name="MaterialQTY" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="MaterialUnits" Nullable="true" MaxLength="50" />
           <Property Type="Int32" Name="StockQTY2" Nullable="true" />
           <Property Type="String" Name="Units2" Nullable="true" MaxLength="50" />
@@ -8605,6 +8731,10 @@
           <Property Type="Int32" Name="id" Nullable="false" />
           <Property Type="String" Name="CategoryName" Nullable="true" MaxLength="30" />
         </ComplexType>
+        <ComplexType Name="CheckDrawingSrc_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="FileName" Nullable="true" />
+        </ComplexType>
         <ComplexType Name="CheckDropAreaList_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="20" />
@@ -8616,6 +8746,16 @@
         <ComplexType Name="CheckDropWhList_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="WHArea" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="CheckFinishedGoods_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Reservoir" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="CargoArea" Nullable="true" />
+          <Property Type="Int32" Name="Goods" Nullable="true" />
+          <Property Type="String" Name="PartNumber" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="PartSpec" Nullable="true" MaxLength="300" />
+          <Property Type="Int32" Name="总数" Nullable="true" />
+          <Property Type="String" Name="PackageName" Nullable="true" MaxLength="50" />
         </ComplexType>
         <ComplexType Name="CheckFinshProcess_Result">
           <Property Type="Int32" Name="PartID" Nullable="false" />
@@ -8659,6 +8799,11 @@
           <Property Type="String" Name="PartSpec" Nullable="false" MaxLength="300" />
           <Property Type="String" Name="PartMaterial" Nullable="false" MaxLength="50" />
         </ComplexType>
+        <ComplexType Name="CheckPakeCount_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="PackageName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="QTY" Nullable="true" />
+        </ComplexType>
         <ComplexType Name="CheckParts_Result">
           <Property Type="Int32" Name="部件编号" Nullable="true" />
           <Property Type="String" Name="部件名称" Nullable="true" MaxLength="300" />
@@ -8686,6 +8831,7 @@
           <Property Type="Int32" Name="QTY" Nullable="true" />
           <Property Type="Int32" Name="物料序号" Nullable="false" />
           <Property Type="String" Name="Units" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Note" Nullable="true" MaxLength="50" />
         </ComplexType>
         <ComplexType Name="CheckPz_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -8771,9 +8917,10 @@
           <Property Type="String" Name="PartNumber" Nullable="true" MaxLength="300" />
           <Property Type="String" Name="PartSpec" Nullable="true" MaxLength="300" />
           <Property Type="Int32" Name="QTY" Nullable="true" />
-          <Property Type="String" Name="PackageName" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="ContractNumber" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustomerName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="PackageName" Nullable="true" MaxLength="50" />
         </ComplexType>
         <ComplexType Name="CheckWarehouseLocation2_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -8882,6 +9029,7 @@
           <Property Type="Int32" Name="TotalPCS" Nullable="true" />
           <Property Type="Int32" Name="QTYofOneSet" Nullable="true" />
           <Property Type="Int32" Name="TotalQTY" Nullable="true" />
+          <Property Type="Int32" Name="FailedPCS" Nullable="true" />
           <Property Type="Int32" Name="RecievedQTY" Nullable="true" />
           <Property Type="Int32" Name="CompletedQTY" Nullable="true" />
           <Property Type="Int32" Name="PackageQTY" Nullable="true" />
@@ -9028,6 +9176,7 @@
           <Property Type="Int32" Name="TotalPCS" Nullable="true" />
           <Property Type="Int32" Name="QTYofOneSet" Nullable="true" />
           <Property Type="Int32" Name="TotalQTY" Nullable="true" />
+          <Property Type="Int32" Name="FailedPCS" Nullable="true" />
           <Property Type="Int32" Name="RecievedQTY" Nullable="true" />
           <Property Type="Int32" Name="CompletedQTY" Nullable="true" />
           <Property Type="Int32" Name="PackageQTY" Nullable="true" />
@@ -9188,6 +9337,7 @@
           <Property Type="Int32" Name="子件数量" Nullable="true" />
           <Property Type="Int32" Name="原材料用量" Nullable="true" />
           <Property Type="String" Name="原材料单位" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="原材料规格" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="子BOM" Nullable="false" MaxLength="3" />
           <Property Type="Int32" Name="是否组装件" Nullable="true" />
           <Property Type="String" Name="工艺流程" Nullable="true" MaxLength="50" />
@@ -9732,6 +9882,10 @@
           <Property Type="String" Name="合同总结" Nullable="true" />
           <Property Type="String" Name="合同状态" Nullable="false" MaxLength="50" />
         </ComplexType>
+        <ComplexType Name="SP_Edit_Salary_Result">
+          <Property Type="Int32" Name="ccid" Nullable="false" />
+          <Property Type="Decimal" Name="Salary" Nullable="true" Precision="16" Scale="2" />
+        </ComplexType>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
           <Property Type="Binary" Name="definition" Nullable="true" />
@@ -9748,6 +9902,8 @@
           <Property Type="Int32" Name="记字号2" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SP_PM_Accuntingse_Result">
+          <Property Type="String" Name="Dept" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Cnumber" Nullable="true" MaxLength="402" />
           <Property Type="String" Name="摘要" Nullable="true" MaxLength="500" />
           <Property Type="String" Name="科目名称" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="借方" Nullable="true" MaxLength="41" />
@@ -10135,7 +10291,6 @@
           <Property Type="String" Name="状态" Nullable="true" MaxLength="20" />
         </ComplexType>
         <ComplexType Name="SP_PM_SeAccuntingpz_Result">
-          <Property Type="String" Name="项目编号2" Nullable="false" MaxLength="200" />
           <Property Type="String" Name="时间" Nullable="true" MaxLength="20" />
           <Property Type="Int32" Name="编号" Nullable="false" />
           <Property Type="DateTime" Name="凭证日期" Nullable="true" />
@@ -10150,7 +10305,7 @@
         </ComplexType>
         <ComplexType Name="SP_PM_SeContract_Result">
           <Property Type="Int32" Name="id" Nullable="false" />
-          <Property Type="String" Name="name" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="402" />
         </ComplexType>
         <ComplexType Name="SP_PM_SubjectCategory_Result">
           <Property Type="Int32" Name="编号" Nullable="false" />
@@ -10371,25 +10526,6 @@
           <Property Type="String" Name="设计师" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="FileName" Nullable="true" MaxLength="200" />
         </ComplexType>
-        <ComplexType Name="UpMake_Result">
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="Int32" Name="TaskID" Nullable="true" />
-          <Property Type="Int32" Name="MaterialID" Nullable="true" />
-          <Property Type="Int32" Name="QTYofPCS" Nullable="true" />
-          <Property Type="Int32" Name="ApplyPurchasePCS" Nullable="true" />
-          <Property Type="Int32" Name="ApplyPurchaseQTY" Nullable="true" />
-          <Property Type="Int32" Name="ActPurchasePCS" Nullable="true" />
-          <Property Type="Int32" Name="ActPurchaseQTY" Nullable="true" />
-          <Property Type="String" Name="Units" Nullable="true" MaxLength="10" />
-          <Property Type="Double" Name="UnitPrice" Nullable="true" />
-          <Property Type="Double" Name="TotalPrice" Nullable="true" />
-          <Property Type="Int32" Name="POID" Nullable="true" />
-          <Property Type="String" Name="Note" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="ListType" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="CreatedBy" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="CreatedTime" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="Spec" Nullable="true" MaxLength="50" />
-        </ComplexType>
         <ComplexType Name="UserName_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="UserName" Nullable="true" MaxLength="50" />
@@ -10578,6 +10714,47 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="C_ContractProductDetail2">
+            <EntityTypeMapping TypeName="YLMES_newModel.C_ContractProductDetail2">
+              <MappingFragment StoreEntitySet="C_ContractProductDetail2">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ContractID" ColumnName="ContractID" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="Customer_ProductName" ColumnName="Customer_ProductName" />
+                <ScalarProperty Name="ProductTypeID" ColumnName="ProductTypeID" />
+                <ScalarProperty Name="ifDrive" ColumnName="ifDrive" />
+                <ScalarProperty Name="ProductSpec" ColumnName="ProductSpec" />
+                <ScalarProperty Name="P_Speed" ColumnName="P_Speed" />
+                <ScalarProperty Name="P_CarryingCapacity" ColumnName="P_CarryingCapacity" />
+                <ScalarProperty Name="P_ElectricalRequirements" ColumnName="P_ElectricalRequirements" />
+                <ScalarProperty Name="P_EquipmentWorkplace" ColumnName="P_EquipmentWorkplace" />
+                <ScalarProperty Name="P_Main_materialofworkpiece" ColumnName="P_Main_materialofworkpiece" />
+                <ScalarProperty Name="P_ChildPartSpecRange" ColumnName="P_ChildPartSpecRange" />
+                <ScalarProperty Name="P_ChildPartWeight" ColumnName="P_ChildPartWeight" />
+                <ScalarProperty Name="P_WorkpieceFeedingMode" ColumnName="P_WorkpieceFeedingMode" />
+                <ScalarProperty Name="P_RollerDiameter" ColumnName="P_RollerDiameter" />
+                <ScalarProperty Name="P_RollerMaterial" ColumnName="P_RollerMaterial" />
+                <ScalarProperty Name="P_RollerSurface" ColumnName="P_RollerSurface" />
+                <ScalarProperty Name="P_RollerTransferMode" ColumnName="P_RollerTransferMode" />
+                <ScalarProperty Name="P_MainBeaMaterial" ColumnName="P_MainBeaMaterial" />
+                <ScalarProperty Name="Units" ColumnName="Units" />
+                <ScalarProperty Name="Count" ColumnName="Count" />
+                <ScalarProperty Name="DueDay" ColumnName="DueDay" />
+                <ScalarProperty Name="DeliveryedCount" ColumnName="DeliveryedCount" />
+                <ScalarProperty Name="NewDeliveryedCount" ColumnName="NewDeliveryedCount" />
+                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+                <ScalarProperty Name="InstalledQuantity" ColumnName="InstalledQuantity" />
+                <ScalarProperty Name="newInstalledQuantity" ColumnName="newInstalledQuantity" />
+                <ScalarProperty Name="CompletionDate" ColumnName="CompletionDate" />
+                <ScalarProperty Name="Acceptance" ColumnName="Acceptance" />
+                <ScalarProperty Name="AcceptanceDate" ColumnName="AcceptanceDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Category1">
             <EntityTypeMapping TypeName="YLMES_newModel.Category1">
               <MappingFragment StoreEntitySet="Category1">
@@ -10665,6 +10842,7 @@
                 <ScalarProperty Name="部门ID" ColumnName="部门ID" />
                 <ScalarProperty Name="AppID" ColumnName="AppID" />
                 <ScalarProperty Name="PzID" ColumnName="PzID" />
+                <ScalarProperty Name="CID" ColumnName="CID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -10809,6 +10987,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="FI_Salary">
+            <EntityTypeMapping TypeName="YLMES_newModel.FI_Salary">
+              <MappingFragment StoreEntitySet="FI_Salary">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CCID" ColumnName="CCID" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="FI_Subject_category">
             <EntityTypeMapping TypeName="YLMES_newModel.FI_Subject_category">
               <MappingFragment StoreEntitySet="FI_Subject_category">
@@ -10929,6 +11117,7 @@
                 <ScalarProperty Name="StatusID" ColumnName="StatusID" />
                 <ScalarProperty Name="TaskID" ColumnName="TaskID" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="MaterialSpec" ColumnName="MaterialSpec" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -11047,6 +11236,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PM_Machine">
+            <EntityTypeMapping TypeName="YLMES_newModel.PM_Machine">
+              <MappingFragment StoreEntitySet="PM_Machine">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="PurchasePrice" ColumnName="PurchasePrice" />
+                <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
+                <ScalarProperty Name="PeriodOfDepreciation" ColumnName="PeriodOfDepreciation" />
+                <ScalarProperty Name="ifDepreciation" ColumnName="ifDepreciation" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="PM_Material">
             <EntityTypeMapping TypeName="YLMES_newModel.PM_Material">
               <MappingFragment StoreEntitySet="PM_Material">
@@ -11074,7 +11276,8 @@
                 <ScalarProperty Name="InventoryQuantity" ColumnName="InventoryQuantity" />
                 <ScalarProperty Name="DesignType" ColumnName="DesignType" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="materialQTY" ColumnName="materialQTY" />
+                <ScalarProperty Name="RawMaterialID" ColumnName="RawMaterialID" />
+                <ScalarProperty Name="MaterialQTY" ColumnName="MaterialQTY" />
                 <ScalarProperty Name="MaterialUnits" ColumnName="MaterialUnits" />
                 <ScalarProperty Name="StockQTY2" ColumnName="StockQTY2" />
                 <ScalarProperty Name="Units2" ColumnName="Units2" />
@@ -11178,6 +11381,17 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PM_MaterialMatchRawMaterial">
+            <EntityTypeMapping TypeName="YLMES_newModel.PM_MaterialMatchRawMaterial">
+              <MappingFragment StoreEntitySet="PM_MaterialMatchRawMaterial">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="MaterialID" ColumnName="MaterialID" />
+                <ScalarProperty Name="RawMaterialID" ColumnName="RawMaterialID" />
+                <ScalarProperty Name="QTY" ColumnName="QTY" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -11472,6 +11686,7 @@
                 <ScalarProperty Name="TotalPCS" ColumnName="TotalPCS" />
                 <ScalarProperty Name="QTYofOneSet" ColumnName="QTYofOneSet" />
                 <ScalarProperty Name="TotalQTY" ColumnName="TotalQTY" />
+                <ScalarProperty Name="FailedPCS" ColumnName="FailedPCS" />
                 <ScalarProperty Name="RecievedQTY" ColumnName="RecievedQTY" />
                 <ScalarProperty Name="CompletedQTY" ColumnName="CompletedQTY" />
                 <ScalarProperty Name="PackageQTY" ColumnName="PackageQTY" />
@@ -11600,47 +11815,6 @@
                 <ScalarProperty Name="负责人" ColumnName="负责人" />
                 <ScalarProperty Name="是否逾期" ColumnName="是否逾期" />
                 <ScalarProperty Name="数量" ColumnName="数量" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="C_ContractProductDetail2">
-            <EntityTypeMapping TypeName="YLMES_newModel.C_ContractProductDetail2">
-              <MappingFragment StoreEntitySet="C_ContractProductDetail2">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="ContractID" ColumnName="ContractID" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="Customer_ProductName" ColumnName="Customer_ProductName" />
-                <ScalarProperty Name="ProductTypeID" ColumnName="ProductTypeID" />
-                <ScalarProperty Name="ifDrive" ColumnName="ifDrive" />
-                <ScalarProperty Name="ProductSpec" ColumnName="ProductSpec" />
-                <ScalarProperty Name="P_Speed" ColumnName="P_Speed" />
-                <ScalarProperty Name="P_CarryingCapacity" ColumnName="P_CarryingCapacity" />
-                <ScalarProperty Name="P_ElectricalRequirements" ColumnName="P_ElectricalRequirements" />
-                <ScalarProperty Name="P_EquipmentWorkplace" ColumnName="P_EquipmentWorkplace" />
-                <ScalarProperty Name="P_Main_materialofworkpiece" ColumnName="P_Main_materialofworkpiece" />
-                <ScalarProperty Name="P_ChildPartSpecRange" ColumnName="P_ChildPartSpecRange" />
-                <ScalarProperty Name="P_ChildPartWeight" ColumnName="P_ChildPartWeight" />
-                <ScalarProperty Name="P_WorkpieceFeedingMode" ColumnName="P_WorkpieceFeedingMode" />
-                <ScalarProperty Name="P_RollerDiameter" ColumnName="P_RollerDiameter" />
-                <ScalarProperty Name="P_RollerMaterial" ColumnName="P_RollerMaterial" />
-                <ScalarProperty Name="P_RollerSurface" ColumnName="P_RollerSurface" />
-                <ScalarProperty Name="P_RollerTransferMode" ColumnName="P_RollerTransferMode" />
-                <ScalarProperty Name="P_MainBeaMaterial" ColumnName="P_MainBeaMaterial" />
-                <ScalarProperty Name="Units" ColumnName="Units" />
-                <ScalarProperty Name="Count" ColumnName="Count" />
-                <ScalarProperty Name="DueDay" ColumnName="DueDay" />
-                <ScalarProperty Name="DeliveryedCount" ColumnName="DeliveryedCount" />
-                <ScalarProperty Name="NewDeliveryedCount" ColumnName="NewDeliveryedCount" />
-                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
-                <ScalarProperty Name="InstalledQuantity" ColumnName="InstalledQuantity" />
-                <ScalarProperty Name="newInstalledQuantity" ColumnName="newInstalledQuantity" />
-                <ScalarProperty Name="CompletionDate" ColumnName="CompletionDate" />
-                <ScalarProperty Name="Acceptance" ColumnName="Acceptance" />
-                <ScalarProperty Name="AcceptanceDate" ColumnName="AcceptanceDate" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -11790,15 +11964,6 @@
                 <ScalarProperty Name="PackageID" ColumnName="PackageID" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
                 <ScalarProperty Name="StatusID" ColumnName="StatusID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PM_Machine">
-            <EntityTypeMapping TypeName="YLMES_newModel.PM_Machine">
-              <MappingFragment StoreEntitySet="PM_Machine">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -12277,11 +12442,13 @@
           <FunctionImportMapping FunctionImportName="Addhtml" FunctionName="YLMES_newModel.Store.Addhtml" />
           <FunctionImportMapping FunctionImportName="AddLocationType" FunctionName="YLMES_newModel.Store.AddLocationType" />
           <FunctionImportMapping FunctionImportName="AddMerial" FunctionName="YLMES_newModel.Store.AddMerial" />
+          <FunctionImportMapping FunctionImportName="AddOfUpMachine" FunctionName="YLMES_newModel.Store.AddOfUpMachine" />
           <FunctionImportMapping FunctionImportName="AddPlanMater" FunctionName="YLMES_newModel.Store.AddPlanMater" />
           <FunctionImportMapping FunctionImportName="AddPM_MaterialList" FunctionName="YLMES_newModel.Store.AddPM_MaterialList" />
           <FunctionImportMapping FunctionImportName="AddPoDetials" FunctionName="YLMES_newModel.Store.AddPoDetials" />
           <FunctionImportMapping FunctionImportName="AddProcessBOM" FunctionName="YLMES_newModel.Store.AddProcessBOM" />
           <FunctionImportMapping FunctionImportName="AddProcessCar" FunctionName="YLMES_newModel.Store.AddProcessCar" />
+          <FunctionImportMapping FunctionImportName="AddPz" FunctionName="YLMES_newModel.Store.AddPz" />
           <FunctionImportMapping FunctionImportName="AddRoute" FunctionName="YLMES_newModel.Store.AddRoute" />
           <FunctionImportMapping FunctionImportName="AddWH" FunctionName="YLMES_newModel.Store.AddWH" />
           <FunctionImportMapping FunctionImportName="AddWork" FunctionName="YLMES_newModel.Store.AddWork" />
@@ -12316,6 +12483,15 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AutoCheckDeposit" FunctionName="YLMES_newModel.Store.AutoCheckDeposit" />
           <FunctionImportMapping FunctionImportName="ChangUserPassword" FunctionName="YLMES_newModel.Store.ChangUserPassword" />
+          <FunctionImportMapping FunctionImportName="CheckAllWarehouse" FunctionName="YLMES_newModel.Store.CheckAllWarehouse">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="YLMES_newModel.CheckAllWarehouse_Result">
+                <ScalarProperty Name="PartNumber" ColumnName="PartNumber" />
+                <ScalarProperty Name="PartSpec" ColumnName="PartSpec" />
+                <ScalarProperty Name="数量" ColumnName="数量" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="checkBOM" FunctionName="YLMES_newModel.Store.checkBOM">
             <ResultMapping>
               <ComplexTypeMapping TypeName="YLMES_newModel.checkBOM_Result">
@@ -12379,7 +12555,8 @@
                 <ScalarProperty Name="InventoryQuantity" ColumnName="InventoryQuantity" />
                 <ScalarProperty Name="DesignType" ColumnName="DesignType" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="materialQTY" ColumnName="materialQTY" />
+                <ScalarProperty Name="RawMaterialID" ColumnName="RawMaterialID" />
+                <ScalarProperty Name="MaterialQTY" ColumnName="MaterialQTY" />
                 <ScalarProperty Name="MaterialUnits" ColumnName="MaterialUnits" />
                 <ScalarProperty Name="StockQTY2" ColumnName="StockQTY2" />
                 <ScalarProperty Name="Units2" ColumnName="Units2" />
@@ -12423,6 +12600,14 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CheckDrawingSrc" FunctionName="YLMES_newModel.Store.CheckDrawingSrc">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="YLMES_newModel.CheckDrawingSrc_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="CheckDropAreaList" FunctionName="YLMES_newModel.Store.CheckDropAreaList">
             <ResultMapping>
               <ComplexTypeMapping TypeName="YLMES_newModel.CheckDropAreaList_Result">
@@ -12444,6 +12629,20 @@
               <ComplexTypeMapping TypeName="YLMES_newModel.CheckDropWhList_Result">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="WHArea" ColumnName="WHArea" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CheckFinishedGoods" FunctionName="YLMES_newModel.Store.CheckFinishedGoods">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="YLMES_newModel.CheckFinishedGoods_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Reservoir" ColumnName="Reservoir" />
+                <ScalarProperty Name="CargoArea" ColumnName="CargoArea" />
+                <ScalarProperty Name="Goods" ColumnName="Goods" />
+                <ScalarProperty Name="PartNumber" ColumnName="PartNumber" />
+                <ScalarProperty Name="PartSpec" ColumnName="PartSpec" />
+                <ScalarProperty Name="总数" ColumnName="总数" />
+                <ScalarProperty Name="PackageName" ColumnName="PackageName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -12513,6 +12712,15 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CheckPakeCount" FunctionName="YLMES_newModel.Store.CheckPakeCount">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="YLMES_newModel.CheckPakeCount_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PackageName" ColumnName="PackageName" />
+                <ScalarProperty Name="QTY" ColumnName="QTY" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="CheckParts" FunctionName="YLMES_newModel.Store.CheckParts">
             <ResultMapping>
               <ComplexTypeMapping TypeName="YLMES_newModel.CheckParts_Result">
@@ -12550,6 +12758,7 @@
                 <ScalarProperty Name="QTY" ColumnName="QTY" />
                 <ScalarProperty Name="物料序号" ColumnName="物料序号" />
                 <ScalarProperty Name="Units" ColumnName="Units" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -12676,9 +12885,10 @@
                 <ScalarProperty Name="PartNumber" ColumnName="PartNumber" />
                 <ScalarProperty Name="PartSpec" ColumnName="PartSpec" />
                 <ScalarProperty Name="QTY" ColumnName="QTY" />
-                <ScalarProperty Name="PackageName" ColumnName="PackageName" />
                 <ScalarProperty Name="ContractNumber" ColumnName="ContractNumber" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="PackageName" ColumnName="PackageName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -12846,6 +13056,7 @@
                 <ScalarProperty Name="TotalPCS" ColumnName="TotalPCS" />
                 <ScalarProperty Name="QTYofOneSet" ColumnName="QTYofOneSet" />
                 <ScalarProperty Name="TotalQTY" ColumnName="TotalQTY" />
+                <ScalarProperty Name="FailedPCS" ColumnName="FailedPCS" />
                 <ScalarProperty Name="RecievedQTY" ColumnName="RecievedQTY" />
                 <ScalarProperty Name="CompletedQTY" ColumnName="CompletedQTY" />
                 <ScalarProperty Name="PackageQTY" ColumnName="PackageQTY" />
@@ -13033,6 +13244,7 @@
                 <ScalarProperty Name="TotalPCS" ColumnName="TotalPCS" />
                 <ScalarProperty Name="QTYofOneSet" ColumnName="QTYofOneSet" />
                 <ScalarProperty Name="TotalQTY" ColumnName="TotalQTY" />
+                <ScalarProperty Name="FailedPCS" ColumnName="FailedPCS" />
                 <ScalarProperty Name="RecievedQTY" ColumnName="RecievedQTY" />
                 <ScalarProperty Name="CompletedQTY" ColumnName="CompletedQTY" />
                 <ScalarProperty Name="PackageQTY" ColumnName="PackageQTY" />
@@ -13080,6 +13292,7 @@
           <FunctionImportMapping FunctionImportName="PM_AddPurld" FunctionName="YLMES_newModel.Store.PM_AddPurld" />
           <FunctionImportMapping FunctionImportName="PM_AddPurlist" FunctionName="YLMES_newModel.Store.PM_AddPurlist" />
           <FunctionImportMapping FunctionImportName="PM_AddWorkDetial" FunctionName="YLMES_newModel.Store.PM_AddWorkDetial" />
+          <FunctionImportMapping FunctionImportName="PM_AllUnbundling" FunctionName="YLMES_newModel.Store.PM_AllUnbundling" />
           <FunctionImportMapping FunctionImportName="PM_AssignTasksCheck" FunctionName="YLMES_newModel.Store.PM_AssignTasksCheck">
             <ResultMapping>
               <ComplexTypeMapping TypeName="YLMES_newModel.PM_AssignTasksCheck_Result">
@@ -13278,6 +13491,7 @@
                 <ScalarProperty Name="子件数量" ColumnName="子件数量" />
                 <ScalarProperty Name="原材料用量" ColumnName="原材料用量" />
                 <ScalarProperty Name="原材料单位" ColumnName="原材料单位" />
+                <ScalarProperty Name="原材料规格" ColumnName="原材料规格" />
                 <ScalarProperty Name="子BOM" ColumnName="子BOM" />
                 <ScalarProperty Name="是否组装件" ColumnName="是否组装件" />
                 <ScalarProperty Name="工艺流程" ColumnName="工艺流程" />
@@ -13952,6 +14166,14 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="YLMES_newModel.Store.sp_creatediagram" />
           <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="YLMES_newModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="SP_Edit_Salary" FunctionName="YLMES_newModel.Store.SP_Edit_Salary">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="YLMES_newModel.SP_Edit_Salary_Result">
+                <ScalarProperty Name="ccid" ColumnName="ccid" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="YLMES_newModel.Store.sp_helpdiagramdefinition">
             <ResultMapping>
               <ComplexTypeMapping TypeName="YLMES_newModel.sp_helpdiagramdefinition_Result">
@@ -13983,6 +14205,8 @@
           <FunctionImportMapping FunctionImportName="SP_PM_Accuntingse" FunctionName="YLMES_newModel.Store.SP_PM_Accuntingse">
             <ResultMapping>
               <ComplexTypeMapping TypeName="YLMES_newModel.SP_PM_Accuntingse_Result">
+                <ScalarProperty Name="Dept" ColumnName="Dept" />
+                <ScalarProperty Name="Cnumber" ColumnName="Cnumber" />
                 <ScalarProperty Name="摘要" ColumnName="摘要" />
                 <ScalarProperty Name="科目名称" ColumnName="科目名称" />
                 <ScalarProperty Name="借方" ColumnName="借方" />
@@ -14483,7 +14707,6 @@
           <FunctionImportMapping FunctionImportName="SP_PM_SeAccuntingpz" FunctionName="YLMES_newModel.Store.SP_PM_SeAccuntingpz">
             <ResultMapping>
               <ComplexTypeMapping TypeName="YLMES_newModel.SP_PM_SeAccuntingpz_Result">
-                <ScalarProperty Name="项目编号2" ColumnName="项目编号2" />
                 <ScalarProperty Name="时间" ColumnName="时间" />
                 <ScalarProperty Name="编号" ColumnName="编号" />
                 <ScalarProperty Name="凭证日期" ColumnName="凭证日期" />
@@ -14824,29 +15047,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="UpMake" FunctionName="YLMES_newModel.Store.UpMake">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="YLMES_newModel.UpMake_Result">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
-                <ScalarProperty Name="MaterialID" ColumnName="MaterialID" />
-                <ScalarProperty Name="QTYofPCS" ColumnName="QTYofPCS" />
-                <ScalarProperty Name="ApplyPurchasePCS" ColumnName="ApplyPurchasePCS" />
-                <ScalarProperty Name="ApplyPurchaseQTY" ColumnName="ApplyPurchaseQTY" />
-                <ScalarProperty Name="ActPurchasePCS" ColumnName="ActPurchasePCS" />
-                <ScalarProperty Name="ActPurchaseQTY" ColumnName="ActPurchaseQTY" />
-                <ScalarProperty Name="Units" ColumnName="Units" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
-                <ScalarProperty Name="POID" ColumnName="POID" />
-                <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="ListType" ColumnName="ListType" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
-                <ScalarProperty Name="Spec" ColumnName="Spec" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="UpMake" FunctionName="YLMES_newModel.Store.UpMake" />
           <FunctionImportMapping FunctionImportName="UpMaterialDefaultStu" FunctionName="YLMES_newModel.Store.UpMaterialDefaultStu" />
           <FunctionImportMapping FunctionImportName="UserName" FunctionName="YLMES_newModel.Store.UserName">
             <ResultMapping>

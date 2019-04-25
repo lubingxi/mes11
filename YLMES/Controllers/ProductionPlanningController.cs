@@ -547,7 +547,7 @@ namespace YlMES.Controllers
                 {
                     int pq = int.Parse(ProductQuantity);
                     int i = int.Parse(PackageNumber);
-                    if (i > 20)
+                    if (i > 50)
                     {
                         valuesd = "3";
                     }else
@@ -566,8 +566,7 @@ namespace YlMES.Controllers
                         parms[8] = new SqlParameter("@Units", Units);
                         ys.Database.ExecuteSqlCommand(" exec SP_ADD_Package @Type,@WorkorderNO,@TotalPCS,@CreatedEmployee,@PackageLabelQTY,@MaterId,@Outvalue out,@CNumber,@Units", parms);
                         valuesd = (string)parms[6].Value;
-                    }
-                                       
+                    }                                       
                 }
             }
             return Content(valuesd);
@@ -616,6 +615,18 @@ namespace YlMES.Controllers
                 return Json(map, JsonRequestBehavior.AllowGet);
             }
         }
+        //显示标签数量
+        public ActionResult CheckPakeCount(string pn)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                SqlParameter[] parms = new SqlParameter[1];
+                parms[0] = new SqlParameter("@pakeage", pn);
+                var list = ys.Database.SqlQuery<CheckPakeCount_Result>("exec CheckPakeCount @pakeage", parms).FirstOrDefault();
+                return Content(list.QTY.ToString());
+            }
+           
+        }
         //修改打包数量
         public ActionResult UpdateCount(string id,string Count)
         {
@@ -659,7 +670,7 @@ namespace YlMES.Controllers
             }
         }
         //显示打印页面
-        public ActionResult txt(string pnumber, string pspec, string pmater, string ID, string pn, string qty,string unit)
+        public ActionResult txt(string pnumber, string pspec, string pmater, string ID, string pn, string qty,string unit,string note)
         {
             ViewData["canku"] = "成品仓";
             ViewData["mingzi"] = pnumber;
@@ -668,6 +679,7 @@ namespace YlMES.Controllers
             ViewData["PackageName"] = pn;
             ViewData["unit"] = unit;
             ViewData["qty"] = qty;
+            ViewData["note"] = note;
             if (ID != null)
             {
                 string fileName = "1.png";
@@ -1823,10 +1835,23 @@ namespace YlMES.Controllers
             }
         }
         #endregion
-        //扫描工单显示图纸
+        //扫描工单显示图纸页面
         public ActionResult RepairOrderDrawing()
         {
             return View();
+        }
+        //显示图纸页面
+        public ContentResult getDrawingSrc(string id)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                int i = int.Parse(id);
+                SqlParameter[] parms = new SqlParameter[1];
+                parms[0] = new SqlParameter("@id",i);
+                var list = ys.Database.SqlQuery<CheckDrawingSrc_Result>("exec CheckDrawingSrc @id", parms).FirstOrDefault();
+                return Content(list.FileName.ToString());
+            }
+            
         }
         public void MergePdfFilesWithBookMark(string q, string a, string c)
         {

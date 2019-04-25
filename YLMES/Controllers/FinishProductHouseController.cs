@@ -31,15 +31,15 @@ namespace YLMES.Controllers
                 if (CargoArea == null)
                 {
                     CargoArea = "";
-                }
+                }               
                 if (Goods == null)
                 {
                     Goods = "";
                 }
-                SqlParameter[] parms = new SqlParameter[4];
-                parms[0] = new SqlParameter("@Reservoir", "");
-                parms[1] = new SqlParameter("@CargoArea", "");
-                parms[2] = new SqlParameter("@Goods", "");
+                SqlParameter[] parms = new SqlParameter[4];                          
+                parms[0] = new SqlParameter("@Reservoir", Reservoir);
+                parms[1] = new SqlParameter("@CargoArea", CargoArea);
+                parms[2] = new SqlParameter("@Goods", Goods);
                 parms[3] = new SqlParameter("@Type", "check");
                 var list = ys.Database.SqlQuery<CheckWarehouseLocation_Result>("exec CheckWarehouseLocation @Reservoir,@CargoArea,@Goods,@Type", parms).ToList();
                 Dictionary<string, object> hasmap = new Dictionary<string, object>();
@@ -76,8 +76,7 @@ namespace YLMES.Controllers
                 else
                 {
                     return Content("false");
-                }
-              
+                }              
             }          
         }
         //删除成品仓位置信息
@@ -101,6 +100,20 @@ namespace YLMES.Controllers
                     return Content("false");
                 }
             }
+        }
+        //货位解除绑定
+        public ActionResult Unbundling(string id,string pnumber,string pspec)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                int i = int.Parse(id);
+                SqlParameter[] parms = new SqlParameter[3];
+                parms[0] = new SqlParameter("@id", i);
+                parms[1] = new SqlParameter("@PartNumber", pnumber);
+                parms[2] = new SqlParameter("@PartSpec", pspec);
+                ys.Database.ExecuteSqlCommand("exec PM_AllUnbundling  @id,@PartNumber,@PartSpec", parms);
+                return Content("true");
+            }            
         }
         //添加引用产品页面
         public ActionResult CheckPackagingProducts(string id)
@@ -132,8 +145,7 @@ namespace YLMES.Controllers
                 hasmap.Add("msg", "");
                 hasmap.Add("data", list);
                 return Json(hasmap, JsonRequestBehavior.AllowGet);
-            }
-        
+            }        
         }
         //添加项目名称页面
         public ActionResult AddProjectName(string id)
@@ -179,10 +191,63 @@ namespace YLMES.Controllers
             ViewData["Goods"] = Goods;
             return View();
         }
-        //显示成品仓库存查询信息页面
-        public ActionResult FinishedGoods()
+        //显示成品仓库存总数页面
+        public ActionResult AllGoods()
         {
             return View();
+        }
+        //显示成品仓库存总数页面
+        public ActionResult CheckAllFinishedGoods(string PartNumber,string PartSpec,int page,int limit)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                if (PartNumber == null)
+                {
+                    PartNumber = "";
+                }
+                if (PartSpec == null)
+                {
+                    PartSpec = "";
+                }
+                SqlParameter[] parms = new SqlParameter[2];
+                parms[0] = new SqlParameter("@PartNumber", PartNumber);
+                parms[1] = new SqlParameter("@PartSpec", PartSpec);
+                var list = ys.Database.SqlQuery<CheckAllWarehouse_Result>("exec CheckAllWarehouse @PartNumber,@PartSpec", parms).ToList();
+                Dictionary<string, object> hasmap = new Dictionary<string, object>();
+                PageList<CheckAllWarehouse_Result> pageList = new PageList<CheckAllWarehouse_Result>(list, page, limit);
+                int count = list.Count();
+                hasmap.Add("code", 0);
+                hasmap.Add("msg", "");
+                hasmap.Add("count", count);
+                hasmap.Add("data", pageList);
+                return Json(hasmap, JsonRequestBehavior.AllowGet);
+            }
+            
+        }
+        //显示成品仓库存查询信息页面
+        public ActionResult FinishedGoods(string PartNumber,string PartSpec)
+        {
+            ViewData["PartNumber"] = PartNumber;
+            ViewData["PartSpec"]   = PartSpec;
+            return View();
+        }
+        
+        //显示成品仓库存信息
+        public ActionResult CheckFinishedGoods(string PartNumber, string PartSpec)
+        {
+            using (YLMES_newEntities ys = new YLMES_newEntities())
+            {
+              
+                SqlParameter[] parms = new SqlParameter[2];
+                parms[0] = new SqlParameter("@PartNumber", PartNumber);
+                parms[1] = new SqlParameter("@PartSpec", PartSpec);
+                var list = ys.Database.SqlQuery<CheckFinishedGoods_Result>("exec CheckFinishedGoods @PartNumber,@PartSpec", parms).ToList();
+                Dictionary<string, object> hasmap = new Dictionary<string, object>();
+                hasmap.Add("code", 0);
+                hasmap.Add("msg", "");
+                hasmap.Add("data", list);
+                return Json(hasmap, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

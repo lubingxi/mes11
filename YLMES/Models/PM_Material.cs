@@ -38,7 +38,8 @@ namespace YLMES.Models
         public string InventoryQuantity { get; set; }
         public string DesignType { get; set; }
         public string Note { get; set; }
-        public string materialQTY { get; set; }
+        public Nullable<int> RawMaterialID { get; set; }
+        public string MaterialQTY { get; set; }
         public string MaterialUnits { get; set; }
         public Nullable<int> StockQTY2 { get; set; }
         public string Units2 { get; set; }

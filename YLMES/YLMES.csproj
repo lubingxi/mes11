@@ -1760,6 +1760,9 @@
     <Compile Include="Models\Category3.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CheckAllWarehouse_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\checkBOMS_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1778,6 +1781,9 @@
     <Compile Include="Models\CheckdCategory_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CheckDrawingSrc_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CheckDropAreaList_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -1785,6 +1791,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CheckDropWhList_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CheckFinishedGoods_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CheckFinshProcess_Result.cs">
@@ -1803,6 +1812,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CheckMater_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CheckPakeCount_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CheckParts_Result.cs">
@@ -1932,6 +1944,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FI_Dept.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FI_Salary.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FI_Subject_category.cs">
@@ -2109,6 +2124,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_MaterialList_new.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PM_MaterialMatchRawMaterial.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_MaterialTemp.cs">
@@ -2330,6 +2348,9 @@
     <Compile Include="Models\SP_Contract_Receivables_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SP_Edit_Salary_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -2487,9 +2508,6 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UploadTheDrawings_Result.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\UpMake_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserName_Result.cs">
@@ -2719,6 +2737,7 @@
     <Content Include="Views\ProductionPlanning\GoodsInventory.cshtml" />
     <Content Include="Views\TaskManagement\GoodsInventory.cshtml" />
     <Content Include="Views\ProductionPlanning\RepairOrderDrawing.cshtml" />
+    <Content Include="Views\FinishProductHouse\AllGoods.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

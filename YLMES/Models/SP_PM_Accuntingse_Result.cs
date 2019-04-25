@@ -13,6 +13,8 @@ namespace YLMES.Models
     
     public partial class SP_PM_Accuntingse_Result
     {
+        public string Dept { get; set; }
+        public string Cnumber { get; set; }
         public string 摘要 { get; set; }
         public string 科目名称 { get; set; }
         public string 借方 { get; set; }

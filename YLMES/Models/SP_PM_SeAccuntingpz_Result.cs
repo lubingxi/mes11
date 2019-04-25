@@ -13,7 +13,6 @@ namespace YLMES.Models
     
     public partial class SP_PM_SeAccuntingpz_Result
     {
-        public string 项目编号2 { get; set; }
         public string 时间 { get; set; }
         public int 编号 { get; set; }
         public Nullable<System.DateTime> 凭证日期 { get; set; }

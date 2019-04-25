@@ -72,15 +72,22 @@
                     var id = data.ID;
                     var qty = data.QTY;
                     var unit = data.Units;
+                    var note = data.Note;
                     var figureNumber = data.figureNumber;
-                    var url = "/ProductionPlanning/txt?pnumber=" + pnumber + "&pspec=" + pspec + "&pmater=" + pmater + "&ID=" + id + "&pn=" + pn + "&fn=" + figureNumber + "&qty=" + qty + "&unit=" + unit;
-                    var index = layer.open({
-                        type: 2,
-                        content: url,
-                        title: "打印标签",
-                        maxmin: true
+                    $.ajax({
+                        url: "/ProductionPlanning/CheckPakeCount?pn=" + pn,
+                        type: 'post',
+                        success: function (data) {
+                            var url = "/ProductionPlanning/txt?pnumber=" + pnumber + "&pspec=" + pspec + "&pmater=" + pmater + "&ID=" + id + "&pn=" + pn + "&fn=" + figureNumber + "&qty=" + data + "&unit=" + unit + "&note=" + note;
+                            var index = layer.open({
+                                type: 2,
+                                content: url,
+                                title: "打印标签",
+                                maxmin: true
+                            });
+                            layer.full(index);
+                        }
                     });
-                    layer.full(index);
                     break;
                 case 'update':
                     var id = data.ID;

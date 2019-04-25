@@ -109,14 +109,22 @@
                             pn = data.子件编码;
                             prn = data.工件编码;
                             spec = data.工件规格;
-
-                            var url = '/TaskManagement/EditingProcess?ProductName=' + prn + '&ProductSpec=' + spec + '&PartNumber=' + pn + '&PartId=' + parid;
-                            var index = layer.open({
-                                type: 2,
-                                content: url,
-                                maxmin: true
-                            });
-                            layer.full(index);
+                            //var url = '/TaskManagement/EditingProcess?ProductName=' + prn + '&ProductSpec=' + spec + '&PartNumber=' + pn + '&PartId=' + parid;
+                            //var index = layer.open({
+                            //    type: 2,
+                            //    content: url,
+                            //    maxmin: true
+                            //});
+                            //layer.full(index);
+                            if (lc == "添加流程") {
+                                var url = '/TaskManagement/AddProcess?ProductName=' + prn + '&ProductSpec=' + spec + '&PartNumber=' + pn + '&PartId=' + parid;
+                                var index = layer.open({
+                                    type: 2,
+                                    content: url,
+                                    maxmin: true
+                                });
+                                layer.full(index);
+                            }
                             //if (lc == "添加流程") {
                             //    var url = '/TaskManagement/UploadProcess?ProductName=' + prn + '&ProductSpec=' + spec + '&PartNumber=' + pn + '&PartId=' + parid;
                             //    var index = layer.open({
@@ -281,7 +289,7 @@
                 </li>
                 <li>
                     产品规格：
-                    <input class="ContractNumber" id="ContractNumber" type="text" style="width: 180px;" value="@ViewData["ProductSpec"]" />
+                    <input class="ContractNumber" id="ContractNumber" type="text" style="width: 180px;" value="@Session["ProductSpeces"]" />
                 </li>
                 <li>
                     工作目录：

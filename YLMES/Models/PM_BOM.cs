@@ -28,5 +28,6 @@ namespace YLMES.Models
         public string StatusID { get; set; }
         public Nullable<int> TaskID { get; set; }
         public string Type { get; set; }
+        public string MaterialSpec { get; set; }
     }
 }

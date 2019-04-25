@@ -36,17 +36,20 @@
                    , page: true
                    , limit: 15
                    , cols: [[
-                    { field: '', hide: true }
-                   //,{ field: 'ID', width: 100, title: '序号' }
-                   , { field: 'Reservoir', width: 90, title: '库区' }
-                   , { field: 'CargoArea', width: 90, title: '货区' }
-                   , { field: 'Goods', width: 90, title: '货位' }
-                   , { field: 'Type', width: 300, title: '系列',edit:'text' }
-                   //, { field: 'PartSpec', width: 180, title: '产品规格' }
-                  // , { field: 'QTY', width: 180, title: '数量' }
+                    { field: '', hide: true }                  
+                   , { field: 'ID', width: 60, title: '序号' }
+                   , { field: 'Reservoir', width: 60, title: '库区' }
+                   , { field: 'CargoArea', width: 60, title: '货区' }
+                   , { field: 'Goods', width: 60, title: '货位' }
+                   , { field: 'Type', title: '系列', edit: 'text' }
+                   , { field: 'PartNumber', title: '产品名称' }
+                   , { field: 'PartSpec', title: '产品规格' }
+                       , { field: 'QTY', width: 60, title: '数量' }
                    //, { field: 'PackageName', width: 180, title: '包装条码' }
-                   //, { field: 'ContractNumber', width: 180, title: '项目编号' }
-                   , { field: 'right', width: 300, align: 'center', toolbar: '#barDemo' }
+                   , { field: 'ContractNumber', title: '项目编号' }
+                   , { field: 'CustomerName', title: '项目名称' }
+                   , { field: 'PackageName', title: '包装条码' }
+                   , { field: 'right', align: 'center', toolbar: '#barDemo' }
                    ]]
                     });
                 $("#sele").click(function () {
@@ -68,7 +71,7 @@
                     var data = obj.data;                 
                     switch (obj.event) {
                         case 'print':
-                            id = data.ID;
+                          var  id = data.ID;
                             Reservoir = data.Reservoir;
                             CargoArea = data.CargoArea;
                             Goods = data.Goods;
@@ -80,8 +83,23 @@
                             });
                             layer.full(index);
                             break;
+                        case 'Unbundling':
+                            var id = data.ID;
+                            var pnumber = data.PartNumber;
+                            var pspec = data.PartSpec;
+                            $.ajax({
+                                url: "/FinishProductHouse/Unbundling",
+                                data: { id: id, pnumber: pnumber, pspec: pspec },
+                                type: "post",
+                                dataType: "text",
+                                success: function (data) {                                 
+                                    layer.msg('解绑成功！');
+                                    $("#sele").click();
+                                }
+                            });
+                            break;
                         case 'delete':
-                            id = data.ID;
+                         var id = data.ID;
                             layer.confirm("真的要删除吗？", function (index) {
                                 $.ajax({
                                     url: "/FinishProductHouse/DeleteFinishProLocation",
@@ -96,7 +114,7 @@
                             });                          
                             break;
                         case 'yin':
-                            id = data.ID;
+                          var id = data.ID;
                             var url = '/FinishProductHouse/CheckPackagingProducts?id='+id;
                             var index = layer.open({
                                 type: 2,
@@ -107,7 +125,7 @@
                             layer.full(index);
                             break;
                         case 'project':
-                            id = data.ID;
+                           var id = data.ID;
                             var url = '/FinishProductHouse/AddProjectName?id=' + id;
                             var index = layer.open({
                                 type: 2,
@@ -117,7 +135,7 @@
                             });
                             break;
                         case 'edit':
-                            id = data.ID;
+                          var id = data.ID;
                             type = data.Type;
                             $.ajax({
                                 url: "/FinishProductHouse/UpdateFinishProLocation",
@@ -126,7 +144,7 @@
                                 dataType: "text",
                                 success: function (data) {
                                     layer.msg('修改成功!');
-                                    table.reload('tw');
+                                    $("#sele").click();
                                 }
                             });
                             break;
@@ -145,11 +163,12 @@
         });
     </script>
     <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-xs" id="yin" lay-event="yin">显示产品信息</a>  
-        @*<a class="layui-btn layui-btn-xs" id="project" lay-event="project">添加项目</a>*@  
-        <a class="layui-btn layui-btn-xs" id="edit" lay-event="edit">编辑</a>  
-        <a class="layui-btn layui-btn-xs" id="print" lay-event="print">打印</a>  
-        <a class="layui-btn layui-btn-danger layui-btn-xs" id="delete" lay-event="delete">删除</a>                
+        @*<a class="layui-btn layui-btn-xs" id="yin" lay-event="yin">显示产品信息</a>*@
+        @*<a class="layui-btn layui-btn-xs" id="project" lay-event="project">添加项目</a>*@
+        <a class="layui-btn layui-btn-xs" id="Unbundling" lay-event="Unbundling">解除绑定</a>
+        <a class="layui-btn layui-btn-xs" id="edit" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-xs" id="print" lay-event="print">打印</a>
+        @*<a class="layui-btn layui-btn-danger layui-btn-xs" id="delete" lay-event="delete">删除</a>*@
     </script>
 </head>
 

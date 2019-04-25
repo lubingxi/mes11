@@ -28,5 +28,6 @@ namespace YLMES.Models
         public Nullable<int> 部门ID { get; set; }
         public Nullable<int> AppID { get; set; }
         public Nullable<int> PzID { get; set; }
+        public Nullable<int> CID { get; set; }
     }
 }

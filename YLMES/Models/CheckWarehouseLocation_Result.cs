@@ -20,8 +20,9 @@ namespace YLMES.Models
         public string PartNumber { get; set; }
         public string PartSpec { get; set; }
         public Nullable<int> QTY { get; set; }
-        public string PackageName { get; set; }
         public string ContractNumber { get; set; }
         public string Type { get; set; }
+        public string CustomerName { get; set; }
+        public string PackageName { get; set; }
     }
 }

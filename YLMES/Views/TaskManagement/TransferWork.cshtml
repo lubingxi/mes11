@@ -63,8 +63,14 @@
                                 type: "post",
                                 dataType: "text",
                                 success: function (data) {
-                                    if(data=="true"){
+                                    if (data == "true") {
                                         window.history.go(-1);
+                                    } else if (data == "1") {
+                                        alert("采购数量不能为空！");
+                                    } else if (data == "2") {
+                                        alert("采购单位不能为空！");
+                                    } else if (data == "3"){
+                                        alert("采购规格不能为空！");
                                     }
                                 }
                             });

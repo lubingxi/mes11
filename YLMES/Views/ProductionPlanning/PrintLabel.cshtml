@@ -43,39 +43,49 @@
         <div class="layui-form-item">
             <label class="layui-form-label">产品材料：</label>
             <div class="layui-input-block">
-                <input type="text" lay-verify="required" name="pmater"  value="@ViewData["pmater"]" autocomplete="off" class="layui-input" readonly>
+                <input type="text" lay-verify="required" name="pmater" value="@ViewData["pmater"]" autocomplete="off" class="layui-input" readonly>
             </div>
-        </div> 
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">图号：</label>
             <div class="layui-input-block">
-                <input type="text" lay-verify="required" name="fnumber"  value="@ViewData["fnumber"]" autocomplete="off" class="layui-input" readonly>
+                <input type="text" lay-verify="required" name="fnumber" value="@ViewData["fnumber"]" autocomplete="off" class="layui-input" readonly>
             </div>
-        </div> 
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">产品数量：</label>
             <div class="layui-input-block">
-                <input type="number" lay-verify="required" name="ProductQuantity"  autocomplete="off" class="layui-input">
+                <input type="number" lay-verify="required" name="ProductQuantity" autocomplete="off" class="layui-input">
             </div>
-        </div> 
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">打包数量：</label>
             <div class="layui-input-block">
-                <input type="number" lay-verify="required" name="PackageNumber"  autocomplete="off" class="layui-input">
+                <input type="number" lay-verify="required" name="PackageNumber" autocomplete="off" class="layui-input">
             </div>
-        </div> 
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">单位：</label>
             <div class="layui-input-block">
                 <input type="text" lay-verify="required" name="Units" autocomplete="off" class="layui-input">
             </div>
-        </div> 
+        </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">选择项目编号:</label>
+            <label class="layui-form-label">项目编号：</label>
             <div class="layui-input-block" style="width:400px">
                 <select name="CNumber" id="CNumber" lay-verify="" lay-filter="CNumber" lay-search></select>
             </div>
-        </div>      
+        </div>
+
+        @*<div class="layui-form-item">
+            <label class="layui-form-label">成品或部件:</label>
+            <div class="layui-input-block">
+                <select name="city" lay-verify="required">
+                    <option value="成品">成品</option>
+                    <option value="部件">部件</option>
+                </select>
+            </div>
+        </div>*@
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="btn btn-primary radius" type="button">确认打印标签</button>

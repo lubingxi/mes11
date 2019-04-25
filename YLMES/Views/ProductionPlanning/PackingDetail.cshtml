@@ -6,7 +6,6 @@
 
 <html>
 <head>
-
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>友力信息管理系统</title>
     <link href="~/css/style.css" rel="stylesheet" type="text/css" />
@@ -59,17 +58,25 @@
                     var pmater = data.PartMaterial;
                     var pn = data.PackageName;
                     var id = data.ID;
-                    var qty = data.QTY;
+                    //var qty = data.QTY;
                     var unit = data.Units;
+                    var note = data.Note;
                     var figureNumber = data.figureNumber;
-                    var url = "/ProductionPlanning/txt?pnumber=" + pnumber + "&pspec=" + pspec + "&pmater=" + pmater + "&ID=" + id + "&pn=" + pn + "&fn=" + figureNumber + "&qty=" + qty + "&unit=" + unit;
-                    var index = layer.open({
-                        type: 2,
-                        content: url,
-                        title: "打印标签",
-                        maxmin: true
+                    $.ajax({
+                        url: "/ProductionPlanning/CheckPakeCount?pn=" + pn,
+                        type: 'post',
+                        success: function (data) {
+                            var url = "/ProductionPlanning/txt?pnumber=" + pnumber + "&pspec=" + pspec + "&pmater=" + pmater + "&ID=" + id + "&pn=" + pn + "&fn=" + figureNumber + "&qty=" + data + "&unit=" + unit+"&note="+note;
+                            var index = layer.open({
+                                type: 2,
+                                content: url,
+                                title: "打印标签",
+                                maxmin: true
+                            });
+                            layer.full(index);
+                        }
                     });
-                    layer.full(index);
+                    
                     break;                
                 case 'count':
                     var id = data.ID;
@@ -102,7 +109,6 @@
                         }
                     });
                     break;
-
                 case 'delete':
                     var id = data.ID;
                     layer.confirm("真的删除行么", function (index) {
@@ -128,14 +134,9 @@
 </head>
 <body>
     <script type="text/html" id="barDemo">
-        {{#  if(d.QTY == '0'){ }}
-        <a class="layui-btn layui-btn-xs" id="count" lay-event="count">确认数量</a>
-        {{#  } else { }}
         <a class="layui-btn layui-btn-xs" id="update" lay-event="update">修改数量</a>      
         <a class="layui-btn layui-btn-xs" id="add" lay-event="add">打印</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" id="delete" lay-event="delete">删除</a>
-        {{#  } }}
-      
     </script>
     <table class="tablelist" id="tw" lay-filter="demo"></table>
 </body>

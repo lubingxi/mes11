@@ -95,6 +95,7 @@
                     title: "成品库存",
                     maxmin: true
                 });
+                layer.full(index);
             });
             layui.use(['table', 'layer'], function () {
                 var table = layui.table, layer = layui.layer;
@@ -249,6 +250,7 @@
                             var TaskID = data.任务编号;
                             var count = data.工单数量;
                             var unit = data.产品单位;
+                            var Spec = data.产品规格;
                             $.ajax({
                                 url: "/TaskManagement/CheckPurchaseList?Materid=" + mid + "&Taskid=" + TaskID,
                                 type: "post",
@@ -256,7 +258,7 @@
                                 success: function (data) {
                                     if (data == "true") {
                                         $.ajax({
-                                            url: "/TaskManagement/ApplyPurchasingd?type="+"add"+"&Materid=" + mid + "&PCount=" + count + "&Unit=" + "PCS" + "&Taskid=" + TaskID,
+                                            url: "/TaskManagement/ApplyPurchasingd?type=" + "add" + "&Materid=" + mid + "&PCount=" + count + "&Unit=" + "PCS" + "&Taskid=" + TaskID + "&Spec=" + Spec,
                                             type: "post",
                                             dataType: "text",
                                             success: function (data) {

@@ -49,7 +49,6 @@ namespace YlMES.Controllers
         //我的任务
         public ActionResult MyTask()
         {
-
             return View();
         }
         //已完成的任务视图
@@ -452,6 +451,7 @@ namespace YlMES.Controllers
                 ViewData["ContractNumber"] = list.项目名称;
                 ViewData["ContractNumbers"] = list.项目名称;
                 ViewData["ProductName"] = list.产品名称;
+                Session["ProductSpec"] = list.产品规格;
                 Session["ProductNamed"] = list.产品名称;
                 ViewData["TaskName"] = list.任务名称;
                 ViewData["ProductSpec"] = list.产品规格;
@@ -1787,9 +1787,10 @@ namespace YlMES.Controllers
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                string PName = Session["ProductNamed"].ToString();
+                string Spec = Session["ProductSpec"].ToString();
                 SqlParameter[] parms = new SqlParameter[3];
                 parms[0] = new SqlParameter("@ProjectName", PName);
-                parms[1] = new SqlParameter("@PartSpec", PSpec);
+                parms[1] = new SqlParameter("@PartSpec", Spec);
                 parms[2] = new SqlParameter("@Type", "机械设计");
                 var list = ys.Database.SqlQuery<TaskMapingPartCheck_Result>("exec TaskMapingPartCheck @ProjectName,@PartSpec,@Type", parms).ToList();
                 Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
@@ -1810,7 +1811,7 @@ namespace YlMES.Controllers
                 {
                     int i = int.Parse(id);
                     PM_Material pm = ys.PM_Material.Where(c => c.ID == i).FirstOrDefault();
-                    pm.materialQTY = dosage;
+                    //pm.materialQTY = dosage;
                     pm.MaterialUnits = unit;
                     ys.SaveChanges();
                 }
@@ -2630,6 +2631,18 @@ namespace YlMES.Controllers
         //申请采购信息
         public ActionResult ApplyPurchasingd(string type,string Materid,string PCount,string Unit,string Taskid,string Spec)
         {
+            if (PCount == null || PCount=="")
+            {
+                return Content("1");
+            }
+            if(Unit == null || Unit == "")
+            {
+                return Content("2");
+            }
+            if (Spec == null || Spec == "")
+            {
+                return Content("3");
+            }
             if (Session["name"].ToString() == "")
             {
                 return Content("<script>window.top.location = '/Home/Login';</script>");

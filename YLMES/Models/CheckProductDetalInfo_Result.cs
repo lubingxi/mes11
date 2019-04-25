@@ -22,5 +22,6 @@ namespace YLMES.Models
         public Nullable<int> QTY { get; set; }
         public int 物料序号 { get; set; }
         public string Units { get; set; }
+        public string Note { get; set; }
     }
 }

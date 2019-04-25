@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = null;
 }
 
@@ -7,42 +6,69 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>RepairOrderDrawing</title>
-    <script src="~/js/vue.js"></script>
-    <script src="~/js/axios.js"></script>
-    <script src="~/js/elemenui.js"></script>
-    <link href="~/css/elemenui.css" rel="stylesheet" />
-    <script type="text/javascript">
-        "use script"
 
-        window.onload = function () {
-            var vm = new Vue({
-                el: '#vues',
-                data: {
-                    tableData: []
-                }
-            })
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <style>
+        .layui-table-cell {
+            overflow: inherit;
+            height: inherit;
         }
+
+        td:nth-child(3) {
+            overflow: hidden;
+        }
+    </style>
+    <style type="text/css">
+        .layui-table-cell {
+            overflow: inherit;
+            height: inherit;
+        }
+    </style>
+    <script type="text/javascript">
+        layui.use(['table', 'layer'], function () {
+            var table = layui.table, layer = layui.layer;
+            document.getElementById("AllSerach").focus(); 
+            $('.AllSerach').bind("input propertychange", function (event) {
+                var pn = $("#AllSerach").val()
+                $.ajax({
+                    type: "get",
+                    url: '/ProductionPlanning/getDrawingSrc',
+                    data: { id: pn},
+                    dataType: "text",
+                    success: function (data) {
+                        var srcs = "/pdf/" + data;
+                        var url = '/TechnicalDepartment/CheckPdf?src=' + srcs;
+                        var index = layer.open({
+                            type: 2,
+                            title: "PDF",
+                            content: url,
+                            maxmin: true                           
+                        });
+                        layer.full(index);
+                    }
+                });
+            });
+        })
     </script>
 </head>
 <body>
-    <div id="vues">
-        <template>
-            <el-breadcrumb separator-class="el-icon-arrow-right" :style=sty>
-                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                <el-breadcrumb-item>车间生产管理</el-breadcrumb-item>
-                <el-breadcrumb-item>工单图纸</el-breadcrumb-item>
-            </el-breadcrumb>
-            <el-table style="margin:0 auto;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)"
-
-                      element-loading-background="rgba(0, 0, 0, 0.8)"
-                      :data="tableData"
-                      @@row-click="rowclick">
-
-
-            </el-table>
-        </template>
+    <div class="rightinfo">
+        <div class="tools">
+            <ul class="toolbar">
+                <li>
+                    关键字查询：
+                    <input class="AllSerach" id="AllSerach" type="text" style="width:180px;" placeholder="请输入关键字" value="128"/>
+                </li>
+            </ul>
+        </div>
     </div>
 </body>
 </html>

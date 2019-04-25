@@ -10,16 +10,16 @@
 namespace YLMES.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class PM_Machine
+    public partial class CheckFinishedGoods_Result
     {
         public int ID { get; set; }
-        public string MachineName { get; set; }
-        public Nullable<double> PurchasePrice { get; set; }
-        public string PurchaseDate { get; set; }
-        public Nullable<double> PeriodOfDepreciation { get; set; }
-        public Nullable<int> ifDepreciation { get; set; }
-        public string Status { get; set; }
+        public string Reservoir { get; set; }
+        public Nullable<int> CargoArea { get; set; }
+        public Nullable<int> Goods { get; set; }
+        public string PartNumber { get; set; }
+        public string PartSpec { get; set; }
+        public Nullable<int> 总数 { get; set; }
+        public string PackageName { get; set; }
     }
 }

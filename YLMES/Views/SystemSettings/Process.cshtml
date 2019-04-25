@@ -18,6 +18,7 @@
 
 
     <script type="text/javascript">
+        document.cookie = "username="+"@ViewData["name"]";
         $(document).keydown(function (e) {
             switch (e.keyCode) {          
                 case 13:
@@ -100,13 +101,13 @@
                          , { field: '子件规格', width: 150, title: '子件规格' }
                          , { field: '子件材料', width: 120, title: '子件材料' }
                          , { field: '子件数量', width: 90, title: '子件数量', edit: Text, style: 'color: #009688' }
-                         , { field: '原材料用量', width: 100, title: '原材料用量' }
-                         , { field: '原材料单位', width: 100, title: '原材料单位' }
+                         , { field: '原材料用量', width: 100, title: '原材料用量', edit: Text, style: 'color: #009688' }
+                         , { field: '原材料规格', width: 150, title: '原材料规格', edit: Text, style: 'color: #009688'}
+                         , { field: '原材料单位', width: 100, title: '原材料单位', edit: Text, style: 'color: #009688' }
                          , { field: '是否组装件', width: 100, title: '是否组装件' }
                          , { field: '工艺流程', width: 100, title: '工艺流程', event: 'liucheng', templet: '#title', align: 'center' }
                          , { field: '子BOM', width: 100, title: '子件', event: 'zi',templet: '#bom', align: 'center' }
                          , { field: 'right',title:'操作', width: 130, align: 'center', toolbar: '#barDemo'}
-
                    ]]                   
                 });
                 $("#Search").click(function () {
@@ -159,9 +160,9 @@
                      , { field: '子件规格', width: 150, title: '子件规格' }
                      , { field: '子件材料', width: 120, title: '子件材料' }
                      , { field: '子件数量', width: 90, title: '子件数量', edit: Text, style: 'color: #009688' }
-                     , { field: '原材料用量', width: 100, title: '原材料用量' }
-                     , { field: '原材料单位', width: 100, title: '原材料单位' }
-                     , { field: '是否组装件', width: 100, title: '是否组装件' }
+                     , { field: '原材料用量', width: 100, title: '原材料用量', edit: Text, style: 'color: #009688' }
+                     , { field: '原材料规格', width: 150, title: '原材料规格', edit: Text, style: 'color: #009688' }
+                     , { field: '原材料单位', width: 100, title: '原材料单位', edit: Text, style: 'color: #009688' }
                      , { field: '工艺流程', width: 100, title: '工艺流程', event: 'liucheng', templet: '#title', align: 'center' }
                      , { field: '子BOM', width: 100, title: '子件', event: 'zi', templet: '#bom', align: 'center' }
                      , { field: 'right', width: 130, align: 'center', toolbar: '#barDemo' }
@@ -227,7 +228,10 @@
                             id = data.序号;
                             cpq = data.子件数量;
                             mq = data.子件编码;
-                            var url = "/SystemSettings/EditProcessBOM?id=" + id + "&pc=" + cpq + "&ph=" + mq;
+                            mqty=data.原材料用量
+                            spec = data.原材料规格
+                            unit = data.原材料单位
+                            var url = "/SystemSettings/EditProcessBOM?id=" + id + "&pc=" + cpq + "&ph=" + mq + "&mqty=" + mqty + "&spec=" + spec + "&unit=" + unit;
                             $.ajax({
                                 url: url,
                                 type: 'post',

@@ -62,7 +62,7 @@
                                    , toolbar: '#toolbarDemo'
                                    , limit:500
                                      , cols: [[
-                                { field: 'Level', width: 80, title: 'BOM结构' }
+                                         { field: 'Level', width: 80, title: 'BOM结构', sort: true }
                                 , { field: 'FigureNumber', width: 235, title: '图号' }
                                 , { field: 'PartNumber', title: '部件名称', width: 180 }
                                 , { field: 'PartSpec', width: 180, title: '部件规格' }
@@ -241,7 +241,6 @@
                 table.on('checkbox(demo)', function (obj) {
                     console.log(obj)
                 });
-
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
                     switch (obj.event) {

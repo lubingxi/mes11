@@ -22,6 +22,7 @@ namespace YLMES.Models
         public Nullable<int> TotalPCS { get; set; }
         public Nullable<int> QTYofOneSet { get; set; }
         public Nullable<int> TotalQTY { get; set; }
+        public Nullable<int> FailedPCS { get; set; }
         public Nullable<int> RecievedQTY { get; set; }
         public Nullable<int> CompletedQTY { get; set; }
         public Nullable<int> PackageQTY { get; set; }

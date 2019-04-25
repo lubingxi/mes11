@@ -90,39 +90,48 @@
         $(function () {
             layui.use(['table', 'layer'], function () {
                 var table = layui.table, layer = layui.layer;
-                var PartNumber = String
                 var tableIns =table.render({
                      elem: '#tw'
-                   , url: '/FinishProductHouse/CheckFinishedGoods?PartNumber=' + '@ViewData["PartNumber"]' +'&PartSpec='+'@ViewData["PartSpec"]'
+                    , url: '/FinishProductHouse/CheckAllFinishedGoods'
                    , page: true
                    , limit: 15
                    , cols: [[
                     { field: '', hide: true }
-                   ,{ field: 'ID', width: 100, title: '序号' }
-                   , { field: 'Reservoir', width: 60, title: '库区' }
-                   , { field: 'CargoArea', width: 60, title: '货区' }
-                   , { field: 'Goods', width: 60, title: '货位' }
                    , { field: 'PartNumber', title: '产品名称' }
                    , { field: 'PartSpec', title: '产品规格' }
-                   , { field: '总数', width: 100, title: '数量' }
-                   , { field: 'PackageName', title: '包装条码' }
+                   , { field: '数量', width: 100, title: '数量' } 
+                   , { field: 'right', width: 300, align: 'center', toolbar: '#barDemo' }
                    ]]
-                    });
+                });
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;
+                    switch (obj.event) {
+                        case 'check':
+                            var PartNumber = data.PartNumber;
+                            var PartSpec = data.PartSpec;
+                            var url = '/FinishProductHouse/FinishedGoods?PartNumber=' + PartNumber + '&PartSpec=' + PartSpec;
+                            var index = layer.open({
+                                type: 2,
+                                content: url,
+                                area: ['90%', '80%']
+                            });
+                            break;                         
+                    }
+                });
                 $("#sele").click(function () {
-                    var Reservoir = $("#Reservoir").val().trim();
-                    var CargoArea = $("#CargoArea").val().trim();
-                    var Goods = $("#Goods").val().trim();
+                    var PartNumber = $("#PartNumber").val().trim();
+                    var PartSpec = $("#PartSpec").val().trim();
                     tableIns.reload({
                         page: {
                             curr: 1
                         },
                         where: {
-                            Reservoir: Reservoir
-                            , CargoArea: CargoArea
-                            , Goods: Goods
+                            PartNumber: PartNumber
+                            , PartSpec: PartSpec
                         }
                     });
-                });                 
+                });
+
             });
         });
     </script>
@@ -133,30 +142,29 @@
         <ul class="placeul">
             <li><a href="#">首页</a></li>
             <li><a href="#">成品仓</a></li>
-            <li><a href="#">成品库存货位产品分布</a></li>
+            <li><a href="#">成品库存查询</a></li>
         </ul>
     </div>
 
     <div class="rightinfo">
-        @*<div class="tools">
+        <div class="tools">
             <ul class="toolbar">
                 <li>
-                    库区：
-                    <input class="Reservoir" id="Reservoir" type="text" style="width: 120px;" />
+                    产品名称：
+                    <input class="Reservoir" id="PartNumber" type="text" style="width: 120px;" />
                 </li>
                 <li>
-                    货区：
-                    <input class="CargoArea" id="CargoArea" type="text" style="width: 120px;" />
-                </li>
-                <li>
-                    货位：
-                    <input class="Goods" id="Goods" type="text" style="width: 120px;" />
+                    产品规格：
+                    <input class="CargoArea" id="PartSpec" type="text" style="width: 120px;" />
                 </li>
             </ul>
             <button class="layui-btn" data-type="reload" id="sele" usesubmitbehavior=true>搜索</button>
-        </div>*@
+        </div>
         <table class="tablelist" id="tw" lay-filter="demo"></table>
     </div>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" id="check" lay-event="check">位置详情</a>
+    </script>
     <script type="text/javascript">
         function admin_add(title, url, w, h) {
             layer_show(title, url, w, h);
