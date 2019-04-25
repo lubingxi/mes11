@@ -432,6 +432,7 @@
     <Content Include="js\lanrenzhijia.js" />
     <Content Include="js\pageWorker.js" />
     <Content Include="js\print.js" />
+    <Content Include="js\qrcode.js" />
     <Content Include="js\rocketTop.js" />
     <Content Include="js\Select.js" />
     <Content Include="js\SubjectType.js" />
@@ -2738,6 +2739,7 @@
     <Content Include="Views\TaskManagement\GoodsInventory.cshtml" />
     <Content Include="Views\ProductionPlanning\RepairOrderDrawing.cshtml" />
     <Content Include="Views\FinishProductHouse\AllGoods.cshtml" />
+    <Content Include="Views\SystemSettings\MachineConfig.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

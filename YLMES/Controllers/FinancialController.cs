@@ -65,7 +65,8 @@ namespace YLMES.Controllers
                 Dictionary<string, object> map = new Dictionary<string, object>()
                 {
                     {"PzMake",ys.CheckPzMake().ToList() } ,
-                    {"Pz",ys.CheckPz().ToList() }
+                    {"Pz",ys.CheckPz().ToList() },
+                    {"Hit",ys.HitList().ToList() }
                 };
                 return Json(map, JsonRequestBehavior.AllowGet);
             }
@@ -74,7 +75,7 @@ namespace YLMES.Controllers
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-                ys.UpMake(type, id,"测试");
+                ys.UpMake(type, id,Session["name"].ToString());
             }
         }
         public ActionResult Index()
@@ -735,10 +736,6 @@ namespace YLMES.Controllers
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                 var list = Tools<SP_PM_GETLaiminglj_Result>.SqlList("exec [SP_PM_GETLaiminglj]", data);
-                if (list != null)
-                {
-                    int i = 4;
-                }
                 return Json(list, JsonRequestBehavior.AllowGet);
             }
 
@@ -1172,108 +1169,23 @@ namespace YLMES.Controllers
 
 
         #region 记账2
-        public ActionResult AccuntingAD(Dictionary<string,string> datas,
-            string jzdh, string jzh, string jrq,  string xm,string index)
+        public string AccuntingAD(string pzdanh,string jzh,List<Dictionary<string,string>> data )
         {
-            List<string> delList = new List<string>() ;
-            List<string> delList2 = new List<string>();
-            List<string> delList3 = new List<string>();
-            List<string> delList4 = new List<string>();
-            List<string> delList5 = new List<string>();
-            List<string> delList6 = new List<string>();
-            List<string> delList7 = new List<string>();
-            
-            foreach (var ass in datas)
-            {
-                switch (ass.Key.ToString())
-                {
-                    case "name":
-                        delList3.Add(ass.Value);
-                        break;
-                    case "name1":
-                        delList4.Add(ass.Value);
-                        break;
-                    case "name2":
-                        delList5.Add(ass.Value);
-                        break;
-                    case "name3":
-                        delList6.Add(ass.Value);
-                        break;
-                    case "name4":
-                        delList7.Add(ass.Value);
-                        break;
-                }
-            }
-            
-            int i = 0;
-            int a = 0;
-            if (delList3 != null) {
-                foreach(var sb in delList3)
-                {
-                   if(i< delList3.Count)
-                    {
-                        Dictionary<string, string> data = new Dictionary<string, string>
-                        {
-                            { "TYPE", "in" },
-                            { "line", delList3[i] }
-                        };
-                        if (delList4[i]==null || delList4[i]=="")
-                        {
-                            delList4[i] = "";
-                        }
-                            data.Add("line2", delList4[i]);
-                            data.Add("status", delList5[i]);
-                            data.Add("id", delList6[i]);
-                            data.Add("ytu", jzdh);
-                            data.Add("mans", index); 
-                            data.Add("manb", delList7[i]);
-                        if (delList != null)
-                        {
-                            if (i < delList.Count)
-                            {
-                                Dictionary<string, string> data2 = new Dictionary<string, string>
-                                {
-                                    { "TYPE", "up" },
-                                    { "line", delList[i] }
-                                };
-                                int c = Tools<object>.SqlComm("exec SP_PM_LaimingJZ ", data2);
-                                if (c < 1)
-                                {
-                                    return Content("False");
-                                }
-                                data.Add("manf", delList[i]);
-                            }
-                        }
-                                                       
-                             a = Tools<object>.SqlComm("exec SP_PM_LaimingJZ ", data);
-                            if (a < 1)
-                            {
-                                return Content("False");
-                            }
-                                                        
+            using (YLMES_newEntities y=new YLMES_newEntities ()) {
+                for (var a = 0; a < data.Count; a++) {
+                    SqlParameter[] parameters = new SqlParameter[9];
+                    parameters[0] = new SqlParameter("@jzh", jzh);
+                    parameters[1] = new SqlParameter("@pzdanh", pzdanh);
+                    parameters[2] = new SqlParameter("@CrName", Session["name"].ToString());
+                    var i = 3;
+                    foreach (var va in data[a]) {
+                        parameters[i] = new SqlParameter("@"+va.Key,va.Value);
+                        i++;
                     }
-                    //System.Diagnostics.Debug.WriteLine("---------------------------------信息*99---" + delList[0]);
-                    i++;
+                    y.Database.ExecuteSqlCommand("exec AddPz @jzh=@jzh,@Pnumber=@pzdanh,@Cnumber=@numBering,@Dept=@name4,@j=@name2,@d=@name3,@zy=@name,@km=@name1,@CrName=@CrName", parameters);
                 }
             }
-            if (index=="0") {
-            if (a > 0)
-            {
-                    Dictionary<string, string> data = new Dictionary<string, string>
-                    {
-                        { "TYPE", "in2" },
-                        { "line", jrq },
-                        { "line2", jzh },
-                        { "status", Session["name"].ToString() },
-                        { "id", xm },
-                        { "ytu", jzdh }
-                    };
-
-                    Tools<object>.SqlComm("exec SP_PM_LaimingJZ ", data);
-                          
-            }
-            }
-            return Content("True");
+            return "true";
         }
         #endregion
 

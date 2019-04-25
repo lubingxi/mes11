@@ -16,7 +16,41 @@ namespace YLMES.Controllers
         {
             return View();
         }
-
+        #region 机器配置
+        public ActionResult MachineConfig() {
+            return View();
+        }
+        //查询机器列表
+        public ActionResult CheckMachine() {
+            using (YLMES_newEntities y=new YLMES_newEntities ()) {
+                return Json(y.PM_Machine.OrderByDescending(p=>p.ID).ToList(),JsonRequestBehavior.AllowGet);
+            }
+        }
+        //新增机器或修改
+        public ActionResult AddOfUpMachine(Dictionary<string,string> data)
+        {
+            data.Remove("upStatu");
+            try { 
+            using (YLMES_newEntities y = new YLMES_newEntities())
+            {
+                Tools<object>.SqlComm("exec AddOfUpMachine ", data);
+                return Json(y.PM_Machine.Select(p=>p.ID).Max());
+            }
+            }
+            catch {
+                return Json("false");
+            }
+        }
+        //删除机器
+        public void DelMachine(string ID) {
+            using (YLMES_newEntities y = new YLMES_newEntities()) {
+                SqlParameter[] parameters = new SqlParameter[1];
+                parameters[0] = new SqlParameter("@ID",ID);
+                y.Database.ExecuteSqlCommand("exec AddOfUpMachine @ID=@ID,@type='del'",parameters);
+            }
+         
+        }
+        #endregion
         #region 权限设置
         public ActionResult Permissions()
         {
@@ -328,22 +362,19 @@ namespace YLMES.Controllers
             }
         }
         //修改BOM
-        public ActionResult EditProcessBOM(string id, string pc, string ph,string mqty,string spec,string unit)
+        public ActionResult EditProcessBOM(string id, string pc, string ph)
         {
             try
             {
                 int tid = int.Parse(id);
-                SqlParameter[] parms = new SqlParameter[7];
+                SqlParameter[] parms = new SqlParameter[4];
                 parms[0] = new SqlParameter("@ID", tid);
                 parms[1] = new SqlParameter("@PartNumber", "");
                 parms[2] = new SqlParameter("@ChildPartQTY", pc);
                 parms[3] = new SqlParameter("@ChildPartNumber", ph);
-                parms[4] = new SqlParameter("@MQty", mqty);
-                parms[5] = new SqlParameter("@Unit", unit);
-                parms[6] = new SqlParameter("@Spec", spec);
                 using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    ys.Database.ExecuteSqlCommand("exec  EditProcessBOM  @ID,@PartNumber,@ChildPartQTY,@ChildPartNumber,@MQty,@Unit,@Spec", parms);
+                    ys.Database.ExecuteSqlCommand("exec  EditProcessBOM  @ID,@PartNumber,@ChildPartQTY,@ChildPartNumber", parms);
                 }
                 return Content("true");
             }
