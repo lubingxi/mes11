@@ -15,7 +15,8 @@
         //window.document.body.innerHTML = prnhtml;
         window.print();
     }
-
+ 
+    
 </script>
 <style>
     tr td {
@@ -25,9 +26,7 @@
     }
 </style>
 <body>
-    <table style="font-size:50px;border:3px solid #000;width:700px;height:350px;margin:0 auto">
-
-
+    <table style="font-size:50px;border:3px solid #000;width:700px;height:350px;margin:0 auto">              
         <tr>
             <td>成品仓</td>
             <td colspan="4" style="text-align:center"><img src="@TempData["ptu"]"/></td>
@@ -44,7 +43,6 @@
             <td>货位:</td>
             <td colspan="4" style="text-align:center;vertical-align: middle;">@ViewData["Goods"]</td>
         </tr>
-        
     </table>
 </body>
 

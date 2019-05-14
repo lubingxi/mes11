@@ -24,6 +24,9 @@
                 $("#sele").click();
             }
         });
+        function fu() {
+           
+        }
         $(function () {
             if ('@Session["name"]' == "") {
                 window.top.location = '/Home/Login';
@@ -49,7 +52,7 @@
                    , { field: 'ContractNumber', title: '项目编号' }
                    , { field: 'CustomerName', title: '项目名称' }
                    , { field: 'PackageName', title: '包装条码' }
-                   , { field: 'right', align: 'center', toolbar: '#barDemo' }
+                   , { field: 'right',width:350, align: 'center', toolbar: '#barDemo' }
                    ]]
                     });
                 $("#sele").click(function () {
@@ -87,16 +90,23 @@
                             var id = data.ID;
                             var pnumber = data.PartNumber;
                             var pspec = data.PartSpec;
-                            $.ajax({
-                                url: "/FinishProductHouse/Unbundling",
-                                data: { id: id, pnumber: pnumber, pspec: pspec },
-                                type: "post",
-                                dataType: "text",
-                                success: function (data) {                                 
-                                    layer.msg('解绑成功！');
-                                    $("#sele").click();
-                                }
-                            });
+                            var pname = data.PackageName;
+                            layer.confirm("真的解除绑定吗？", function (index) {
+                                if (pnumber == "" || pnumber == null) {
+                                    layer.msg('没有产品不用解绑!');
+                                } else {
+                                    $.ajax({
+                                        url: "/FinishProductHouse/Unbundling",
+                                        data: { id: id, pnumber: pnumber, pspec: pspec, pname: pname },
+                                        type: "post",
+                                        dataType: "text",
+                                        success: function (data) {
+                                            layer.msg('解绑成功！');
+                                            $("#sele").click();
+                                        }
+                                    });
+                                }                            
+                            });                            
                             break;
                         case 'delete':
                          var id = data.ID;
@@ -123,6 +133,7 @@
                                 maxmin: true
                             });
                             layer.full(index);
+                           
                             break;
                         case 'project':
                            var id = data.ID;
@@ -168,7 +179,7 @@
         <a class="layui-btn layui-btn-xs" id="Unbundling" lay-event="Unbundling">解除绑定</a>
         <a class="layui-btn layui-btn-xs" id="edit" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-xs" id="print" lay-event="print">打印</a>
-        @*<a class="layui-btn layui-btn-danger layui-btn-xs" id="delete" lay-event="delete">删除</a>*@
+        <a class="layui-btn layui-btn-danger layui-btn-xs" id="delete" lay-event="delete">删除</a>
     </script>
 </head>
 
@@ -190,11 +201,11 @@
                     <span>
                         <img style="margin-bottom:10px" src="../../images/t01.png" />
                     </span><a target="rightFrame">新增成品仓货位</a>
-                </li>              
+                </li>
                 <li>
                     库区：
                     <input class="Reservoir" id="Reservoir" type="text" style="width: 120px;" />
-                </li>             
+                </li>
                 <li>
                     货区：
                     <input class="CargoArea" id="CargoArea" type="text" style="width: 120px;" />
@@ -204,10 +215,12 @@
                     <input class="Goods" id="Goods" type="text" style="width: 120px;" />
                 </li>
             </ul>
+
             <button class="layui-btn" data-type="reload" id="sele" usesubmitbehavior=true>搜索</button>
         </div>
         <table class="tablelist" id="tw" lay-filter="demo"></table>
     </div>
+    <button class="aaa" onclick="fu"> aaa</button>
     <script type="text/javascript">
         function admin_add(title, url, w, h) {
             layer_show(title, url, w, h);

@@ -57,6 +57,17 @@ namespace YLMES.Controllers
         {
             return View();
         }
+        //显示客户名称
+        public ActionResult CheckCustomerName(string cnumber)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                var list = ys.C_Contract.Where(c => c.ContractNumber.Contains(cnumber)).FirstOrDefault();
+                string CustomerName = list.CustomerName;
+                return Content(CustomerName);
+            }
+          
+        }
         //新增成品仓位置信息
         public ActionResult AddFinishProLocation(string Reservoir,string CargoArea,string Goods)
         {
@@ -102,16 +113,17 @@ namespace YLMES.Controllers
             }
         }
         //货位解除绑定
-        public ActionResult Unbundling(string id,string pnumber,string pspec)
+        public ActionResult Unbundling(string id,string pnumber,string pspec,string pname)
         {
             using(YLMES_newEntities ys = new YLMES_newEntities())
             {
                 int i = int.Parse(id);
-                SqlParameter[] parms = new SqlParameter[3];
+                SqlParameter[] parms = new SqlParameter[4];
                 parms[0] = new SqlParameter("@id", i);
                 parms[1] = new SqlParameter("@PartNumber", pnumber);
                 parms[2] = new SqlParameter("@PartSpec", pspec);
-                ys.Database.ExecuteSqlCommand("exec PM_AllUnbundling  @id,@PartNumber,@PartSpec", parms);
+                parms[3] = new SqlParameter("@PackageName", pname);
+                ys.Database.ExecuteSqlCommand("exec PM_AllUnbundling  @id,@PartNumber,@PartSpec,@PackageName", parms);
                 return Content("true");
             }            
         }

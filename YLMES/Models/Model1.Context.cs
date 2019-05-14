@@ -56,11 +56,12 @@ namespace YLMES.Models
         public virtual DbSet<htmltext> htmltext { get; set; }
         public virtual DbSet<MaterTypeNames> MaterTypeNames { get; set; }
         public virtual DbSet<PM_ApplierList> PM_ApplierList { get; set; }
+        public virtual DbSet<PM_ApplierList_temp> PM_ApplierList_temp { get; set; }
         public virtual DbSet<PM_ApplierProductType> PM_ApplierProductType { get; set; }
         public virtual DbSet<PM_ApplyerMaterialType> PM_ApplyerMaterialType { get; set; }
         public virtual DbSet<PM_AssemblyPart> PM_AssemblyPart { get; set; }
         public virtual DbSet<PM_BOM> PM_BOM { get; set; }
-        public virtual DbSet<PM_BOM_Process> PM_BOM_Process { get; set; }
+        public virtual DbSet<PM_BOM_Design> PM_BOM_Design { get; set; }
         public virtual DbSet<PM_DepartMent> PM_DepartMent { get; set; }
         public virtual DbSet<PM_FactorySetting> PM_FactorySetting { get; set; }
         public virtual DbSet<PM_Figure> PM_Figure { get; set; }
@@ -87,6 +88,7 @@ namespace YLMES.Models
         public virtual DbSet<PM_Scanrecord> PM_Scanrecord { get; set; }
         public virtual DbSet<PM_ScoreSetting> PM_ScoreSetting { get; set; }
         public virtual DbSet<PM_TaskRoute> PM_TaskRoute { get; set; }
+        public virtual DbSet<PM_TemporaryInventory> PM_TemporaryInventory { get; set; }
         public virtual DbSet<PM_TemporaryPurchaseMaterialList> PM_TemporaryPurchaseMaterialList { get; set; }
         public virtual DbSet<PM_UserAccessSetup> PM_UserAccessSetup { get; set; }
         public virtual DbSet<PM_WH> PM_WH { get; set; }
@@ -132,7 +134,11 @@ namespace YLMES.Models
         public virtual DbSet<PM_TaskType> PM_TaskType { get; set; }
         public virtual DbSet<TableStatus> TableStatus { get; set; }
         public virtual DbSet<temp1121> temp1121 { get; set; }
+        public virtual DbSet<temp3> temp3 { get; set; }
+        public virtual DbSet<temp5> temp5 { get; set; }
+        public virtual DbSet<temp6> temp6 { get; set; }
         public virtual DbSet<toji> toji { get; set; }
+        public virtual DbSet<pm_Destock> pm_Destock { get; set; }
     
         [DbFunction("YLMES_newEntities", "f_split")]
         public virtual IQueryable<f_split_Result> f_split(string c, string split, Nullable<int> index)
@@ -249,6 +255,47 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Addhtml", textParameter, cuidParameter, typeParameter);
         }
     
+        public virtual int AddInventoryWork(string partNumber, Nullable<int> taskID, string parentPartNumber, string dueDay, string createdEmployee, string spec, string ji, string cSpec, string count)
+        {
+            var partNumberParameter = partNumber != null ?
+                new ObjectParameter("PartNumber", partNumber) :
+                new ObjectParameter("PartNumber", typeof(string));
+    
+            var taskIDParameter = taskID.HasValue ?
+                new ObjectParameter("TaskID", taskID) :
+                new ObjectParameter("TaskID", typeof(int));
+    
+            var parentPartNumberParameter = parentPartNumber != null ?
+                new ObjectParameter("ParentPartNumber", parentPartNumber) :
+                new ObjectParameter("ParentPartNumber", typeof(string));
+    
+            var dueDayParameter = dueDay != null ?
+                new ObjectParameter("DueDay", dueDay) :
+                new ObjectParameter("DueDay", typeof(string));
+    
+            var createdEmployeeParameter = createdEmployee != null ?
+                new ObjectParameter("CreatedEmployee", createdEmployee) :
+                new ObjectParameter("CreatedEmployee", typeof(string));
+    
+            var specParameter = spec != null ?
+                new ObjectParameter("Spec", spec) :
+                new ObjectParameter("Spec", typeof(string));
+    
+            var jiParameter = ji != null ?
+                new ObjectParameter("Ji", ji) :
+                new ObjectParameter("Ji", typeof(string));
+    
+            var cSpecParameter = cSpec != null ?
+                new ObjectParameter("cSpec", cSpec) :
+                new ObjectParameter("cSpec", typeof(string));
+    
+            var countParameter = count != null ?
+                new ObjectParameter("count", count) :
+                new ObjectParameter("count", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddInventoryWork", partNumberParameter, taskIDParameter, parentPartNumberParameter, dueDayParameter, createdEmployeeParameter, specParameter, jiParameter, cSpecParameter, countParameter);
+        }
+    
         public virtual int AddLocationType(string createdBy)
         {
             var createdByParameter = createdBy != null ?
@@ -348,6 +395,47 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddOfUpMachine", typeParameter, machineNameParameter, periodOfDepreciationParameter, purchaseDateParameter, purchasePriceParameter, statusParameter, ifDepreciationParameter, iDParameter);
         }
     
+        public virtual int AddOutsourcWork(string partNumber, Nullable<int> taskID, string parentPartNumber, string dueDay, string createdEmployee, string spec, string ji, string cSpec, string count)
+        {
+            var partNumberParameter = partNumber != null ?
+                new ObjectParameter("PartNumber", partNumber) :
+                new ObjectParameter("PartNumber", typeof(string));
+    
+            var taskIDParameter = taskID.HasValue ?
+                new ObjectParameter("TaskID", taskID) :
+                new ObjectParameter("TaskID", typeof(int));
+    
+            var parentPartNumberParameter = parentPartNumber != null ?
+                new ObjectParameter("ParentPartNumber", parentPartNumber) :
+                new ObjectParameter("ParentPartNumber", typeof(string));
+    
+            var dueDayParameter = dueDay != null ?
+                new ObjectParameter("DueDay", dueDay) :
+                new ObjectParameter("DueDay", typeof(string));
+    
+            var createdEmployeeParameter = createdEmployee != null ?
+                new ObjectParameter("CreatedEmployee", createdEmployee) :
+                new ObjectParameter("CreatedEmployee", typeof(string));
+    
+            var specParameter = spec != null ?
+                new ObjectParameter("Spec", spec) :
+                new ObjectParameter("Spec", typeof(string));
+    
+            var jiParameter = ji != null ?
+                new ObjectParameter("Ji", ji) :
+                new ObjectParameter("Ji", typeof(string));
+    
+            var cSpecParameter = cSpec != null ?
+                new ObjectParameter("cSpec", cSpec) :
+                new ObjectParameter("cSpec", typeof(string));
+    
+            var countParameter = count != null ?
+                new ObjectParameter("count", count) :
+                new ObjectParameter("count", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddOutsourcWork", partNumberParameter, taskIDParameter, parentPartNumberParameter, dueDayParameter, createdEmployeeParameter, specParameter, jiParameter, cSpecParameter, countParameter);
+        }
+    
         public virtual int AddPlanMater(Nullable<int> taskID)
         {
             var taskIDParameter = taskID.HasValue ?
@@ -435,6 +523,47 @@ namespace YLMES.Models
                 new ObjectParameter("CreateBy", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddProcessCar", partIdParameter, processNameParameter, fileParameter, createByParameter);
+        }
+    
+        public virtual int AddProcuWork(string partNumber, Nullable<int> taskID, string parentPartNumber, string dueDay, string createdEmployee, string spec, string ji, string cSpec, string count)
+        {
+            var partNumberParameter = partNumber != null ?
+                new ObjectParameter("PartNumber", partNumber) :
+                new ObjectParameter("PartNumber", typeof(string));
+    
+            var taskIDParameter = taskID.HasValue ?
+                new ObjectParameter("TaskID", taskID) :
+                new ObjectParameter("TaskID", typeof(int));
+    
+            var parentPartNumberParameter = parentPartNumber != null ?
+                new ObjectParameter("ParentPartNumber", parentPartNumber) :
+                new ObjectParameter("ParentPartNumber", typeof(string));
+    
+            var dueDayParameter = dueDay != null ?
+                new ObjectParameter("DueDay", dueDay) :
+                new ObjectParameter("DueDay", typeof(string));
+    
+            var createdEmployeeParameter = createdEmployee != null ?
+                new ObjectParameter("CreatedEmployee", createdEmployee) :
+                new ObjectParameter("CreatedEmployee", typeof(string));
+    
+            var specParameter = spec != null ?
+                new ObjectParameter("Spec", spec) :
+                new ObjectParameter("Spec", typeof(string));
+    
+            var jiParameter = ji != null ?
+                new ObjectParameter("Ji", ji) :
+                new ObjectParameter("Ji", typeof(string));
+    
+            var cSpecParameter = cSpec != null ?
+                new ObjectParameter("cSpec", cSpec) :
+                new ObjectParameter("cSpec", typeof(string));
+    
+            var countParameter = count != null ?
+                new ObjectParameter("count", count) :
+                new ObjectParameter("count", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddProcuWork", partNumberParameter, taskIDParameter, parentPartNumberParameter, dueDayParameter, createdEmployeeParameter, specParameter, jiParameter, cSpecParameter, countParameter);
         }
     
         public virtual int AddPz(string jzh, string crName, string cnumber, string pnumber, string dept, string zy, string km, string j, string d)
@@ -854,21 +983,17 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CheckDropWhList_Result>("CheckDropWhList", tYPEParameter, wHIDParameter, wHAreaIDParameter, wHStorageLocationIDParameter);
         }
     
-        public virtual ObjectResult<CheckFinishedGoods_Result> CheckFinishedGoods(string reservoir, string cargoArea, string goods)
+        public virtual ObjectResult<CheckFinishedGoods_Result> CheckFinishedGoods(string partNumber, string partSpec)
         {
-            var reservoirParameter = reservoir != null ?
-                new ObjectParameter("Reservoir", reservoir) :
-                new ObjectParameter("Reservoir", typeof(string));
+            var partNumberParameter = partNumber != null ?
+                new ObjectParameter("PartNumber", partNumber) :
+                new ObjectParameter("PartNumber", typeof(string));
     
-            var cargoAreaParameter = cargoArea != null ?
-                new ObjectParameter("CargoArea", cargoArea) :
-                new ObjectParameter("CargoArea", typeof(string));
+            var partSpecParameter = partSpec != null ?
+                new ObjectParameter("PartSpec", partSpec) :
+                new ObjectParameter("PartSpec", typeof(string));
     
-            var goodsParameter = goods != null ?
-                new ObjectParameter("Goods", goods) :
-                new ObjectParameter("Goods", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CheckFinishedGoods_Result>("CheckFinishedGoods", reservoirParameter, cargoAreaParameter, goodsParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CheckFinishedGoods_Result>("CheckFinishedGoods", partNumberParameter, partSpecParameter);
         }
     
         public virtual ObjectResult<CheckFinshProcess_Result> CheckFinshProcess(Nullable<int> takid)
@@ -918,9 +1043,13 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CheckInventory_Result>("CheckInventory", partIDParameter, taskIDParameter, countParameter);
         }
     
-        public virtual ObjectResult<CheckMake_Result> CheckMake()
+        public virtual ObjectResult<CheckMake_Result> CheckMake(string type)
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CheckMake_Result>("CheckMake");
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CheckMake_Result>("CheckMake", typeParameter);
         }
     
         public virtual ObjectResult<CheckMateial_Result> CheckMateial(string productName, string productSpec)
@@ -963,7 +1092,7 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CheckParts_Result>("CheckParts", taskIDParameter);
         }
     
-        public virtual ObjectResult<CheckProcess_Result> CheckProcess(string type, string productName, string productSpec, string partNumber, string stationTypeNumber, string routeName, string require, string createdBy, Nullable<int> partId, string workSecondPerPCS, string workSecond2PerPCS)
+        public virtual ObjectResult<CheckProcess_Result> CheckProcess(string type, string productName, string productSpec, string partNumber, string stationTypeNumber, string routeName, string require, string createdBy, Nullable<int> partId, string workSecondPerPCS, string workSecond2PerPCS, string order)
         {
             var typeParameter = type != null ?
                 new ObjectParameter("type", type) :
@@ -1009,7 +1138,11 @@ namespace YLMES.Models
                 new ObjectParameter("WorkSecond2PerPCS", workSecond2PerPCS) :
                 new ObjectParameter("WorkSecond2PerPCS", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CheckProcess_Result>("CheckProcess", typeParameter, productNameParameter, productSpecParameter, partNumberParameter, stationTypeNumberParameter, routeNameParameter, requireParameter, createdByParameter, partIdParameter, workSecondPerPCSParameter, workSecond2PerPCSParameter);
+            var orderParameter = order != null ?
+                new ObjectParameter("Order", order) :
+                new ObjectParameter("Order", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CheckProcess_Result>("CheckProcess", typeParameter, productNameParameter, productSpecParameter, partNumberParameter, stationTypeNumberParameter, routeNameParameter, requireParameter, createdByParameter, partIdParameter, workSecondPerPCSParameter, workSecond2PerPCSParameter, orderParameter);
         }
     
         public virtual ObjectResult<CheckProductDetalInfo_Result> CheckProductDetalInfo(string packageName)
@@ -1217,6 +1350,11 @@ namespace YLMES.Models
         public virtual ObjectResult<ChecSmsInfos_Result> ChecSmsInfos()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ChecSmsInfos_Result>("ChecSmsInfos");
+        }
+    
+        public virtual ObjectResult<string> CostAccounting()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("CostAccounting");
         }
     
         public virtual int CreateBOM(Nullable<int> taskID, string createdBy)
@@ -1646,9 +1784,13 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<getPackjobs_Result>("getPackjobs", tYPEParameter, workorderNOParameter);
         }
     
-        public virtual ObjectResult<HitList_Result> HitList()
+        public virtual ObjectResult<HitList_Result> HitList(string type)
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<HitList_Result>("HitList");
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<HitList_Result>("HitList", typeParameter);
         }
     
         public virtual int ImcommingPONotice(string type, string pONO)
@@ -1664,11 +1806,11 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ImcommingPONotice", typeParameter, pONOParameter);
         }
     
-        public virtual int InsertSmsInfos(string name, string number, string createBy)
+        public virtual int InsertSmsInfos(string depart, string number, string createBy)
         {
-            var nameParameter = name != null ?
-                new ObjectParameter("Name", name) :
-                new ObjectParameter("Name", typeof(string));
+            var departParameter = depart != null ?
+                new ObjectParameter("Depart", depart) :
+                new ObjectParameter("Depart", typeof(string));
     
             var numberParameter = number != null ?
                 new ObjectParameter("Number", number) :
@@ -1678,7 +1820,7 @@ namespace YLMES.Models
                 new ObjectParameter("CreateBy", createBy) :
                 new ObjectParameter("CreateBy", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertSmsInfos", nameParameter, numberParameter, createByParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertSmsInfos", departParameter, numberParameter, createByParameter);
         }
     
         public virtual ObjectResult<Install_check_Result> Install_check(Nullable<int> contractID)
@@ -2063,7 +2205,7 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PM_AddPurld", taskIDParameter, materialIDParameter, applyPCSParameter, applyQTYParameter, qtyofPCSParameter);
         }
     
-        public virtual int PM_AddPurlist(Nullable<int> taskID, Nullable<int> materialID, Nullable<int> count, string userName, string unit, string type, Nullable<int> parid, string spec)
+        public virtual int PM_AddPurlist(Nullable<int> taskID, Nullable<int> materialID, Nullable<int> count, string userName, string unit, string type, Nullable<int> parid, string spec, string name)
         {
             var taskIDParameter = taskID.HasValue ?
                 new ObjectParameter("TaskID", taskID) :
@@ -2097,7 +2239,11 @@ namespace YLMES.Models
                 new ObjectParameter("Spec", spec) :
                 new ObjectParameter("Spec", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PM_AddPurlist", taskIDParameter, materialIDParameter, countParameter, userNameParameter, unitParameter, typeParameter, paridParameter, specParameter);
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PM_AddPurlist", taskIDParameter, materialIDParameter, countParameter, userNameParameter, unitParameter, typeParameter, paridParameter, specParameter, nameParameter);
         }
     
         public virtual int PM_AddWorkDetial(string workorderNO)
@@ -2109,7 +2255,7 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PM_AddWorkDetial", workorderNOParameter);
         }
     
-        public virtual int PM_AllUnbundling(Nullable<int> id, string partNumber, string partSpec)
+        public virtual int PM_AllUnbundling(Nullable<int> id, string partNumber, string partSpec, string packageName)
         {
             var idParameter = id.HasValue ?
                 new ObjectParameter("id", id) :
@@ -2123,7 +2269,11 @@ namespace YLMES.Models
                 new ObjectParameter("PartSpec", partSpec) :
                 new ObjectParameter("PartSpec", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PM_AllUnbundling", idParameter, partNumberParameter, partSpecParameter);
+            var packageNameParameter = packageName != null ?
+                new ObjectParameter("PackageName", packageName) :
+                new ObjectParameter("PackageName", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PM_AllUnbundling", idParameter, partNumberParameter, partSpecParameter, packageNameParameter);
         }
     
         public virtual ObjectResult<PM_AssignTasksCheck_Result> PM_AssignTasksCheck(string rwapStatusID, string createdTimeStart, string salesOrder, string projectName, string statusID)
@@ -2149,6 +2299,28 @@ namespace YLMES.Models
                 new ObjectParameter("StatusID", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PM_AssignTasksCheck_Result>("PM_AssignTasksCheck", rwapStatusIDParameter, createdTimeStartParameter, salesOrderParameter, projectNameParameter, statusIDParameter);
+        }
+    
+        public virtual ObjectResult<PM_AssignTasksCheck2_Result> PM_AssignTasksCheck2()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PM_AssignTasksCheck2_Result>("PM_AssignTasksCheck2");
+        }
+    
+        public virtual ObjectResult<PM_CheckDesignBom_Result> PM_CheckDesignBom(string type, string name, string cname)
+        {
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("name", name) :
+                new ObjectParameter("name", typeof(string));
+    
+            var cnameParameter = cname != null ?
+                new ObjectParameter("cname", cname) :
+                new ObjectParameter("cname", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PM_CheckDesignBom_Result>("PM_CheckDesignBom", typeParameter, nameParameter, cnameParameter);
         }
     
         public virtual ObjectResult<PM_CheckElectricalInv_Result> PM_CheckElectricalInv(Nullable<int> taskid)
@@ -2194,6 +2366,28 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PM_CheckMaterID_Result>("PM_CheckMaterID", partNumberParameter, partSpecParameter, partMaterialParameter);
         }
     
+        public virtual ObjectResult<PM_CheckProductName_Result> PM_CheckProductName(string productName, string productSpec)
+        {
+            var productNameParameter = productName != null ?
+                new ObjectParameter("ProductName", productName) :
+                new ObjectParameter("ProductName", typeof(string));
+    
+            var productSpecParameter = productSpec != null ?
+                new ObjectParameter("ProductSpec", productSpec) :
+                new ObjectParameter("ProductSpec", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PM_CheckProductName_Result>("PM_CheckProductName", productNameParameter, productSpecParameter);
+        }
+    
+        public virtual int PM_CheckRoute(string route)
+        {
+            var routeParameter = route != null ?
+                new ObjectParameter("Route", route) :
+                new ObjectParameter("Route", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PM_CheckRoute", routeParameter);
+        }
+    
         public virtual ObjectResult<PM_CheckSupplierMat_Result> PM_CheckSupplierMat(string supplierId)
         {
             var supplierIdParameter = supplierId != null ?
@@ -2201,6 +2395,27 @@ namespace YLMES.Models
                 new ObjectParameter("SupplierId", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PM_CheckSupplierMat_Result>("PM_CheckSupplierMat", supplierIdParameter);
+        }
+    
+        public virtual int pm_Destocking(string taskid, string reduce, Nullable<int> material, string type)
+        {
+            var taskidParameter = taskid != null ?
+                new ObjectParameter("Taskid", taskid) :
+                new ObjectParameter("Taskid", typeof(string));
+    
+            var reduceParameter = reduce != null ?
+                new ObjectParameter("Reduce", reduce) :
+                new ObjectParameter("Reduce", typeof(string));
+    
+            var materialParameter = material.HasValue ?
+                new ObjectParameter("material", material) :
+                new ObjectParameter("material", typeof(int));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("pm_Destocking", taskidParameter, reduceParameter, materialParameter, typeParameter);
         }
     
         public virtual ObjectResult<PM_EditAccessSetup_Result> PM_EditAccessSetup(string type, string userName, string functionName, Nullable<int> status, Nullable<int> typeid)
@@ -2321,6 +2536,27 @@ namespace YLMES.Models
                 new ObjectParameter("Count", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PM_MakePackage", typeParameter, idParameter, countParameter);
+        }
+    
+        public virtual int PM_MassDistribution(Nullable<int> taskID, string machineDesignOwner, string electricalOwner, string issueOwner)
+        {
+            var taskIDParameter = taskID.HasValue ?
+                new ObjectParameter("TaskID", taskID) :
+                new ObjectParameter("TaskID", typeof(int));
+    
+            var machineDesignOwnerParameter = machineDesignOwner != null ?
+                new ObjectParameter("MachineDesignOwner", machineDesignOwner) :
+                new ObjectParameter("MachineDesignOwner", typeof(string));
+    
+            var electricalOwnerParameter = electricalOwner != null ?
+                new ObjectParameter("ElectricalOwner", electricalOwner) :
+                new ObjectParameter("ElectricalOwner", typeof(string));
+    
+            var issueOwnerParameter = issueOwner != null ?
+                new ObjectParameter("IssueOwner", issueOwner) :
+                new ObjectParameter("IssueOwner", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PM_MassDistribution", taskIDParameter, machineDesignOwnerParameter, electricalOwnerParameter, issueOwnerParameter);
         }
     
         public virtual ObjectResult<PM_PartSettingCheck_Result> PM_PartSettingCheck(string partNumber, string taskid)
@@ -2906,6 +3142,36 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PM_TaskProgressEdit_Result>("PM_TaskProgressEdit", typeParameter, taskIdParameter, progressItemParameter, timeFromParameter, timeTOParameter, childTaskDescriptionParameter, statusDescriptionParameter, userNameParameter);
         }
     
+        public virtual int pm_TheOrderCenter(Nullable<int> contractID, string contractNumber)
+        {
+            var contractIDParameter = contractID.HasValue ?
+                new ObjectParameter("ContractID", contractID) :
+                new ObjectParameter("ContractID", typeof(int));
+    
+            var contractNumberParameter = contractNumber != null ?
+                new ObjectParameter("ContractNumber", contractNumber) :
+                new ObjectParameter("ContractNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("pm_TheOrderCenter", contractIDParameter, contractNumberParameter);
+        }
+    
+        public virtual int PM_UpdateMaterSpec(string partNumber, string partSpec, Nullable<int> id)
+        {
+            var partNumberParameter = partNumber != null ?
+                new ObjectParameter("PartNumber", partNumber) :
+                new ObjectParameter("PartNumber", typeof(string));
+    
+            var partSpecParameter = partSpec != null ?
+                new ObjectParameter("PartSpec", partSpec) :
+                new ObjectParameter("PartSpec", typeof(string));
+    
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("PM_UpdateMaterSpec", partNumberParameter, partSpecParameter, idParameter);
+        }
+    
         public virtual int PM_WH_Delete(string tYPE, Nullable<int> wHID, Nullable<int> wHAreaID, Nullable<int> wHStorageLocationID, Nullable<int> wHGoodsAllocationID)
         {
             var tYPEParameter = tYPE != null ?
@@ -3380,6 +3646,52 @@ namespace YLMES.Models
                 new ObjectParameter("cang", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Raw_MaterialStock_Result>("Raw_MaterialStock", projectNameParameter, partNumberParameter, partSpecParameter, createdTimeEndParameter, createdTimeParameter, createdByParameter, iDParameter, cangParameter);
+        }
+    
+        public virtual ObjectResult<Raw_MaterialStock2_Result> Raw_MaterialStock2(string id)
+        {
+            var idParameter = id != null ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Raw_MaterialStock2_Result>("Raw_MaterialStock2", idParameter);
+        }
+    
+        public virtual ObjectResult<Raw_MaterialStocks_Result> Raw_MaterialStocks(string projectName, string partNumber, string partSpec, string createdTimeEnd, string createdTime, string createdBy, string iD, string cang)
+        {
+            var projectNameParameter = projectName != null ?
+                new ObjectParameter("ProjectName", projectName) :
+                new ObjectParameter("ProjectName", typeof(string));
+    
+            var partNumberParameter = partNumber != null ?
+                new ObjectParameter("PartNumber", partNumber) :
+                new ObjectParameter("PartNumber", typeof(string));
+    
+            var partSpecParameter = partSpec != null ?
+                new ObjectParameter("PartSpec", partSpec) :
+                new ObjectParameter("PartSpec", typeof(string));
+    
+            var createdTimeEndParameter = createdTimeEnd != null ?
+                new ObjectParameter("CreatedTimeEnd", createdTimeEnd) :
+                new ObjectParameter("CreatedTimeEnd", typeof(string));
+    
+            var createdTimeParameter = createdTime != null ?
+                new ObjectParameter("CreatedTime", createdTime) :
+                new ObjectParameter("CreatedTime", typeof(string));
+    
+            var createdByParameter = createdBy != null ?
+                new ObjectParameter("CreatedBy", createdBy) :
+                new ObjectParameter("CreatedBy", typeof(string));
+    
+            var iDParameter = iD != null ?
+                new ObjectParameter("ID", iD) :
+                new ObjectParameter("ID", typeof(string));
+    
+            var cangParameter = cang != null ?
+                new ObjectParameter("cang", cang) :
+                new ObjectParameter("cang", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Raw_MaterialStocks_Result>("Raw_MaterialStocks", projectNameParameter, partNumberParameter, partSpecParameter, createdTimeEndParameter, createdTimeParameter, createdByParameter, iDParameter, cangParameter);
         }
     
         public virtual ObjectResult<RawWHIQCList_Result> RawWHIQCList(string pONOID, string pONO)
@@ -6897,7 +7209,7 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Statistics_TaskAll", projectNameParameter, ownerParameter, overdudayParameter);
         }
     
-        public virtual ObjectResult<Statistics_TaskAlllist_Result> Statistics_TaskAlllist(string projectName, string owner, string overduday)
+        public virtual int Statistics_TaskAlllist(string projectName, string owner, string overduday)
         {
             var projectNameParameter = projectName != null ?
                 new ObjectParameter("ProjectName", projectName) :
@@ -6911,7 +7223,7 @@ namespace YLMES.Models
                 new ObjectParameter("Overduday", overduday) :
                 new ObjectParameter("Overduday", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Statistics_TaskAlllist_Result>("Statistics_TaskAlllist", projectNameParameter, ownerParameter, overdudayParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Statistics_TaskAlllist", projectNameParameter, ownerParameter, overdudayParameter);
         }
     
         public virtual ObjectResult<Statisticschar_Departmentlist_Result> Statisticschar_Departmentlist(string department)
@@ -7029,6 +7341,15 @@ namespace YLMES.Models
                 new ObjectParameter("CreateBy", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("TechTaskReCe", taskIdParameter, createByParameter);
+        }
+    
+        public virtual ObjectResult<updatea_Result> updatea(string projectid)
+        {
+            var projectidParameter = projectid != null ?
+                new ObjectParameter("projectid", projectid) :
+                new ObjectParameter("projectid", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<updatea_Result>("updatea", projectidParameter);
         }
     
         public virtual int UpdateBOM(Nullable<int> id, string dosage, string unit)
@@ -7288,7 +7609,7 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateProcess", stationTypeParameter, sortIDParameter, workHoursParameter, workHours2Parameter, requireParameter, iDParameter, createdByParameter, routeNameParameter, indexParameter);
         }
     
-        public virtual int UpdatePurchaseQTY(Nullable<int> qTYofPCS, Nullable<int> materialID, Nullable<int> applyPurchasePCS, Nullable<int> taskID, string units, string note, string type, Nullable<int> actPCS, Nullable<int> price, Nullable<int> id, string listType)
+        public virtual int UpdatePurchaseQTY(Nullable<int> qTYofPCS, Nullable<int> materialID, Nullable<double> applyPurchasePCS, Nullable<int> taskID, string units, string note, string type, Nullable<int> actPCS, Nullable<double> price, Nullable<int> id, string listType)
         {
             var qTYofPCSParameter = qTYofPCS.HasValue ?
                 new ObjectParameter("QTYofPCS", qTYofPCS) :
@@ -7300,7 +7621,7 @@ namespace YLMES.Models
     
             var applyPurchasePCSParameter = applyPurchasePCS.HasValue ?
                 new ObjectParameter("ApplyPurchasePCS", applyPurchasePCS) :
-                new ObjectParameter("ApplyPurchasePCS", typeof(int));
+                new ObjectParameter("ApplyPurchasePCS", typeof(double));
     
             var taskIDParameter = taskID.HasValue ?
                 new ObjectParameter("TaskID", taskID) :
@@ -7324,7 +7645,7 @@ namespace YLMES.Models
     
             var priceParameter = price.HasValue ?
                 new ObjectParameter("price", price) :
-                new ObjectParameter("price", typeof(int));
+                new ObjectParameter("price", typeof(double));
     
             var idParameter = id.HasValue ?
                 new ObjectParameter("id", id) :
@@ -7497,7 +7818,7 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<UploadTheDrawings_Result>("UploadTheDrawings", typeParameter, figureNumberParameter, folderNameParameter, fileNameParameter, createdByParameter, marterIDParameter, partNumberParameter, partSpecParameter, partMaterialParameter);
         }
     
-        public virtual int UpMake(string type, string id, string makeCreatedBy)
+        public virtual int UpMake(string type, string id, string makeCreatedBy, string otype)
         {
             var typeParameter = type != null ?
                 new ObjectParameter("type", type) :
@@ -7511,7 +7832,11 @@ namespace YLMES.Models
                 new ObjectParameter("MakeCreatedBy", makeCreatedBy) :
                 new ObjectParameter("MakeCreatedBy", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpMake", typeParameter, idParameter, makeCreatedByParameter);
+            var otypeParameter = otype != null ?
+                new ObjectParameter("otype", otype) :
+                new ObjectParameter("otype", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpMake", typeParameter, idParameter, makeCreatedByParameter, otypeParameter);
         }
     
         public virtual int UpMaterialDefaultStu(string mid, string appid, string cuid, string type, string money, string createBy, string price, string sum, Nullable<int> indexStut, string taid)
@@ -7644,13 +7969,13 @@ namespace YLMES.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WOCheck_Result>("WOCheck", customerNameParameter, contractNumberParameter, workorderNOParameter, createTimeParameter, createTimeToParameter);
         }
     
-        public virtual ObjectResult<WOdetail_Result> WOdetail(string workorderNO)
+        public virtual int WOdetail(string workorderNO)
         {
             var workorderNOParameter = workorderNO != null ?
                 new ObjectParameter("WorkorderNO", workorderNO) :
                 new ObjectParameter("WorkorderNO", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WOdetail_Result>("WOdetail", workorderNOParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("WOdetail", workorderNOParameter);
         }
     
         public virtual ObjectResult<WOdetail_byStation_Result> WOdetail_byStation(string stationType, string workorderNO)
@@ -7664,6 +7989,27 @@ namespace YLMES.Models
                 new ObjectParameter("WorkorderNO", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WOdetail_byStation_Result>("WOdetail_byStation", stationTypeParameter, workorderNOParameter);
+        }
+    
+        public virtual int pm_AddDestock(string taskid, string materialId, Nullable<int> count, Nullable<int> counts)
+        {
+            var taskidParameter = taskid != null ?
+                new ObjectParameter("Taskid", taskid) :
+                new ObjectParameter("Taskid", typeof(string));
+    
+            var materialIdParameter = materialId != null ?
+                new ObjectParameter("MaterialId", materialId) :
+                new ObjectParameter("MaterialId", typeof(string));
+    
+            var countParameter = count.HasValue ?
+                new ObjectParameter("Count", count) :
+                new ObjectParameter("Count", typeof(int));
+    
+            var countsParameter = counts.HasValue ?
+                new ObjectParameter("Counts", counts) :
+                new ObjectParameter("Counts", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("pm_AddDestock", taskidParameter, materialIdParameter, countParameter, countsParameter);
         }
     }
 }

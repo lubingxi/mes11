@@ -609,15 +609,10 @@
                     }
                 });
             }
-            if ('@ViewData["ifDrive"]' == "设计部完成图纸审批") {
-                if ('@ViewData["SendXing"]' == "标准") {
-                    var url = '/TaskManagement/FinishMyDesign?ifDrive=' + '@ViewData["ifDrives"]' + '&name=' + '@ViewData["names"]' + '&ProjectName=' + '@ViewData["CustomerNames"]' + '&taskid=' + taskid;
-                    layer_show("完成我的设计", url, 1400, 800);
-                }
-                else {
+            if ('@ViewData["ifDrive"]' == "设计部完成图纸审批") {              
                     $.ajax({
                         url: "/TaskManagement/UpdateIssueCompleted",
-                        data: { Taskid: taskid, cnumber: cnumber },
+                        data: { Taskid: taskid, cnumber: cnumber, name: localStorage.sitename },
                         type: "post",
                         dataType: "text",
                         success: function (data) {
@@ -631,42 +626,7 @@
                                 return;
                             }
                         }
-                    });
-                    //$.ajax({
-                    //    url: "/TaskManagement/CheckBomAll",
-                    //    data: { Taskid: taskid },
-                    //    type: "post",
-                    //    dataType: "text",
-                    //    success: function (data) {
-                    //        if (data == "true") {
-                    //            window.setTimeout(function () {
-                    //                $.ajax({
-                    //                    url: "/TaskManagement/UpdateIssueCompleted",
-                    //                    data: { Taskid: taskid },
-                    //                    type: "post",
-                    //                    dataType: "text",
-                    //                    success: function (data) {
-                    //                        if (data == "true") {
-                    //                            window.setTimeout(function () {
-                    //                                window.history.go(-1);
-                    //                            }, 500);
-                    //                        }
-                    //                        else if (data == "null") {
-                    //                            alert("任务类型不能为空!");
-                    //                            return;
-                    //                        }
-                    //                    }
-                    //                });
-                    //            }, 500);
-                    //        }
-                    //        else {
-                    //            alert("还有图纸没有上传呢！");
-                    //            url = '/TaskManagement/UploadDrawing?id=' + taskid;
-                    //            layer_show('图纸操作', url, '1300', '800');
-                    //        }
-                    //    }
-                    //});
-                }
+                    });                                 
             }
             if ('@ViewData["ifDrive"]' == "工艺部确认图纸接收") {
                 $.ajax({
@@ -852,7 +812,13 @@
             }
         });
         $("#up").click(function () {
-            layer_show("任务进度详细", '/TaskManagement/UpdateProgress', 1200, 700);
+            var url = '/TaskManagement/UpdateProgress';
+            var index = layer.open({
+                type: 2,
+                content: url,
+                maxmin: true
+            });
+            layer.full(index);
         });
         $("#tab-system").Huitab({
             index: 0

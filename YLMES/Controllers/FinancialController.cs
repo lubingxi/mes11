@@ -33,26 +33,32 @@ namespace YLMES.Controllers
         // GET: Financial
         //采购记账页面
         //凭证审核
-        public void PzAudit(int PzID) {
-            using (YLMES_newEntities ys=new YLMES_newEntities ()) {
-              FI_Accounting_pz list= ys.FI_Accounting_pz.Where(p=>p.编号==PzID).FirstOrDefault();
+        public void PzAudit(int PzID)
+        {
+            using (YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                FI_Accounting_pz list = ys.FI_Accounting_pz.Where(p => p.编号 == PzID).FirstOrDefault();
                 list.Status = 1;
                 ys.SaveChanges();
             }
         }
-        public ActionResult CAccounting() {
+        public ActionResult CAccounting()
+        {
             return View();
         }
-        public ActionResult Make() {
+        public ActionResult Make()
+        {
             return View();
         }
         //获取数据
-        public ActionResult CheckMake() {
-            using (YLMES_newEntities ys=new YLMES_newEntities ()) {
+        public ActionResult CheckMake(string type)
+        {
+            using (YLMES_newEntities ys = new YLMES_newEntities())
+            {
                 Dictionary<string, object> map = new Dictionary<string, object>()
                 {
-                    {"Make",ys.CheckMake().ToList() },
-                    {"Hit",ys.HitList().ToList() }
+                    {"Make",ys.CheckMake(type).ToList() },
+                    {"Hit",ys.HitList(type).ToList() }
                 };
                 return Json(map, JsonRequestBehavior.AllowGet);
             }
@@ -65,24 +71,24 @@ namespace YLMES.Controllers
                 Dictionary<string, object> map = new Dictionary<string, object>()
                 {
                     {"PzMake",ys.CheckPzMake().ToList() } ,
-                    {"Pz",ys.CheckPz().ToList() },
-                    {"Hit",ys.HitList().ToList() }
+                    {"Pz",ys.CheckPz().ToList() }
                 };
                 return Json(map, JsonRequestBehavior.AllowGet);
             }
         }
-        public void UpMake(string type,string id)
+        public void UpMake(string type, string id, string Order_type)
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-                ys.UpMake(type, id,Session["name"].ToString());
+                ys.UpMake(type, id, Session["name"].ToString(), Order_type);
+
             }
         }
         public ActionResult Index()
         {
             return View();
         }
-        
+
         public ActionResult SubjectType()
         {
 
@@ -186,15 +192,15 @@ namespace YLMES.Controllers
         public ActionResult SeAccountingListpz()
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
-                {
-                    return Json(ys.Database.SqlQuery<SP_PM_Caption_Result>("exec SP_PM_Caption 'check'").ToList(), JsonRequestBehavior.AllowGet);
-                }
-
+            {
+                return Json(ys.Database.SqlQuery<SP_PM_Caption_Result>("exec SP_PM_Caption 'check'").ToList(), JsonRequestBehavior.AllowGet);
             }
-            #endregion
 
-            #region 验证名称否存在
-            public ActionResult CheckName(string Name, string num)
+        }
+        #endregion
+
+        #region 验证名称否存在
+        public ActionResult CheckName(string Name, string num)
         {
             if (Name == null || Name.Trim() == "")
             {
@@ -281,8 +287,8 @@ namespace YLMES.Controllers
         #endregion
 
         #region 新增科目
-        public ActionResult AddAccounting(string SubjectCode , string SubjectTypeName, string code2, string gss ,
-            string sexa , string AllName , string sexb , string sexd , string fu)
+        public ActionResult AddAccounting(string SubjectCode, string SubjectTypeName, string code2, string gss,
+            string sexa, string AllName, string sexb, string sexd, string fu)
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
@@ -313,7 +319,7 @@ namespace YLMES.Controllers
 
         #region 修改科目
         public ActionResult UpAccounting(string SubjectCode, string SubjectTypeName, string code2, string gss,
-            string sexa, string AllName, string sexb, string sexd, string fu,string id, string status)
+            string sexa, string AllName, string sexb, string sexd, string fu, string id, string status)
         {
             Dictionary<string, string> data = new Dictionary<string, string>
             {
@@ -330,11 +336,11 @@ namespace YLMES.Controllers
                 { "fu", fu },
                 { "AllName", AllName }
             };
-            int i= Tools<object>.SqlComm("exec SP_PM_Caption ", data);
-               if (i > 0)
-                {
-                    return Content("True");
-                }
+            int i = Tools<object>.SqlComm("exec SP_PM_Caption ", data);
+            if (i > 0)
+            {
+                return Content("True");
+            }
             return Content("False");
         }
         #endregion
@@ -465,7 +471,7 @@ namespace YLMES.Controllers
         #endregion
 
         #region//搜索费用报销单
-        public ActionResult SeLaimingList(string danh,string dates, string datee, int page, int limit, string status,string id)
+        public ActionResult SeLaimingList(string danh, string dates, string datee, int page, int limit, string status, string id)
         {
             if (dates == null)
             {
@@ -555,9 +561,9 @@ namespace YLMES.Controllers
             {
                 danh = "";
             }
-            if (dept=="3")
+            if (dept == "3")
             {
-                 test="1";
+                test = "1";
             }
             if (mans == null)
             {
@@ -565,38 +571,38 @@ namespace YLMES.Controllers
             }
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-                            SqlParameter[] parms = new SqlParameter[17];
-                            parms[0] = new SqlParameter("@TYPE", "add");
-                            parms[1] = new SqlParameter("@line", test);
-                            parms[2] = new SqlParameter("@line2", "");
-                            parms[3] = new SqlParameter("@status", "");
-                            parms[4] = new SqlParameter("@id", id);
-                            parms[5] = new SqlParameter("@ytu", ytu);
-                            parms[6] = new SqlParameter("@mans", mans);
-                            parms[7] = new SqlParameter("@manf", manf);
-                            parms[8] = new SqlParameter("@manb", manb);
-                            parms[9] = new SqlParameter("@manl", manl);
-                            parms[10] = new SqlParameter("@money", money);
-                            parms[11] = new SqlParameter("@note", note);
-                            parms[12] = new SqlParameter("@date", date4);
-                            parms[13] = new SqlParameter("@count", "0");
-                            parms[14] = new SqlParameter("@src", "");
-                            parms[15] = new SqlParameter("@dept", dept);
-                            parms[16] = new SqlParameter("@danh", danh);
+                SqlParameter[] parms = new SqlParameter[17];
+                parms[0] = new SqlParameter("@TYPE", "add");
+                parms[1] = new SqlParameter("@line", test);
+                parms[2] = new SqlParameter("@line2", "");
+                parms[3] = new SqlParameter("@status", "");
+                parms[4] = new SqlParameter("@id", id);
+                parms[5] = new SqlParameter("@ytu", ytu);
+                parms[6] = new SqlParameter("@mans", mans);
+                parms[7] = new SqlParameter("@manf", manf);
+                parms[8] = new SqlParameter("@manb", manb);
+                parms[9] = new SqlParameter("@manl", manl);
+                parms[10] = new SqlParameter("@money", money);
+                parms[11] = new SqlParameter("@note", note);
+                parms[12] = new SqlParameter("@date", date4);
+                parms[13] = new SqlParameter("@count", "0");
+                parms[14] = new SqlParameter("@src", "");
+                parms[15] = new SqlParameter("@dept", dept);
+                parms[16] = new SqlParameter("@danh", danh);
                 int w = ys.Database.ExecuteSqlCommand("exec SP_PM_LaimingAD  @TYPE,@line,@line2,@status,@id,@ytu," +
                                 "@mans,@manf,@manb,@manl,@money,@note,@date,@count,@src,@dept,@danh", parms);
-                            if (w > 0)
-                            {
-                                   return Content("True");
+                if (w > 0)
+                {
+                    return Content("True");
 
-                            }
+                }
                 return Content("False");
             }
         }
         #endregion
 
         #region//新增报销单(批量上传)
-        public ActionResult AddLaimingLoad(string id,HttpPostedFileBase file,string type)
+        public ActionResult AddLaimingLoad(string id, HttpPostedFileBase file, string type)
         {
 
             Dictionary<string, object> hasmap = new Dictionary<string, Object>();
@@ -610,39 +616,39 @@ namespace YLMES.Controllers
                     return Json(hasmap, JsonRequestBehavior.AllowGet);
                 }
                 else
-                { 
+                {
                     var fileName1 = Path.Combine(Request.MapPath("~/Uploadf"), Path.GetFileName(file.FileName));
                     file.SaveAs(fileName1);
                     var fname = fileName1.Substring(fileName1.LastIndexOf('\\') + 1);
-                        using (YLMES_newEntities ys = new YLMES_newEntities())
+                    using (YLMES_newEntities ys = new YLMES_newEntities())
+                    {
+                        SqlParameter[] parms = new SqlParameter[5];
+                        parms[0] = new SqlParameter("@TYPE", type);
+                        parms[1] = new SqlParameter("@line", 1);
+                        parms[2] = new SqlParameter("@line2", fname + "&$");
+                        parms[3] = new SqlParameter("@status", "");
+                        parms[4] = new SqlParameter("@id", id);
+                        int w = ys.Database.ExecuteSqlCommand("exec SP_PM_Laimingzful  @TYPE,@line,@line2,@status,@id", parms);
+                        if (w > 0)
                         {
-                            SqlParameter[] parms = new SqlParameter[5];
-                            parms[0] = new SqlParameter("@TYPE", type);
-                            parms[1] = new SqlParameter("@line",1);
-                            parms[2] = new SqlParameter("@line2",fname+"&$");
-                            parms[3] = new SqlParameter("@status", "");
-                            parms[4] = new SqlParameter("@id",id);
-                            int w = ys.Database.ExecuteSqlCommand("exec SP_PM_Laimingzful  @TYPE,@line,@line2,@status,@id", parms);
-                            if (w > 0)
-                            {
-                                hasmap.Add("code", 0);
-                                hasmap.Add("msg", "上传成功！");
-                                hasmap.Add("data", "");
-                                return Json(hasmap, JsonRequestBehavior.AllowGet);
-                            }
-                            else
-                            {
-                                hasmap.Add("code", 1);
-                                hasmap.Add("msg", "修改插入出现异常！");
-                                hasmap.Add("data", "");
-                                return Json(hasmap, JsonRequestBehavior.AllowGet);
-                            }
-                        }        
+                            hasmap.Add("code", 0);
+                            hasmap.Add("msg", "上传成功！");
+                            hasmap.Add("data", "");
+                            return Json(hasmap, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            hasmap.Add("code", 1);
+                            hasmap.Add("msg", "修改插入出现异常！");
+                            hasmap.Add("data", "");
+                            return Json(hasmap, JsonRequestBehavior.AllowGet);
+                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
-                hasmap.Add("code",2);
+                hasmap.Add("code", 2);
                 hasmap.Add("msg", "上传出现异常！");
                 hasmap.Add("data", "");
                 Console.WriteLine(ex.Message);
@@ -707,7 +713,7 @@ namespace YLMES.Controllers
                     string filePath = Server.MapPath(fileds);
                     System.IO.File.Delete(filePath);
                     //System.Diagnostics.Debug.WriteLine("---------------------------------信息*99---" + a.col);
-                }   
+                }
             }
             Dictionary<string, string> data = new Dictionary<string, string>
             {
@@ -724,7 +730,7 @@ namespace YLMES.Controllers
         #endregion
 
         #region 查询上传附件路径
-        public ActionResult SeLaiminlj(string id,string type)
+        public ActionResult SeLaiminlj(string id, string type)
         {
             Dictionary<string, string> data = new Dictionary<string, string>
             {
@@ -743,8 +749,8 @@ namespace YLMES.Controllers
         #endregion
 
         #region 删除上传附件路径
-        public ActionResult DelLoadlj(string id,List<string> delstr,string type)
-        {        
+        public ActionResult DelLoadlj(string id, List<string> delstr, string type)
+        {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                 if (delstr != null)
@@ -763,7 +769,7 @@ namespace YLMES.Controllers
                             return Content("False");
                         }
                         else
-                        {                   
+                        {
                             string fileds = "~/Uploadf/" + str;
                             string filePath = Server.MapPath(fileds);
                             System.IO.File.Delete(filePath);
@@ -799,7 +805,7 @@ namespace YLMES.Controllers
         #region 修改提交报销单
         public ActionResult UpLaimingztaifs(string id, string dh, string name)
         {
-   
+
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                 SqlParameter[] parms = new SqlParameter[3];
@@ -807,13 +813,13 @@ namespace YLMES.Controllers
                 parms[1] = new SqlParameter("@line", id);
                 parms[2] = new SqlParameter("@line2", name);
                 int w = ys.Database.ExecuteSqlCommand("exec SP_PM_LaimingUPA  @TYPE,@line,@line2", parms);
-        
+
                 SqlParameter[] parms2 = new SqlParameter[3];
                 parms2[0] = new SqlParameter("@TYPE", "up");
                 parms2[1] = new SqlParameter("@line", dh);
                 parms2[2] = new SqlParameter("@line2", name);
                 int w2 = ys.Database.ExecuteSqlCommand("exec SP_PM_LaimingUPA  @TYPE,@line,@line2", parms2);
-     
+
 
             }
             return Content("True");
@@ -840,7 +846,7 @@ namespace YLMES.Controllers
                     };
 
                     int i = Tools<object>.SqlComm("exec SP_PM_LaimingADTWO ", data);
-                 
+
                 }
             }
 
@@ -856,7 +862,7 @@ namespace YLMES.Controllers
                     };
 
                     int i = Tools<object>.SqlComm("exec SP_PM_LaimingADTWO ", data);
-                 
+
                 }
             }
             return Content("True");
@@ -869,7 +875,7 @@ namespace YLMES.Controllers
             {
                 dept = "";
             }
-          
+
             if (delList != null)
             {
                 foreach (var sb in delList)
@@ -880,11 +886,11 @@ namespace YLMES.Controllers
                         { "line", sb },
                         { "line2", dept }
                     };
-                    if (dept=="2")
+                    if (dept == "2")
                     {
                         data.Add("status", dept);
                     }
-             
+
                     int i = Tools<object>.SqlComm("exec SP_PM_LaimingUp ", data);
                     if (i < 0)
                     {
@@ -921,7 +927,7 @@ namespace YLMES.Controllers
         //        parms[1] = new SqlParameter("@line", dates);
         //        parms[2] = new SqlParameter("@line2", datee);
         //        parms[3] = new SqlParameter("@status", status);
-  
+
         //        var list = ys.Database.SqlQuery<SP_PM_SeLaimingListpz_Result>("exec SP_PM_SeLaimingListpz @Type,@line,@line2,@status", parms).ToList();
         //        hasmap = new Dictionary<string, Object>();
         //        PageList<SP_PM_SeLaimingListpz_Result> pageList = new PageList<SP_PM_SeLaimingListpz_Result>(list, page, limit);
@@ -1043,7 +1049,7 @@ namespace YLMES.Controllers
         #endregion
 
         #region 记账
-        public ActionResult UpLaimingpz(string name,string id,string note5,string km)
+        public ActionResult UpLaimingpz(string name, string id, string note5, string km)
         {
             Dictionary<string, string> data = new Dictionary<string, string>
             {
@@ -1054,10 +1060,10 @@ namespace YLMES.Controllers
                 { "id", id }
             };
             int i = Tools<object>.SqlComm("exec SP_PM_SeLaimingListpz ", data);
-                    if (i < 0)
-                    {
-                        return Content("False");
-                    }
+            if (i < 0)
+            {
+                return Content("False");
+            }
             return Content("True");
         }
         #endregion
@@ -1148,9 +1154,9 @@ namespace YLMES.Controllers
         }
         #endregion
 
-        
+
         #region 支付
-        public ActionResult UpLaimingzhifu(string name,string danh)
+        public ActionResult UpLaimingzhifu(string name, string danh)
         {
             Dictionary<string, string> data = new Dictionary<string, string>
             {
@@ -1169,17 +1175,20 @@ namespace YLMES.Controllers
 
 
         #region 记账2
-        public string AccuntingAD(string pzdanh,string jzh,List<Dictionary<string,string>> data )
+        public string AccuntingAD(string pzdanh, string jzh, List<Dictionary<string, string>> data)
         {
-            using (YLMES_newEntities y=new YLMES_newEntities ()) {
-                for (var a = 0; a < data.Count; a++) {
+            using (YLMES_newEntities y = new YLMES_newEntities())
+            {
+                for (var a = 0; a < data.Count; a++)
+                {
                     SqlParameter[] parameters = new SqlParameter[9];
                     parameters[0] = new SqlParameter("@jzh", jzh);
                     parameters[1] = new SqlParameter("@pzdanh", pzdanh);
                     parameters[2] = new SqlParameter("@CrName", Session["name"].ToString());
                     var i = 3;
-                    foreach (var va in data[a]) {
-                        parameters[i] = new SqlParameter("@"+va.Key,va.Value);
+                    foreach (var va in data[a])
+                    {
+                        parameters[i] = new SqlParameter("@" + va.Key, va.Value);
                         i++;
                     }
                     y.Database.ExecuteSqlCommand("exec AddPz @jzh=@jzh,@Pnumber=@pzdanh,@Cnumber=@numBering,@Dept=@name4,@j=@name2,@d=@name3,@zy=@name,@km=@name1,@CrName=@CrName", parameters);
@@ -1201,7 +1210,7 @@ namespace YLMES.Controllers
                 SqlParameter[] parms = new SqlParameter[3];
                 parms[0] = new SqlParameter("@Name", "");
                 parms[1] = new SqlParameter("@Num", "6");
-                parms[2] = new SqlParameter("@yh",yh);
+                parms[2] = new SqlParameter("@yh", yh);
                 return Json(ys.Database.SqlQuery<SP_PM_CheckDanH_Result>("exec SP_PM_CheckDanH @Name,@Num,@yh", parms).ToList(), JsonRequestBehavior.AllowGet);
             }
 
@@ -1226,7 +1235,7 @@ namespace YLMES.Controllers
                 parms[0] = new SqlParameter("@TYPE", "check");
                 parms[1] = new SqlParameter("@line", id);
                 parms[2] = new SqlParameter("@line2", danh);
-       
+
                 var list = ys.Database.SqlQuery<SP_PM_LaimingDanh_Result>("exec SP_PM_LaimingDanh @TYPE,@line,@line2", parms).ToList();
                 hasmap = new Dictionary<string, Object>();
                 PageList<SP_PM_LaimingDanh_Result> pageList = new PageList<SP_PM_LaimingDanh_Result>(list, page, limit);
@@ -1241,7 +1250,7 @@ namespace YLMES.Controllers
         #endregion
 
         #region//根据二审状态搜索费用报销单
-        public ActionResult SeLaimingListqr(string dates, string datee, int page, int limit , string status,string id)
+        public ActionResult SeLaimingListqr(string dates, string datee, int page, int limit, string status, string id)
         {
             if (dates == null)
             {
@@ -1308,8 +1317,8 @@ namespace YLMES.Controllers
         }
         #endregion
 
- 
-        public ActionResult DelAccounting(string id,string danh)
+
+        public ActionResult DelAccounting(string id, string danh)
         {
             Dictionary<string, string> data = new Dictionary<string, string>
             {
@@ -1325,7 +1334,7 @@ namespace YLMES.Controllers
             return Content("False");
         }
 
-  
+
         public ActionResult SeAccuntingJZH(string date)
         {
             Dictionary<string, string> data = new Dictionary<string, string>

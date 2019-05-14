@@ -27,5 +27,6 @@ namespace YLMES.Models
         public Nullable<double> 工单数量 { get; set; }
         public string 工单名称 { get; set; }
         public string 生成工单 { get; set; }
+        public Nullable<int> 减少数量 { get; set; }
     }
 }

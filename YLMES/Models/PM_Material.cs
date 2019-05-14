@@ -44,5 +44,6 @@ namespace YLMES.Models
         public Nullable<int> StockQTY2 { get; set; }
         public string Units2 { get; set; }
         public string WarehouseType { get; set; }
+        public Nullable<decimal> price { get; set; }
     }
 }

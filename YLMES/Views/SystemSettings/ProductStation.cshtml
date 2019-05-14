@@ -26,15 +26,9 @@
             }
         </style>
         <script type="text/html" id="barDemo">
-            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-            <a class="layui-btn layui-btn-xs" lay-event="edit">更新</a>
+            @*<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>*@
+            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-        </script>
-        <script type="text/html" id="titleTpl">
-            @Html.DropDownList("Ck", new SelectList(ViewBag.ck, "line","line"), "{{d.线别}}", new { @class = "ck", @ID = "ck", @lay_filter = "ck" })
-        </script>
-        <script type="text/html" id="titleTp">
-            @Html.DropDownList("Ce", new SelectList(ViewBag.ce, "StationType","StationType"), "{{d.工位类型}}", new { @class = "ce", @ID = "ce", @lay_filter = "ce" })
         </script>
     </head>
     <body>      
@@ -43,7 +37,7 @@
             <ul class="placeul">
                 <li><a href="#">首页</a></li>
                 <li><a href="#">系统设置</a></li>
-                <li><a href="#">生产工位</a></li>
+                <li><a href="#">生产工位类型</a></li>
             </ul>
         </div>
         <div class="rightinfo">
@@ -58,7 +52,6 @@
                     <li>
                         工位查询：
                         <input class="ContractNumber" id="Name" type="text" style="width: 80px;" />
-
                     </li>
                 </ul>
                 <button class="layui-btn" id="Search" data-type="reload">搜索</button>
@@ -73,6 +66,7 @@
                 $('#add').click(function () {
                     $.ajax({
                         url: "/SystemSettings/ADDProductStation",
+                        data: { name: localStorage.sitename},
                         type: "post",
                         dataType: "text",
                         success: function (data) {

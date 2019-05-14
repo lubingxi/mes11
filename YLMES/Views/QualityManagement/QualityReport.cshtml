@@ -1,0 +1,71 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script src="~/js/awesomplete.js"></script>
+    <script src="~/js/awesomplete.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(document).keydown(function (e) {
+                if (e.keyCode == 13) {
+                    $(".layui-btn").click();
+                }
+            });
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                var tableIns = table.render({
+                    elem: '#tw'
+                 , url: '/TaskManagement/CheckInventers?Parid=' + '@ViewData["part"]'
+                 , cols: [[
+                   { field: 'ChildPartID', width: 230, title: '物料编码' }
+                 , { field: 'PartNumber', width: 230, title: '物料名称' }
+                 , { field: 'PartSpec', width: 200, title: '物料规格' }
+                 , { field: 'PartMaterial', width: 150, title: '材质' }
+                 , { field: 'StockQTY', width: 100, title: '库存数量' }
+                 ]]
+                });
+            });
+        })
+
+
+
+    </script>
+</head>
+<body onselectstart="return false;">
+
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">品质管理</a></li>
+            <li><a href="#">品质报告</a></li>
+        </ul>
+    </div>
+    <div class="rightinfo">
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+    </div>
+
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+</body>
+</html>

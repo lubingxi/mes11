@@ -83,37 +83,37 @@ namespace YLMES.Controllers
             }
             return Json(list, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult Reportlist(string ProjectName, string Name, string IsOverDue, int page, int limit)
-        {
-            using (YLMES_newEntities ys = new YLMES_newEntities())
-            {
-                if (ProjectName == null)
-                {
-                    ProjectName = "";
-                }
-                if(Name==null)
-                {
-                    Name = "";
-                }
-                if(IsOverDue==null)
-                {
-                    IsOverDue = "";
-                }
-                SqlParameter[] parms = new SqlParameter[3];
-                parms[0] = new SqlParameter("@ProjectName", ProjectName);
-                parms[1] = new SqlParameter("@owner", Name);
-                parms[2] = new SqlParameter("@Overduday", IsOverDue);
-                var list = ys.Database.SqlQuery<Statistics_TaskAlllist_Result>(" exec [Statistics_TaskAlllist] @ProjectName,@owner,@Overduday", parms).ToList();
-                PageList<Statistics_TaskAlllist_Result> pageList = new PageList<Statistics_TaskAlllist_Result>(list, page, limit);
-                Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
-                int count = list.Count();
-                hasmap.Add("code", 0);
-                hasmap.Add("msg", "");
-                hasmap.Add("count", count);
-                hasmap.Add("data", pageList);
-                return Json(hasmap, JsonRequestBehavior.AllowGet);
-            }
-        }
+        //public JsonResult Reportlist(string ProjectName, string Name, string IsOverDue, int page, int limit)
+        //{
+        //    using (YLMES_newEntities ys = new YLMES_newEntities())
+        //    {
+        //        if (ProjectName == null)
+        //        {
+        //            ProjectName = "";
+        //        }
+        //        if(Name==null)
+        //        {
+        //            Name = "";
+        //        }
+        //        if(IsOverDue==null)
+        //        {
+        //            IsOverDue = "";
+        //        }
+        //        SqlParameter[] parms = new SqlParameter[3];
+        //        parms[0] = new SqlParameter("@ProjectName", ProjectName);
+        //        parms[1] = new SqlParameter("@owner", Name);
+        //        parms[2] = new SqlParameter("@Overduday", IsOverDue);
+        //        var list = ys.Database.SqlQuery<Statistics_TaskAlllist_Result>(" exec [Statistics_TaskAlllist] @ProjectName,@owner,@Overduday", parms).ToList();
+        //        PageList<Statistics_TaskAlllist_Result> pageList = new PageList<Statistics_TaskAlllist_Result>(list, page, limit);
+        //        Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
+        //        int count = list.Count();
+        //        hasmap.Add("code", 0);
+        //        hasmap.Add("msg", "");
+        //        hasmap.Add("count", count);
+        //        hasmap.Add("data", pageList);
+        //        return Json(hasmap, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
 
         public JsonResult Reportdepartment()
         {

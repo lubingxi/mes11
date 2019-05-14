@@ -48,8 +48,20 @@
                     nextBoo: true
                 },
                 methods: {
-                    get() {
-                        axios("/Financial/CheckMake").then( (res)=> {
+                    handleCommand(type) {
+                        switch (type) {
+                            case "a":
+                                this.loading = true
+                                this.get("采购入库")
+                                break;
+                            case "b":
+                                this.loading = true
+                                this.get("领料出库")
+                                break;
+                        }
+                    },
+                    get(type) {
+                        axios("/Financial/CheckMake", { params: { type: type }}).then(res => {
                             var fi = []
                             vm.MakeData = {}
                             vm.tableData1 = []
@@ -206,7 +218,7 @@
                     },
                     selectClick() {
                         if (this.tableData.length > 0) {
-                            axios.post("/Financial/UpMake", { type: "select", id: vm.checkedData.toString() }).then(function () {
+                            axios.post("/Financial/UpMake", { type: "select", id: vm.checkedData.toString(), Order_type: this.tableData[0].Type}).then(function () {
                                 vm.get()
                                 vm.$message({
                                     message: '打单完成',
@@ -219,7 +231,7 @@
                     },
                     allClick() {
                         if (this.tableData.length > 0) {
-                            axios.post("/Financial/UpMake", { type: "all" }).then(function () {
+                            axios.post("/Financial/UpMake", { type: "all", Order_type: this.tableData[0].Type}).then(function () {
                                 vm.get()
                                 vm.$message({
                                     message: '打单完成',
@@ -231,7 +243,7 @@
                         }
                     },
                     singleClick(id) {
-                        axios.post("/Financial/UpMake", { type: "select", id: id }).then(function () {
+                        axios.post("/Financial/UpMake", { type: "select", id: id, Order_type: this.tableData[0].Type }).then(function () {
                             vm.get()
                             vm.$message({
                                 message: '打单完成',
@@ -314,7 +326,7 @@
                     }
                 }
                 , created: function () {
-                    this.get();
+                    this.get("采购入库");
                 }
                 , computed: {
                     page() {
@@ -378,11 +390,20 @@
                                 placeholder="选择日期">
                 </el-date-picker>
                 <el-button type="primary" @@click="selectClick">打单选择项</el-button>
-                
+
                 <el-badge value="推荐" class="item">
                     <el-button type="success" @@click="allClick" style="margin:5px 20px">全部打单</el-button>
                 </el-badge>
                 <el-button type="primary" plain @@click="dialogTableVisible1=true">已打列表</el-button>
+                <el-dropdown @@command="handleCommand" trigger="click">
+                    <el-button type="primary">
+                        打单类型<i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                    <el-dropdown-menu slot="dropdown" >
+                        <el-dropdown-item command="a">采购入库</el-dropdown-item>
+                        <el-dropdown-item command="b">领料出库</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
             </div>
             <el-table :data="page"
                       style="margin:0 auto;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)"

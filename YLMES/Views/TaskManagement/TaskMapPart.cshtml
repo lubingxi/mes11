@@ -84,10 +84,11 @@
                , {
                    field: '子件数量', width: 100, title: '子件数量'
                }
-               //, { field: '原材料用量', title: '原材料用量', width: 200, edit: Text, style: 'color: #009688' }
-               //, { field: '原材料单位', width: 200, title: '原材料单位', edit: Text, style: 'color: #009688' }
+               , { field: '原材料用量', title: '原材料用量', width: 100, edit: Text, style: 'color: #009688' }            
+               , { field: '原材料规格', width: 150, title: '原材料规格', edit: Text, style: 'color: #009688' }
+               , { field: '原材料单位', width: 90, title: '原材料单位', edit: Text, style: 'color: #009688' }
                , { field: '是否组装件', width: 100, title: '是否组装件', templet: '#dd' }
-               , { field: '工艺流程', width: 200, title: '工艺流程', event: 'xi', templet: '#cc' }
+               , { field: '工艺流程', width: 250, title: '工艺流程', event: 'xi', templet: '#cc' }
                , { field: 'right', width: 300, align: 'center', toolbar: '#barDemo' }
                ]]
 
@@ -101,14 +102,15 @@
                         //if (lc != null && lc != '添加流程') {
                         //    layer.msg('不能修改')
                         //}
-                        if (zj == 0) {
-                            d.工艺流程 = '';
-                            layer.msg('没有流程!');
-                        }
-                        else {
+                        //if (zj == 0) {
+                        //    //d.工艺流程 = '';
+                        //    layer.msg('没有流程!');
+                        //}
+                        //else {
                             pn = data.子件编码;
                             prn = data.工件编码;
-                            spec = data.工件规格;
+                        spec = data.工件规格;
+                       // alert(parid);
                             //var url = '/TaskManagement/EditingProcess?ProductName=' + prn + '&ProductSpec=' + spec + '&PartNumber=' + pn + '&PartId=' + parid;
                             //var index = layer.open({
                             //    type: 2,
@@ -116,15 +118,56 @@
                             //    maxmin: true
                             //});
                             //layer.full(index);
+
+
                             if (lc == "添加流程") {
-                                var url = '/TaskManagement/AddProcess?ProductName=' + prn + '&ProductSpec=' + spec + '&PartNumber=' + pn + '&PartId=' + parid;
+                                layer.open({
+                                    title: '请输入流程名称',
+                                    content: '<html><input type="text" class="Route" style="height:20px;width:300px;"  value="" id="Route" placeholder="请输入" autofocus="autofocus"/></html>',
+                                    area: ["300px", "200px"],
+                                    btn: ["确定", "取消"],
+                                    yes: function (index, layero) {
+                                        var Route = $('#Route').val();
+                                        layer.close(index);
+                                        $.ajax({
+                                            url: "/TaskManagement/AddRoute?Route=" + Route,
+                                            type: 'post',
+                                            async: true,
+                                            dataType: "text",
+                                            success: function (data) {
+                                                if (data == "false") {
+                                                    layer.msg('该流程已存在！');
+                                                }
+                                                else {
+                                                    var url = '/TaskManagement/AddProcess?ProductName=' + prn + '&ProductSpec=' + spec + '&PartNumber=' + pn + '&PartId=' + parid + '&Route=' + Route;
+                                                    var index = layer.open({
+                                                        type: 2,
+                                                        content: url,
+                                                        maxmin: true,
+                                                        end: function () {
+                                                            table.reload('tw');
+                                                        }
+                                                    });
+                                                    layer.full(index);
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                            else if (lc == "外购") {
+                                layer.msg('外购流程');
+                            }
+                            else {
+                                var url = '/TaskManagement/AddProcess?ProductName=' + prn + '&ProductSpec=' + spec + '&PartNumber=' + pn + '&PartId=' + parid + '&Route=' + lc;
                                 var index = layer.open({
                                     type: 2,
                                     content: url,
-                                    maxmin: true
+                                    maxmin: true    
                                 });
                                 layer.full(index);
                             }
+                        }
                             //if (lc == "添加流程") {
                             //    var url = '/TaskManagement/UploadProcess?ProductName=' + prn + '&ProductSpec=' + spec + '&PartNumber=' + pn + '&PartId=' + parid;
                             //    var index = layer.open({
@@ -134,8 +177,8 @@
                             //    });
                             //    layer.full(index);
                             //}                       
-                        }
-                    }
+                    //    }
+                    
                     if (obj.event === 'zi') {
                         var parnum = data.子件编码;
                         var pase = data.子件规格;
@@ -237,6 +280,27 @@
                                 area: ['75%', '60%']
                             });
                             break;
+                        case 'edit':
+                            var id = data.原材料序号;
+                            var mqty = data.原材料用量;
+                            var mspec = data.原材料规格;
+                            var munits = data.原材料单位;
+                            var url = "/TaskManagement/EditProcess";
+                            $.ajax({
+                                url: url,
+                                type: 'post',
+                                data: { mqty: mqty, mspec: mspec, munits: munits,id:id},
+                                dataType: 'text',                                
+                                success: function (data) {
+                                    if (data == "true") {
+                                        layer.msg("提交成功", { icon: 6 });
+                                        table.reload('tw');
+                                    } else if (data == "number") {
+                                        layer.msg("请输入数字");
+                                    }
+                                }
+                            });
+                            break;
                     };
                 });
 
@@ -249,6 +313,7 @@
     </script>
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-xs" id="check" lay-event="check">查看图纸</a>
+        <a class="layui-btn layui-btn-xs" id="edit" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-xs" id="yin" lay-event="yin">引用流程</a>
         <a class="layui-btn layui-btn-xs" id="gou" lay-event="gou">是否外购</a>
         @*<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete" data-type="getCheckLength" id="delete">删除</a>*@

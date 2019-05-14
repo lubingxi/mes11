@@ -15,10 +15,6 @@
     <script type="text/javascript" src="~/js/Laimingqr.js"></script>
     <script type="text/javascript">
     </script>
-    <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-xs" lay-event="upload">支付附件</a>
-
-    </script>
     <script type="text/html" id="barDemo2">
         <a class="layui-btn layui-btn-xs" lay-event="check">凭证查看</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delpz">删除</a>
@@ -37,51 +33,6 @@
     </style>
 </head>
 <body>
-
-    <img src="" style="display:none;width:100%;height:100%" class="imgg" />
-
-    @*单号查看*@
-    <div class="layui-form czs" style="display:none" action="" id="for6">
-        <div class="layui-form-item">
-            <div class="rightinfo">
-                <div class="tools">
-                    <ul class="toolbar">
-                        <li class="click" id="add2">
-                            <span>
-                                <img src="../../images/t01.png" />
-                            </span>
-                            <a>新增凭证</a>
-                        </li>
-                        <li>
-                            时间从：
-                            <input name="dates3" class="strattime" id="dates3" type="text" onclick="WdatePicker()" style="width: 80px;" />
-                        </li>
-                        <li>
-                            到：
-                            <input name="datee3" class="endtime" id="datee3" type="text" onclick="WdatePicker()" style="width: 80px;" />
-                        </li>
-                        <li>
-
-                            <div class="layui-form-item">
-
-                                <select name="modules" lay-search=lay-search id="gssz3" lay-verify="gssz" lay-filter="gssz">
-                                    <option value="">请选择状态</option>
-                                    <option value="已记账">已记账</option>
-                                    <option value="未记账">未记账</option>
-                                </select>
-                            </div>
-
-                        </li>
-
-                    </ul>
-
-                    <div id="divsh"><button class="layui-btn" id="Search3" data-type="reload">搜索</button></div>
-                </div>
-                <table class="tablelist" id="tw9" lay-filter="demo"></table>
-            </div>
-        </div>
-    </div>
-
     @*单号查看*@
     <div class="layui-form czs" style="display:none" action="" id="for7">
 
@@ -106,46 +57,14 @@
         <div class="layui-form-item">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">项目编号：</label><div class="layui-input-inline">
-                        <select name="modules" lay-search=lay-search id="gss6" lay-verify="gsst" lay-filter='gss'></select>
-                    </div>
                     <button class="layui-btn" lay-filter="demo1" id="xzy2">新增空行</button>
                     <button class="layui-btn" lay-filter="demo1" type="submit" lay-submit="" id="b2c">保存6</button>
                     <input type="text" id="jzh2" hidden="hidden" value="" />
                 </div>
-                @*<div class="layui-inline">
-                        <label class="layui-form-label">部门：</label><div class="layui-input-inline">
-                            <select name="modules" lay-search=lay-search id="gss7" lay-verify="gssy" lay-filter='gss'></select>
-                        </div>
-                    </div>*@
-
             </div>
         </div>
     </div>
-    @*新增上传附件*@
-    @*<div class="layui-form czs" style="display:none" action="" id="for3">
-            <fieldset class="layui-elem-field layui-field-title " style="margin-top: 20px;color:mediumseagreen;">
-                <legend>报销单原始凭证上传</legend>
-            </fieldset>
-            <div class="layui-form-item">
-                <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
-                    原附件预览图：
-                    <div class="layui-upload-list" id="demo3"></div>
-                </blockquote>
-
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button class="layui-btn" id="qx3">取消</button>
-                    <input type="text" id="flag4" hidden="hidden" value="False" />
-                </div>
-            </div>
-
-        </div>*@
-
     <div class="place">
-        <select hidden="hidden" name="modules" lay-search=lay-search id="gssname" lay-verify="gssname" lay-filter='gssname'></select>
-        <span>位置：</span><input type="text" id="Sessioname" hidden="hidden" value=@Session["name"] />
         <ul class="placeul">
             <li><a href="#">首页</a></li>
             <li><a href="#">财务管理</a></li>
@@ -161,19 +80,13 @@
                     </span>
                     <a>新增凭证</a>
                 </li>
-                @*<li class="click" id="add">
-                        <span>
-                            <img src="../../images/t01.png" />
-                        </span>
-                        <a>新增凭证</a>
-                    </li>*@
                 <li>
                     时间从：
-                    <input name="dates" class="strattime" id="dates2" type="text" onclick="WdatePicker()" style="width: 80px;" />
+                    <input name="dates" class="strattime" id="dates2" type="text"  style="width: 80px;" />
                 </li>
                 <li>
                     到：
-                    <input name="datee" class="endtime" id="datee2" type="text" onclick="WdatePicker()" style="width: 80px;" />
+                    <input name="datee" class="endtime" id="datee2" type="text" style="width: 80px;" />
                 </li>
 
             </ul>
@@ -216,34 +129,10 @@
             </div>
         </div>
     </div>
-
-    @*table序号列显示*@
-    <script type="text/html" id="indexTpl">
-        {{d.LAY_TABLE_INDEX+1}}
-    </script>
-    <script type="text/html" id="cc">
-        {{#  if(d.单号 != '' && d.单号!=null){ }}
-        <span style="color:red;cursor:pointer;">{{d.单号}}</span>
-        {{#  } else { }}
-        {{#  } }}
-    </script>
-    <script type="text/html" id="jie">
-        <select name="modules" lay-search=lay-search class="gss8" lay-verify="gss" lay-filter='gss'></select>
-    </script>
-    <script type="text/html" id="jie2">
-        <select name="modules" lay-search=lay-search class="gssb" lay-verify="gss" lay-filter='gss'></select>
-    </script>
-    @*<script type="text/html" id="test">
-            <input id="test" onblur="test(value)" value="{{d.remark}}" class="layui-input" type="text"
-                   onkeyup="value=value.replace(/[^\d]/g,'') " ng-pattern="/[^a-zA-Z]" />
-        </script>*@
     <script type="text/javascript">
             if ('@Session["name"]' == "") {
                 location.href = '/Home/Login'
             }
     </script>
-
-
-
 </body>
 </html>

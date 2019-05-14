@@ -73,7 +73,6 @@ namespace YlMES.Controllers
                 parameters[1] = new SqlParameter("@text", html1);
                 parameters[2] = new SqlParameter("@type", type);
                 ys.Database.ExecuteSqlCommand("exec Addhtml @type=@type,@text=@text,@cuid=@cuid", parameters);
-
             }
             return "true";
         }
@@ -112,7 +111,7 @@ namespace YlMES.Controllers
                 return Json(hasmap, JsonRequestBehavior.AllowGet);
             }
         }
-        public ActionResult Queren(string id,string pnumber)
+        public ActionResult Queren(string id,string pnumber,string name)
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
@@ -138,7 +137,7 @@ namespace YlMES.Controllers
                 }
                 else
                 {
-                    YLMES.Sms.CheckSms("设计部",pnumber);
+                    YLMES.Sms.CheckSms("设计部",pnumber,name);
                     con.StatusID = "计划部订单处理中心确认完成生产订单转换";
                     ys.SaveChanges();
                 }
@@ -577,10 +576,11 @@ namespace YlMES.Controllers
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                 int i = int.Parse(id);
-                var pm = ys.PM_Material.Where(s => s.ID == i).FirstOrDefault();
-                pm.PartNumber = pnumber;
-                pm.PartSpec = pspec;
-                ys.SaveChanges();
+                SqlParameter[] parms = new SqlParameter[3];
+                parms[0] = new SqlParameter("@PartNumber", pnumber);
+                parms[1] = new SqlParameter("@PartSpec", pspec);
+                parms[2] = new SqlParameter("@id", i);
+                ys.Database.ExecuteSqlCommand(" exec PM_UpdateMaterSpec @PartNumber,@PartSpec,@id", parms);
                 return Content("true");
             }
         }
@@ -756,7 +756,10 @@ namespace YlMES.Controllers
                 int pId = int.Parse(PdId);
                 //string PtID = Session["ProductTypeID"].ToString();
                 //int PTiD = int.Parse(PtID);
+                if(BreakUp=="不拆分" && select == "标准")
+                {
 
+                }
                 using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
                     C_Contract con = ys.C_Contract.Where(c => c.ID == cotId).FirstOrDefault();
@@ -1137,13 +1140,13 @@ namespace YlMES.Controllers
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-                SqlParameter[] parms = new SqlParameter[1];
-                parms[0] = new SqlParameter("@WorkorderNO", id);
-                var list = ys.Database.SqlQuery<WOdetail_Result>("exec WOdetail  @WorkorderNO", parms).ToList();
+                //SqlParameter[] parms = new SqlParameter[1];
+                //parms[0] = new SqlParameter("@WorkorderNO", id);
+                //var list = ys.Database.SqlQuery<WOdetail_Result>("exec WOdetail  @WorkorderNO", parms).ToList();
                 Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
-                hasmap.Add("code", 0);
-                hasmap.Add("msg", "");
-                hasmap.Add("data", list);
+                //hasmap.Add("code", 0);
+                //hasmap.Add("msg", "");
+                //hasmap.Add("data", list);
                 return Json(hasmap, JsonRequestBehavior.AllowGet);
             }
         }
@@ -1258,13 +1261,19 @@ namespace YlMES.Controllers
 
         #region 打印工艺卡
 
-        public ActionResult AddProcess(string marid, string id, string PartId, string gid)
+        public ActionResult AddProcess(string marid,string name,string spec, string id, string PartId, string gid)
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                 int pid = int.Parse(marid);
-                ViewData["id"] = id;
+                ViewData["id"] = "";
                 ViewData["PartId"] = PartId;
+                SqlParameter[] parmsd = new SqlParameter[1];
+                parmsd[0] = new SqlParameter("@Partid", pid);
+                var listd= ys.Database.SqlQuery<CheckMater_Result>("exec CheckMater @Partid", parmsd).FirstOrDefault();
+                ViewData["PartNumber"] = listd.PartNumber;
+                Session["ProductNamed"] = name;
+                Session["ProductSpeces"] = spec;
                 string fileName = "2.png";
                 string ImageUrl = null;
                 String savePath = Server.MapPath("~/QRCodeImage") + "/" + fileName;
@@ -1679,7 +1688,7 @@ namespace YlMES.Controllers
             }
             return Json(list, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult Scanrecordlist(string operation, string Scantrim, string Endtime)
+        public JsonResult Scanrecordlist(string operation, string Scantrim, string Endtime,int page,int limit)
         {
             if (operation.Equals("全部"))
             {
@@ -1693,12 +1702,13 @@ namespace YlMES.Controllers
                 parms[2] = new SqlParameter("@Scantrim", Scantrim);
                 parms[3] = new SqlParameter("@Endtime", Endtime);
                 var list = ys.Database.SqlQuery<PDA_Scanrecord_Result>("exec PDA_Scanrecord @Type,@operation,@Scantrim,@Endtime", parms).ToList();
+                PageList<PDA_Scanrecord_Result> pageList = new PageList<PDA_Scanrecord_Result>(list, page, limit);
                 Dictionary<string, object> hasmap = new Dictionary<string, Object>();
                 int count = list.Count();
                 hasmap.Add("code", 0);
                 hasmap.Add("msg", "");
                 hasmap.Add("count", count);
-                hasmap.Add("data", list);
+                hasmap.Add("data", pageList);
                 return Json(hasmap, JsonRequestBehavior.AllowGet);
             }
         }

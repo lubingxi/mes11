@@ -15,14 +15,10 @@ namespace YLMES.Models
     {
         public int 物料编码 { get; set; }
         public string 图号 { get; set; }
-        public int 注册序号 { get; set; }
         public string 物料名称 { get; set; }
         public string 物料规格 { get; set; }
         public string 材质 { get; set; }
         public Nullable<int> 库存套数 { get; set; }
         public Nullable<int> 库存数量 { get; set; }
-        public string 仓库位置 { get; set; }
-        public string 入库时间 { get; set; }
-        public string 操作员 { get; set; }
     }
 }

@@ -80,15 +80,14 @@ namespace YLMES.Controllers
 
         }
         //添加工位
-        public string ADDProductStation()
+        public string ADDProductStation(string name)
         {
-            string CreatedBy = Session["name"].ToString();
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
 
                 SqlParameter[] parms = new SqlParameter[2];
                 parms[0] = new SqlParameter("@Type", "ADD");
-                parms[1] = new SqlParameter("@CreatedBy", CreatedBy.ToString());
+                parms[1] = new SqlParameter("@CreatedBy",name);
                 int i = ys.Database.ExecuteSqlCommand("exec SP_PM_ProductStation @Type,'','','','','','','','',@CreatedBy", parms);
             }
             return "true";
@@ -106,22 +105,20 @@ namespace YLMES.Controllers
             return "true";
         }
         //修改工位类型
-        public string UpProductStation(string Line, string StationID, string Station, string StationType)
+        public string UpProductStation(string id,string Number,string StationType,string name)
         {
-            string CreatedBy = Session["name"].ToString();
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-
-                SqlParameter[] parms = new SqlParameter[6];
+                int i = int.Parse(id);
+                SqlParameter[] parms = new SqlParameter[7];
                 parms[0] = new SqlParameter("@Type", "Update");
-                parms[1] = new SqlParameter("@StationID", Convert.ToInt32(StationID));
-                parms[2] = new SqlParameter("@Station", Station);
-                parms[3] = new SqlParameter("@Line", Line);
-                parms[4] = new SqlParameter("@StationType", StationType);
-                parms[5] = new SqlParameter("@CreatedBy", CreatedBy.ToString());
-                int i = ys.Database.ExecuteSqlCommand("exec SP_PM_ProductStation @Type,@StationID,@Station,'',@Line,'','','',@StationType,'',@CreatedBy", parms);
-
-
+                parms[1] = new SqlParameter("@StationID", i);
+                parms[2] = new SqlParameter("@Station", "");
+                parms[3] = new SqlParameter("@Line", "");
+                parms[4] = new SqlParameter("@StationTypeNumber", Number);
+                parms[5] = new SqlParameter("@StationType", StationType);
+                parms[6] = new SqlParameter("@CreatedBy", name);
+                 ys.Database.ExecuteSqlCommand("exec SP_PM_ProductStation @Type,@StationID,@Station,'',@Line,'','',@StationTypeNumber,@StationType,@CreatedBy", parms);
             }
             return "true";
         }
@@ -272,16 +269,12 @@ namespace YLMES.Controllers
 
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-
                 SqlParameter[] parms = new SqlParameter[4];
                 parms[0] = new SqlParameter("@type", "EDIT");
                 parms[1] = new SqlParameter("@UserName", UserName);
                 parms[2] = new SqlParameter("@FunctionName", FunctionName);
                 parms[3] = new SqlParameter("@Status", Status);
                 int i = ys.Database.ExecuteSqlCommand("exec PM_EditAccessSetup @type,@UserName,@FunctionName,@Status,''", parms);
-
-
-
             }
             return "true";
         }
@@ -362,19 +355,23 @@ namespace YLMES.Controllers
             }
         }
         //修改BOM
-        public ActionResult EditProcessBOM(string id, string pc, string ph)
+        public ActionResult EditProcessBOM(string id, string pc, string ph,string mqty,string spec,string unit)
         {
             try
             {
                 int tid = int.Parse(id);
-                SqlParameter[] parms = new SqlParameter[4];
+                SqlParameter[] parms = new SqlParameter[7];
                 parms[0] = new SqlParameter("@ID", tid);
                 parms[1] = new SqlParameter("@PartNumber", "");
                 parms[2] = new SqlParameter("@ChildPartQTY", pc);
                 parms[3] = new SqlParameter("@ChildPartNumber", ph);
+                parms[4] = new SqlParameter("@materialQTY", mqty);
+                parms[5] = new SqlParameter("@MaterialUnits", unit);
+                parms[6] = new SqlParameter("@MaterialSpec", spec);
+               // parms[7] = new SqlParameter("@MaterialName", mname);
                 using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    ys.Database.ExecuteSqlCommand("exec  EditProcessBOM  @ID,@PartNumber,@ChildPartQTY,@ChildPartNumber", parms);
+                    ys.Database.ExecuteSqlCommand("exec  EditProcessBOM  @ID,@PartNumber,@ChildPartQTY,@ChildPartNumber,@materialQTY,@MaterialUnits,@MaterialSpec", parms);
                 }
                 return Content("true");
             }
@@ -385,11 +382,10 @@ namespace YLMES.Controllers
             }
         }
         //添加子件
-        public ActionResult AddProcessBOM(string name, string PartSpec)
+        public ActionResult AddProcessBOM(string name, string PartSpec,string username)
         {
             try
             {
-                string username = Session["name"].ToString();
                 SqlParameter[] parms = new SqlParameter[3];
                 parms[0] = new SqlParameter("@PartNumber", name);
                 parms[1] = new SqlParameter("@PartSpec", PartSpec);

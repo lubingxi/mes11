@@ -43,40 +43,58 @@
                        field: '所需数量', width: 100, title: '所需物料数量'
                      }
                    , { field: 'StockQTY', title: '库存数量', width: 150 }
-                   , { field: 'count', width: 100, title: '采购数量',edit:true }
-                   , { field: 'units', width: 100, title: '采购单位', edit: true }
+                   , { field: 'MaterialName', width: 200, title: '采购名称', edit: true }
                    , { field: 'spec', width: 200, title: '采购规格', edit: true }
+                   , { field: 'count', width: 100, title: '采购数量',edit:true }
+                   , { field: 'units', width: 100, title: '采购单位', edit: true }                  
                    ]]
                 });
                 $("#Apply").on('click', function () {
                     var checkStatus = table.checkStatus("tw")
                         , data = checkStatus.data
                     if (data.length >= 1) {
+                         status = "";
                         for (var i = 0; i < data.length; i++) {
                             materid = (checkStatus.data[i].ChildPartID);
                             Count = (checkStatus.data[i].count);
                             Units = (checkStatus.data[i].units);
-                            Spec = (checkStatus.data[i].spec);                       
+                            Spec = (checkStatus.data[i].spec); 
+                            name = (checkStatus.data[i].MaterialName); 
                             $.ajax({
                                 url: "/TaskManagement/ApplyPurchasingd",
-                                data: { type:'add',Materid: materid, PCount: Count, Unit: Units,Taskid:@ViewData["taskid"],Spec:Spec },
+                                data: { type: 'add', Materid: materid, PCount: Count, Unit: Units, Taskid:@ViewData["taskid"], Spec: Spec, Name: name, username: localStorage.sitename },
                                 type: "post",
                                 dataType: "text",
                                 success: function (data) {
-                                    if (data == "true") {
-                                        window.history.go(-1);
-                                    } else if (data == "1") {
-                                        alert("采购数量不能为空！");
+                                    if (data == "1") {
+                                        layer.msg("采购数量不能为空！");
                                     } else if (data == "2") {
-                                        alert("采购单位不能为空！");
-                                    } else if (data == "3"){
-                                        alert("采购规格不能为空！");
+                                        layer.msg("采购单位不能为空！");
+                                    }
+                                    else if (data == "3") {
+                                        layer.msg("采购规格不能为空！");
+                                    }
+                                    else if (data == "4") {
+                                        layer.msg("采购名称不能为空！");
+                                    }
+                                    else if (data == "true") {                                      
                                     }
                                 }
                             });
                         }
                     }
-                  
+                     $.ajax({
+                         url: "/TaskManagement/AddProcuWork",
+                         data: { ProductName: '@ViewData["ProductName"]', ProductSpec: '@ViewData["ProductSpec"]', partnum: '@ViewData["partname"]', spec: '@ViewData["spec"]', ji: '@ViewData["ji"]', count: '@ViewData["count"]', taskid: '@ViewData["taskid"]', createby: localStorage.sitename },
+                                type: "post",
+                                dataType: "text",
+                                success: function (data) {
+                                    if (data == "true") {
+                                        layer.msg('申请成功！');
+                                        layer.closeAll();
+                                    }
+                                }
+                            });
                 });
                 $("#SpecialSymbols").on('click', function () {
                     var url = '/TaskManagement/CheckSpecialSymbols';

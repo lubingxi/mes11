@@ -40,5 +40,6 @@ namespace YLMES.Models
         public string outMakeQTY { get; set; }
         public string MakeCreatedBy { get; set; }
         public string Type { get; set; }
+        public Nullable<decimal> price { get; set; }
     }
 }

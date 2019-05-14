@@ -1,0 +1,119 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;
+                    table.render({
+                     elem: '#tw'
+                   , url: '/Home/CDetialsd'
+                   , page: false
+                   , limit: 15
+                   , cols: [[
+                    { field: '合同编号', width: 210, title: '合同编号'}
+                   , { field: '产品名称', width: 235, title: '客户产品名称', sort: true }
+                   , {
+                       field: '产品规格', width: 180, title: '产品规格',
+                   }
+                   , { field: '单位', title: '单位', width: 180 }
+                   , { field: '合同数量', width: 180, title: '合同数量', sort: true }
+                   , { field: '合同ID', width: 100, title: '合同ID', }
+                   , { field: 'right', width: 178, align: 'center', toolbar: '#barDemo' }
+                   ]]
+                    });
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;
+                    switch (obj.event) {
+                        case 'LookAtListing':
+                            var id = data.合同ID;
+                            var pname = data.产品名称;
+                            var pspec = data.产品规格;
+                            $.ajax({
+                                type: "POST",
+                                url: '/TaskManagement/CheckTaskId',
+                                data: { id: id, pname: pname, pspec: pspec},
+                                dataType: "json",
+                                success: function (data) {
+                                    if (data != null) {
+                                        var index = layer.open({
+                                            type: 2,
+                                            anim: 1,
+                                            title: '查看清单',
+                                            maxmin: true,
+                                            content: '/TaskManagement/FinishMyDesign?ifDrive=' + data.ifDrive + '&ProjectName=' + data.ProductName + '&name=' + '' + '&taskid=' + data.TaskID
+                                        });
+                                        layer.full(index);                                        
+                                    }
+                                }
+                            });
+                            break;  
+                        case 'CheckProcess':
+                            var CustomerName = data.产品名称;
+                            var CustomerSpec = data.产品规格;
+                            var index = layer.open({
+                                type: 2,
+                                anim: 1,
+                                title: '查看工艺卡',
+                                maxmin: true,
+                                content: '/Home/ProcessCard?Name=' + CustomerName + '&Spec=' + CustomerSpec
+                            });
+                            layer.full(index);
+                            break;  
+                    };
+                });
+
+
+            });
+        })
+
+
+
+    </script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="LookAtListing">查看清单</a>
+        <a class="layui-btn layui-btn-xs" lay-event="CheckProcess">查看工艺</a>
+    </script>
+
+
+</head>
+
+
+<body>
+
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">销售管理</a></li>
+            <li><a href="#">合同查询</a></li>
+            <li><a href="#">查看货物明细</a></li>
+        </ul>
+    </div>
+    <table class="tablelist" id="tw" lay-filter="demo"></table>
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+
+</body>
+</html>
+
+
+

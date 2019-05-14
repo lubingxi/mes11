@@ -141,7 +141,7 @@
             <div class="layui-input-block">
                 <button  class="btn btn-primary radius" onclick="sub()">保存</button>
                 @*<button class="layui-btn" onclick="sub()" style="margin-left:100px">保存</button>*@    
-                <button onclick="returns()" class="btn btn-default radius" id="cancle" type="button" style="margin-left:100px;">&nbsp;&nbsp;返回&nbsp;&nbsp;<i hidden="hidden" id="u">/Home/SalesCreation</i></button>         
+                @*<button onclick="returns()" class="btn btn-default radius" id="cancle" type="button" style="margin-left:100px;">&nbsp;&nbsp;返回&nbsp;&nbsp;<i hidden="hidden" id="u">/Home/SalesCreation</i></button>*@         
             </div>
         </div>
      
@@ -166,7 +166,10 @@
                     type: 2,
                     content: url,
                     title: "新增客户信息",
-                    maxmin: true
+                    maxmin: true,
+                    end: function () {
+                        location.reload();
+                    }
                 });
                 layer.full(index);
             });
@@ -193,13 +196,17 @@
         function sub() {
             $("#form-article-add").ajaxSubmit({
                 url: "@Url.Action("CwAdd", "Home")",
+                data: { name: localStorage.sitename},
                 type: "post",
+                dataType:"text",
                 success: function (data) {
                     if (data == "true") {
                         alert("插入成功");
                         //layer.closeAll();
                     } else if (data == "false") {
                         alert("插入失败");
+                    } else if (data == "two") {
+                        alert("合同编号不能重复!");
                     }
                 },
                 error: function (aa) {

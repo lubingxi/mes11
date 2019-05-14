@@ -18,6 +18,7 @@ namespace YLMES.Models
         public string 流程 { get; set; }
         public string 工位类型 { get; set; }
         public string 单套工时 { get; set; }
+        public Nullable<int> 顺序 { get; set; }
         public string 辅助工时 { get; set; }
         public string 工艺要求 { get; set; }
         public Nullable<int> 编码 { get; set; }

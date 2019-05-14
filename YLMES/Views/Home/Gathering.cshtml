@@ -40,10 +40,10 @@ white-space: normal;
             });
             $("#throung").click(function () {
                 var bianhao = '@ViewData["CNumbers"]';
-                if ('@ViewData["name"]' == "刘杨珍") {
+                if (localStorage.sitename == "刘扬珍") {
                     $.ajax({
                         url: "/Home/EditStatus",
-                        data: { bianhao: bianhao },
+                        data: { bianhao: bianhao, name: localStorage.sitename },
                         type: 'post',
                         success: function (data) {
                             if (data == "true") {
@@ -63,7 +63,7 @@ white-space: normal;
                 }
                 else
                 {
-                    layer.msg("只有刘杨珍才有资格！");
+                    layer.msg("只有刘扬珍才有资格！");
                 }
                 
             });
@@ -190,8 +190,9 @@ white-space: normal;
                                         if (data == "true") {
                                             window.setTimeout(function () {
                                                 layer.msg("添加成功", { icon: 6 });
+                                              
                                                 $.ajax({
-                                                    url: "/Home/Chane?he=" + id + "&cnum=" + cnum,
+                                                    url: "/Home/Chane?he=" + id + "&cnum=" + cnum + "&name=" + localStorage.sitename,
                                                     type: "post",
                                                     dataType: "text",
                                                     success: function (data) {
@@ -294,7 +295,7 @@ white-space: normal;
                             newd= data.NewAmountCollected;
                             dateRec = data.DateOfReceipt;
                             ticket = data.TicketOpeningAndDate;
-
+                            var cnum = data.合同编号;
                             $.ajax({
                                 url: "/Home/XiuShouJilu",
                                 type: 'post',
@@ -304,7 +305,7 @@ white-space: normal;
                                     if (data == "true") {
                                         layer.msg("修改成功", { icon: 6 });
                                         $.ajax({
-                                            url: "/Home/Chane?he=" + id + "&cnum=" + cnum,
+                                            url: "/Home/Chane?he=" + cid + "&cnum=" + cnum + "&name=" + localStorage.sitename,
                                             type: "post",
                                             dataType: "text",
                                             success: function (data) {

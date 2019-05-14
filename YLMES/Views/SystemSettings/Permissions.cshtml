@@ -39,12 +39,12 @@
                         , url: '/SystemSettings/ByExistsRoot?UserName=' + NameSearch + '&FunctionName=' + FunctionName                 
                         , page: true
                         , limit: 15
-                        , done: function () {
-                            $("tr a").hide();
-                         $("tr").hover(function () {
-                         $(this).children().last().children().children().toggle();
-                         })
-                         }
+                        //, done: function () {
+                        //    $("tr a").hide();
+                        // $("tr").hover(function () {
+                        // $(this).children().last().children().children().toggle();
+                        // })
+                        // }
                         , cols: [[   
                             { align: 'center', title: '已拥有权限（勾选可删除权限）', colspan: 9 }], [
                             { type: 'checkbox' }                         
@@ -71,8 +71,7 @@
             
                 $("#Status").on('click', function () {  
                 var checkStatus = table.checkStatus("tw")
-                        , data = checkStatus.data
-                 
+                        , data = checkStatus.data                 
                     if (data.length >= 1) {
                         for (var i = 0; i < data.length; i++) {
                             UserName = (checkStatus.data[i].姓名);

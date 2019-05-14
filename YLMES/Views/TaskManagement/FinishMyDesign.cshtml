@@ -19,19 +19,18 @@
 
 
     <script type="text/javascript">
-        $(function () {         
+        $(function () {
                 if ('@Session["name"]' == "") {
                     window.top.location = '/Home/Login';
                 }
-           
-          
+
             layui.config({
                 base: '/layui_exts/',
             }).use(['jquery', 'layer', 'excel', 'table'], function () {
                 var $ = layui.jquery;
                 var table = layui.table;
                 var layer = layui.layer;
-                var excel = layui.excel;          
+                var excel = layui.excel;
                 var uploadExcel = function (files) {
                     try {
                         excel.importExcel(files, {
@@ -48,15 +47,15 @@
                                 ,'WhetherToUpload':'I'
                             }
                         }, function (data) {
-                            var datas = [];                    
-                         
+                            var datas = [];
+
                             data[0]["key"].forEach(function (value,index) {
-                                if (index > 0) {                                 
+                                if (index > 0) {
                                     value.Level = $.trim(value.Level);
                                     datas.push(value)
                                 }
                             })
-                     
+
                             table.render({
                                 elem: '#tw'
                                    , toolbar: '#toolbarDemo'
@@ -73,7 +72,7 @@
                                 , { field: 'WhetherToUpload', width: 120, title: '是否上传' }
                                      ]]
                                    , data: datas
-                            });                                             
+                            });
                         });
                     } catch (e) {
                     }
@@ -92,7 +91,7 @@
                                         layer.msg('上传成功！');
                                         $('#btn1').show();
                                         $('#btn2').show();
-                                        $('#btn3').show();                                       
+                                        $('#btn3').show();
                                     }
                                 }
                             });
@@ -106,7 +105,7 @@
                 });
 
             });
- 
+
             if ('@ViewData["dao"]' == "2") {
                 $('#btn1').show();
                 $('#btn2').show();
@@ -115,33 +114,17 @@
                     var table = layui.table, layer = layui.layer;
                         table.render({
                             elem: '#tw'
-                            , url: '/TaskManagement/CheckBOMD'
-                            //  , done: function () {
-                            //      $("tr a").hide();
-                            //    $("tr").hover(function () {
-                            //        $(this).children().last().children().children().toggle();
-                            //    })
-
-
-                            //}
+                            , url: '/TaskManagement/CheckBOMD?w='+'@Session["taskid"]'
                             , cols: [[
-                                { field: 'BOM结构', width: 80, title: 'BOM结构' }
-                                , { field: '图号', width: 235, title: '图号' }
-                                , {
-                                    field: '上传图片', width: 100, title: '上传图纸'
-                                }
-                                 , {
-                                     field: '是否上传', width: 100, title: '是否上传'
-                                 }
-                                , { field: '部件名称', title: '部件名称', width: 180 }
-                                , { field: '部件规格', width: 180, title: '部件规格' }
-                                , { field: '材料', width: 150, title: '材料' }
-                                , { field: '备注', width: 100, title: '备注' }
-                                , { field: '类型', width: 100, title: '类型' }
-                                , { field: '类别', width: 100, title: '类别' }
-                                , { field: '序号', width: 100, title: '序号' }
-                                , { field: 'right', width: 100, align: 'center', toolbar: '#barDemo' }
-                            ]]                       
+                                  { field: '部件编号', title: '部件编号', width: 100 }
+                                , { field: '部件图号', title: '部件图号', width: 250 }
+                                , { field: '部件名称', title: '部件名称', width: 250 }
+                                , { field: '部件规格', width: 250, title: '部件规格' }
+                                , { field: '部件材料', width: 250, title: '部件材料' }
+                                , { field: '上传图片', width: 100, title: '图纸状态',templet: '#tuzhi' }
+                                , { field: '是否上传', width: 100, title: '是否上传' }
+                             //   , { field: 'right', width: 100, align: 'center', toolbar: '#barDemo' }
+                            ]]
                     });
                     table.on('tool(demo)', function (obj) {
                         var data = obj.data;
@@ -180,10 +163,10 @@
                         type: 2
                         , area: ['70%', '70%']
                         , title:'上传文件'
-                        , content: '/TaskManagement/BatchUpload?taskid='+'@ViewData["taskid"]'
+                        , content: '/TaskManagement/BatchUpload?taskid='+'@Session["taskid"]'
                         , anim: 2
                     });
-                });               
+                });
             });
             $("#btn2").click(function () {
                 $.ajax({
@@ -212,29 +195,16 @@
                 $("#btn1").click(function () {
                     table.render({
                      elem: '#tw'
-                   , url: '/TaskManagement/CheckBOMD'
-                 //  , done: function () {
-                 //    $("tr a").hide();
-                 //    $("tr").hover(function () {
-                 //    $(this).children().last().children().children().toggle();
-                 //    })
-                 //}
+                    , url: '/TaskManagement/CheckBOMD?w='+'@Session["taskid"]'
                    , cols: [[
-                   { field: 'BOM结构', width: 80, title: 'BOM结构' }
-                   , { field: '图号', width: 235, title: '图号' }
-                   , {
-                       field: '上传图片', width: 100, title: '上传图纸'
-                   }
-                   , {
-                       field: '是否上传', width: 100, title: '是否上传'
-                   }
-                   , { field: '部件名称', title: '部件名称', width: 180 }
-                   , { field: '部件规格', width: 180, title: '部件规格' }
-                   , { field: '材料', width: 150, title: '材料' }
-                   , { field: '备注', width: 100, title: '备注' }
-                   , { field: '类型', width: 100, title: '类型' }
-                   , { field: '序号', width: 100, title: '序号' }
-                   , { field: 'right', width: 100, align: 'center', toolbar: '#barDemo' }
+                       { field: '部件编号', title: '部件编号', width: 100 }
+                   , { field: '部件图号', title: '部件图号', width: 250 }
+                   , { field: '部件名称', title: '部件名称', width: 250 }
+                   , { field: '部件规格', width: 250, title: '部件规格' }
+                   , { field: '部件材料', width: 250, title: '部件材料' }
+                   , { field: '上传图片', width: 100, title: '图纸状态', templet: '#tuzhi' }
+                   , { field: '是否上传', width: 100, title: '是否上传' }
+                 //  , { field: 'right', width: 100, align: 'center', toolbar: '#barDemo' }
                    ]]
                     });
                 });
@@ -246,10 +216,10 @@
                     switch (obj.event) {
                         case 'add':
                             tupian = data.上传图片;
-                            tuhao = data.图号;
+                            tuhao = data.部件图号;
                             name = data.部件名称;
                             spec = data.部件规格;
-                            partMet = data.材料;
+                            partMet = data.部件材料;
                             var index = layer.open({
                                 type: 2,
                                 anim: 1,
@@ -269,8 +239,8 @@
 
     </script>
     <script type="text/html" id="barDemo">
-        {{#  if(d.图号 != ''){ }}
-        <a class="layui-btn layui-btn-xs" id="add" lay-event="add">操作图纸</a>
+        {{#  if(d.是否上传 == '是'){ }}
+        <a class="layui-btn layui-btn-xs" id="add" lay-event="add">图纸信息</a>
         {{#  } else { }}
         {{#  } }}
     </script>

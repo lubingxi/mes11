@@ -52,7 +52,7 @@
                     var endtime = $(".endtime").val();
                     table.render({
                         elem: '#tw'
-                        , url: '/TaskManagement/CompletedTasksJson?StartTime=' + strattime + '&endtime=' + endtime + '&ProjectName=' + ProjectName + '&TaskName=' + TaskName
+                        , url: '/TaskManagement/CompletedTasksJson?StartTime=' + strattime + '&endtime=' + endtime + '&ProjectName=' + ProjectName + '&TaskName=' + TaskName + '&name=' + localStorage.sitename
                         , page: true
                         , limit: 15
                         , done: function () {
@@ -94,8 +94,8 @@
                     var strattime = $(".strattime").val();
                     var endtime = $(".endtime").val();
                     table.render({
-                    elem: '#tw'
-                   , url: '/TaskManagement/CompletedTasksJson?StartTime=' + strattime + '&endtime=' + endtime + '&ProjectName=' + ProjectName + '&TaskName=' + TaskName
+                        elem: '#tw'
+                        , url: '/TaskManagement/CompletedTasksJson?StartTime=' + strattime + '&endtime=' + endtime + '&ProjectName=' + ProjectName + '&TaskName=' + TaskName + '&name=' + localStorage.sitename
                    , page: true
                    , limit: 15
                    , done: function () {

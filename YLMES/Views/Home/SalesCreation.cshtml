@@ -29,7 +29,7 @@
             if ('@Session["name"]' == "") {
                 window.top.location = '/Home/Login';
             }
-            if ('@Session["name"]' == '刘扬珍') {
+            if ('@Session["name"]' == '陆炳曦') {
                 $("#ReviewStatus").attr("value","申请修改");
             }
             $('.CustomerName').val(localStorage.Customername);
@@ -57,7 +57,7 @@
                    , { field: '合同状态', width: 180, title: '合同状态' }
                    , { field: '是否通过', width: 90, title: '是否审核' }
                    , { field: '是否客户合同', width: 90, title: '客户合同' }
-                   , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+                   , { field: 'right', width: 350, align: 'center', toolbar: '#barDemo' }
                    ]]
                     });
                 $("#sele").click(function () {
@@ -208,18 +208,21 @@
                             });
                             layer.full(index);
                         }
-
                     }
                     switch (obj.event) {
-
                         case 'add':
                             id = data.id;
                             window.parent.document.getElementById("rightframe").src = "/Home/notice?id=" + id;
                             break;
                         case 'Detials':
-                            id = data.id;
-                            window.parent.document.getElementById("rightframe").src = "/Home/HDetials?id=" + id;
-                            break;
+                            //var status = data.合同状态;
+                            //if (status != "销售部新建销售合同") {
+                            //    layer.msg('已提交不能修改！');
+                            //} else {
+                                id = data.id;
+                                window.parent.document.getElementById("rightframe").src = "/Home/HDetials?id=" + id;
+                                break;
+                           // }                           
                         case 'que':
                             id = data.id;
                             cn = data.ContractNumber;
@@ -231,7 +234,7 @@
                                 layer.confirm("真的要提交吗？", function (index) {
                                     $.ajax({
                                         url: "/Home/SubmitMethod",
-                                        data: { id: id, cnum: cn },
+                                        data: { id: id, cnum: cn, name: localStorage.sitename },
                                         type: "post",
                                         dataType: "text",
                                         success: function (data) {
@@ -247,8 +250,27 @@
                                 });
                             }
                             break;
+                        case 'TheDelivery':
+                            var id = data.id;
+                            layer.confirm("真的要提交吗？", function (index) {
+                                $.ajax({
+                                    url: "/Home/SubmitContractFinsh",
+                                    data: { id: id },
+                                    type: "post",
+                                    dataType: "text",
+                                    success: function (data) {
+                                        if (data == "true") {
+                                            layer.msg('确认成功!');
+                                            $("#sele").click();
+                                        } else {
+                                            layer.msg('请联系系统维修人员!');
+                                        }
+                                    }
+                                });
+                            });
+                            break;
                         case 'edit':
-                            id = data.id;
+                           var id = data.id;
                             staus = data.合同状态;
                             tong = data.是否通过;
 
@@ -336,8 +358,11 @@
                             var index = layer.open({
                                 type: 2,
                                 content: url,
-                                title: "公司合同",
-                                maxmin: true
+                                title: "客户合同",
+                                maxmin: true,
+                                end: function () {
+                                    layer.closeAll();
+                                }
                             });
                             layer.full(index);
                         }
@@ -347,7 +372,10 @@
                                 type: 2,
                                 content: url,
                                 title: "公司合同",
-                                maxmin: true
+                                maxmin: true,
+                                end: function () {
+                                    layer.closeAll();
+                                }
                             });
                             layer.full(index);
                          
@@ -374,10 +402,12 @@
         <a class="layui-btn layui-btn-xs" id="edit" lay-event="que">提交确认</a>
         <a class="layui-btn layui-btn-xs" id="edits" lay-event="edit">修改</a>
         <a class="layui-btn layui-btn-xs" id="edits" lay-event="Detials">货物明细</a>
+        <a class="layui-btn layui-btn-xs" id="edit" lay-event="TheDelivery">确认已发货</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" id="del">删除</a>
         {{#  } else { }}
         <a class="layui-btn layui-btn-xs" id="edit" lay-event="que">提交确认</a>
         <a class="layui-btn layui-btn-xs" id="edits" lay-event="edit">修改</a>
+        <a class="layui-btn layui-btn-xs" id="edit" lay-event="TheDelivery">确认已发货</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" id="del">删除</a>
         {{#  } }}
 

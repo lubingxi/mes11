@@ -139,7 +139,7 @@ namespace YLMES.Controllers
                 parms[14] = new SqlParameter("@Representative", "");
                 parms[15] = new SqlParameter("@Account", "");
                 parms[16] = new SqlParameter("@Bank", "");
-                parms[17] = new SqlParameter("@Status", Status);
+                parms[17] = new SqlParameter("@Status", "");
                 var list = ys.Database.SqlQuery<ApplierList_Supplier_Result>("exec  ApplierList_Supplier  @Type,@ApplierID,@ApplierName,@Address,@Contact,@Tel,@Mobile,@Category,@Level,@Advantage,@Note,@Fax,@CreatedBy,@Principal,@Representative,@Account,@Bank,@Status", parms).ToList();
                 Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
                 PageList<ApplierList_Supplier_Result> pageList = new PageList<ApplierList_Supplier_Result>(list, page, limit);
@@ -165,7 +165,7 @@ namespace YLMES.Controllers
                 parms[4] = new SqlParameter("@Contact", Contact);
                 parms[5] = new SqlParameter("@Tel", Tel);
                 parms[6] = new SqlParameter("@Mobile", Mobile);
-                parms[7] = new SqlParameter("@Category", Category);
+                parms[7] = new SqlParameter("@Category", "");
                 parms[8] = new SqlParameter("@Level", Level);
                 parms[9] = new SqlParameter("@Advantage", Advantage);
                 parms[10] = new SqlParameter("@Note", "");
@@ -374,7 +374,6 @@ namespace YLMES.Controllers
                 hasmap.Add("msg", "");
                 hasmap.Add("count", count);
                 hasmap.Add("data", pageList);
-
             }
             return Json(hasmap, JsonRequestBehavior.AllowGet);
         }

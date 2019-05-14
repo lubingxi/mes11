@@ -705,10 +705,71 @@ namespace YlMES.Controllers
 
         #endregion
 
+        #region 原材料位置
+
+        public ActionResult MaterialInventoryLocation()
+        {
+            return View();
+        }
+
+        #endregion
+
+
+
         #region 原材料查询
         public ActionResult MaterialsStock()
         {
             return View();
+        }
+        public JsonResult GetmaterialsStocksd(string ProjectName, string PartNumber, string CreatedTimeEnd, string CreatedTime, string CreatedBy, string ID, string cang)
+        {
+            if (ProjectName == null)
+            {
+                ProjectName = "";
+            }
+            if (PartNumber == null)
+            {
+                PartNumber = "";
+            }
+            if (CreatedTimeEnd == null)
+            {
+                CreatedTimeEnd = "";
+            }
+            if (CreatedTime == null)
+            {
+                CreatedTime = "";
+            }
+            if (CreatedBy == null)
+            {
+                CreatedBy = "";
+            }
+            if (ID == null)
+            {
+                ID = "";
+            }
+            if (cang == null)
+            {
+                cang = "";
+            }
+
+            using (YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                SqlParameter[] parms = new SqlParameter[8];
+                parms[0] = new SqlParameter("@ProjectName", ProjectName);
+                parms[1] = new SqlParameter("@PartNumber", PartNumber);
+                parms[2] = new SqlParameter("@PartSpec", "");
+                parms[3] = new SqlParameter("@CreatedTimeEnd", CreatedTimeEnd);
+                parms[4] = new SqlParameter("@CreatedTime", CreatedTime);
+                parms[5] = new SqlParameter("@CreatedBy", CreatedBy);
+                parms[6] = new SqlParameter("@ID", ID);
+                parms[7] = new SqlParameter("@cang", cang);
+                var list = ys.Database.SqlQuery<Raw_MaterialStocks_Result>("exec Raw_MaterialStocks @ProjectName,@PartNumber,@PartSpec,@CreatedTimeEnd,@CreatedTime,@CreatedBy,@ID,@cang", parms).ToList();
+                Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
+                hasmap.Add("code", 0);
+                hasmap.Add("msg", "");
+                hasmap.Add("data", list);
+                return Json(hasmap, JsonRequestBehavior.AllowGet);
+            }
         }
         public JsonResult GetmaterialsStock(string ProjectName, string PartNumber,string CreatedTimeEnd, string CreatedTime, string CreatedBy,string ID,string cang)
         {
@@ -740,6 +801,7 @@ namespace YlMES.Controllers
             {
                 cang = "";
             }
+            
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                 SqlParameter[] parms = new SqlParameter[8];
@@ -813,5 +875,40 @@ namespace YlMES.Controllers
             
         }
         #endregion
+
+        //查看货位页面
+        public ActionResult WarehouseLocation(string id)
+        {
+            ViewData["id"] = id;
+            return View();
+        }
+        //显示货位信息
+        public ActionResult GetmaterialsStocks(string id)
+        {
+            using (YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                SqlParameter[] parms = new SqlParameter[1];
+                parms[0] = new SqlParameter("@id", id);
+                var list = ys.Database.SqlQuery<Raw_MaterialStock2_Result>("exec Raw_MaterialStock2 @id", parms).ToList();
+                Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
+                hasmap.Add("code", 0);
+                hasmap.Add("msg", "");
+                hasmap.Add("data", list);
+                return Json(hasmap, JsonRequestBehavior.AllowGet);
+            }
+        }
+        //删除CheckBox物料
+        public ActionResult AllDeleteMaterial(string ID)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                int i = int.Parse(ID);
+                var list = ys.PM_Material.Where(c => c.ID == i).FirstOrDefault();
+                ys.PM_Material.Remove(list);
+                ys.SaveChanges();
+                return Content("true");
+            }
+           
+        }
     }
 }

@@ -73,10 +73,15 @@
         <div class="layui-form-item">
             <label class="layui-form-label">项目编号：</label>
             <div class="layui-input-block" style="width:400px">
-                <select name="CNumber" id="CNumber" lay-verify="" lay-filter="CNumber" lay-search></select>
+                <select name="CNumber" id="CNumber" lay-verify="" lay-filter="CNumber" lay-search> <option value="">请选择</option></select>
             </div>
         </div>
-
+        <div class="layui-form-item">
+            <label class="layui-form-label">项目名称：</label>
+            <div class="layui-input-block">
+                <input type="text" lay-verify="required" name="CName" autocomplete="off" class="layui-input">
+            </div>
+        </div>
         @*<div class="layui-form-item">
             <label class="layui-form-label">成品或部件:</label>
             <div class="layui-input-block">
@@ -111,12 +116,25 @@
                     }
                 }
             });
+            form.on('select(CNumber)', function (data) {
+              
+                $.ajax({
+                    url: "/FinishProductHouse/CheckCustomerName",
+                    data: { cnumber: data.value },
+                    type: "post",
+                    dataType: "text",
+                    success: function (data) {
+                        $("[name=CName]").val(data);
+                    }
+                });
+            });
         });
         $(function () {
               if ('@Session["name"]' == "") {
                 window.top.location = '/Home/Login';
-              }
-
+            }
+        
+           
             $(".radius").click(function () {
                 var id = $("[name=id]").val();
                 var pnumber = $("[name=pnumber]").val();
@@ -130,7 +148,7 @@
                 $.ajax({
                     type: "get",
                     url: '/ProductionPlanning/ProductAdds',
-                    data: { id: id, pnumber: pnumber, pspec: pspec, pmater: pmater, fnumber: fnumber, ProductQuantity: ProductQuantity, PackageNumber: PackageNumber, CNumber: CNumber, Units: Units },
+                    data: { id: id, pnumber: pnumber, pspec: pspec, pmater: pmater, fnumber: fnumber, ProductQuantity: ProductQuantity, PackageNumber: PackageNumber, Units: Units, CNumber: CNumber },
                     dataType: "text",
                     success: function (data) {   
                         if (data == "1") {
@@ -139,7 +157,7 @@
                         else if (data == "2") {
                             alert("打包数量不能为空！");
                         } else if (data == "3") {
-                            alert("打包数量不能超过20个！");
+                            alert("打包数量不能超过50个！");
                         }
                         else {
                             var index = layer.open({

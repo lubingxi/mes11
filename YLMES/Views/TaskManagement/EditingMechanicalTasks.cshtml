@@ -214,6 +214,7 @@
             $("#select").removeAttr("disabled");
             $("#form-article-add").ajaxSubmit({
                 url: "@Url.Action("EditMachine", "TaskManagement")",
+                data: { names: localStorage.sitename},
                 type: "post",
                 success: function (data) {
                     if (data == "true") {
@@ -221,7 +222,7 @@
                         window.parent.location.reload();
                     }else
                     {
-                        alert("编辑失败！");
+                        alert("请联系维护人员！");
                     }
                 },
                 error: function (aa) {

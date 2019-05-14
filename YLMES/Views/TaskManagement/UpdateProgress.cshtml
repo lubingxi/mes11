@@ -22,24 +22,21 @@
             }
         });
         $(function () {
-            $("#add").click(function () {
-                var url = '/TaskManagement/UpdateTaskProgress'
-                layer_show('编辑任务进度', url, '800', '600');
-            });
+        
             layui.use('table', function () {
                 var table = layui.table;
                 table.render({
                     elem: '#tw'
                , url: '/TaskManagement/CheckProgress'
-               , done: function () {
-                 $("tr a").hide()
-                 $("tr").hover(function () {
+             //  , done: function () {
+             //    $("tr a").hide()
+             //    $("tr").hover(function () {
 
-                     $(this).children().last().children().children().toggle();
-                 })
+             //        $(this).children().last().children().children().toggle();
+             //    })
 
 
-             }
+             //}
                , page: false
                , cols: [[
                  { field: 'TaskID', width: 90, title: '任务编号' }
@@ -93,7 +90,17 @@
                             break;
                     };
                 });
-
+                $("#add").click(function () {
+                    var url = '/TaskManagement/UpdateTaskProgress';
+                    var index = layer.open({
+                        type: 2,
+                        content: url,
+                        area: ['800px', '600px'],
+                        end: function () {
+                            table.reload('tw');
+                        }
+                    });
+                });
             });
 
         })

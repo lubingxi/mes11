@@ -12,37 +12,29 @@ namespace YLMES
 {
     public  class Sms
     {
-        public static int InsertSmsInfos(string name,string Number,string CreateBy)
+        public static int InsertSmsInfos(string dept,string Number,string CreateBy)
         {
             using(YLMES_newEntities ys = new YLMES_newEntities())
             {
                 SqlParameter[] parms = new SqlParameter[3];
-                parms[0] = new SqlParameter("@Name", name);
+                parms[0] = new SqlParameter("@Depart", dept);
                 parms[1] = new SqlParameter("@Number", Number);
                 parms[2] = new SqlParameter("@CreatedBy", CreateBy);
-                ys.Database.ExecuteSqlCommand("exec InsertSmsInfos  @Name,@Number,@CreatedBy", parms);
+                ys.Database.ExecuteSqlCommand("exec InsertSmsInfos  @Depart,@Number,@CreatedBy", parms);
                 return 1;
             }         
         }
-        public static int CheckSms(string Dept, string number)
+        public static int CheckSms(string Dept, string number,string name)
         {
             using(YLMES_newEntities ys =new YLMES_newEntities())
             {
                 SqlParameter[] parms = new SqlParameter[1];
                 parms[0] = new SqlParameter("@Dept", Dept);
                 var list = ys.Database.SqlQuery<SendSms_Result>("exec SendSms @Dept", parms).FirstOrDefault();
-                int i = SendSms(list.UserName, number, list.Tel);
-                if (i > 0)
-                {
-                    //SqlParameter[] parmd = new SqlParameter[1];
-                    //parmd[0] = new SqlParameter("@Dept", Dept);
-                    //ys.Database.ExecuteSqlCommand("exec UpdateSmsInfo @Dept");
-                    return 1;
-                }
-                else
-                {
-                    return 0;
-                }
+                InsertSmsInfos("设计部", number, name);
+                return 1;
+               // int i = SendSms(list.UserName, number, list.Tel);
+
             }            
         }
         public static int CheckSms2(string name, string number,string tel,DateTime? times)

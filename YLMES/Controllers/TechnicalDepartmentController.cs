@@ -211,6 +211,39 @@ namespace YLMES.Controllers
         }
         #endregion
 
+        #region 查看任务清单
+
+        public ActionResult TaskList()
+        {
+            return View();
+        }
+        //获取清单数据
+        public ActionResult TaskListJson(string name,string CName, int page, int limit)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                if (CName == null)
+                {
+                    CName = "";
+                }
+                Dictionary<string, Object> hasmap;
+                SqlParameter[] parms = new SqlParameter[3];
+                parms[0] = new SqlParameter("@type", "check");
+                parms[1] = new SqlParameter("@name", name);
+                parms[2] = new SqlParameter("@cname", CName);
+                var list = ys.Database.SqlQuery<PM_CheckDesignBom_Result>("exec PM_CheckDesignBom @type,@name,@cname", parms).ToList();
+                hasmap = new Dictionary<string, Object>();
+                PageList<PM_CheckDesignBom_Result> pageList = new PageList<PM_CheckDesignBom_Result>(list, page, limit);
+                int count = list.Count();
+                hasmap.Add("code", 0);
+                hasmap.Add("msg", "");
+                hasmap.Add("count", count);
+                hasmap.Add("data", pageList);
+                return Json(hasmap, JsonRequestBehavior.AllowGet);
+            }
+        }
+        #endregion
+
 
     }
 }

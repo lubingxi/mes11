@@ -14,9 +14,7 @@ namespace YLMES.Models
     public partial class SP_PM_ProductStation_Result
     {
         public int 序号 { get; set; }
-        public string 工位 { get; set; }
         public string 工位类型编号 { get; set; }
         public string 工位类型 { get; set; }
-        public string 线别 { get; set; }
     }
 }

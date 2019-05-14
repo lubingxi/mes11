@@ -1,32 +1,79 @@
 ﻿@{
     ViewBag.Title = "ca1";
 }
- 小类别： @Html.DropDownList("Category2", new SelectList(ViewBag.c2, "id","CategoryName"),"请选择",new { @class ="Xiao" })  
+ 小类别： @Html.DropDownList("Category2", new SelectList(ViewBag.c2, "id", "CategoryName"), "请选择", new { @class = "Xiao" })
 <script type="text/javascript" src="../../js/jquery.js"></script>
-<script>
-    $(function () {
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getAllDelete">批量删除</button>
        
+    </div>
+</script>
+<script>
+    //$("#AllDelete").on('click', function () {
+    //    var checkStatus = table.checkStatus("tw")
+    //        , data = checkStatus.data
+    //    if (data.length >= 1) {
+    //        status = "";
+    //        for (var i = 0; i < data.length; i++) {
+    //            var materid = (checkStatus.data[i].ID);
+    //            alert(materid);
+    //        }
+    //    }
+
+    //});
+    $(function () {
         layui.use(['table', 'layer'], function () {
             var table = layui.table, layer = layui.layer;
             table.render({
                 elem: '#tw'
-           , url: '/Rms/CateCHeck?Da=' + $(".Da").val() + "&Xiao=" + $(".Xiao").val()
-           , page: true
-           , limit: 15
-           , done: function () {
+                , url: '/Rms/CateCHeck?Da=' + $(".Da").val() + "&Xiao=" + $(".Xiao").val()
+                , page: true
+                , toolbar: '#toolbarDemo'
+                , limit: 15
+                , done: function () {
                     $("tr a").hide()
                     $("tr").hover(function () {
                         $(this).children().last().children().children().toggle();
                     })
                 }
-           , cols: [[
-             { field: 'ID', width: 210, title: '物料编码' }
-           , { field: 'PartNumber', width: 210, title: '物料名称' }
-           , { field: 'PartSpec', width: 235, title: '规格' }
-           , { field: 'figureNumber', width: 235, title: '图号' }
-            , { field: 'PartMaterial', width: 235, title: '材料' }
-           , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
-           ]]
+                , cols: [[
+                    { type: 'checkbox' }
+                    , { field: 'ID', width: 210, title: '物料编码' }
+                    , { field: 'PartNumber', width: 210, title: '物料名称' }
+                    , { field: 'PartSpec', width: 235, title: '规格' }
+                    , { field: 'figureNumber', width: 235, title: '图号' }
+                    , { field: 'PartMaterial', width: 235, title: '材料' }
+                    , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+                ]]
+            });
+            table.on('toolbar(demo)', function (obj) {
+            var checkStatus = table.checkStatus("tw")
+            , data = checkStatus.data
+           if (data.length >= 1) {
+            status = "";
+            for (var i = 0; i < data.length; i++) {
+                var materid = (checkStatus.data[i].ID);
+                $.ajax({
+                    url: "/Rms/AllDeleteMaterial",
+                    data: { ID: materid },
+                    type: "post",
+                    dataType: "text",
+                    success: function (data) {
+                        if (data == "true") {
+                            window.setTimeout(function () {
+                                layer.msg("删除成功!");
+                                window.parent.document.getElementById("rightframe").src = "/Rms/MaterialRegistration";
+                            }, 500);
+                        }
+                        else {
+                            alert("删除失败!");
+                            return;
+                        }
+                    }
+                });
+            }
+           }
             });
             table.on('tool(demo)', function (obj) {
                 var data = obj.data;
@@ -35,7 +82,7 @@
                         ID = data.ID;
                         PartNumber = data.PartNumber;
                         PartSpec = data.PartSpec;
-                        PartMaterial = data.PartMaterial;              
+                        PartMaterial = data.PartMaterial;
                         var url = '/Rms/Pbc?ID=' + ID + '&PartNumber=' + PartNumber + '&PartSpec=' + PartSpec + '&PartMaterial=' + PartMaterial;
                         var index = layer.open({
                             type: 2,
@@ -81,23 +128,53 @@
                 var table = layui.table, layer = layui.layer;
                 table.render({
                     elem: '#tw'
-               , url: '/Rms/CateCHeck?Da=' + $(".Da").val() + "&Xiao=" + $(".Xiao").val()
-               , page: true
-               , limit: 15
-               , done: function () {
+                    , url: '/Rms/CateCHeck?Da=' + $(".Da").val() + "&Xiao=" + $(".Xiao").val()
+                    , page: true
+                    , toolbar: '#toolbarDemo'
+                    , limit: 15
+                    , done: function () {
                         $("tr a").hide()
                         $("tr").hover(function () {
                             $(this).children().last().children().children().toggle();
                         })
                     }
-               , cols: [[
-                 { field: 'ID', width: 210, title: '物料编码' }
-               , { field: 'PartNumber', width: 210, title: '物料名称' }
-               , { field: 'PartSpec', width: 235, title: '规格' }
-               , { field: 'figureNumber', width: 235, title: '图号' }
-               , { field: 'PartMaterial', width: 235, title: '材料' }
-               , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
-               ]]
+                    , cols: [[
+                        { type: 'checkbox' }
+                        , { field: 'ID', width: 210, title: '物料编码' }
+                        , { field: 'PartNumber', width: 210, title: '物料名称' }
+                        , { field: 'PartSpec', width: 235, title: '规格' }
+                        , { field: 'figureNumber', width: 235, title: '图号' }
+                        , { field: 'PartMaterial', width: 235, title: '材料' }
+                        , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+                    ]]
+                });
+                table.on('toolbar(demo)', function (obj) {
+                    var checkStatus = table.checkStatus("tw")
+                        , data = checkStatus.data
+                    if (data.length >= 1) {
+                        status = "";
+                        for (var i = 0; i < data.length; i++) {
+                            var materid = (checkStatus.data[i].ID);
+                            $.ajax({
+                                url: "/Rms/AllDeleteMaterial",
+                                data: { ID: materid },
+                                type: "post",
+                                dataType: "text",
+                                success: function (data) {
+                                    if (data == "true") {
+                                        window.setTimeout(function () {
+                                            layer.msg("删除成功!");
+                                            window.parent.document.getElementById("rightframe").src = "/Rms/MaterialRegistration";
+                                        }, 500);
+                                    }
+                                    else {
+                                        alert("删除失败!");
+                                        return;
+                                    }
+                                }
+                            });
+                        }
+                    }
                 });
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
@@ -150,23 +227,53 @@
                 var table = layui.table, layer = layui.layer;
                 table.render({
                     elem: '#tw'
-                , url: '/Rms/TypeLikeSearch?Da=' + da + "&Xiao=" + xiao + "&pn=" + s
-                , done: function () {
+                    , url: '/Rms/TypeLikeSearch?Da=' + da + "&Xiao=" + xiao + "&pn=" + s
+                    , done: function () {
                         $("tr a").hide()
                         $("tr").hover(function () {
                             $(this).children().last().children().children().toggle();
                         })
                     }
-               , page: true
-               , limit: 15
-               , cols: [[
-                { field: 'ID', width: 210, title: '物料编码' }
-               , { field: 'PartNumber', width: 210, title: '物料名称' }
-               , { field: 'PartSpec', width: 235, title: '规格' }
-               , { field: 'figureNumber', width: 235, title: '图号' }
-               , { field: 'PartMaterial', width: 235, title: '材料' }
-               , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
-               ]]
+                    , page: true
+                    , limit: 15
+                    , toolbar: '#toolbarDemo'
+                    , cols: [[
+                        { type: 'checkbox' }
+                        , { field: 'ID', width: 210, title: '物料编码' }
+                        , { field: 'PartNumber', width: 210, title: '物料名称' }
+                        , { field: 'PartSpec', width: 235, title: '规格' }
+                        , { field: 'figureNumber', width: 235, title: '图号' }
+                        , { field: 'PartMaterial', width: 235, title: '材料' }
+                        , { field: 'right', width: 250, align: 'center', toolbar: '#barDemo' }
+                    ]]
+                });
+                table.on('toolbar(demo)', function (obj) {
+                    var checkStatus = table.checkStatus("tw")
+                        , data = checkStatus.data
+                    if (data.length >= 1) {
+                        status = "";
+                        for (var i = 0; i < data.length; i++) {
+                            var materid = (checkStatus.data[i].ID);
+                            $.ajax({
+                                url: "/Rms/AllDeleteMaterial",
+                                data: { ID: materid },
+                                type: "post",
+                                dataType: "text",
+                                success: function (data) {
+                                    if (data == "true") {
+                                        window.setTimeout(function () {
+                                            layer.msg("删除成功!");
+                                            window.parent.document.getElementById("rightframe").src = "/Rms/MaterialRegistration";
+                                        }, 500);
+                                    }
+                                    else {
+                                        alert("删除失败!");
+                                        return;
+                                    }
+                                }
+                            });
+                        }
+                    }
                 });
                 table.on('tool(demo)', function (obj) {
                     var data = obj.data;
@@ -211,10 +318,10 @@
                 });
             });
         })
-       $("#AllSerach").propertychange(function () {
+        $("#AllSerach").propertychange(function () {
             var s = $(this).val();
             alert(s);
-           
+
         });
     })
 </script>

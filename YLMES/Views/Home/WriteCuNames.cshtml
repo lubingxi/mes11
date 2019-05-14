@@ -94,6 +94,7 @@
         function sub() {
             $("#form-article-add").ajaxSubmit({
                 url: "@Url.Action("AddCustomer","Home")",
+                data: { name: localStorage.sitename},
                 type: "post",
                 success: function (data) {
                     if (data == "true") {

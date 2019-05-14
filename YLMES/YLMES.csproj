@@ -311,6 +311,7 @@
     <Content Include="Content\Layui-KnifeZ\lay\modules\upload.js" />
     <Content Include="Content\Layui-KnifeZ\lay\modules\util.js" />
     <Content Include="Content\Site.css" />
+    <Content Include="css\AddProcessPrint.css" />
     <Content Include="css\bdmapStyle.css" />
     <Content Include="css\bootstrap.min.css" />
     <Content Include="css\elemenui.css" />
@@ -400,6 +401,7 @@
     <Content Include="images\sun.png" />
     <Content Include="images\sunshine_0.png" />
     <Content Include="images\system-preferences-icon.png" />
+    <Content Include="images\book.png" />
     <Content Include="img\icon_locate_blue.png" />
     <Content Include="img\icon_locate_green.png" />
     <Content Include="img\icon_locate_red.png" />
@@ -1478,6 +1480,7 @@
     <Content Include="Models\Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
+    <Content Include="instructions\instructions.docx" />
     <None Include="Properties\PublishProfiles\YLMESNew.pubxml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="css\bootstrap-table.css" />
@@ -1726,6 +1729,7 @@
     <Compile Include="Controllers\IncomingController.cs" />
     <Compile Include="Controllers\ProductionPlanningController.cs" />
     <Compile Include="Controllers\PurchasingManageController.cs" />
+    <Compile Include="Controllers\QualityManagementController.cs" />
     <Compile Include="Controllers\RmsController.cs" />
     <Compile Include="Controllers\StatisticalController.cs" />
     <Compile Include="Controllers\SystemSettingsController.cs" />
@@ -2034,6 +2038,9 @@
     <Compile Include="Models\PM_ApplierList.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PM_ApplierList_temp.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PM_ApplierProductType.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -2046,16 +2053,22 @@
     <Compile Include="Models\PM_Assembly_setting.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PM_AssignTasksCheck2_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PM_AssignTasksCheck_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_BOM.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PM_BOM_Process.cs">
+    <Compile Include="Models\PM_BOM_Design.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_Bonusratio.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PM_CheckDesignBom_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_CheckElectricalInv_Result.cs">
@@ -2065,6 +2078,12 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_CheckMaterID_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PM_CheckProductName_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PM_CheckProduct_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_CheckSupplierMat_Result.cs">
@@ -2080,6 +2099,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_DepartRouting.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\pm_Destock.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PM_EditAccessSetup_Result.cs">
@@ -2229,6 +2251,9 @@
     <Compile Include="Models\PM_Task_History_Status.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PM_TemporaryInventory.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PM_TemporaryPurchaseMaterialList.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -2299,6 +2324,12 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\RawWHIQCList_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Raw_MaterialStock2_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Raw_MaterialStocks_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Raw_MaterialStock_Result.cs">
@@ -2469,9 +2500,6 @@
     <Compile Include="Models\Statistics_Scroelist_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Statistics_TaskAlllist_Result.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\StrToTable_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -2502,10 +2530,22 @@
     <Compile Include="Models\temp1121.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\temp3.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\temp5.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\temp6.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\toji.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tttb.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\updatea_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UploadTheDrawings_Result.cs">
@@ -2527,9 +2567,6 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\WOdetail_byStation_Result.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\WOdetail_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="PageList.cs" />
@@ -2740,6 +2777,15 @@
     <Content Include="Views\ProductionPlanning\RepairOrderDrawing.cshtml" />
     <Content Include="Views\FinishProductHouse\AllGoods.cshtml" />
     <Content Include="Views\SystemSettings\MachineConfig.cshtml" />
+    <Content Include="Views\Financial\MachineConfig.cshtml" />
+    <Content Include="Views\ApplierList\MaterialManagement.cshtml" />
+    <Content Include="Views\TechnicalDepartment\TaskList.cshtml" />
+    <Content Include="Views\TaskManagement\TaskDirectorAllocation.cshtml" />
+    <Content Include="Views\Rms\WarehouseLocation.cshtml" />
+    <Content Include="Views\Rms\MaterialInventoryLocation.cshtml" />
+    <Content Include="Views\QualityManagement\QualityReport.cshtml" />
+    <Content Include="Views\Home\HDetialsd.cshtml" />
+    <Content Include="Views\Home\ProcessCard.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

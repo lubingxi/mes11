@@ -29,6 +29,7 @@ namespace YLMES.Models
         public Nullable<double> 单价 { get; set; }
         public Nullable<double> 总价 { get; set; }
         public string 供应商 { get; set; }
+        public string 名称 { get; set; }
         public string 备注 { get; set; }
         public string 类型 { get; set; }
         public string 采购订单状态 { get; set; }

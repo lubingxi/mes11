@@ -97,7 +97,8 @@
                                 break;
                             case 'que':
                                 id = data.ID;
-                                var url = "/TaskManagement/SubmitOrder?id=" + id;
+                                cnumber = data.ContractNumber;
+                                var url = "/TaskManagement/SubmitOrder?id=" + id + "&cnumber=" + cnumber;
                                 $.ajax({
                                     url: url,
                                     data: { id: id },

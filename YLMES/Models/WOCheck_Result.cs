@@ -25,5 +25,6 @@ namespace YLMES.Models
         public Nullable<int> 完成数量 { get; set; }
         public string 状态 { get; set; }
         public string 路径 { get; set; }
+        public string 产品规格 { get; set; }
     }
 }

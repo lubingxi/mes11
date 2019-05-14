@@ -15,10 +15,10 @@
     <script src="~/layui/layui.js" type="text/javascript"></script>
     <title>MaterialManagement</title>
     <style>
-        /*.layui-table-cell {
+        .layui-table-cell {
             overflow: inherit;
             height: inherit;
-        }*/
+        }
     </style>
     <script type="text/javascript">
         $(function () { 
@@ -55,7 +55,7 @@
                     , { field: 'PartSpec', title: '物料规格', width: 200}
                     , { field: 'PartMaterial', title: '物料材质', width: 200}
                     , { field: '物料类型序号', title: '物料类型', templet: '#Category', width: 250 }
-                    , { field: 'ApplierId', title: '默认供应商', templet: '#Applier', width: 250}
+                    , { field: 'ApplierId', title: '默认供应商', templet: '#Applier', width: 300}
                     , { field: 'ContractTypeId', title: '合同种类', toolbar: '#se', width:280}
                     , { align: 'center', toolbar: '#bsarDemo', width: 200}
                 ]]
@@ -144,7 +144,17 @@
                             e.append("<option value=" + data[i].序号+">" + data[i].供应商 + "</option>");
                         }
                         if (data.length == 0) {
-                            e.append("<dd>没有选项</dd>");                 
+                            $.get("/ApplierList/checkApplierName", function (data) {                           
+                                if (data != null) {
+                                   // $(".ApplierId").empty();                              
+                                    for (var j = 0; j <applierid.length; j++) {
+                                        for (var i = 0; i < data.length; i++) {      
+                                           $(".ApplierId:eq(" + j + ")").append("<option value='" + data[i].ID + "'>" + data[i].Name + "</option>")                                            
+                                        }                                    
+                                    }                                                                  
+                                }
+                                form.render(null, 'LAY-table-1');
+                            })       
                         }
                         form.render();
                     }
@@ -211,7 +221,7 @@
         <select class="CategoryId" lay-filter="CategoryId" lay-search=lay-search></select>
     </script>
     <script type="text/html" id="Applier">
-        <select class="ApplierId"lay-filter="ApplierId"></select>
+        <select class="ApplierId"lay-filter="ApplierId" lay-search=lay-search></select>
     </script>
 </head>
 <body>

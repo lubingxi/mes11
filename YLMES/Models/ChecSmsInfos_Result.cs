@@ -19,5 +19,7 @@ namespace YLMES.Models
         public string Tel { get; set; }
         public string Number { get; set; }
         public string Dept { get; set; }
+        public string IfSend { get; set; }
+        public int id { get; set; }
     }
 }

@@ -34,22 +34,22 @@
         </tr>
         <tr>
             <td>名称:</td>
-            <td colspan="4" style="text-align:left">@ViewData["mingzi"]</td>
+            <td colspan="4" style="text-align:center">@ViewData["mingzi"]</td>
         </tr>
         <tr>
             <td>规格:</td>
-            <td colspan="4" style="text-align:left;vertical-align: middle;">@ViewData["guige"]</td>
+            <td colspan="4" style="text-align:center;vertical-align: middle;">@ViewData["guige"]</td>
         </tr>
-        <tr>
+        @*<tr>
             <td>数量:</td>
             <td colspan="2" style="text-align:center;">@ViewData["qty"]</td>
-            <td colspan="1" style="text-align:center;vertical-align: middle;">单位:</td>
+            <td colspan="3" style="text-align:center;vertical-align: middle;">单位:</td>
             <td colspan="1" style="text-align:center">@ViewData["unit"]</td>
-        </tr>
+        </tr>*@
         <tr>
             <td>包装条码:</td>
-            <td colspan="3" style="text-align:center">@ViewData["PackageName"]</td>
-            <td colspan="1" style="text-align:center;">@ViewData["note"]</td>
+            <td colspan="4" style="text-align:center">@ViewData["PackageName"]</td>
+            @*<td colspan="1" style="text-align:center;">@ViewData["note"]</td>*@
         </tr>
     </table>
 </body>

@@ -97,35 +97,37 @@
                             layer.full(index);  
                             break;
                         case 'print':                            
-                            src = data.路径;
+                            WorkerMaterId = data.工单部件编号;
                             id = data.工单编号;
-                            //var url = "/ProductionPlanning/AddProcess?marid=" + WorkerMaterId + "&id=Partid" + "&PartId=0" + "&gid=" + id;
-                            //var index = layer.open({
-                            //    type: 2,
-                            //    title: '工艺路线单',
-                            //    content: url,
-                            //    area: ['1200px', '700px'],
-                            //    maxmin: true
-                            //});
-                            //layer.full(index);
-                            if (src == null) {
-                                layer.msg('没有工艺卡');
-                            } else {
-                                $.ajax({
-                                    url: "/ProductionPlanning/CheckPdfPath?src=" + src + "&Materid=" + id,
-                                    type: "post",
-                                    dataType: "text",
-                                    success: function (data) {
-                                        var url = '/TechnicalDepartment/CheckPdf?src=' + data;
-                                        var index = layer.open({
-                                            type: 2,
-                                            title: "PDF",
-                                            content: url,
-                                            area: ['90%', '90%']
-                                        });
-                                    }
-                                });
-                            }                       
+                            name = data.产品名称;
+                            spec = data.产品规格;
+                            var url = "/ProductionPlanning/AddProcess?marid=" + WorkerMaterId + "&name=" + name + "&spec=" +spec+ "&id=Partid" + "&PartId=0" + "&gid=" + id;
+                            var index = layer.open({
+                                type: 2,
+                                title: '工艺路线单',
+                                content: url,
+                                area: ['1200px', '700px'],
+                                maxmin: true
+                            });
+                            layer.full(index); 
+                            //if (src == null) {
+                            //    layer.msg('没有工艺卡');
+                            //} else {
+                            //    $.ajax({
+                            //        url: "/ProductionPlanning/CheckPdfPath?src=" + src + "&Materid=" + id,
+                            //        type: "post",
+                            //        dataType: "text",
+                            //        success: function (data) {
+                            //            var url = '/TechnicalDepartment/CheckPdf?src=' + data;
+                            //            var index = layer.open({
+                            //                type: 2,
+                            //                title: "PDF",
+                            //                content: url,
+                            //                area: ['90%', '90%']
+                            //            });
+                            //        }
+                            //    });
+                            //}                       
                             break;
                     };
                 });
@@ -206,22 +208,18 @@
                             break;
                         case 'print':                        
                             WorkerMaterId = data.工单部件编号;
-                            src = data.路径;
-                            $.ajax({
-                                url: "/ProductionPlanning/CheckPdfPath?src=" + src + "&Materid=" + WorkerMaterId,
-                                type: "post",
-                                dataType: "text",
-                                success: function (data) {
-                                    var url = '/TechnicalDepartment/CheckPdf?src=' + data;
-                                    var index = layer.open({
-                                        type: 2,
-                                        title: "PDF",
-                                        content: url,
-                                        area: ['90%', '90%']
-                                    });
-                                }
+                            id = data.工单编号;
+                            name = data.产品名称;
+                            spec = data.产品规格;
+                            var url = "/ProductionPlanning/AddProcess?marid=" + WorkerMaterId + "&name=" + name + "&spec=" + spec + "&id=Partid" + "&PartId=0" + "&gid=" + id;
+                            var index = layer.open({
+                                type: 2,
+                                title: '工艺路线单',
+                                content: url,
+                                area: ['1200px', '700px'],
+                                maxmin: true
                             });
-                            
+                            layer.full(index);                                                      
                             break;
                     };
                 });
@@ -245,10 +243,10 @@
                 layer.full(index);
             });
             $('#station').click(function () {
-                var url = '/SystemSettings/LocationType';
+                var url = '/SystemSettings/ProductStation';
                 var index = layer.open({
                     type: 2,
-                    title: "生产线信息",
+                    title: "工位类型信息",
                     content: url,
                     maxmin: true
                 });
@@ -297,7 +295,7 @@
             <button class="layui-btn" data-type="reload" id="search">查询</button>
             <button class="layui-btn" id="distribution">工单分配</button>
             <button class="layui-btn" id="line">生产线查询</button>
-            <button class="layui-btn" id="station">工位查询</button>
+            <button class="layui-btn" id="station">工位类型查询</button>
         </div>
 
         <table class="tablelist" id="tw" lay-filter="demo"></table>

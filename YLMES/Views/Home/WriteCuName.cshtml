@@ -71,7 +71,7 @@
             <div class="row cl">
                 <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
                     <button onclick="sub()" class="btn btn-primary radius" type="button"><i class="Hui-iconfont">&#xe632;</i>保存</button>
-                    <button class="btn btn-default radius" onclick="returns()" id="cancle" type="button" style="margin-left:100px;">&nbsp;&nbsp;返回&nbsp;&nbsp;</button>  
+                    @*<button class="btn btn-default radius" onclick="returns()" id="cancle" type="button" style="margin-left:100px;">&nbsp;&nbsp;返回&nbsp;&nbsp;</button>*@  
                 </div>
             </div>
         </form>
@@ -95,6 +95,7 @@
         function sub() {
             $("#form-article-add").ajaxSubmit({
                 url: "@Url.Action("AddCustomer","Home")",
+                data: { name: localStorage.sitename},
                 type: "post",
                 success: function (data) {
                     if (data == "true") {

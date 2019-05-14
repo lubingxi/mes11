@@ -28,5 +28,6 @@ namespace YLMES.Models
         public Nullable<int> ActPurchaseQTY { get; set; }
         public string Units { get; set; }
         public string MakeCreatedBy { get; set; }
+        public string Type { get; set; }
     }
 }

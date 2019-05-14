@@ -18,16 +18,19 @@ namespace YLMES.Models
         public Nullable<int> StationtypeID { get; set; }
         public Nullable<int> WorkOrderID { get; set; }
         public Nullable<int> MachineID { get; set; }
+        public Nullable<double> FactoryOverheadUnits { get; set; }
+        public Nullable<double> LaborCostUnits { get; set; }
         public Nullable<int> RecievedPCS { get; set; }
         public Nullable<int> CompletedPCS { get; set; }
         public Nullable<int> FailedPCS { get; set; }
         public Nullable<int> TrasferNextStationPCS { get; set; }
         public string StartWorkTime { get; set; }
         public string EndWorkTime { get; set; }
-        public Nullable<double> WorkHours { get; set; }
+        public Nullable<double> WorkTimes { get; set; }
         public Nullable<int> EmployeeID { get; set; }
         public Nullable<int> QAEmployeeID { get; set; }
         public string StatusID { get; set; }
         public Nullable<int> LineID { get; set; }
+        public string JZStatus { get; set; }
     }
 }

@@ -20,9 +20,8 @@ namespace YLMES.Models
         public string StationTypeID { get; set; }
         public Nullable<int> WorkHoursOfOneSet { get; set; }
         public string WorkHoursUnits { get; set; }
-        public string StartWorkTime { get; set; }
-        public string EndWorkTime { get; set; }
-        public Nullable<double> WorkHours { get; set; }
+        public Nullable<double> FactoryOverheadUnits { get; set; }
+        public Nullable<double> LaborCostUnits { get; set; }
         public Nullable<int> RecievedQTY { get; set; }
         public Nullable<int> CompletedQTY { get; set; }
         public Nullable<int> FailedQTY { get; set; }

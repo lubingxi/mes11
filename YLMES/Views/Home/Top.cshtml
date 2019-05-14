@@ -35,32 +35,14 @@
             });
             $('#weixin').click(function () {
                 window.parent.document.getElementById("rightframe").src = "https://wx.qq.com/";
-            });
-            showAuto();
+            });           
         })
-        function showAuto() {
-            setInterval(function () {
-                if ('@Session["name"]' == "") {
-                    window.top.location = '/Home/Login';
-                }
-                $.ajax({
-                    url: "/Home/ChecSmsInfo",
-                    type: "post",
-                    dataType: "text",
-                    success: function (data) {
-
-                    }
-                });
-            },60000);
-        }
+    
     </script>
     <script src="~/layui/layui.js" charset="utf-8"></script>
     <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
     <script>
         $(function () {
-            if ('@Session["name"]' == "") {
-                window.top.location = '/Home/Login';
-            }
         });
         layui.use('element', function () {
             var $ = layui.jquery
@@ -105,6 +87,7 @@
         <li><a href="https://wx.qq.com/" target="_blank"><img src="../../images/icon06.png" title="微信" /><h2>微信</h2></a></li>
         <li><a href="https://chuan.wellsign.cn/" target="_blank"><img src="../../images/qian.png" title="微信" /><h2>好签小程序</h2></a></li>
         <li id="gai"><a target="rightFrame"><img src="../../images/icon02.png" title="修改信息" /><h2>修改密码</h2></a></li>
+        <li id="gai"><a href="~/instructions/instructions.docx"><img src="../../images/book.png" style="width:50px;height:45px;" title="说明书" /><h2>说明书</h2></a></li>
     </ul>
 
     <div class="topright">

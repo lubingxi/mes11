@@ -13,17 +13,12 @@ namespace YLMES.Models
     
     public partial class checkBOM_Result
     {
-        public int 序号 { get; set; }
-        public string BOM结构 { get; set; }
-        public Nullable<int> 任务编号 { get; set; }
-        public string 图号 { get; set; }
-        public string 上传图片 { get; set; }
+        public Nullable<int> 部件编号 { get; set; }
+        public string 部件图号 { get; set; }
         public string 部件名称 { get; set; }
-        public string 是否上传 { get; set; }
         public string 部件规格 { get; set; }
-        public string 材料 { get; set; }
-        public string 备注 { get; set; }
-        public string 类别 { get; set; }
-        public string 类型 { get; set; }
+        public string 部件材料 { get; set; }
+        public string 上传图片 { get; set; }
+        public string 是否上传 { get; set; }
     }
 }

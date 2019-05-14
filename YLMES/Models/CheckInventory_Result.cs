@@ -20,5 +20,6 @@ namespace YLMES.Models
         public Nullable<int> StockQTY { get; set; }
         public Nullable<int> ChildPartQTY { get; set; }
         public Nullable<int> 所需数量 { get; set; }
+        public string MaterialName { get; set; }
     }
 }

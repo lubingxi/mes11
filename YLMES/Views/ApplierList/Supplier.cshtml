@@ -21,8 +21,8 @@
             overflow: inherit;
             height: inherit
         }
-        td:nth-child(3){
-            overflow:hidden
+        td:nth-child(4), td:nth-child(3) {
+            overflow: hidden
         }
        
     </style>
@@ -37,7 +37,7 @@
         <a class="layui-btn layui-btn-xs" lay-event="add">新增物料</a>
         <a class="layui-btn layui-btn-xs" lay-event="check">查看物料</a>
         <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
-        <a class="layui-btn layui-btn-xs" lay-event="sh">审核</a>
+        @*<a class="layui-btn layui-btn-xs" lay-event="sh">审核</a>*@
         @*<a class="layui-btn layui-btn-xs" lay-event="bb">绑定</a>*@
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" lay-filter="demo">删除</a>
     </script>
@@ -72,21 +72,21 @@
             <ul class="toolbar">
                 <li class="ads" id="addD">
                     <span>
-                        <img style="margin-bottom:10px" src="../../images/t01.png" />
+                        <img style="margin-bottom:10px;" src="../../images/t01.png" />
                     </span><a target="rightFrame">新增供应商信息</a><i hidden=hidden id="u">/ApplierList/ApplierAdd</i>
                 </li>
                 <li>
                     供应商名称：
-                    <input class="Name" id="Name" type="text" placeholder="请输入供应商名称：" />
+                    <input class="Name" id="Name" type="text" style="width:300px;" placeholder="请输入供应商名称：" />
                 </li>
-                <li>
+                @*<li>
                     审核状态：
                     <select name="quiz1" id="s">
                         <option value="" selected="">全部</option>
                         <option value="未开始">未审核</option>
                         <option value="进行中">已审核</option>
                     </select>
-                </li>
+                </li>*@
             </ul>
             <button class="layui-btn" data-type="reload" id="SupplierSel">查询</button>
         </div>

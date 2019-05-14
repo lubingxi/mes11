@@ -98,8 +98,7 @@ namespace YLMES.Controllers
         //修改安装详细信息
         public ActionResult EditContractInstallation(string sn, string yan, string jan, string fish, string ifshou, string shoutime, string pid, string cid,string cn)
         {
-            try
-            {
+           
                 int YianNumber = int.Parse(yan);
                 int JianNumber = int.Parse(jan);
                 int HeNumber = int.Parse(cn);
@@ -126,14 +125,7 @@ namespace YLMES.Controllers
                         ys.Database.ExecuteSqlCommand("exec  Install_update  @ContractID,@ProductDetailID,@newInstalledQuantity,@CompletionDate,@AcceptanceDate,@Acceptance,@CreatedBy", parms);
                     }
                     return Content("true");
-               }
-               
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return Content("false");
-            }
+               }                                                 
         }
         //安装历史记录页面
         public ActionResult InstallHistory(string tid, string cid, string cn, string cnb)

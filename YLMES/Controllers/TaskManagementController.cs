@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using YLMES;
@@ -46,21 +47,90 @@ namespace YlMES.Controllers
             Session["pndd"] = customerName;
             return View();
         }
+        //分配设计人或审核人
+        public ActionResult MassDistribution(string id,string mechanical, string electrical,string audit)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                int i = int.Parse(id);
+                SqlParameter[] parms = new SqlParameter[4];
+                parms[0] = new SqlParameter("@TaskID", i);
+                parms[1] = new SqlParameter("@MachineDesignOwner", mechanical);
+                parms[2] = new SqlParameter("@ElectricalOwner", electrical);
+                parms[3] = new SqlParameter("@IssueOwner", audit);
+                ys.Database.ExecuteSqlCommand("exec PM_MassDistribution @TaskID,@MachineDesignOwner,@ElectricalOwner,@IssueOwner", parms);
+
+               
+                return Content("true");
+            }           
+        }
         //我的任务
         public ActionResult MyTask()
         {
             return View();
+        }
+        //查看任务信息
+        public JsonResult CheckTaskId(string id,string pname,string pspec)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                int i = int.Parse(id);
+                var list = ys.PM_Task.Where(p => p.ProjectID == i && p.ProductName == pname && p.ProductSpec == pspec).FirstOrDefault();
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+           
         }
         //已完成的任务视图
         public ActionResult CompletedTasks()
         {
             return View();
         }
+        //修改工艺流程用量
+        public ActionResult EditProcess(string mqty,string mspec,string munits,string id)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                var reg = @"^[0-9]*$";
+                bool res=Regex.IsMatch(mqty, reg);
+                if (res == false)
+                {
+                    return Content("number");
+                }
+                int i = int.Parse(id);
+                int qty = int.Parse(mqty);
+                var bom = ys.PM_BOM.Where(b => b.ID == i).FirstOrDefault();
+                bom.MaterialQTY = qty;
+                bom.MaterialSpec = mspec;
+                bom.MaterialUnits = munits;
+                ys.SaveChanges();
+                return Content("true");
+            }
+            
+        }
+        //添加采购工单
+        public ActionResult AddProcuWork(string taskid,string PartNumber,string ProductSpec, string partnum,string spec,string ji,string count,string createby)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                int tid = int.Parse(taskid);
+                SqlParameter[] parms = new SqlParameter[8];
+                parms[0] = new SqlParameter("@PartNumber", PartNumber);
+                parms[1] = new SqlParameter("@TaskID", tid);
+                parms[2] = new SqlParameter("@ParentPartNumber", partnum);
+                parms[3] = new SqlParameter("@DueDay", "");
+                parms[4] = new SqlParameter("@CreatedEmployee", createby);
+                parms[5] = new SqlParameter("@Spec", spec);
+                parms[6] = new SqlParameter("@Ji", ji);
+                parms[7] = new SqlParameter("@cSpec", ProductSpec);
+                ys.Database.ExecuteSqlCommand("exec AddProcuWork @PartNumber,@TaskID,@ParentPartNumber,@DueDay,@CreatedEmployee,@Spec,@Ji,@cSpec", parms);
+                return Content("true");
+            }      
+        }
 
         #region 下载模版
         public ActionResult FileADownload(string file1)
         {
-            if (string.IsNullOrEmpty(file1))
+            if (string.IsNullOrEmpty(file1) || file1=="//")
             {
                 return Content("<script>alert('没有文件哦!');history.go(-1);</script>");
             }
@@ -229,7 +299,7 @@ namespace YlMES.Controllers
             }
         }
         //图纸发行
-        public ActionResult UpdateIssueCompleted(string Taskid,string cnumber)
+        public ActionResult UpdateIssueCompleted(string Taskid,string cnumber,string name)
         {
             try
             {
@@ -245,8 +315,7 @@ namespace YlMES.Controllers
                         return Content("null");
                     }else if (i > 0)
                     {
-                        string name = Session["name"].ToString();
-                        Sms.InsertSmsInfos("梁树银",cnumber, name);
+                        Sms.InsertSmsInfos("工艺部", cnumber, name);
                     }
                 }
                 return Content("true");
@@ -396,10 +465,10 @@ namespace YlMES.Controllers
         #endregion
 
         #region 显示完成我的设计
-
         public ActionResult FinishMyDesign(string ifDrive, string name, string ProjectName, string taskid)
         {
-            ViewData["taskid"] = taskid;
+            Session["taskid"] = taskid;
+            Session["Delete"] = taskid;
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                 int tid = int.Parse(taskid);
@@ -421,7 +490,6 @@ namespace YlMES.Controllers
             Session["type"] = name;
             return View();
         }
-
         #endregion
 
         #region 显示任务名称
@@ -1129,11 +1197,10 @@ namespace YlMES.Controllers
 
         #region 显示已完成任务信息
 
-        public JsonResult CompletedTasksJson(string StartTime, string endtime, string ProjectName, string TaskName, int page, int limit)
+        public JsonResult CompletedTasksJson(string StartTime, string endtime, string ProjectName, string TaskName,string name, int page, int limit)
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-                string name = Session["name"].ToString();
                 SqlParameter[] parms = new SqlParameter[6];
                 parms[0] = new SqlParameter("@Owner", name);
                 parms[1] = new SqlParameter("@Status", "");
@@ -1288,7 +1355,7 @@ namespace YlMES.Controllers
 
         #region 编辑机械和电气任务分配
 
-        public ActionResult EditMachine(string PojectName, string PriorityCode, string TaskName, string select, string ProductName, string ProductSpec, string JieDate, string taskdesc, string MachineDesignOwner, string MachineDesignBaseTime, string MachineDesignBaseScore, string QualifiedOwner, string QualifiedBaseTime, string QualifiedBaseScore, string IssueOwner, string IssueBaseTime, string IssueBaseScore, string fileDownA, string fileDownB, string fileDownC, string Count, string Units, string BracketFoot)
+        public ActionResult EditMachine(string PojectName, string PriorityCode, string TaskName, string select, string ProductName, string ProductSpec, string JieDate, string taskdesc, string MachineDesignOwner, string MachineDesignBaseTime, string MachineDesignBaseScore, string QualifiedOwner, string QualifiedBaseTime, string QualifiedBaseScore, string IssueOwner, string IssueBaseTime, string IssueBaseScore, string fileDownA, string fileDownB, string fileDownC, string Count, string Units, string BracketFoot,string names)
         {
             try
             {
@@ -1331,27 +1398,30 @@ namespace YlMES.Controllers
                         "@MachineDesignBaseScore,@QualifiedOwner,@QualifiedBaseTime,@QualifiedBaseScore,@IssueOwner,@IssueBaseTime,@IssueBaseScore,@Note,@electricalOwner,@electricalDesignBaseTime,@electricalDesignBaseScore,@TaskType,@PCS,@Units,@BracketFoot", parms);
                     //if (i > 0)
                     //{
-                        return Content("true");
-                        //string name = Session["name"].ToString();
-                        //if ((MachineDesignOwner != null || MachineDesignOwner != "") && (QualifiedOwner!=null || QualifiedOwner !=""))
-                        //{                           
-                        //    Sms.InsertSmsInfos(QualifiedOwner, PojectName, name);
-                        //}
-                        //else if(MachineDesignOwner != null || MachineDesignOwner != "")
-                        //{
-                        //    Sms.InsertSmsInfos(MachineDesignOwner, PojectName, name);
-                        //}
-                        //if(IssueOwner !=null || IssueOwner != "")
-                        //{
-                        //    Sms.InsertSmsInfos(IssueOwner, PojectName, name);
-                        //}
-                   // }
-                    //string name = Session["name"].ToString();                  
-                    //SqlParameter[] parmd = new SqlParameter[2];
-                    //parmd[0] = new SqlParameter("@TaskId", tk);
-                    //parmd[1] = new SqlParameter("@CreateBy", name);
-                    //ys.Database.ExecuteSqlCommand("exec TechTaskReCe  @TaskId,@CreateBy", parmd);
 
+                    //    string names = Session["name"].ToString();
+                    //    if ((MachineDesignOwner != null || MachineDesignOwner != "") && (QualifiedOwner != null || QualifiedOwner != ""))
+                    //    {
+                    //        Sms.InsertSmsInfos(QualifiedOwner, PojectName, names);
+                    //    }
+                    //    else if (MachineDesignOwner != null || MachineDesignOwner != "")
+                    //    {
+                    //        Sms.InsertSmsInfos(MachineDesignOwner, PojectName, names);
+                    //    }
+                    //    if (IssueOwner != null || IssueOwner != "")
+                    //    {
+                    //        Sms.InsertSmsInfos(IssueOwner, PojectName, names);
+                    //    }
+                    //    return Content("true");
+                    //}else
+                    //{
+                    //    return Content("false");
+                    //}
+                    SqlParameter[] parmd = new SqlParameter[2];
+                    parmd[0] = new SqlParameter("@TaskId", tk);
+                    parmd[1] = new SqlParameter("@CreateBy", names);
+                    ys.Database.ExecuteSqlCommand("exec TechTaskReCe  @TaskId,@CreateBy", parmd);
+                    return Content("true");
                 }
               
             }
@@ -1436,17 +1506,9 @@ namespace YlMES.Controllers
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
-                string id = Session["Check"].ToString();
-                int i = 0;
-                if (w != null)
-                {
-                    i = int.Parse(w);
-                }
-                else
-                {
-                    i = int.Parse(id);
-                }
-
+             //   string id = Session["Check"].ToString();
+                    int i = 0;               
+                    i = int.Parse(w);              
                 SqlParameter[] parms = new SqlParameter[1];
                 parms[0] = new SqlParameter("@TaskID", i);
                 var list = ys.Database.SqlQuery<checkBOM_Result>("exec checkBOM  @TaskID", parms).ToList();
@@ -1470,10 +1532,9 @@ namespace YlMES.Controllers
                 SqlParameter[] parms = new SqlParameter[1];
                 parms[0] = new SqlParameter("@TaskID", i);
                 var list = ys.Database.SqlQuery<checkBOM_Result>("exec checkBOM  @TaskID", parms).ToList();
-                list = list.Where(c => c.类型 == "焊接件" || c.类型 == "装配体").ToList();
                 foreach (var w in list)
                 {
-                    if (w.上传图片 == "上传")
+                    if (w.上传图片 == "未上传")
                     {
                         return Content("false");
                     }
@@ -2026,6 +2087,40 @@ namespace YlMES.Controllers
             }
             return View();
         }
+        //删除流程信息
+        public ActionResult DeleteRouting(string RouteName)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                SqlParameter[] parms = new SqlParameter[2];
+                parms[0] = new SqlParameter("@type", "delete");
+                parms[1] = new SqlParameter("@RouteName", RouteName);
+                ys.Database.ExecuteSqlCommand("exec CheckProcess  @type,'','','','',@RouteName", parms);
+                return Content("true");
+            }            
+        }
+        //显示产品名称
+        public ActionResult Processc(string ProductName,string ProductSpec)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                SqlParameter[] parms = new SqlParameter[2];
+                parms[0] = new SqlParameter("@ProductName", ProductName);
+                parms[1] = new SqlParameter("@ProductSpec", ProductSpec);               
+                var  list = ys.Database.SqlQuery<PM_CheckProductName_Result>("exec PM_CheckProductName @ProductName,@ProductSpec", parms).FirstOrDefault();
+                if (list == null)
+                {
+                    Session["ProductNamed"] = ProductName;
+                    Session["ProductSpeces"] = ProductSpec;
+                }
+                else
+                {
+                    Session["ProductNamed"] = list.PartNumber;
+                    Session["ProductSpeces"] = list.PartSpec;
+                }              
+                return Content("true");
+            }           
+        }
         //显示流程
         public ActionResult CheckProcess(string type, string PartNumber,string id, string RouteName)
         {
@@ -2100,6 +2195,26 @@ namespace YlMES.Controllers
                 }
 
             }
+        }
+        //新增流程
+        public ActionResult AddRoute(string Route)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                SqlParameter[] parms = new SqlParameter[1];
+                parms[0] = new SqlParameter("@Route", Route);
+               int i=ys.Database.ExecuteSqlCommand("exec PM_CheckRoute  @Route", parms);
+                if (i > 0)
+                {
+                    return Content("true");
+                }
+                else
+                {
+                    return Content("false");
+                }
+                
+            }
+            
         }
         //上传Excel文件页面
         public ActionResult UploadProcess(string Route)
@@ -2420,7 +2535,6 @@ namespace YlMES.Controllers
             {
                 list = ys.PM_ProductStationType.ToList();
             }
-
             return Json(list, JsonRequestBehavior.AllowGet);
         }
         //查询可用流程
@@ -2454,7 +2568,7 @@ namespace YlMES.Controllers
 
         //保存流程
         [ValidateInput(false)]
-        public string AddPoc(List<string> proValue, List<string> proName, string RouteName, string PartId1)
+        public string AddPoc(List<string> proValue, List<string> proName, string RouteName, string PartId1,string name)
         {
 
             StringBuilder sb = new StringBuilder();
@@ -2464,19 +2578,16 @@ namespace YlMES.Controllers
 
             for (int index = 0; index < proName.Count; index++)
             {
-
                 Applier.Add(proName[index].ToString(), proValue[index].ToString());
-
             }
             int PartId = int.Parse(PartId1);
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
                 int j = 0;
-                sb.Append("exec CheckProcess @PartId=" + PartId + ",@RouteName='" + RouteName + "',@CreatedBy='" + Session["name"] + "',@type='" + Type + "',");
+                sb.Append("exec CheckProcess @PartId=" + PartId + ",@RouteName='" + RouteName + "',@CreatedBy='" + name + "',@type='" + Type + "',");
                 foreach (var app in Applier)
                 {
                     prams[j] = new SqlParameter("@" + app.Key + "1", app.Value);
-
 
                     if ((j + 1) == proName.Count)
                     {
@@ -2484,7 +2595,6 @@ namespace YlMES.Controllers
                     }
                     else
                     {
-
                         sb.Append("@" + app.Key + "=" + "@" + app.Key + "1" + ",");
                         j++;
                     }
@@ -2583,15 +2693,17 @@ namespace YlMES.Controllers
             return View();
         }
         //显示是否转工单页面
-        public ActionResult TransferWork(string Parid,string OrderCount,string pnum,string taskid,string ProductName,string ProductSpec)
+        public ActionResult TransferWork(string Parid,string OrderCount,string pnum,string spec,string ji,string taskid,string ProductName,string ProductSpec)
         {
             ViewData["partid"] = Parid;
             ViewData["partids"] = Parid;
             ViewData["count"] = OrderCount;
             ViewData["count2"] = OrderCount;
             ViewData["partname"] = pnum;
+            ViewData["spec"] = spec;
+            ViewData["ji"] = ji;
             ViewData["taskid"] = taskid;
-            ViewData["taskid2"] = taskid;
+            ViewData["taskid2"] = taskid;         
             ViewData["ProductName"] = ProductName;
             ViewData["ProductSpec"] = ProductSpec;
             return View();
@@ -2629,41 +2741,41 @@ namespace YlMES.Controllers
             return Content("true");
         }
         //申请采购信息
-        public ActionResult ApplyPurchasingd(string type,string Materid,string PCount,string Unit,string Taskid,string Spec)
+        public ActionResult ApplyPurchasingd(string type,string Materid,string PCount,string Unit,string Taskid,string Spec,string Name,string username)
         {
-            if (PCount == null || PCount=="")
+            if (PCount == null || PCount=="" || PCount== "undefined")
             {
                 return Content("1");
             }
-            if(Unit == null || Unit == "")
+            if(Unit == null || Unit == "" || Unit == "undefined")
             {
                 return Content("2");
             }
-            if (Spec == null || Spec == "")
+            if (Spec == null || Spec == "" || Spec == "undefined")
             {
                 return Content("3");
             }
-            if (Session["name"].ToString() == "")
+            if (Name == null || Name == "" || Name == "undefined")
             {
-                return Content("<script>window.top.location = '/Home/Login';</script>");
+                return Content("4");
             }
             else
             {
                 using(YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    string name = Session["name"].ToString();
                     int tid = int.Parse(Taskid);
                     int cid = int.Parse(Materid);
                     int count = int.Parse(PCount);
-                    SqlParameter[] parmd = new SqlParameter[7];
+                    SqlParameter[] parmd = new SqlParameter[8];
                     parmd[0] = new SqlParameter("@TaskID", tid);
                     parmd[1] = new SqlParameter("@MaterialID", cid);
                     parmd[2] = new SqlParameter("@Count", count);
-                    parmd[3] = new SqlParameter("@UserName", name);
+                    parmd[3] = new SqlParameter("@UserName", username);
                     parmd[4] = new SqlParameter("@Unit", Unit);
                     parmd[5] = new SqlParameter("@type", type);
                     parmd[6] = new SqlParameter("@Spec", Spec);
-                    ys.Database.ExecuteSqlCommand("exec PM_AddPurlist  @TaskID,@MaterialID,@Count,@UserName,@Unit,@type,'',@Spec", parmd);
+                    parmd[7] = new SqlParameter("@Name", Name);
+                    ys.Database.ExecuteSqlCommand("exec PM_AddPurlist  @TaskID,@MaterialID,@Count,@UserName,@Unit,@type,'',@Spec,@Name", parmd);
                     //if (i > 0)
                     //{
 
@@ -2690,6 +2802,62 @@ namespace YlMES.Controllers
                 }
             }
             return Content("true");
+        }
+        //减少部件库存数量
+        public ActionResult ReduceNumberOfParts(string Count,string Counts,string Taskid,string material)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                int num = int.Parse(Count);
+                int nums = int.Parse(Counts);
+                SqlParameter[] parms = new SqlParameter[4];
+                parms[0] = new SqlParameter("@Taskid", Taskid);
+                parms[1] = new SqlParameter("@MaterialId", material);
+                parms[2] = new SqlParameter("@Count", num);
+                parms[3] = new SqlParameter("@Counts", nums);
+                ys.Database.ExecuteSqlCommand("exec pm_AddDestock @Taskid,@MaterialId,@Count,@Counts", parms);
+                return Content("true");
+            }          
+        }
+        //插入外协工单
+        public ActionResult AddOutsourcWork(string ProductName,string ProductSpec,string partnum,string spec,string ji,string count,string taskid,string createby)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                int tid = int.Parse(taskid);
+                SqlParameter[] parms = new SqlParameter[9];
+                parms[0] = new SqlParameter("@PartNumber", ProductName);
+                parms[1] = new SqlParameter("@TaskID", tid);
+                parms[2] = new SqlParameter("@ParentPartNumber", partnum);
+                parms[3] = new SqlParameter("@DueDay", "");
+                parms[4] = new SqlParameter("@CreatedEmployee", createby);
+                parms[5] = new SqlParameter("@Spec", spec);
+                parms[6] = new SqlParameter("@Ji", ji);
+                parms[7] = new SqlParameter("@cSpec", ProductSpec);
+                parms[8] = new SqlParameter("@count", count);
+                ys.Database.ExecuteSqlCommand("exec AddOutsourcWork @PartNumber,@TaskID,@ParentPartNumber,@DueDay,@CreatedEmployee,@Spec,@Ji,@cSpec,@count", parms);
+                return Content("true");
+            }         
+        }
+        //插入库存工单
+        public ActionResult AddInventoryWork(string ProductName, string ProductSpec, string partnum, string spec, string ji, string count, string taskid, string createby)
+        {
+            using (YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                int tid = int.Parse(taskid);
+                SqlParameter[] parms = new SqlParameter[9];
+                parms[0] = new SqlParameter("@PartNumber", ProductName);
+                parms[1] = new SqlParameter("@TaskID", tid);
+                parms[2] = new SqlParameter("@ParentPartNumber", partnum);
+                parms[3] = new SqlParameter("@DueDay", "");
+                parms[4] = new SqlParameter("@CreatedEmployee", createby);
+                parms[5] = new SqlParameter("@Spec", spec);
+                parms[6] = new SqlParameter("@Ji", ji);
+                parms[7] = new SqlParameter("@cSpec", ProductSpec);
+                parms[8] = new SqlParameter("@count", count);
+                ys.Database.ExecuteSqlCommand("exec AddInventoryWork @PartNumber,@TaskID,@ParentPartNumber,@DueDay,@CreatedEmployee,@Spec,@Ji,@cSpec,@count", parms);
+                return Content("true");
+            }
         }
         //显示工单信息
         public ActionResult TaskMapingWOCheck(string taskid, int page, int limit)
@@ -2858,7 +3026,7 @@ namespace YlMES.Controllers
                 SqlParameter[] parms = new SqlParameter[8];
                 parms[0] = new SqlParameter("@PartNumber", PartNumber);
                 parms[1] = new SqlParameter("@TaskID", tid);
-                parms[2] = new SqlParameter("@ParentPartNumber", PartNumber);
+                parms[2] = new SqlParameter("@ParentPartNumber", Parent);
                 parms[3] = new SqlParameter("@DueDay", "");
                 parms[4] = new SqlParameter("@CreatedEmployee", name);
                 parms[5] = new SqlParameter("@Spec", Spec);
@@ -2964,8 +3132,8 @@ namespace YlMES.Controllers
             {
                 SqlParameter[] parms = new SqlParameter[10];
                 int id = int.Parse(taskid);
-                int pices = int.Parse(Price);
-                int counts = int.Parse(count);
+                float pices = float.Parse(Price);
+                float counts = float.Parse(count);
                 parms[0] = new SqlParameter("@QTYofPCS", 666);
                 parms[1] = new SqlParameter("@MaterialID", 666);
                 parms[2] = new SqlParameter("@ApplyPurchasePCS", counts);
@@ -3345,7 +3513,7 @@ namespace YlMES.Controllers
 
         #region 订单处理中心确认收到订单
 
-        public ActionResult SubmitOrder(string id)
+        public ActionResult SubmitOrder(string id, string cnumber)
         {
             using (YLMES_newEntities ys = new YLMES_newEntities())
             {
@@ -3358,17 +3526,12 @@ namespace YlMES.Controllers
                 }
                 else
                 {
-                    var con = ys.C_ContractProductDetail.Where(c => c.ContractID == i).ToList();
-                    foreach (var s in con)
-                    {
-                        s.Status = "计划部订单处理中心确认收到生产订单";
-                        ys.SaveChanges();
-                    }
-                    list.StatusID = "计划部订单处理中心确认收到生产订单";
-                    ys.SaveChanges();
+                    SqlParameter[] parms = new SqlParameter[2];
+                    parms[0] = new SqlParameter("@ContractID", i);
+                    parms[1] = new SqlParameter("@ContractNumber", cnumber);
+                    ys.Database.ExecuteSqlCommand("exec pm_TheOrderCenter @ContractID,@ContractNumber", parms);
                     return Content("true");
                 }
-
             }
 
         }
@@ -3775,7 +3938,57 @@ namespace YlMES.Controllers
                 };
                 return Json(map, JsonRequestBehavior.AllowGet);
             }            
-        }    
+        }
         #endregion
+
+        #region 查询库存
+        public ActionResult QueryTheInventory(string id)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                int i = int.Parse(id);
+                var list = ys.PM_Material.Where(m => m.ID == i).FirstOrDefault();
+                return Content(list.StockQTY.ToString());
+            }          
+        }
+        #endregion
+
+        #region 主管专用分配任务
+
+        public ActionResult TaskDirectorAllocation()
+        {
+            return View();
+        }
+        public ActionResult TaskJson2()
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                var list = ys.Database.SqlQuery<PM_AssignTasksCheck2_Result>("exec PM_AssignTasksCheck2 ").ToList();
+                Dictionary<string, Object> hasmap = new Dictionary<string, Object>();
+                int count = list.Count();
+                hasmap.Add("code", 0);
+                hasmap.Add("msg", "");
+                hasmap.Add("count", count);
+                hasmap.Add("data", list);
+                return Json(hasmap, JsonRequestBehavior.AllowGet);
+            }         
+        }
+
+        #endregion
+
+        //减少产品数量
+        public ActionResult Destocking(string Reduce,string Taskid,string material,string type)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                SqlParameter[] parms = new SqlParameter[4];
+                parms[0] = new SqlParameter("@Taskid", Taskid);
+                parms[1] = new SqlParameter("@Reduce", Reduce);
+                parms[2] = new SqlParameter("@material", material);
+                parms[3] = new SqlParameter("@type", type);
+                ys.Database.ExecuteSqlCommand("exec pm_Destocking  @Taskid,@Reduce,@material,@type", parms);
+                return Content("true");
+            }           
+        }
     }
 }

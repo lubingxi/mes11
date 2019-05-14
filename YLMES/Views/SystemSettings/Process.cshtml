@@ -55,7 +55,7 @@
                 }
                 else
                 {
-                    var url = "/SystemSettings/AddProcessBOM?name=" + name + "&PartSpec=" + PartSpec;
+                    var url = "/SystemSettings/AddProcessBOM?name=" + name + "&PartSpec=" + PartSpec + "&username=" + localStorage.sitename;
                     $.ajax({
                         url: url,
                         type: 'post',
@@ -105,7 +105,7 @@
                          , { field: '原材料规格', width: 150, title: '原材料规格', edit: Text, style: 'color: #009688'}
                          , { field: '原材料单位', width: 100, title: '原材料单位', edit: Text, style: 'color: #009688' }
                          , { field: '是否组装件', width: 100, title: '是否组装件' }
-                         , { field: '工艺流程', width: 100, title: '工艺流程', event: 'liucheng', templet: '#title', align: 'center' }
+                         , { field: '工艺流程', width: 250, title: '工艺流程', event: 'liucheng', templet: '#title', align: 'center',style:'color:red' }
                          , { field: '子BOM', width: 100, title: '子件', event: 'zi',templet: '#bom', align: 'center' }
                          , { field: 'right',title:'操作', width: 130, align: 'center', toolbar: '#barDemo'}
                    ]]                   
@@ -141,13 +141,13 @@
                     , url: '/SystemSettings/CheckProcessBOM?Name=' + name + '&PartSpec=' + PartSpec + '&Material=' + Material
                     , page: true
                     , limit: 15
-                    , done: function () {
-                                    ifs = $("#checks").text();
-                                    $("tr a").hide();
-                                    $("tr").hover(function () {
-                                    $(this).children().last().children().children().toggle();
-                                    })
-                                }         
+                    //, done: function () {
+                    //                ifs = $("#checks").text();
+                    //                $("tr a").hide();
+                    //                $("tr").hover(function () {
+                    //                $(this).children().last().children().children().toggle();
+                    //                })
+                    //            }         
                      , cols: [[
                      { filed: '', hide: true }
                      , { field: '序号', width: 65, title: '序号' }
@@ -160,10 +160,11 @@
                      , { field: '子件规格', width: 150, title: '子件规格' }
                      , { field: '子件材料', width: 120, title: '子件材料' }
                      , { field: '子件数量', width: 90, title: '子件数量', edit: Text, style: 'color: #009688' }
+                     //, { field: '原材料名称', width: 100, title: '原材料名称', edit: Text, style: 'color: #009688' }
                      , { field: '原材料用量', width: 100, title: '原材料用量', edit: Text, style: 'color: #009688' }
                      , { field: '原材料规格', width: 150, title: '原材料规格', edit: Text, style: 'color: #009688' }
                      , { field: '原材料单位', width: 100, title: '原材料单位', edit: Text, style: 'color: #009688' }
-                     , { field: '工艺流程', width: 100, title: '工艺流程', event: 'liucheng', templet: '#title', align: 'center' }
+                     , { field: '工艺流程', width: 250, title: '工艺流程', event: 'liucheng', templet: '#title', align: 'center',style:'color:red' }
                      , { field: '子BOM', width: 100, title: '子件', event: 'zi', templet: '#bom', align: 'center' }
                      , { field: 'right', width: 130, align: 'center', toolbar: '#barDemo' }
                      ]]
@@ -174,32 +175,27 @@
                         liucheng = data.工艺流程;
                         if (liucheng == null) {
                             layer.msg('没有工艺流程');
-                        } else {
-
-                            if (liucheng == '查看流程') {
-
-                                var url = "/TaskManagement/EditingProcess?ProductName=" + data.工件编码 + "&ProductSpec=" + data.工件规格 + "&PartNumber=" + data.子件编码 + "&PartId=" + data.子件序号 + "&ifs=" + "1";
-                                var index = layer.open({
-                                    type: 2,
-                                    title: '工艺流程',
-                                    content: url,
-                                    area: ['1200px', '700px'],
-                                    maxmin: true
-                                });
-                                layer.full(index);
-                            }
-                            else {
-                                var url = "/TaskManagement/EditingProcess?ProductName=" + data.工件编码 + "&ProductSpec=" + data.工件规格 + "&PartNumber=" + data.子件编码 + "&PartId=" + data.子件序号;
-                                var index = layer.open({
-                                    type: 2,
-                                    title: '工艺流程',
-                                    content: url,
-                                    area: ['1200px', '700px'],
-                                    maxmin: true
-                                });
-                                layer.full(index);
-                            }
-                          
+                        } else if (liucheng == "外购") {
+                            layer.msg('外购流程无需查看！');
+                        }
+                        else {
+                            sessionStorage.product = data.工件编码;
+                            sessionStorage.spec = data.工件规格;
+                            var urls = "/TaskManagement/Processc?ProductName=" + sessionStorage.product + "&ProductSpec=" + sessionStorage.spec;
+                            $.ajax({
+                                url: urls,
+                                type: 'get',
+                                success: function (data) {
+                                }
+                            });
+                            var url = '/TaskManagement/AddProcess?ProductName=' + data.工件编码 + '&ProductSpec=' + data.工件规格 + '&PartNumber=' + data.子件编码 + '&PartId=' + data.子件序号 + '&Route=' + data.工艺流程;
+                            var index = layer.open({
+                                type: 2,
+                                content: url,
+                                maxmin: true
+                            });
+                            layer.full(index);
+                                                                                                     
                         }
                     }
                     switch (obj.event) {
@@ -228,6 +224,7 @@
                             id = data.序号;
                             cpq = data.子件数量;
                             mq = data.子件编码;
+                            //mname = data.原材料名称;
                             mqty=data.原材料用量
                             spec = data.原材料规格
                             unit = data.原材料单位
@@ -264,13 +261,6 @@
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
     </script>
 
-    <script type="text/html" id="title">
-        {{#  if(d.工艺流程 == '添加流程'&&d.是否组装件==1){ }}
-        <span style="color:red">添加流程</span>
-        {{#  } else if(d.是否组装件==1){ }}
-        <span style="color:red" id="checks">查看流程</span>
-        {{#  } }}
-    </script>
     <script type="text/html" id="bom">
         {{#  if(d.子BOM == 'BOM'){ }}
         <span style="color:red">BOM</span>
@@ -296,11 +286,11 @@
         <div class="tools">
 
             <ul class="toolbar">
-                <li class="ads" id="addC">
+                @*<li class="ads" id="addC">
                     <span>
                         <img src="../../images/t01.png" />
                     </span><a target="rightFrame">新增子件</a>
-                </li>
+                </li>*@
                 <li>
                     名称：
                     <input class="Name" id="Name" type="text" style="width: 180px;" value="" />

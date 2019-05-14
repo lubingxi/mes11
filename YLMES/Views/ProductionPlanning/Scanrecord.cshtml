@@ -41,6 +41,8 @@
                     var tableIns = table.render({
                         elem: '#tw'
                         , url: '/ProductionPlanning/Scanrecordlist?operation=' + department + '&Scantrim=' + Scantrim + '&Endtime=' + Endtime
+                        , limit: 10
+                        , page: true
                         , toolbar: '#toolbarDemo'
                         , cols: [[
                             { type:'numbers', width: 80, title: '序号' }                            

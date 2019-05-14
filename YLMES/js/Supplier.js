@@ -11,8 +11,8 @@
                 , cols: [[
                   { field: '', hide:true }
                 ,{ field: '序号', width: 80, title: '序号' }
-               , { field: '名称', width: 205, title: '名称', edit: Text,style:"color:#009688" }
-                    , { field: '地址', title: '地址', width: 210, edit: Text, event: 'setSign', style: "color:#009688" }
+               , { field: '名称', width: 255, title: '名称', edit: Text,style:"color:#009688" }
+                    , { field: '地址', title: '地址', edit: Text, event: 'setSign', style: "color:#009688" }
                     , { field: '联系人', width: 90, title: '联系人', edit: Text, style: "color:#009688" }
                     , { field: '电话', width: 120, title: '电话', edit: Text, style: "color:#009688" }
                     , { field: '手机', width: 120, title: '手机', edit: Text, style: "color:#009688" }
@@ -31,7 +31,7 @@
                 },
                 where: {
                     Name: NameSearch
-                    , Status: Select
+                    //, Status: Select
                 }
             });
         })

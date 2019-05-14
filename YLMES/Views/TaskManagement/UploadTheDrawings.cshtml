@@ -84,7 +84,7 @@
                     var src = "/Upload/" + data.FileName;
                     var strd = src.substr(src.lastIndexOf('.') + 1);
                     if (strd == "pdf" || strd == "PDF") {
-                        var srcs = "/Upload/" + data.FileName;
+                        var srcs = "/pdf/" + data.FileName;
                         var url = '/TechnicalDepartment/CheckPdf?src=' + srcs;
                     var index = layer.open({
                         type: 2,

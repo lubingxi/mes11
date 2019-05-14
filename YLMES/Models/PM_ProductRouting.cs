@@ -17,7 +17,7 @@ namespace YLMES.Models
         public int ID { get; set; }
         public int RouteID { get; set; }
         public Nullable<int> SortID { get; set; }
-        public string StationType { get; set; }
+        public Nullable<int> StationType { get; set; }
         public string WorkSecondPerPCS { get; set; }
         public string WorkSecond2PerPCS { get; set; }
         public string require { get; set; }

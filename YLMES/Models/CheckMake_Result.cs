@@ -22,5 +22,6 @@ namespace YLMES.Models
         public Nullable<System.DateTime> CreatedTime { get; set; }
         public string CreatedBy { get; set; }
         public string InMakeQTY { get; set; }
+        public string Type { get; set; }
     }
 }

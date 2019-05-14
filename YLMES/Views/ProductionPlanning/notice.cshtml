@@ -23,7 +23,7 @@
             $("#addC").click(function () {
                 $.ajax({
                     type: "POST",
-                    url: '/ProductionPlanning/Queren?id='+'@TempData["not"]'+'&pnumber='+'@ViewData["cnumber"]',
+                    url: '/ProductionPlanning/Queren?id=' + '@TempData["not"]' + '&pnumber=' + '@ViewData["cnumber"]' + '&name=' + localStorage.sitename,
                     dataType: "text",
                     success: function (data) {
                         if (data == 'true') {

@@ -1,0 +1,131 @@
+﻿@{
+    Layout = null;
+
+
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>友力信息管理系统</title>
+    <script src="../../My97DatePicker4.7.2/WdatePicker.js"></script>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script src="~/layui/layui.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        $(function () {           
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table, layer = layui.layer;                       
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;                  
+                     table.render({
+                      elem: '#tw'
+                    , url: '/SystemSettings/CheckProcessBOM?Name=' + name + '&PartSpec=' + PartSpec + '&Material=' + Material
+                    , page: true
+                    , limit: 15
+                    //, done: function () {
+                    //                ifs = $("#checks").text();
+                    //                $("tr a").hide();
+                    //                $("tr").hover(function () {
+                    //                $(this).children().last().children().children().toggle();
+                    //                })
+                    //            }
+                     , cols: [[
+                     { filed: '', hide: true }
+                     , { field: '序号', width: 65, title: '序号' }
+                     , { field: '工件编码', width: 200, title: '物料名称' }
+                     , { field: '工件规格', width: 155, title: '工件规格' }
+                     , {
+                         field: '工件材料', width: 80, title: '工件材料'
+                     }
+                     , { field: '子件编码', title: '子物料名称', width: 180, edit: Text, style: 'color: #009688' }
+                     , { field: '子件规格', width: 150, title: '子件规格' }
+                     , { field: '子件材料', width: 120, title: '子件材料' }
+                     , { field: '子件数量', width: 90, title: '子件数量', edit: Text, style: 'color: #009688' }
+                     //, { field: '原材料名称', width: 100, title: '原材料名称', edit: Text, style: 'color: #009688' }
+                     , { field: '原材料用量', width: 100, title: '原材料用量', edit: Text, style: 'color: #009688' }
+                     , { field: '原材料规格', width: 150, title: '原材料规格', edit: Text, style: 'color: #009688' }
+                     , { field: '原材料单位', width: 100, title: '原材料单位', edit: Text, style: 'color: #009688' }
+                     , { field: '工艺流程', width: 250, title: '工艺流程', event: 'liucheng', templet: '#title', align: 'center',style:'color:red' }
+                     , { field: '子BOM', width: 100, title: '子件', event: 'zi', templet: '#bom', align: 'center' }
+                     , { field: 'right', width: 130, align: 'center', toolbar: '#barDemo' }
+                     ]]
+                            });
+                    if (obj.event === 'liucheng') {
+                        liucheng = data.工艺流程;
+                        if (liucheng == null) {
+                            layer.msg('没有工艺流程');
+                        } else if (liucheng == "外购") {
+                            layer.msg('外购流程无需查看！');
+                        }
+                        else {
+                            sessionStorage.product = data.工件编码;
+                            sessionStorage.spec = data.工件规格;
+                            var urls = "/TaskManagement/Processc?ProductName=" + sessionStorage.product + "&ProductSpec=" + sessionStorage.spec;
+                            $.ajax({
+                                url: urls,
+                                type: 'get',
+                                success: function (data) {
+                                }
+                            });
+                            var url = '/TaskManagement/AddProcess?ProductName=' + data.工件编码 + '&ProductSpec=' + data.工件规格 + '&PartNumber=' + data.子件编码 + '&PartId=' + data.子件序号 + '&Route=' + data.工艺流程;
+                            var index = layer.open({
+                                type: 2,
+                                content: url,
+                                maxmin: true
+                            });
+                            layer.full(index);
+
+                        }
+                    }            
+                });
+
+
+            });
+        })
+
+
+
+    </script>
+
+    <script type="text/html" id="bom">
+        {{#  if(d.子BOM == 'BOM'){ }}
+        <span style="color:red">BOM</span>
+        {{#  } else { }}
+        {{#  } }}
+    </script>
+</head>
+
+
+<body>
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">系统设置</a></li>
+            <li><a href="#">工艺BOM</a></li>
+        </ul>
+    </div>
+    <div class="rightinfo">
+        <table class="tablelist" id="tw" lay-filter="demo"></table>
+    </div>
+    <script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="~/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="~/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="~/lib/laypage/1.2/laypage.js"></script>
+    <script type="text/javascript">
+            function admin_add(title, url, w, h) {
+                layer_show(title, url, w, h);
+            }
+    </script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+</body>
+</html>

@@ -13,7 +13,7 @@ namespace YLMES.Models
     
     public partial class checkCoMaterial_Result
     {
-        public int 物料类型序号 { get; set; }
+        public Nullable<int> 物料类型序号 { get; set; }
         public int ID { get; set; }
         public Nullable<int> Category1ID { get; set; }
         public Nullable<int> Category2ID { get; set; }
@@ -44,5 +44,6 @@ namespace YLMES.Models
         public Nullable<int> StockQTY2 { get; set; }
         public string Units2 { get; set; }
         public string WarehouseType { get; set; }
+        public Nullable<decimal> price { get; set; }
     }
 }

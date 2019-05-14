@@ -1,0 +1,11 @@
+﻿
+    @media print {
+        /*element.style {
+          font-size:12px;
+        }*/
+        .layui-form-select .layui-input {
+            width: 150px;
+            text-align: center;
+        }
+    }
+

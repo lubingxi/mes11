@@ -31,5 +31,6 @@ namespace YLMES.Models
         public string CreatedBy { get; set; }
         public string CreatedTime { get; set; }
         public string Spec { get; set; }
+        public string MaterialName { get; set; }
     }
 }

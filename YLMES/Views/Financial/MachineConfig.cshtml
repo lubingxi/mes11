@@ -1,0 +1,354 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/js/vue.js"></script>
+    <script src="~/js/axios.js"></script>
+    <script src="~/js/print.js"></script>
+    <script src="~/js/elemenui.js"></script>
+    <link href="~/css/elemenui.css" rel="stylesheet" />
+    <script src="~/js/qrcode.js"></script>
+    <title>MachineConfig</title>
+    <style>
+
+        .slide-fade-enter-active {
+            transition: all .1s ease;
+        }
+
+        .slide-fade-leave-active {
+            transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+        }
+
+        .slide-fade-enter, .slide-fade-leave-to
+        /* .slide-slide-fade-leave-active for below version 2.1.8 */ {
+            transform: translateX(10px);
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="vues">
+        <template>
+            <el-breadcrumb separator-class="el-icon-arrow-right" style="margin:20px">
+                <el-breadcrumb-item>首页</el-breadcrumb-item>
+                <el-breadcrumb-item>系统设置</el-breadcrumb-item>
+                <el-breadcrumb-item>机器配置</el-breadcrumb-item>
+            </el-breadcrumb>
+            <el-button type="warning">机器查找</el-button>
+            <el-autocomplete popper-class="my-autocomplete"
+                             v-model="search"
+                             :fetch-suggestions="querySearch"
+                             placeholder="输入机器名称查找"
+                             clearable
+                             prefix-icon="el-icon-search">
+            </el-autocomplete>
+            <el-table :data="page"
+                      style="margin:0 auto;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)"
+                      height="600"
+                      v-loading="loading"
+                      element-loading-text="拼命加载中"
+                      element-loading-spinner="el-icon-loading"
+                      element-loading-background="rgba(0, 0, 0, 0.8)">
+
+                <el-table-column type="index">
+                </el-table-column>
+                <el-table-column prop="MachineName"
+                                 label="机器名称" align="center">
+                    <template slot-scope="scope">
+                        <transition name="slide-fade" mode="out-in">
+                            <el-tag v-if="!scope.row.upStatu">{{scope.row.MachineName}}</el-tag>
+                            <el-autocomplete v-if="scope.row.upStatu"
+                                             popper-class="my-autocomplete"
+                                             v-model="scope.row.MachineName"
+                                             :fetch-suggestions="querySearch"
+                                             placeholder="请输入内容"
+                                             clearable
+                                             prefix-icon="el-icon-search">
+                            </el-autocomplete>
+                        </transition>
+                    </template>
+                </el-table-column>
+                <el-table-column label="采购价格" prop="PurchasePrice" align="center">
+                    <template slot-scope="scope">
+                        <transition name="slide-fade" mode="out-in">
+                            <el-tag v-if="!scope.row.upStatu">{{scope.row.PurchasePrice}}</el-tag>
+                            <el-input v-if="scope.row.upStatu" v-model="scope.row.PurchasePrice" placeholder="请输入内容"></el-input>
+                        </transition>
+                    </template>
+                </el-table-column>
+                <el-table-column label="采购日期" prop="PurchaseDate" align="center">
+                    <template slot-scope="scope">
+                        <transition name="slide-fade" mode="out-in">
+                            <div v-if="!scope.row.upStatu" key="icon">
+                                <i class="el-icon-time"></i>
+                                <span style="margin-left: 10px">{{scope.row.PurchaseDate}}</span>
+                            </div>
+                            <div class="block" v-else key="date">
+                                <el-date-picker v-model="scope.row.PurchaseDate"
+                                                type="date"
+                                                format="yyyy 年 MM 月 dd 日"
+                                                value-format="yyyy-MM-dd"
+                                                placeholder="选择日期">
+                                </el-date-picker>
+                            </div>
+                        </transition>
+                    </template>
+                </el-table-column>
+                <el-table-column label="折旧年限" prop="PeriodOfDepreciation" align="center">
+                    <template slot-scope="scope">
+                        <transition name="slide-fade" mode="out-in">
+                            <el-tag v-if="!scope.row.upStatu">{{scope.row.PeriodOfDepreciation}}</el-tag>
+                            <el-input v-if="scope.row.upStatu" v-model="scope.row.PeriodOfDepreciation" placeholder="请输入内容"></el-input>
+                        </transition>
+                    </template>
+                </el-table-column>
+                <el-table-column label="是否折旧" prop="ifDepreciation" align="center">
+                    <template slot-scope="scope">
+                        <transition name="slide-fade" mode="out-in">
+                            <el-tag v-if="!scope.row.upStatu" :type="scope.row.ifDepreciation=='1'?'success':'danger'">{{scope.row.ifDepreciation=='1'?'是':'否'}}</el-tag>
+                            <el-switch v-else style="display: block"
+                                       v-model="scope.row.ifDepreciation"
+                                       active-color="#13ce66"
+                                       inactive-color="#ff4949"
+                                       active-value="1"
+                                       inactive-value="0"
+                                       active-text="是"
+                                       inactive-text="否">
+                            </el-switch>
+                        </transition>
+                    </template>
+                </el-table-column>
+                <el-table-column label="状态" prop="Status" align="center">
+                    <template slot-scope="scope">
+                        <transition name="slide-fade" mode="out-in">
+                            <el-tag v-if="!scope.row.upStatu" :type="scope.row.Status=='1'?'success':'danger'">{{scope.row.Status=='1'?'启用':'停用'}}</el-tag>
+                            <el-switch v-else style="display: block"
+                                       v-model="scope.row.Status"
+                                       active-color="#13ce66"
+                                       inactive-color="#ff4949"
+                                       active-value="1"
+                                       inactive-value="0"
+                                       active-text="启用"
+                                       inactive-text="停用">
+                            </el-switch>
+                        </transition>
+                    </template>
+                </el-table-column>
+                <el-table-column :key="addStatu">
+                    <template slot="header">
+                        <el-button :type="addStatus.type" @@click="addMachine">{{addStatus.text}}</el-button>
+                    </template>
+                    <template slot-scope="scope">
+                        <el-button size="mini" :type="scope.row.upStatu?'success':'primary'" @@click="upMachine(scope.row)">{{scope.row.upStatu?'确定':'编辑'}}</el-button>
+                        <el-button size="mini" type="danger" disabled @@click="delMachine(scope.row.ID)">删除</el-button>
+                        <el-button size="mini" type="info" @@click="print(scope.row)">打印</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="block">
+                <el-pagination @@size-change="handleSizeChange"
+                               @@current-change="handleCurrentChange"
+                               :current-page="currentPage"
+                               :page-sizes="[10, 20, 30, 40]"
+                               :page-size="pageSize"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="total">
+                </el-pagination>
+            </div>
+            <div v-show="pr">
+                <div ref="print">
+                    <div id="qrcode"></div>
+                    <h1>{{printValue}}</h1>
+                </div>
+            </div>
+        </template>
+    </div>
+    <script>
+        "use strict"
+        Vue.prototype.qrcode = QRCode;
+        var vm = new Vue({
+            el: "#vues",
+            data: {
+                pageData: [],
+                total: 0,
+                pageSize: 10,
+                currentPage: 1,
+                loading: true,
+                search: "",
+                addStatu: false,
+                restaurants: [],
+                printValue: "",
+                pr: false
+            },
+            methods: {
+                print(row) {
+                    new this.qrcode('qrcode', {
+                        text: String(row.ID),
+                        width: 156,
+                        height: 156,
+                        colorDark: '#000000',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    })
+                    this.printValue = row.MachineName
+                    setTimeout(() => {
+                        this.$print(this.$refs.print)
+                        var list = document.getElementById("qrcode")
+                        list.removeChild(list.childNodes[0]);
+                        list.removeChild(list.childNodes[0]);
+                    })
+                },
+                digit(t, e) {
+                    var i = "";
+                    t = String(t),
+                        e = e || 2;
+                    for (var a = t.length; a < e; a++)
+                        i += "0";
+                    return t < Math.pow(10, e) ? i + (0 | t) : t
+                },
+                toDateString(t, e) {
+                    if (typeof (t) == "string") {
+                        t = Number(t.substring(t.indexOf("(") + 1, t.indexOf(")")))
+                    }
+                    var i = this
+                        , a = new Date(t || new Date)
+                        , n = [i.digit(a.getFullYear(), 4), i.digit(a.getMonth() + 1), i.digit(a.getDate())]
+                        , r = [i.digit(a.getHours()), i.digit(a.getMinutes()), i.digit(a.getSeconds())];
+                    return e = e || "yyyy-MM-dd HH:mm:ss",
+                        e.replace(/yyyy/g, n[0]).replace(/MM/g, n[1]).replace(/dd/g, n[2]).replace(/HH/g, r[0]).replace(/mm/g, r[1]).replace(/ss/g, r[2])
+                },
+                get() {
+                    axios("/SystemSettings/CheckMachine").then((res) => {
+                        this.pageData = res.data.map(x => {
+                            x.type = "up"
+                            this.restaurants.push({
+                                value: x.MachineName,
+                                address: x.MachineName
+                            })
+                            x.upStatu = false;
+                            x.Status = String(x.Status)
+                            x.PurchasePrice == null ? x.PurchasePrice = 0 : ""
+                            x.PurchaseDate == null ? x.PurchaseDate = this.toDateString(new Date("2000-10-01"),"yyyy-MM-dd") : ""
+                            x.PeriodOfDepreciation == null ? x.PeriodOfDepreciation = "0" : ""
+                            x.ifDepreciation = String(x.ifDepreciation)
+                            return x
+                        })
+                        this.loading = false
+                    })
+                },
+                handleSizeChange(siae) {
+                    this.pageSize = siae
+                },
+                handleCurrentChange(curr) {
+                    this.currentPage = curr
+                },
+                delMachine(ID) {
+                    axios.post("/SystemSettings/DelMachine", { ID: ID })
+                    this.$message({
+                        message: '删除成功',
+                        type: 'success'
+                    });
+                    this.pageData = this.pageData.filter(x => x.ID != ID)
+                },
+                upMachine(row) {
+                    if (row.upStatu) {
+                        if (row.type == "add") {
+                            axios.post("/SystemSettings/AddOfUpMachine", { data: row }).then((res) => {
+                                if (res.data == "false") {
+                                    this.$message.error('新增失败，机器名称重复');
+                                    this.pageData.shift()
+                                } else {
+                                    this.$message({
+                                        message: '新增成功',
+                                        type: 'success'
+                                    });
+                                    row.ID = res.data
+                                }
+                            })
+                        } else {
+                            axios.post("/SystemSettings/AddOfUpMachine", { data: row }).then(res => {
+                                if (res.data == "false") {
+                                    this.$message.error('修改失败，机器名称重复');
+                                    row.MachineName = sessionStorage.getItem("MachineName")
+                                } else {
+                                    this.$message({
+                                        message: '修改成功',
+                                        type: 'success'
+                                    });
+                                }
+                            })
+
+                        }
+                        row.type == "up"
+                        this.addStatu = false
+                        row.upStatu = false
+                    } else {
+                        sessionStorage.setItem("MachineName", row.MachineName)
+                        row.upStatu = true
+                    }
+                },
+                addMachine() {
+                    if (this.addStatu) {
+                        this.pageData.shift()
+                        this.addStatu = false
+                    } else {
+                        this.pageData.unshift({
+                            MachineName: "",
+                            PeriodOfDepreciation: "0",
+                            PurchaseDate: this.toDateString(new Date(), "yyyy-MM-dd"),
+                            PurchasePrice: 0,
+                            Status: "1",
+                            ifDepreciation: "1",
+                            upStatu: true,
+                            type: "add"
+                        })
+                        this.addStatu = true
+                    }
+                },
+                querySearch(queryString, cb) {
+                    var results = new String(queryString) ? this.restaurants.filter(this.createFilter(new String(queryString))) : this.restaurants;
+                    cb(results);
+                },
+                createFilter(queryString) {
+                    return (restaurant) => {0
+                        return (new String(restaurant.value).toLowerCase().indexOf(new String(queryString).toLowerCase()) === 0);
+                    };
+                },
+            },
+            created: function () {
+                this.get();
+            },
+            computed: {
+                page() {
+                    if (this.pageData.length > 0) {
+                        var curr = (this.currentPage - 1) * this.pageSize
+                        var data = this.pageData.filter(x => x.MachineName.includes(this.search) || this.search == ""||x.upStatu)
+                        this.total = data.length
+                        
+                    
+                        return data.slice(curr, curr + this.pageSize);
+                    }
+                },
+                addStatus() {
+                    return {
+                        text: this.addStatu ? "取消新增" : "新增机器",
+                        type: this.addStatu ? 'danger' : 'primary'
+                    }
+                }
+            },
+            watch: {
+                search() {
+                    this.currentPage = 1
+                }
+            }
+
+        })
+    </script>
+</body>
+</html>

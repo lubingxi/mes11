@@ -25,6 +25,7 @@ namespace YLMES.Models
         public Nullable<int> 原材料用量 { get; set; }
         public string 原材料单位 { get; set; }
         public string 原材料规格 { get; set; }
+        public string 原材料名称 { get; set; }
         public string 子BOM { get; set; }
         public Nullable<int> 是否组装件 { get; set; }
         public string 工艺流程 { get; set; }

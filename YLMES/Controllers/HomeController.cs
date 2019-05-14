@@ -149,6 +149,18 @@ namespace YlMES.Controllers
             Session["Cid"] = id;
             return View();
         }
+        public ActionResult HDetialsd(string id)
+        {
+            TempData["d"] = id;
+            return View();
+        }
+        //显示工艺卡页面
+        public ActionResult ProcessCard(string Name,string Spec)
+        {
+            ViewData["name"] = Name;
+            ViewData["spec"] = Spec;
+            return View();
+        }
         //显示我的任务选择人
         public ActionResult MyTaskName(string name)
            {
@@ -226,19 +238,18 @@ namespace YlMES.Controllers
         #endregion
 
         #region 提交合同状态
-        public ActionResult SubmitMethod(string id,string cnum)
+        public ActionResult SubmitMethod(string id,string cnum,string name)
         {
             try
             {
                 using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    string name = Session["name"].ToString();
                     int i = int.Parse(id);
                     var con = ys.C_Contract.Where(c => c.ID == i).FirstOrDefault();
                     con.StatusID = "销售部提交合同至财务";
                     con.AuditThrough = "";
                     ys.SaveChanges();
-                    int s = Sms.CheckSms("财务部", cnum);
+                    int s = Sms.InsertSmsInfos("财务部", cnum, name);
                     if (s > 0)
                     {
                         return Content("true");
@@ -291,7 +302,7 @@ namespace YlMES.Controllers
                 {
                     int i = int.Parse(id);
                     string name = Session["name"].ToString();
-                    if (name == "杨心盛")
+                    if (name == "陆炳曦")
                     {
                         var con = ys.C_Contract.Where(c => c.ID == i).FirstOrDefault();
                         con.AuditThrough = "审核通过";
@@ -404,7 +415,7 @@ namespace YlMES.Controllers
 
         #region 将合同变成审核通过
 
-        public ActionResult EditStatus(string bianhao)
+        public ActionResult EditStatus(string bianhao,string name)
         {
             try
             {
@@ -420,16 +431,14 @@ namespace YlMES.Controllers
                 {
                      var cid = ys.C_Contract.Where(s => s.ContractNumber == bianhao).FirstOrDefault();
                      var he = ys.C_Contract_Receivables.Where(h => h.ContractID == cid.ID).FirstOrDefault();
-                    
-                         C_Contract contract = ys.C_Contract.Where(p => p.ContractNumber == bianhao).FirstOrDefault();
+                        Sms.InsertSmsInfos("订单中心", bianhao, name);
+                        C_Contract contract = ys.C_Contract.Where(p => p.ContractNumber == bianhao).FirstOrDefault();
                          contract.StatusID = "财务部合同审核通过";
                          ys.SaveChanges();
                          return Content("true");
                      
                 }                 
-                }
-
-               
+                }               
             }
             catch (Exception ex)
             {
@@ -677,7 +686,7 @@ namespace YlMES.Controllers
         #endregion
 
         #region 添加合同
-        public ActionResult CwAdd()
+        public ActionResult CwAdd(string name)
         {
             int i = 0;
             try
@@ -697,7 +706,6 @@ namespace YlMES.Controllers
                 string ia = Request["InstallationAmount"].ToString();
                 string aa = Request["AcceptanceAmount"].ToString();
                 string qaa = Request["QualityAssuranceAmount"].ToString();
-                string name = Session["name"].ToString();
                 using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
                     SqlParameter[] parms = new SqlParameter[19];
@@ -730,7 +738,7 @@ namespace YlMES.Controllers
             }
             catch (Exception ex)
             {
-                return Content("false");
+                return Content("two");
             }
 
             return Content("false");
@@ -761,12 +769,7 @@ namespace YlMES.Controllers
             {
                 return Content("false");
             }
-
-
-            return Content("false");
         }
-
-
         #endregion
 
 
@@ -1173,7 +1176,7 @@ namespace YlMES.Controllers
             return Content("false");
         }
         //如果订金够可以生产
-        public ActionResult Chane(string he,string cnum)
+        public ActionResult Chane(string he,string cnum,string name)
         {
             try
             {
@@ -1186,7 +1189,7 @@ namespace YlMES.Controllers
                     var list = ys.C_Contract.Where(c => c.ID == i).FirstOrDefault();
                     if (list.StatusID == "财务部合同审核通过")
                     {
-                        int s = Sms.CheckSms("订单中心", cnum);
+                        int s = Sms.InsertSmsInfos("订单中心", cnum, name);
                         if (s > 0)
                         {
                             return Content("true");
@@ -1493,13 +1496,10 @@ namespace YlMES.Controllers
             }
         }
         //新增客户信息
-        public ActionResult AddCustomer(string CustomerCode, string CustomerName, string Address, string Tel, string Contact, string Bank, string Account, string Representative, string Principal)
-        {
-            try
-            {
+        public ActionResult AddCustomer(string CustomerCode, string CustomerName, string Address, string Tel, string Contact, string Bank, string Account, string Representative, string Principal,string name)
+        {            
                 using (YLMES_newEntities ys = new YLMES_newEntities())
                 {
-                    string name = Session["name"].ToString();
                     var cuname = ys.PM_Customer.Where(pm => pm.CustomerName.Equals(CustomerName)).ToList();
                     if (cuname.Count==0)
                     {
@@ -1516,20 +1516,21 @@ namespace YlMES.Controllers
                         parms[9] = new SqlParameter("@Representative", Representative);
                         parms[10] = new SqlParameter("@Principal", Principal);
                         parms[11] = new SqlParameter("@CreatedBy", name);
-                        ys.Database.ExecuteSqlCommand("exec PM_AddCustomer  @Type,@id,@CustomerCode,@CustomerName,@Address,@Tel,@Contact,@Bank,@Account,@Representative,@Principal,@CreatedBy", parms);
+                       int i= ys.Database.ExecuteSqlCommand("exec PM_AddCustomer  @Type,@id,@CustomerCode,@CustomerName,@Address,@Tel,@Contact,@Bank,@Account,@Representative,@Principal,@CreatedBy", parms);
+                        if (i > 0)
+                        {
+                            return Content("true");
+                        }
                     }
                     else
                     {
                         return Content("two");
                     }
-
-                    return Content("true");
-                }
-            }
-            catch (Exception ex)
-            {
                 return Content("false");
+
             }
+            
+          
 
         }
         //新增客户信息
@@ -1629,6 +1630,20 @@ namespace YlMES.Controllers
             }
         }
         #endregion
+
+        //完成发货
+        public ActionResult SubmitContractFinsh(string id)
+        {
+            using(YLMES_newEntities ys = new YLMES_newEntities())
+            {
+                int i = int.Parse(id);
+                var list = ys.C_Contract.Where(c => c.ID == i).FirstOrDefault();
+                list.StatusID = "已完成";
+                ys.SaveChanges();
+                return Content("true");
+            }
+          
+        }
     }
 
 

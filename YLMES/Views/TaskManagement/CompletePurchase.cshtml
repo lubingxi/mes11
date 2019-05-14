@@ -84,12 +84,13 @@
                         //, { field: '每套数量', width: 150, title: '每套数量', edit: Text, style: 'color: #009688' }
                         //, { field: '实际采购套数', width: 100, title: '实际套数',edit: Text, style: 'color:#009688' }
                         , { field: '实际采购数量', width: 100, title: '实际数量' }
+                        , { field: '名称', width: 100, title: '名称' }
                         , { field: '单位', width: 100, title: '单位' }
-                         , { field: '规格', width: 100, title: '规格' }
+                        , { field: '规格', width: 100, title: '规格' }
                         //, { field: '单位', width: 100, title: '单位', edit: Text, style: 'color: #009688'}
                         , { field: '单价', width: 100, title: '单价', edit: Text, style: 'color: #009688' }
-                        , { field: '总价', width: 150, title: '总价', totalRow: true }
-                        , { field: '供应商', width: 150, title: '供应商' }
+                        , { field: '总价', width: 120, title: '总价', totalRow: true }
+                        , { field: '供应商', width: 200, title: '供应商' }
                         , { fixed: 'right', width: 180, align: 'center', toolbar: '#barDemo' }
                     ]]
                 });
@@ -115,6 +116,7 @@
                                     else {
                                         layer.msg("编辑失败！");
                                         return;
+                                        
                                     }
                                 }
                             });                     

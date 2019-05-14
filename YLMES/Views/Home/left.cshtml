@@ -51,9 +51,9 @@
                                         case "工艺BOM":
                                             $('#systemsetup').append('<li><cite></cite><a href="#">工艺BOM</a><i hidden="hidden">/SystemSettings/Process</i></li>');
                                             break;
-                                        case "工艺流程":
-                                            $('#systemsetup').append('<li><cite></cite><a href="#">工艺流程</a><i hidden="hidden">/TaskManagement/EditingProcess?PartNumber=""</i></li>');
-                                            break;
+                                        //case "工艺流程":
+                                        //    $('#systemsetup').append('<li><cite></cite><a href="#">工艺流程</a><i hidden="hidden">/TaskManagement/EditingProcess?PartNumber=""</i></li>');
+                                        //    break;
                                         case "仓库设置":
                                             $('#systemsetup').append(' <li><cite></cite><a href="#">仓库设置</a><i hidden="hidden">/Warehouse/Warehousesetup</i></li>');
                                             break;
@@ -154,6 +154,9 @@
                                         case "库存查询":
                                             $('#Rawmaterial').append('<li><cite></cite><a href="#">原材料库存查询</a><i hidden=hidden>/Rms/MaterialsStock</i></li>')
                                             break;
+                                        case "库存位置":
+                                            $('#Rawmaterial').append('<li><cite></cite><a href="#">原材料库存位置</a><i hidden=hidden>/Rms/MaterialInventoryLocation</i></li>')
+                                            break;
                                         case "入库打单":
                                             $('#Rawmaterial').append('<li><cite></cite><a href="#">入库打单</a><i hidden=hidden>/Financial/Make</i></li>')
                                             break;
@@ -186,7 +189,12 @@
                                     }
                                     switch (result.FuncationName) {
                                         case "任务分配":
-                                            $("#task").append('<li><cite></cite><a href="#">任务分配</a><i hidden="hidden">/TaskManagement/TaskAllocation</i></li>');
+                                            if (result.EmployeeName == "胡超") {
+                                                $("#task").append('<li><cite></cite><a href="#">任务分配</a><i hidden="hidden">/TaskManagement/TaskDirectorAllocation</i></li>');
+                                            } else {
+                                                $("#task").append('<li><cite></cite><a href="#">任务分配</a><i hidden="hidden">/TaskManagement/TaskAllocation</i></li>');
+                                            }
+                                          
                                             break;
                                         case "我的任务":
                                             if (result.EmployeeName == "朱小梅" || result.EmployeeName == "肖建") {
@@ -206,7 +214,7 @@
                                             if (result.DepartMent == "财务部") {
                                                 $("#task").append('<li><cite></cite><a href="#">已完成的任务</a><i hidden="hidden">/TaskManagement/FinishTask</i></li>');
                                             }
-                                            else if (result.EmployeeName == "朱小梅")
+                                            else if (result.EmployeeName == "朱小梅" || result.EmployeeName == "肖建")
                                             {
                                                 $("#task").append('<li><cite></cite><a href="#">已完成的任务</a><i hidden="hidden">/TaskManagement/FinishPTask</i></li>');
                                             }
@@ -225,9 +233,9 @@
                                         $('#statisticaltitle').after('<ul class="menuson" id="stati"></ul>');
                                     }
                                     switch (result.FuncationName) {
-                                        case "任务统计报表":
-                                            $('#stati').append('<li><cite></cite><a href="#">任务统计报表</a><i hidden="hidden">/Statistical/Report</i></li>');
-                                            break;
+                                        //case "任务统计报表":
+                                        //    $('#stati').append('<li><cite></cite><a href="#">任务统计报表</a><i hidden="hidden">/Statistical/Report</i></li>');
+                                        //    break;
                                         case "个人成绩":
                                             $('#stati').append('<li><cite></cite><a href="#">个人成绩</a><i hidden="hidden">/Statistical/Scroe</i></li>');
                                             break;
@@ -247,6 +255,9 @@
                                     switch (result.FuncationName) {
                                         case "上传图纸":
                                             $('#technology').append('<li><cite></cite><a href="#">上传图纸</a><i hidden=hidden>/TechnicalDepartment/FileManagement</i></li>');
+                                            break;
+                                        case "任务设计清单":
+                                            $('#technology').append('<li><cite></cite><a href="#">任务设计清单</a><i hidden=hidden>/TechnicalDepartment/TaskList</i></li>');
                                             break;
                                             //UploadTheDrawings
                                     }

@@ -21,8 +21,10 @@ namespace YLMES.Models
         public string 子件规格 { get; set; }
         public string 子件材料 { get; set; }
         public Nullable<int> 子件数量 { get; set; }
-        public string 原材料用量 { get; set; }
+        public Nullable<int> 原材料用量 { get; set; }
         public string 原材料单位 { get; set; }
+        public string 原材料规格 { get; set; }
+        public int 原材料序号 { get; set; }
         public string 子BOM { get; set; }
         public Nullable<int> 是否组装件 { get; set; }
         public Nullable<int> 任务编号 { get; set; }
